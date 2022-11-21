@@ -1,0 +1,30 @@
+{
+  "name": "@roxavn/core-server",
+  "version": "0.2.6",
+  "description": "",
+  "keywords": [],
+  "license": "UNLICENSED",
+  "author": "",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=14.17.4",
+    "npm": ">=7.21.1"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "rimraf dist && nest build"
+  },
+  "devDependencies": {
+    "@types/validator": "^13.7.10",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "class-validator": "^0.13.2",
+    "i18next": "^22.0.6",
+    "typeorm": "^0.3.10"
+  }
+}
