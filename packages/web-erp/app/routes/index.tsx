@@ -1,7 +1,15 @@
+import { useTranslation } from 'react-i18next';
+
+function Test() {
+  const { t } = useTranslation();
+  return <h1>{t('greeting')}</h1>;
+}
+
 export default function Index() {
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
       <h1>Welcome to Remix</h1>
+      <Test />
       <ul>
         <li>
           <a
