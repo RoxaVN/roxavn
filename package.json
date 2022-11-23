@@ -5,9 +5,7 @@
   },
   "private": true,
   "workspaces": [
-    "packages/core-share",
-    "packages/core-server",
-    "packages/core-web",
+    "packages/core",
     "packages/web-erp"
   ],
   "devDependencies": {
