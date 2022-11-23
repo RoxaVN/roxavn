@@ -1,3 +1,4 @@
+import { ClientProvider } from '@mantine/remix';
 import { RemixBrowser } from '@remix-run/react';
 import i18next from 'i18next';
 import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
@@ -38,9 +39,11 @@ function hydrate() {
         hydrateRoot(
           document,
           <StrictMode>
-            <I18nextProvider i18n={i18next}>
-              <RemixBrowser />
-            </I18nextProvider>
+            <ClientProvider>
+              <I18nextProvider i18n={i18next}>
+                <RemixBrowser />
+              </I18nextProvider>
+            </ClientProvider>
           </StrictMode>
         );
       });

@@ -20,18 +20,17 @@
   },
   "dependencies": {
     "class-validator": "^0.13.2",
-    "date-fns": "^2.23.0",
-    "formik": "^2.2.9",
     "i18next": "^21.3.3",
     "lodash": "^4.17.21",
-    "primeflex": "^3.2.1",
-    "primeicons": "^6.0.1",
-    "primereact": "^8.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-transition-group": "^4.4.2",
     "rxjs": "^7.2.0",
     "typeorm": "^0.3.10"
+  },
+  "exports": {
+    "./web": "./dist/web/index.js",
+    "./share": "./dist/share/index.js",
+    "./server": "./dist/server/index.js"
   },
   "files": [
     "/dist",

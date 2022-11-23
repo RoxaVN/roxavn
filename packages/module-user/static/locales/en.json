@@ -1,0 +1,18 @@
+{
+  "username": "Username",
+  "password": "Password",
+  "retypePassword": "Retype password",
+  "wrongRetypePassword": "Wrong retype password",
+  "resetPassword": "Reset password",
+  "sendResetPasswordLink": "Please send this link ({{link}}) to {{name}} to reset password",
+  "name": "Name",
+  "addUser": "Add user",
+  "login": "Login",
+  "logout": "Logout",
+  "email": "Email",
+  "role": "Role",
+  "setRoleOf": "Set role of {{name}}",
+  "myProfile": "My profile",
+  "userList": "User list",
+  "changeTheme": "Change theme"
+}

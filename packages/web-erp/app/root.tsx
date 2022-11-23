@@ -1,4 +1,4 @@
-import { json, type LoaderFunction } from '@remix-run/node';
+import { json, type MetaFunction, type LoaderFunction } from '@remix-run/node';
 import {
   Links,
   LiveReload,
@@ -11,13 +11,21 @@ import {
 import { useChangeLanguage } from 'remix-i18next';
 import { useTranslation } from 'react-i18next';
 import i18next from '~/i18next.server';
+import { createEmotionCache, MantineProvider } from '@mantine/core';
 
 type LoaderData = { locale: string };
+createEmotionCache({ key: 'mantine' });
 
 export const loader: LoaderFunction = async ({ request }) => {
   const locale = await i18next.getLocale(request);
   return json<LoaderData>({ locale });
 };
+
+export const meta: MetaFunction = () => ({
+  charset: 'utf-8',
+  title: 'Web Erp',
+  viewport: 'width=device-width,initial-scale=1',
+});
 
 export default function Root() {
   // Get the locale from the loader
@@ -32,17 +40,19 @@ export default function Root() {
   useChangeLanguage(locale);
 
   return (
-    <html lang={locale} dir={i18n.dir()}>
-      <head>
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
-    </html>
+    <MantineProvider withGlobalStyles withNormalizeCSS>
+      <html lang={locale} dir={i18n.dir()}>
+        <head>
+          <Meta />
+          <Links />
+        </head>
+        <body>
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </body>
+      </html>
+    </MantineProvider>
   );
 }

@@ -7,6 +7,9 @@ import { renderToString } from 'react-dom/server';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18next from './i18next.server';
 import i18n from './i18n'; // your i18n configuration file
+import { injectStyles, createStylesServer } from '@mantine/remix';
+
+const server = createStylesServer();
 
 export default async function handleRequest(
   request: Request,
@@ -45,7 +48,7 @@ export default async function handleRequest(
 
   headers.set('Content-Type', 'text/html');
 
-  return new Response('<!DOCTYPE html>' + markup, {
+  return new Response('<!DOCTYPE html>' + injectStyles(markup, server), {
     status: statusCode,
     headers: headers,
   });

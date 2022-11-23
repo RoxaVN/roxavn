@@ -1,0 +1,18 @@
+{
+  "username": "Tên tài khoản",
+  "password": "Mật khẩu",
+  "retypePassword": "Nhập lại mật khẩu",
+  "wrongRetypePassword": "Nhập lại mật khẩu không chính xác",
+  "resetPassword": "Đặt lại mật khẩu",
+  "sendResetPasswordLink": "Vui lòng gửi liên kết ({{link}}) đến {{name}} để đặt lại mật khẩu",
+  "name": "Tên",
+  "addUser": "Thêm tài khoản",
+  "login": "Đăng nhập",
+  "logout": "Đăng xuất",
+  "email": "Email",
+  "role": "Quyền",
+  "setRoleOf": "Thiết lập quyền cho {{name}}",
+  "myProfile": "Thông tin của tôi",
+  "userList": "Danh sách tài khoản",
+  "changeTheme": "Thay đổi chủ đề"
+}
