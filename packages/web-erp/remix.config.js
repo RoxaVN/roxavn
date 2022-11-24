@@ -1,6 +1,6 @@
 const glob = require('glob');
 const path = require('path');
-const { modules } = require('./app.config');
+const { getJsonFromFile } = require('@roxavn/core/server');
 
 /** @type {import('@remix-run/dev').AppConfig} */
 module.exports = {
@@ -8,7 +8,8 @@ module.exports = {
   serverDependenciesToBundle: [/^@roxavn/],
   routes: (defineRoutes) => {
     return defineRoutes((route) => {
-      Object.keys(modules).forEach((module) => {
+      const appConfig = getJsonFromFile('.app.config.json');
+      Object.keys(appConfig.modules).forEach((module) => {
         try {
           const pathToModule = path.dirname(require.resolve(module + '/web'));
           glob.sync(pathToModule + '/pages/**/*.js').map((file) => {

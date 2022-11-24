@@ -56,3 +56,5 @@ export class BaseModule {
     return params ? urlUtils.gen(path, params) : path;
   }
 }
+
+export const baseModule = new BaseModule('@roxavn/core');
