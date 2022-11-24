@@ -1,3 +1,4 @@
+import { Card, Container } from '@mantine/core';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Routes } from '../../share';
 
@@ -8,11 +9,13 @@ const LoginPage = (): JSX.Element => {
   const [params] = useSearchParams();
 
   return (
-    <div className="my-6 flex justify-content-center">
-      <LoginForm
-        onSuccess={() => navigate(params.get('ref') || Routes.Home.path)}
-      />
-    </div>
+    <Container size={400} py={50}>
+      <Card withBorder>
+        <LoginForm
+          onSuccess={() => navigate(params.get('ref') || Routes.Home.path)}
+        />
+      </Card>
+    </Container>
   );
 };
 

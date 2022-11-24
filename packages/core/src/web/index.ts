@@ -1,4 +1,5 @@
 export * from './components/ApiRender';
+export * from './components/ApiForm';
 
 export * from './services/ui';
 export * from './services/http';

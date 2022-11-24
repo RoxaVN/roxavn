@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { BaseModule } from '../../share';
+import { baseModule, BaseModule } from '../../share';
 
-class WebModule {
+export class WebModule {
   readonly base: BaseModule;
 
   constructor(module: BaseModule) {
@@ -24,4 +24,4 @@ class WebModule {
   }
 }
 
-export { WebModule };
+export const webModule = new WebModule(baseModule);
