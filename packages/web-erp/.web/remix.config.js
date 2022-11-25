@@ -17,7 +17,7 @@ module.exports = {
               .split('/web/pages')[1]
               .replace('.js', '')
               .replace(/index$/, '');
-            route(pathName, path.relative('./app', file));
+            route(pathName, path.relative('.web/app', file));
           });
         } catch (e) {}
       });

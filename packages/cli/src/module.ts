@@ -17,16 +17,16 @@ class ModuleService {
   }
 
   createStaticLink(targetName: string, srcPath: string) {
-    const targetFolder = 'public/static';
+    const targetFolder = '.web/public/static';
     fse.ensureDirSync(targetFolder);
 
     const currentDir = process.cwd();
     const relativePath = path.relative(targetFolder, srcPath);
 
     process.chdir(targetFolder);
-    if (fs.lstatSync(targetName)) {
+    try {
       fs.unlinkSync(targetName);
-    }
+    } catch (e) {}
     fs.symlinkSync(relativePath, targetName);
     process.chdir(currentDir);
   }

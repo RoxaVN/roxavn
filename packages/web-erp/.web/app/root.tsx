@@ -10,8 +10,9 @@ import {
 } from '@remix-run/react';
 import { useChangeLanguage } from 'remix-i18next';
 import { useTranslation } from 'react-i18next';
-import i18next from '~/i18next.server';
+import i18next from './i18next.server';
 import { createEmotionCache, MantineProvider } from '@mantine/core';
+import React from 'react';
 
 type LoaderData = { locale: string };
 createEmotionCache({ key: 'mantine' });
