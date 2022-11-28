@@ -17,7 +17,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps): JSX.Element => {
         {t('login')}
       </Title>
       <ApiForm
-        api={webModule.base.api(Apis.Login)}
+        api={webModule.api(Apis.Login)}
         fields={[
           <TextInput
             label={t('email')}
