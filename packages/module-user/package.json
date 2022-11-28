@@ -2,7 +2,10 @@
   "name": "@roxavn/module-user",
   "version": "0.1.0",
   "scripts": {
-    "build": "rimraf dist/ && tsc -p tsconfig.build.json"
+    "build": "rimraf dist/ && tsc -p tsconfig.build.json",
+    "dev": "remix build .web && run-p \"dev:*\"",
+    "dev:node": "cross-env NODE_ENV=development nodemon --require dotenv/config .web/server.js",
+    "dev:remix": "remix watch .web"
   },
   "license": "UNLICENSED",
   "author": "",
@@ -11,6 +14,7 @@
   },
   "dependencies": {
     "@roxavn/core": "^0.1.28",
+    "@roxavn/web-erp": "^0.1.0",
     "react-router-dom": "6.3.0",
     "rxjs": "^7.5.7"
   },

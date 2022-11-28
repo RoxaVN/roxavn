@@ -16,8 +16,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "strict": true,
-    "sourceMap": true
+    "strict": true
   },
   "include": ["src", "test"],
   "exclude": ["node_modules", "dist"]

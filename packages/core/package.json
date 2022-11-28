@@ -21,6 +21,7 @@
   "dependencies": {
     "@mantine/core": "^5.8.2",
     "@mantine/form": "^5.8.2",
+    "@remix-run/dev": "^1.7.6",
     "@tabler/icons": "^1.113.0",
     "class-validator": "^0.13.2",
     "i18next": "^21.3.3",

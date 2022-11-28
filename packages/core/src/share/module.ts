@@ -51,6 +51,10 @@ export class BaseModule {
     return name.replace(/\//g, '@');
   }
 
+  public static genFullApiPath(path: string, name: string): string {
+    return '/' + API_BASE_PATH + '/' + BaseModule.escapeName(name) + path;
+  }
+
   public genWebPath(router: WebRoute, params?: Record<string, any>) {
     const { path } = router;
     return params ? urlUtils.gen(path, params) : path;

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 
-import { moduleService } from './module.js';
+import { moduleService } from './module';
+import { templateService } from './template';
 
 const program = new Command();
 
@@ -14,5 +15,10 @@ program
   .command('module:sync')
   .description('Sync module after installing')
   .action(() => moduleService.sync());
+
+program
+  .command('create')
+  .description('Create package')
+  .action(() => templateService.createPackage());
 
 program.parse();

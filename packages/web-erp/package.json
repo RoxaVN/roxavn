@@ -1,6 +1,7 @@
 {
   "name": "@roxavn/web-erp",
   "version": "0.1.0",
+  "main": "index.js",
   "scripts": {
     "build": "remix build .web",
     "dev": "run-p \"dev:*\"",
@@ -21,7 +22,6 @@
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",
     "express": "^4.18.2",
-    "glob": "^8.0.3",
     "i18next": "^21.3.3",
     "i18next-browser-languagedetector": "^7.0.1",
     "i18next-fs-backend": "^2.0.0",
