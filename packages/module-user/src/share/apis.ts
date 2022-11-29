@@ -28,6 +28,7 @@ export const Apis = {
   Login: {
     method: 'POST',
     path: '/login',
+    validator: LoginRequest,
   } as Api<LoginRequest, LoginResponse, UnauthorizedException>,
 
   Logout: {

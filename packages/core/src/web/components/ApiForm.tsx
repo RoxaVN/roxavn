@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { IconSend } from '@tabler/icons';
 import { Api, ApiRequest, ApiResponse } from '../../share';
 import { apiFetcher } from '../services/api.fetcher';
-import { webModule } from '../services/web.module';
+import { webModule } from '../services/module';
 
 export interface ApiFormProps<
   Request extends ApiRequest,

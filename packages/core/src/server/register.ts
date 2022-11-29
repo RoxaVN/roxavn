@@ -2,8 +2,7 @@ import minimatch from 'minimatch';
 import path from 'path';
 
 import { AppConfig } from '@remix-run/dev';
-import { getJsonFromFile, getPackageJson, visitFiles } from '../utils';
-import { BaseModule } from '../../share';
+import { getJsonFromFile, getPackageJson, visitFiles } from './utils';
 
 type RoutesConfig = Exclude<AppConfig['routes'], undefined>;
 type RouteManifest = Awaited<ReturnType<RoutesConfig>>;
@@ -16,44 +15,27 @@ function isRouteModuleFile(filename: string): boolean {
   return routeModuleExts.includes(path.extname(filename));
 }
 
-export function defineModuleRoutes(defineRoutes: DefineRoutes) {
+export function registerApiRoutes() {
+  const appConfig = getJsonFromFile('.app.config.json');
+  const currentModule = getPackageJson('.').name;
+  Object.keys(appConfig.modules).map((module) => {
+    try {
+      if (module !== currentModule) {
+        require(module + '/server').useApis();
+      }
+    } catch (e) {}
+  });
+}
+
+export function registerWebRoutes(defineRoutes: DefineRoutes) {
   const appConfig = getJsonFromFile('.app.config.json');
   const currentModule = getPackageJson('.').name;
   const modules = Object.keys(appConfig.modules);
   const result: RouteManifest = {};
   const currentDir = process.cwd();
   process.chdir('.web/app');
-  Object.assign(result, defineApiRoutes(modules, defineRoutes, currentModule));
   Object.assign(result, definePageRoutes(modules, defineRoutes, currentModule));
   process.chdir(currentDir);
-  return result;
-}
-
-function defineApiRoutes(
-  modules: string[],
-  defineRoutes: DefineRoutes,
-  currentModule: string
-): RouteManifest {
-  const result: RouteManifest = {};
-  for (const module of modules) {
-    try {
-      const pathToModule =
-        currentModule === module
-          ? '../../src/server'
-          : path.dirname(require.resolve(module + '/server'));
-      const routesDir = path.join(pathToModule, 'api');
-      const routes = defineConventionsRoutes(
-        path.relative('.', routesDir),
-        defineRoutes
-      );
-      for (const route of Object.values(routes)) {
-        if (route.path) {
-          route.path = BaseModule.genFullApiPath(route.path, module);
-        }
-      }
-      Object.assign(result, routes);
-    } catch (e) {}
-  }
   return result;
 }
 

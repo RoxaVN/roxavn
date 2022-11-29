@@ -56,19 +56,17 @@ import {
 import { CountryCode } from 'libphonenumber-js';
 import validator from 'validator';
 
-const buildMessage = (
-  message: string,
-  params?: Record<string, unknown>
-): string => {
-  return JSON.stringify({ message: `Validation.${message}`, params });
-};
+const buildContext = (i18n: string, params?: Record<string, unknown>) => ({
+  i18n,
+  params,
+});
 
 export const IsDefined = (
   validationOptions?: ValidationOptions
 ): PropertyDecorator => {
   return _IsDefined({
     ...validationOptions,
-    message: buildMessage('IsDefined'),
+    context: buildContext('IsDefined'),
   });
 };
 
@@ -80,7 +78,7 @@ export const NotEquals = (
 ): PropertyDecorator => {
   return _NotEquals(comparison, {
     ...validationOptions,
-    message: buildMessage('NotEquals', { comparison }),
+    context: buildContext('NotEquals', { comparison }),
   });
 };
 
@@ -89,7 +87,7 @@ export const IsNotEmpty = (
 ): PropertyDecorator => {
   return _IsNotEmpty({
     ...validationOptions,
-    message: buildMessage('IsNotEmpty'),
+    context: buildContext('IsNotEmpty'),
   });
 };
 
@@ -99,7 +97,7 @@ export const IsIn = (
 ): PropertyDecorator => {
   return _IsIn(values, {
     ...validationOptions,
-    message: buildMessage('IsIn', { values }),
+    context: buildContext('IsIn', { values }),
   });
 };
 
@@ -109,7 +107,7 @@ export const IsNotIn = (
 ): PropertyDecorator => {
   return _IsNotIn(values, {
     ...validationOptions,
-    message: buildMessage('IsNotIn', { values }),
+    context: buildContext('IsNotIn', { values }),
   });
 };
 
@@ -118,7 +116,7 @@ export const IsBoolean = (
 ): PropertyDecorator => {
   return _IsBoolean({
     ...validationOptions,
-    message: buildMessage('IsBoolean'),
+    context: buildContext('IsBoolean'),
   });
 };
 
@@ -127,7 +125,7 @@ export const IsDate = (
 ): PropertyDecorator => {
   return _IsDate({
     ...validationOptions,
-    message: buildMessage('IsDate'),
+    context: buildContext('IsDate'),
   });
 };
 
@@ -137,7 +135,7 @@ export const IsNumber = (
 ): PropertyDecorator => {
   return _IsNumber(options, {
     ...validationOptions,
-    message: buildMessage('IsNumber'),
+    context: buildContext('IsNumber'),
   });
 };
 
@@ -146,7 +144,7 @@ export const IsInt = (
 ): PropertyDecorator => {
   return _IsInt({
     ...validationOptions,
-    message: buildMessage('IsInt'),
+    context: buildContext('IsInt'),
   });
 };
 
@@ -155,7 +153,7 @@ export const IsString = (
 ): PropertyDecorator => {
   return _IsString({
     ...validationOptions,
-    message: buildMessage('IsString'),
+    context: buildContext('IsString'),
   });
 };
 
@@ -164,7 +162,7 @@ export const IsArray = (
 ): PropertyDecorator => {
   return _IsArray({
     ...validationOptions,
-    message: buildMessage('IsArray'),
+    context: buildContext('IsArray'),
   });
 };
 
@@ -174,7 +172,7 @@ export const IsDivisibleBy = (
 ): PropertyDecorator => {
   return _IsDivisibleBy(number, {
     ...validationOptions,
-    message: buildMessage('IsDivisibleBy', { number }),
+    context: buildContext('IsDivisibleBy', { number }),
   });
 };
 
@@ -183,7 +181,7 @@ export const IsPositive = (
 ): PropertyDecorator => {
   return _IsPositive({
     ...validationOptions,
-    message: buildMessage('IsPositive'),
+    context: buildContext('IsPositive'),
   });
 };
 
@@ -192,7 +190,7 @@ export const IsNegative = (
 ): PropertyDecorator => {
   return _IsNegative({
     ...validationOptions,
-    message: buildMessage('IsNegative'),
+    context: buildContext('IsNegative'),
   });
 };
 
@@ -202,7 +200,7 @@ export const Min = (
 ): PropertyDecorator => {
   return _Min(min, {
     ...validationOptions,
-    message: buildMessage('Min', { number: min }),
+    context: buildContext('Min', { number: min }),
   });
 };
 
@@ -212,7 +210,7 @@ export const Max = (
 ): PropertyDecorator => {
   return _Max(max, {
     ...validationOptions,
-    message: buildMessage('Max', { number: max }),
+    context: buildContext('Max', { number: max }),
   });
 };
 
@@ -222,7 +220,7 @@ export const MinDate = (
 ): PropertyDecorator => {
   return _MinDate(date, {
     ...validationOptions,
-    message: buildMessage('MinDate', { date }),
+    context: buildContext('MinDate', { date }),
   });
 };
 
@@ -232,7 +230,7 @@ export const MaxDate = (
 ): PropertyDecorator => {
   return _MaxDate(date, {
     ...validationOptions,
-    message: buildMessage('MaxDate', { date }),
+    context: buildContext('MaxDate', { date }),
   });
 };
 
@@ -242,7 +240,7 @@ export const IsDateString = (
 ): PropertyDecorator => {
   return _IsDateString(options, {
     ...validationOptions,
-    message: buildMessage('IsDateString'),
+    context: buildContext('IsDateString'),
   });
 };
 
@@ -251,7 +249,7 @@ export const IsBooleanString = (
 ): PropertyDecorator => {
   return _IsBooleanString({
     ...validationOptions,
-    message: buildMessage('IsBooleanString'),
+    context: buildContext('IsBooleanString'),
   });
 };
 
@@ -261,7 +259,7 @@ export const IsNumberString = (
 ): PropertyDecorator => {
   return _IsNumberString(options, {
     ...validationOptions,
-    message: buildMessage('IsNumberString'),
+    context: buildContext('IsNumberString'),
   });
 };
 
@@ -271,7 +269,7 @@ export const Contains = (
 ): PropertyDecorator => {
   return _Contains(seed, {
     ...validationOptions,
-    message: buildMessage('Contains', { seed }),
+    context: buildContext('Contains', { seed }),
   });
 };
 
@@ -281,7 +279,7 @@ export const NotContains = (
 ): PropertyDecorator => {
   return _NotContains(seed, {
     ...validationOptions,
-    message: buildMessage('NotContains', { seed }),
+    context: buildContext('NotContains', { seed }),
   });
 };
 
@@ -291,7 +289,7 @@ export const IsAlpha = (
 ): PropertyDecorator => {
   return _IsAlpha(locale, {
     ...validationOptions,
-    message: buildMessage('IsAlpha'),
+    context: buildContext('IsAlpha'),
   });
 };
 
@@ -301,7 +299,7 @@ export const IsAlphanumeric = (
 ): PropertyDecorator => {
   return _IsAlphanumeric(locale, {
     ...validationOptions,
-    message: buildMessage('IsAlphanumeric'),
+    context: buildContext('IsAlphanumeric'),
   });
 };
 
@@ -311,7 +309,7 @@ export const IsDecimal = (
 ): PropertyDecorator => {
   return _IsDecimal(options, {
     ...validationOptions,
-    message: buildMessage('IsDecimal'),
+    context: buildContext('IsDecimal'),
   });
 };
 
@@ -320,7 +318,7 @@ export const IsLatLong = (
 ): PropertyDecorator => {
   return _IsLatLong({
     ...validationOptions,
-    message: buildMessage('IsLatLong'),
+    context: buildContext('IsLatLong'),
   });
 };
 
@@ -329,7 +327,7 @@ export const IsLatitude = (
 ): PropertyDecorator => {
   return _IsLatitude({
     ...validationOptions,
-    message: buildMessage('IsLatitude'),
+    context: buildContext('IsLatitude'),
   });
 };
 
@@ -338,7 +336,7 @@ export const IsLongitude = (
 ): PropertyDecorator => {
   return _IsLongitude({
     ...validationOptions,
-    message: buildMessage('IsLongitude'),
+    context: buildContext('IsLongitude'),
   });
 };
 
@@ -348,7 +346,7 @@ export const IsEmail = (
 ): PropertyDecorator => {
   return _IsEmail(options, {
     ...validationOptions,
-    message: buildMessage('IsEmail'),
+    context: buildContext('IsEmail'),
   });
 };
 
@@ -358,7 +356,7 @@ export const IsEnum = (
 ): PropertyDecorator => {
   return _IsEnum(entity, {
     ...validationOptions,
-    message: buildMessage('IsEnum'),
+    context: buildContext('IsEnum'),
   });
 };
 
@@ -367,7 +365,7 @@ export const IsLowercase = (
 ): PropertyDecorator => {
   return _IsLowercase({
     ...validationOptions,
-    message: buildMessage('IsLowercase'),
+    context: buildContext('IsLowercase'),
   });
 };
 
@@ -376,7 +374,7 @@ export const IsUppercase = (
 ): PropertyDecorator => {
   return _IsUppercase({
     ...validationOptions,
-    message: buildMessage('IsUppercase'),
+    context: buildContext('IsUppercase'),
   });
 };
 
@@ -386,7 +384,7 @@ export const IsPhoneNumber = (
 ): PropertyDecorator => {
   return _IsPhoneNumber(region, {
     ...validationOptions,
-    message: buildMessage('IsPhoneNumber'),
+    context: buildContext('IsPhoneNumber'),
   });
 };
 
@@ -396,7 +394,7 @@ export const IsUrl = (
 ): PropertyDecorator => {
   return _IsUrl(options, {
     ...validationOptions,
-    message: buildMessage('IsUrl'),
+    context: buildContext('IsUrl'),
   });
 };
 
@@ -406,7 +404,7 @@ export const IsUUID = (
 ): PropertyDecorator => {
   return _IsUUID(version, {
     ...validationOptions,
-    message: buildMessage('IsUUID'),
+    context: buildContext('IsUUID'),
   });
 };
 
@@ -415,7 +413,7 @@ export const IsMimeType = (
 ): PropertyDecorator => {
   return _IsMimeType({
     ...validationOptions,
-    message: buildMessage('IsMimeType'),
+    context: buildContext('IsMimeType'),
   });
 };
 
@@ -424,7 +422,7 @@ export const IsObject = (
 ): PropertyDecorator => {
   return _IsObject({
     ...validationOptions,
-    message: buildMessage('IsObject'),
+    context: buildContext('IsObject'),
   });
 };
 
@@ -434,7 +432,7 @@ export const IsNotEmptyObject = (
 ): PropertyDecorator => {
   return _IsNotEmptyObject(options, {
     ...validationOptions,
-    message: buildMessage('IsNotEmptyObject'),
+    context: buildContext('IsNotEmptyObject'),
   });
 };
 
@@ -444,7 +442,7 @@ export const MinLength = (
 ): PropertyDecorator => {
   return _MinLength(min, {
     ...validationOptions,
-    message: buildMessage('MinLength', { number: min }),
+    context: buildContext('MinLength', { number: min }),
   });
 };
 
@@ -454,7 +452,7 @@ export const MaxLength = (
 ): PropertyDecorator => {
   return _MaxLength(max, {
     ...validationOptions,
-    message: buildMessage('MaxLength', { number: max }),
+    context: buildContext('MaxLength', { number: max }),
   });
 };
 
@@ -464,7 +462,7 @@ export const Matches = (
 ): PropertyDecorator => {
   return _Matches(pattern, {
     ...validationOptions,
-    message: buildMessage('Matches'),
+    context: buildContext('Matches'),
   });
 };
 
@@ -474,7 +472,7 @@ export const ArrayContains = (
 ): PropertyDecorator => {
   return _ArrayContains(values, {
     ...validationOptions,
-    message: buildMessage('ArrayContains', { values }),
+    context: buildContext('ArrayContains', { values }),
   });
 };
 
@@ -484,7 +482,7 @@ export const ArrayNotContains = (
 ): PropertyDecorator => {
   return _ArrayNotContains(values, {
     ...validationOptions,
-    message: buildMessage('ArrayNotContains', { values }),
+    context: buildContext('ArrayNotContains', { values }),
   });
 };
 
@@ -493,7 +491,7 @@ export const ArrayNotEmpty = (
 ): PropertyDecorator => {
   return _ArrayNotEmpty({
     ...validationOptions,
-    message: buildMessage('ArrayNotEmpty'),
+    context: buildContext('ArrayNotEmpty'),
   });
 };
 
@@ -503,7 +501,7 @@ export const ArrayMinSize = (
 ): PropertyDecorator => {
   return _ArrayMinSize(min, {
     ...validationOptions,
-    message: buildMessage('ArrayMinSize', { number: min }),
+    context: buildContext('ArrayMinSize', { number: min }),
   });
 };
 
@@ -513,7 +511,7 @@ export const ArrayMaxSize = (
 ): PropertyDecorator => {
   return _ArrayMaxSize(max, {
     ...validationOptions,
-    message: buildMessage('ArrayMaxSize', { number: max }),
+    context: buildContext('ArrayMaxSize', { number: max }),
   });
 };
 
@@ -523,6 +521,6 @@ export const ArrayUnique = (
 ): PropertyDecorator => {
   return _ArrayUnique(identifierOrOptions, {
     ...validationOptions,
-    message: buildMessage('ArrayUnique'),
+    context: buildContext('ArrayUnique'),
   });
 };

@@ -1,4 +1,5 @@
 import { Permission } from './permission';
+import { ExactProps } from './props';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Empty {}
@@ -51,7 +52,7 @@ export type ApiResponse = Record<string, any>;
 export type ApiError = Record<string, any>;
 
 export interface Api<
-  Req extends ApiRequest = ApiRequest, // eslint-disable-line @typescript-eslint/no-unused-vars
+  Req extends ApiRequest = ApiRequest,
   Res extends ApiResponse = ApiResponse, // eslint-disable-line @typescript-eslint/no-unused-vars
   Error extends ApiError = ApiError // eslint-disable-line @typescript-eslint/no-unused-vars
 > {
@@ -69,6 +70,9 @@ export interface Api<
    * Auth requirement.
    */
   auth?: 'LOGGED' | 'NOT_LOGGED';
+
+  // request validator
+  validator?: typeof ExactProps<Req>;
 
   /**
    * Permission.
