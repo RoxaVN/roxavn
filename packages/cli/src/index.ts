@@ -1,6 +1,6 @@
-#!/usr/bin/env node
 import { Command } from 'commander';
 
+import { devService } from './dev';
 import { moduleService } from './module';
 import { templateService } from './template';
 
@@ -21,4 +21,9 @@ program
   .description('Create package')
   .action(() => templateService.createPackage());
 
-program.parse();
+program
+  .command('dev')
+  .description('Run dev server')
+  .action(() => devService.run());
+
+export default program;

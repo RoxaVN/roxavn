@@ -4,9 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "remix build .web",
-    "dev": "run-p \"dev:*\"",
-    "dev:node": "cross-env NODE_ENV=development nodemon --require dotenv/config ./.web/server.js",
-    "dev:remix": "remix watch .web",
+    "dev": "roxavn dev",
     "start": "cross-env NODE_ENV=production node ./server.js"
   },
   "dependencies": {

@@ -1,8 +1,9 @@
 {
   "name": "@roxavn/cli",
   "version": "0.1.0",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "rimraf dist && tsc -p tsconfig.build.json && chmod +x dist/index.js",
+    "build": "rimraf dist && tsc -p tsconfig.build.json && chmod +x dist/cli.js",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --passWithNoTests --watch",
     "test:cov": "rimraf coverage && jest --passWithNoTests --coverage"
@@ -12,22 +13,25 @@
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.5.2",
+    "@types/nodemon": "^1.19.2",
     "jest": "^29.3.1",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.2.1",
     "typescript": "^4.3.5"
   },
   "bin": {
-    "roxavn": "dist/index.js"
+    "roxavn": "dist/cli.js"
   },
   "engines": {
     "node": ">=14.17.4",
     "npm": ">=7.21.1"
   },
   "dependencies": {
+    "@remix-run/dev": "^1.7.6",
     "@roxavn/core": "^0.1.28",
     "commander": "^9.4.1",
-    "fs-extra": "^10.1.0"
+    "fs-extra": "^10.1.0",
+    "nodemon": "^2.0.20"
   },
   "files": [
     "/dist"

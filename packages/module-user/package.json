@@ -3,9 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "build": "rimraf dist/ && tsc -p tsconfig.build.json",
-    "dev": "remix build .web && run-p \"dev:*\"",
-    "dev:node": "cross-env NODE_ENV=development nodemon --require dotenv/config .web/server.ts",
-    "dev:remix": "remix watch .web"
+    "dev": "roxavn dev"
   },
   "license": "UNLICENSED",
   "author": "",
