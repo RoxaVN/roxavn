@@ -12,6 +12,7 @@ import { useChangeLanguage } from 'remix-i18next';
 import { useTranslation } from 'react-i18next';
 import i18next from './i18next.server';
 import { createEmotionCache, MantineProvider } from '@mantine/core';
+import { StylesPlaceholder } from '@mantine/remix';
 import React from 'react';
 
 type LoaderData = { locale: string };
@@ -44,6 +45,7 @@ export default function Root() {
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <html lang={locale} dir={i18n.dir()}>
         <head>
+          <StylesPlaceholder />
           <Meta />
           <Links />
         </head>
