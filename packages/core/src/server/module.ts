@@ -1,11 +1,14 @@
 import { validateSync } from 'class-validator';
 import { Request, Response, Router, NextFunction } from 'express';
-import { Api, ApiRequest, ApiResponse, baseModule, BaseModule } from '../share';
 import {
-  BadRequestException,
-  LogicException,
-  ServerException,
-} from './exception';
+  Api,
+  ApiRequest,
+  ApiResponse,
+  baseModule,
+  BaseModule,
+  FullApiResponse,
+} from '../share';
+import { ServerException, ValidationException } from './exception';
 
 export type ApiMiddlerware = (
   api: Api,
@@ -43,7 +46,7 @@ export class ServerModule extends BaseModule {
       ),
       function (req: Request, resp: Response) {
         const result = handler(getRequestInput(req), { req, resp });
-        resp.json(result);
+        resp.status(200).json({ code: 200, data: result } as FullApiResponse);
       }
     );
   }
@@ -51,30 +54,31 @@ export class ServerModule extends BaseModule {
   static fromBase(base: BaseModule) {
     return new ServerModule(base.name);
   }
-
-  static createApiMiddleware(apiMiddlerware: ApiMiddlerware) {
-    ServerModule.apiMiddlerwares.push(apiMiddlerware);
-  }
-
-  static createErrorMiddleware(errorMiddlerware: ErrorMiddlerware) {
-    ServerModule.errorMiddlerwares.push(errorMiddlerware);
-  }
 }
 
-ServerModule.createErrorMiddleware((error, req, resp) => {
-  if (!(error instanceof LogicException)) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ServerModule.errorMiddlerwares.push((error, req, resp, next) => {
+  if (!error.code) {
     error = new ServerException();
   }
-  resp.status(error.code).json(error.toJson());
+  resp
+    .status(error.code)
+    .json({ code: error.code, error: error.toJson() } as FullApiResponse);
 });
 
-ServerModule.createApiMiddleware((api, req, resp, next) => {
+ServerModule.apiMiddlerwares.push((api, req, resp, next) => {
   if (api.validator) {
-    const errors = validateSync(new api.validator(getRequestInput(req)));
+    const errors = validateSync(new api.validator(getRequestInput(req)), {
+      stopAtFirstError: true,
+    });
     if (errors.length) {
-      const exception = new BadRequestException();
-      exception.metadata = { errors };
-      next(exception);
+      const metadata = {};
+      errors.forEach((error) => {
+        if (error.contexts) {
+          metadata[error.property] = Object.values(error.contexts)[0];
+        }
+      });
+      next(new ValidationException(metadata));
       return;
     }
   }

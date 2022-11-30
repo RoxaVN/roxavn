@@ -33,6 +33,8 @@ app.use(morgan('tiny'));
 registerApiRoutes();
 app.use('/', ServerModule.apiRouter);
 
+ServerModule.errorMiddlerwares.map((handler) => app.use(handler));
+
 app.all(
   '*',
   process.env.NODE_ENV === 'development'

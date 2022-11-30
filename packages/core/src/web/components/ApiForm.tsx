@@ -76,7 +76,15 @@ export function ApiForm<
                 const error = apiFetcher.getErrorData(resp);
                 if (error) {
                   if (error.type === 'ValidationException') {
-                    form.setErrors(error.metadata);
+                    Object.keys(error.metadata).forEach((field) =>
+                      form.setFieldError(
+                        field,
+                        t(
+                          error.metadata[field].i18n,
+                          error.metadata[field].params
+                        )
+                      )
+                    );
                   }
                 }
               });

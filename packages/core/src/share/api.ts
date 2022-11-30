@@ -1,3 +1,4 @@
+import { ErrorResponse } from './errors';
 import { Permission } from './permission';
 import { ExactProps } from './props';
 
@@ -45,6 +46,12 @@ export interface PaginatedCollection<T> extends Collection<T> {
    * Pagination metadata.
    */
   pagination: Pagination;
+}
+
+export interface FullApiResponse {
+  code: number;
+  data?: any;
+  error?: ErrorResponse;
 }
 
 export type ApiRequest = Record<string, any>;

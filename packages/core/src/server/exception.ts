@@ -1,17 +1,19 @@
+import { ErrorResponse } from '../share';
+
 export class LogicException extends Error {
-  code: number;
+  code = 500;
   type: string;
   metadata?: Record<string, unknown>;
 
-  constructor(code: number) {
+  constructor(metadata?: Record<string, unknown>) {
     super();
-    this.code = code;
-    this.type = this.constructor.name;
+    this.metadata = metadata;
+    this.type = new.target.name;
+    Object.setPrototypeOf(this, new.target.prototype);
   }
 
-  toJson() {
+  toJson(): ErrorResponse {
     return {
-      code: this.code,
       type: this.type,
       metadata: this.metadata,
     };
@@ -19,31 +21,25 @@ export class LogicException extends Error {
 }
 
 export class BadRequestException extends LogicException {
-  constructor() {
-    super(400);
-  }
+  code = 400;
 }
 
 export class UnauthorizedException extends LogicException {
-  constructor() {
-    super(401);
-  }
+  code = 401;
 }
 
 export class ForbiddenException extends LogicException {
-  constructor() {
-    super(403);
-  }
+  code = 403;
 }
 
 export class NotFoundException extends LogicException {
-  constructor() {
-    super(404);
-  }
+  code = 404;
+}
+
+export class ValidationException extends LogicException {
+  code = 422;
 }
 
 export class ServerException extends LogicException {
-  constructor() {
-    super(500);
-  }
+  code = 500;
 }

@@ -7,7 +7,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Node: Nodemon",
+      "name": "Node: Run dev server",
       "cwd": "${fileDirname}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
