@@ -2,7 +2,7 @@
   "name": "@roxavn/module-user",
   "version": "0.1.0",
   "scripts": {
-    "build": "rimraf dist/ && tsc -p tsconfig.build.json",
+    "build": "roxavn build",
     "dev": "roxavn dev"
   },
   "license": "UNLICENSED",

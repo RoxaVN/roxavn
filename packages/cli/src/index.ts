@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 
+import { buildService } from './build';
 import { devService } from './dev';
 import { moduleService } from './module';
 import { templateService } from './template';
@@ -12,7 +13,7 @@ program
   .version('0.8.0');
 
 program
-  .command('module:sync')
+  .command('sync:module')
   .description('Sync module after installing')
   .action(() => moduleService.sync());
 
@@ -25,5 +26,10 @@ program
   .command('dev')
   .description('Run dev server')
   .action(() => devService.run());
+
+program
+  .command('build')
+  .description('Build module for publish')
+  .action(() => buildService.compile());
 
 export default program;

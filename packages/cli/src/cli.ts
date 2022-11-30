@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-import command from './index';
+import program from './index';
 
-command.parse();
+program.parse();
