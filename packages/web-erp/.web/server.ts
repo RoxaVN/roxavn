@@ -1,6 +1,6 @@
 try {
   // import typescript module for dev
-  require('../src/server').useApis();
+  require('../src/server');
 } catch (e) {}
 
 require('./server');

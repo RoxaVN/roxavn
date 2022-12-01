@@ -60,20 +60,23 @@ export class ServerModule extends BaseModule {
     );
   }
 
-  useService<
-    Req extends ApiRequest,
-    Resp extends ApiResponse,
-    Service extends ApiService<Api<Req, Resp>>
-  >(api: Api<Req, Resp>, serviceClass: new (...args: any[]) => Service) {
-    this.useApi(api, async (req) => {
-      const service = new serviceClass(databaseManager.dataSource);
-      return service.handle(req);
-    });
-  }
-
   static fromBase(base: BaseModule) {
     return new ServerModule(base.name);
   }
+}
+
+export function UseApi<Req extends ApiRequest, Resp extends ApiResponse>(
+  module: ServerModule,
+  api: Api<Req, Resp>
+) {
+  return function (
+    serviceClass: new (...args: any[]) => ApiService<Api<Req, Resp>>
+  ) {
+    module.useApi(api, async (req) => {
+      const service = new serviceClass(databaseManager.dataSource);
+      return service.handle(req);
+    });
+  };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

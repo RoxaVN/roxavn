@@ -20,7 +20,7 @@ export function registerApiRoutes() {
   Object.keys(appConfig.get().modules).map((module) => {
     try {
       if (module !== '.') {
-        require(module + '/server').useApis();
+        require(module + '/server');
       }
     } catch (e) {}
   });
