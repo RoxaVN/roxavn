@@ -3,7 +3,7 @@ const express = require('express');
 const compression = require('compression');
 const morgan = require('morgan');
 const { createRequestHandler } = require('@remix-run/express');
-const { ServerModule, registerApiRoutes } = require('@roxavn/core/server');
+const { bootstrap } = require('@roxavn/core/server');
 
 const BUILD_DIR = path.join(__dirname, 'build');
 
@@ -30,10 +30,7 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1h' }));
 
 app.use(morgan('tiny'));
 
-registerApiRoutes();
-app.use('/', ServerModule.apiRouter);
-
-ServerModule.errorMiddlerwares.map((handler) => app.use(handler));
+bootstrap(app);
 
 app.all(
   '*',

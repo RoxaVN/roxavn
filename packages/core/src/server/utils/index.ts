@@ -1,1 +1,3 @@
-export * from './fs.utils';
+export * from './fs';
+export * from './register';
+export * from './bootstrap';

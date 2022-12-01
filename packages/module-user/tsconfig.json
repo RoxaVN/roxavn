@@ -12,6 +12,8 @@
     "allowJs": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "strictPropertyInitialization": false,
+    "emitDecoratorMetadata": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"]

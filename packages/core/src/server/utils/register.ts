@@ -2,7 +2,8 @@ import minimatch from 'minimatch';
 import path from 'path';
 
 import { AppConfig } from '@remix-run/dev';
-import { getJsonFromFile, getPackageJson, visitFiles } from './utils';
+import { visitFiles } from '.';
+import { appConfig } from '../app.config';
 
 type RoutesConfig = Exclude<AppConfig['routes'], undefined>;
 type RouteManifest = Awaited<ReturnType<RoutesConfig>>;
@@ -16,11 +17,9 @@ function isRouteModuleFile(filename: string): boolean {
 }
 
 export function registerApiRoutes() {
-  const appConfig = getJsonFromFile('.app.config.json');
-  const currentModule = getPackageJson('.').name;
-  Object.keys(appConfig.modules).map((module) => {
+  Object.keys(appConfig.get().modules).map((module) => {
     try {
-      if (module !== currentModule) {
+      if (module !== '.') {
         require(module + '/server').useApis();
       }
     } catch (e) {}
@@ -28,27 +27,24 @@ export function registerApiRoutes() {
 }
 
 export function registerWebRoutes(defineRoutes: DefineRoutes) {
-  const appConfig = getJsonFromFile('.app.config.json');
-  const currentModule = getPackageJson('.').name;
-  const modules = Object.keys(appConfig.modules);
+  const modules = Object.keys(appConfig.get().modules);
   const result: RouteManifest = {};
   const currentDir = process.cwd();
   process.chdir('.web/app');
-  Object.assign(result, definePageRoutes(modules, defineRoutes, currentModule));
+  Object.assign(result, definePageRoutes(modules, defineRoutes));
   process.chdir(currentDir);
   return result;
 }
 
 function definePageRoutes(
   modules: string[],
-  defineRoutes: DefineRoutes,
-  currentModule: string
+  defineRoutes: DefineRoutes
 ): RouteManifest {
   const result: RouteManifest = {};
   for (const module of modules) {
     try {
       const pathToModule =
-        currentModule === module
+        module === '.'
           ? '../../src/web'
           : path.dirname(require.resolve(module + '/web'));
       const routesDir = path.join(pathToModule, 'pages');

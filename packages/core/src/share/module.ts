@@ -1,5 +1,5 @@
 import { Api, ApiError, ApiRequest, ApiResponse } from './api';
-import { API_BASE_PATH } from './constants';
+import { constants } from './constants';
 import { WebRoute } from './route';
 import { urlUtils } from './url';
 
@@ -40,7 +40,7 @@ export class BaseModule {
       ...api,
       path:
         '/' +
-        API_BASE_PATH +
+        constants.API_BASE_PATH +
         '/' +
         this._escapedName +
         (params ? urlUtils.gen(api.path, params) : api.path),
@@ -52,7 +52,9 @@ export class BaseModule {
   }
 
   public static genFullApiPath(path: string, name: string): string {
-    return '/' + API_BASE_PATH + '/' + BaseModule.escapeName(name) + path;
+    return (
+      '/' + constants.API_BASE_PATH + '/' + BaseModule.escapeName(name) + path
+    );
   }
 
   public genWebPath(router: WebRoute, params?: Record<string, any>) {
