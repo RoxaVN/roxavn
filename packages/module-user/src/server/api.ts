@@ -1,6 +1,7 @@
 import { Apis } from '../share/apis';
 import { serverModule } from './module';
+import { LoginApiService } from './services';
 
 export function useApis() {
-  serverModule.useApi(Apis.Login, () => ({ accessToken: '20' }));
+  serverModule.useService(Apis.Login, LoginApiService);
 }

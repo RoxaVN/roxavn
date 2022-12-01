@@ -8,7 +8,9 @@ import {
   BaseModule,
   FullApiResponse,
 } from '../share';
+import { databaseManager } from './database';
 import { ServerException, ValidationException } from './exception';
+import { ApiService } from './service';
 
 export type ApiMiddlerware = (
   api: Api,
@@ -34,7 +36,10 @@ export class ServerModule extends BaseModule {
 
   useApi<Req extends ApiRequest, Resp extends ApiResponse>(
     api: Api<Req, Resp>,
-    handler: (req: Req, context: { req: Request; resp: Response }) => Resp
+    handler: (
+      req: Req,
+      context: { req: Request; resp: Response }
+    ) => Promise<Resp> | Resp
   ) {
     ServerModule.apiRouter[api.method.toLowerCase()](
       BaseModule.genFullApiPath(api.path, this.name),
@@ -44,11 +49,26 @@ export class ServerModule extends BaseModule {
             middleware(api, req, resp, next);
           }
       ),
-      function (req: Request, resp: Response) {
-        const result = handler(getRequestInput(req), { req, resp });
-        resp.status(200).json({ code: 200, data: result } as FullApiResponse);
+      async function (req: Request, resp: Response, next: NextFunction) {
+        try {
+          const result = await handler(getRequestInput(req), { req, resp });
+          resp.status(200).json({ code: 200, data: result } as FullApiResponse);
+        } catch (e) {
+          next(e);
+        }
       }
     );
+  }
+
+  useService<
+    Req extends ApiRequest,
+    Resp extends ApiResponse,
+    Service extends ApiService<Api<Req, Resp>>
+  >(api: Api<Req, Resp>, serviceClass: new (...args: any[]) => Service) {
+    this.useApi(api, async (req) => {
+      const service = new serviceClass(databaseManager.dataSource);
+      return service.handle(req);
+    });
   }
 
   static fromBase(base: BaseModule) {
