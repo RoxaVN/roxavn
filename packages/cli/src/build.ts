@@ -51,6 +51,8 @@ class BuildService {
         suppressImplicitAnyIndexErrors: true,
         allowSyntheticDefaultImports: true,
         skipLibCheck: true,
+        emitDecoratorMetadata: true,
+        strictPropertyInitialization: false,
         strict: true,
       },
       include: ['src'],

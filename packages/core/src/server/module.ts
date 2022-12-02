@@ -7,9 +7,10 @@ import {
   baseModule,
   BaseModule,
   FullApiResponse,
+  ServerException,
+  ValidationException,
 } from '../share';
 import { databaseManager } from './database';
-import { ServerException, ValidationException } from './exception';
 import { ApiService } from './service';
 
 export type ApiMiddlerware = (
@@ -65,7 +66,7 @@ export class ServerModule extends BaseModule {
   }
 }
 
-export function UseApi<Req extends ApiRequest, Resp extends ApiResponse>(
+export function useApi<Req extends ApiRequest, Resp extends ApiResponse>(
   module: ServerModule,
   api: Api<Req, Resp>
 ) {

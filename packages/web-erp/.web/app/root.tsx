@@ -14,6 +14,7 @@ import i18next from './i18next.server';
 import { createEmotionCache, MantineProvider } from '@mantine/core';
 import { StylesPlaceholder } from '@mantine/remix';
 import React from 'react';
+import 'reflect-metadata';
 
 type LoaderData = { locale: string };
 createEmotionCache({ key: 'mantine' });

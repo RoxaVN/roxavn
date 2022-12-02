@@ -5,28 +5,54 @@ export interface ErrorResponse {
   type: string;
 
   /**
-   * An error message.
-   */
-  message?: string;
-
-  /**
    * An error metadata.
    */
+  metadata?: {
+    i18n?: string;
+    params?: Record<string, any>;
+  };
+}
+
+export class LogicException extends Error {
+  code = 500;
+  type: string;
   metadata?: Record<string, unknown>;
+
+  constructor(metadata?: Record<string, unknown>) {
+    super();
+    this.metadata = metadata;
+    this.type = new.target.name;
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+
+  toJson(): ErrorResponse {
+    return {
+      type: this.type,
+      metadata: this.metadata,
+    };
+  }
 }
 
-export interface BadRequestException extends ErrorResponse {
-  type: 'BadRequestException';
+export class BadRequestException extends LogicException {
+  code = 400;
 }
 
-export interface UnauthorizedException extends ErrorResponse {
-  type: 'UnauthorizedException';
+export class UnauthorizedException extends LogicException {
+  code = 401;
 }
 
-export interface ForbiddenException extends ErrorResponse {
-  type: 'ForbiddenException';
+export class ForbiddenException extends LogicException {
+  code = 403;
 }
 
-export interface NotFoundException extends ErrorResponse {
-  type: 'NotFoundException';
+export class NotFoundException extends LogicException {
+  code = 404;
+}
+
+export class ValidationException extends LogicException {
+  code = 422;
+}
+
+export class ServerException extends LogicException {
+  code = 500;
 }

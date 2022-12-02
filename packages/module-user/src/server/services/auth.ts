@@ -1,15 +1,15 @@
-import { ApiService, UnauthorizedException, UseApi } from '@roxavn/core/server';
-import { InferApiRequest } from '@roxavn/core/share';
+import { ApiService, useApi } from '@roxavn/core/server';
+import { InferApiRequest, UnauthorizedException } from '@roxavn/core/share';
 
-import { Apis } from '../../share';
+import { LoginApi } from '../../share';
 import { Env } from '../config';
 import { PasswordIdentity, UserAccessToken } from '../entities';
 import { serverModule } from '../module';
 import { TokenService } from './token';
 
-@UseApi(serverModule, Apis.Login)
-export class LoginApiService extends ApiService<typeof Apis.Login> {
-  async handle(request: InferApiRequest<typeof Apis.Login>) {
+@useApi(serverModule, LoginApi)
+export class LoginApiService extends ApiService<typeof LoginApi> {
+  async handle(request: InferApiRequest<typeof LoginApi>) {
     const tokenService = new TokenService();
 
     const identity = await this.dataSource

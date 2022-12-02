@@ -1,6 +1,5 @@
 import { Max, Min, MinLength, validateByClass } from '@roxavn/core/share';
 import { Type } from 'class-transformer';
-import 'reflect-metadata';
 
 const A_MINUTE = 60 * 1000;
 const AN_HOUR = 60 * A_MINUTE;
