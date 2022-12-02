@@ -13,6 +13,10 @@ class TemplateService {
     }
     const webModulePath = path.dirname(require.resolve('@roxavn/web-erp'));
     fse.copySync(path.join(webModulePath, '.web'), '.web');
+    fse.copyFileSync(
+      path.join(webModulePath, 'tsconfig.json'),
+      'tsconfig.json'
+    );
   }
 }
 
