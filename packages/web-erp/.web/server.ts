@@ -3,6 +3,13 @@ try {
   require('../src/server');
 } catch (e) {}
 
-require('./server');
+const serverConfigs = require('./server');
+
+serverConfigs.callback = () => {
+  try {
+    // import __hooks__ module to install
+    require('../src/__hooks__/install');
+  } catch (e) {}
+};
 
 export default {};

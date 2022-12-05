@@ -30,28 +30,32 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1h' }));
 
 app.use(morgan('tiny'));
 
-bootstrap(app);
+bootstrap(app).then(() => {
+  app.all(
+    '*',
+    process.env.NODE_ENV === 'development'
+      ? (req, res, next) => {
+          purgeRequireCache();
 
-app.all(
-  '*',
-  process.env.NODE_ENV === 'development'
-    ? (req, res, next) => {
-        purgeRequireCache();
-
-        return createRequestHandler({
+          return createRequestHandler({
+            build: require(BUILD_DIR),
+            mode: process.env.NODE_ENV,
+          })(req, res, next);
+        }
+      : createRequestHandler({
           build: require(BUILD_DIR),
           mode: process.env.NODE_ENV,
-        })(req, res, next);
-      }
-    : createRequestHandler({
-        build: require(BUILD_DIR),
-        mode: process.env.NODE_ENV,
-      })
-);
-const port = process.env.PORT || 3000;
+        })
+  );
 
-app.listen(port, () => {
-  console.log(`Express server listening on port ${port}`);
+  if (configs.callback) {
+    configs.callback();
+  }
+
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`Express server listening on port ${port}`);
+  });
 });
 
 function purgeRequireCache() {
@@ -66,3 +70,7 @@ function purgeRequireCache() {
     }
   }
 }
+
+const configs = { callback: null };
+
+module.exports = configs;
