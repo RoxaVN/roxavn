@@ -5,6 +5,7 @@ import { IconSend } from '@tabler/icons';
 import { Api, ApiRequest, ApiResponse } from '../../share';
 import { apiFetcher } from '../services/api.fetcher';
 import { webModule } from '../services/module';
+import { uiManager } from '../services/ui';
 
 export interface ApiFormProps<
   Request extends ApiRequest,
@@ -76,15 +77,17 @@ export function ApiForm<
                 const error = apiFetcher.getErrorData(resp);
                 if (error) {
                   if (error.type === 'ValidationException') {
-                    Object.keys(error.metadata).forEach((field) =>
+                    Object.keys(error.i18n).forEach((field) =>
                       form.setFieldError(
                         field,
-                        t(
-                          error.metadata[field].i18n,
-                          error.metadata[field].params
-                        )
+                        t(error.i18n[field].key, {
+                          ns: error.i18n[field].ns,
+                          ...error.i18n[field].params,
+                        })
                       )
                     );
+                  } else {
+                    uiManager.errorDialog(error);
                   }
                 }
               });

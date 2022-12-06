@@ -55,9 +55,15 @@ import {
 } from 'class-validator';
 import { CountryCode } from 'libphonenumber-js';
 import validator from 'validator';
+import { I18nErrorField } from './errors';
+import { baseModule } from './module';
 
-const buildContext = (i18n: string, params?: Record<string, unknown>) => ({
-  i18n: 'Validation.' + i18n,
+const buildContext = (
+  key: string,
+  params?: Record<string, unknown>
+): I18nErrorField => ({
+  key: 'Validation.' + key,
+  ns: baseModule.escapedName,
   params,
 });
 

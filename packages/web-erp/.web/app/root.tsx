@@ -12,6 +12,7 @@ import { useChangeLanguage } from 'remix-i18next';
 import { useTranslation } from 'react-i18next';
 import i18next from './i18next.server';
 import { createEmotionCache, MantineProvider } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
 import { StylesPlaceholder } from '@mantine/remix';
 import React from 'react';
 import 'reflect-metadata';
@@ -44,19 +45,21 @@ export default function Root() {
 
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
-      <html lang={locale} dir={i18n.dir()}>
-        <head>
-          <StylesPlaceholder />
-          <Meta />
-          <Links />
-        </head>
-        <body>
-          <Outlet />
-          <ScrollRestoration />
-          <Scripts />
-          <LiveReload />
-        </body>
-      </html>
+      <ModalsProvider>
+        <html lang={locale} dir={i18n.dir()}>
+          <head>
+            <StylesPlaceholder />
+            <Meta />
+            <Links />
+          </head>
+          <body>
+            <Outlet />
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload />
+          </body>
+        </html>
+      </ModalsProvider>
     </MantineProvider>
   );
 }

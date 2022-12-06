@@ -12,6 +12,7 @@
     "@emotion/server": "^11.10.0",
     "@mantine/core": "^5.8.2",
     "@mantine/hooks": "^5.8.2",
+    "@mantine/modals": "^5.8.2",
     "@mantine/remix": "^5.8.2",
     "@remix-run/express": "^1.7.6",
     "@remix-run/node": "^1.7.6",

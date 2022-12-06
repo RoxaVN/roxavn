@@ -1,8 +1,8 @@
-import { Api, ApiRequest, ApiResponse } from '../../share';
+import { Api, ApiRequest, ApiResponse, ErrorResponse } from '../../share';
 import { HttpException, http } from './http';
 
 const apiFetcher = {
-  getErrorData(e: HttpException) {
+  getErrorData(e: HttpException): ErrorResponse | undefined {
     return e?.data?.error;
   },
   fetch<Request extends ApiRequest, Response extends ApiResponse>(

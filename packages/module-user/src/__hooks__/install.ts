@@ -7,8 +7,6 @@ export default async function install(): Promise<any> {
     await database.up();
   } catch (error) {
     console.error(error);
-  } finally {
-    process.exit(1);
   }
 }
 

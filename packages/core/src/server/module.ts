@@ -6,6 +6,7 @@ import {
   ApiResponse,
   baseModule,
   BaseModule,
+  ErrorResponse,
   FullApiResponse,
   ServerException,
   ValidationException,
@@ -96,13 +97,13 @@ ServerModule.apiMiddlerwares.push((api, req, resp, next) => {
       stopAtFirstError: true,
     });
     if (errors.length) {
-      const metadata = {};
+      const i18n: ErrorResponse['i18n'] = {};
       errors.forEach((error) => {
         if (error.contexts) {
-          metadata[error.property] = Object.values(error.contexts)[0];
+          i18n[error.property] = Object.values(error.contexts)[0];
         }
       });
-      next(new ValidationException(metadata));
+      next(new ValidationException(i18n));
       return;
     }
   }

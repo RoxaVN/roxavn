@@ -1,4 +1,5 @@
 {
+  "confirm": "Xác nhận",
   "accept": "Đồng ý",
   "reject": "Từ chối",
   "choose": "Lựa chọn",
@@ -22,6 +23,14 @@
   "report": "Báo cáo",
   "config": "Cấu hình",
   "statistic": "Thống kê",
+
+  "Error": {
+    "BadRequestException": "Yêu cầu không hợp lệ",
+    "UnauthorizedException": "Lỗi xác thực",
+    "ForbiddenException": "Lỗi không có quyền truy cập",
+    "NotFoundException": "Lỗi không tìm thấy dữ liệu",
+    "ServerException": "Lỗi máy chủ"
+  },
 
   "Validation": {
     "IsDefined": "Không được bỏ qua",

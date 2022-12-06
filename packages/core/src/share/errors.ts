@@ -1,3 +1,11 @@
+import { baseModule } from './module';
+
+export type I18nErrorField = {
+  key: string;
+  ns?: string;
+  params?: Record<string, any>;
+};
+
 export interface ErrorResponse {
   /**
    * An error type.
@@ -5,22 +13,21 @@ export interface ErrorResponse {
   type: string;
 
   /**
-   * An error metadata.
+   * An error i18n.
    */
-  metadata?: {
-    i18n?: string;
-    params?: Record<string, any>;
-  };
+  i18n: Record<string, I18nErrorField>;
 }
 
 export class LogicException extends Error {
   code = 500;
   type: string;
-  metadata?: Record<string, unknown>;
+  i18n = {} as ErrorResponse['i18n'];
 
-  constructor(metadata?: Record<string, unknown>) {
+  constructor(i18n?: ErrorResponse['i18n']) {
     super();
-    this.metadata = metadata;
+    if (i18n) {
+      this.i18n = i18n;
+    }
     this.type = new.target.name;
     Object.setPrototypeOf(this, new.target.prototype);
   }
@@ -28,25 +35,40 @@ export class LogicException extends Error {
   toJson(): ErrorResponse {
     return {
       type: this.type,
-      metadata: this.metadata,
+      i18n: this.i18n,
     };
   }
 }
 
 export class BadRequestException extends LogicException {
   code = 400;
+  i18n = {
+    default: { key: 'Error.BadRequestException', ns: baseModule.escapedName },
+  };
 }
 
 export class UnauthorizedException extends LogicException {
   code = 401;
+  i18n = {
+    default: {
+      key: 'Error.UnauthorizedException',
+      ns: baseModule.escapedName,
+    },
+  };
 }
 
 export class ForbiddenException extends LogicException {
   code = 403;
+  i18n = {
+    default: { key: 'Error.ForbiddenException', ns: baseModule.escapedName },
+  };
 }
 
 export class NotFoundException extends LogicException {
   code = 404;
+  i18n = {
+    default: { key: 'Error.NotFoundException', ns: baseModule.escapedName },
+  };
 }
 
 export class ValidationException extends LogicException {
@@ -55,4 +77,7 @@ export class ValidationException extends LogicException {
 
 export class ServerException extends LogicException {
   code = 500;
+  i18n = {
+    default: { key: 'Error.ServerException', ns: baseModule.escapedName },
+  };
 }

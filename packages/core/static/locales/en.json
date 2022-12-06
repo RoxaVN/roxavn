@@ -1,4 +1,5 @@
 {
+  "confirm": "Confirm",
   "accept": "Yes",
   "reject": "No",
   "choose": "Choose",
@@ -23,6 +24,13 @@
   "config": "Config",
   "statistic": "Statistic",
 
+  "Error": {
+    "BadRequestException": "Bad request exception",
+    "UnauthorizedException": "Unauthorized exception",
+    "ForbiddenException": "Forbidden exception",
+    "NotFoundException": "Not found exception",
+    "ServerException": "Server exception"
+  },
   "Validation": {
     "IsDefined": "Must be defined",
     "NotEquals": "Must not be equal to {{comparison}}",
