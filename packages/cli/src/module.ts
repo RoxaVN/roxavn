@@ -4,6 +4,8 @@ import path from 'path';
 import { BaseModule } from '@roxavn/core/share';
 import { getJsonFromFile } from '@roxavn/core/server';
 
+import { CodeChanger } from './lib';
+
 class ModuleService {
   sync() {
     const config = getJsonFromFile('.app.config.json');
@@ -11,9 +13,45 @@ class ModuleService {
   }
 
   syncModule(module: string) {
-    const webPath = path.dirname(require.resolve(module + '/web'));
-    const staticPath = path.join(path.dirname(path.dirname(webPath)), 'static');
-    this.createStaticLink(BaseModule.escapeName(module), staticPath);
+    this.syncStatic(module);
+    this.addInit(module);
+  }
+
+  syncStatic(module: string) {
+    const staticPath =
+      module === '.'
+        ? 'static'
+        : path.join(require.resolve(module + '/web'), '../../../', 'static');
+    const moduleName = this.realModuleName(module);
+    this.createStaticLink(BaseModule.escapeName(moduleName), staticPath);
+  }
+
+  addInit(module: string) {
+    const webPath =
+      module === '.'
+        ? 'src/web'
+        : path.dirname(require.resolve(module + '/web'));
+    if (
+      fs.existsSync(`${webPath}/init.ts`) ||
+      fs.existsSync(`${webPath}/init.tsx`) ||
+      fs.existsSync(`${webPath}/init.js`) ||
+      fs.existsSync(`${webPath}/init.jsx`)
+    ) {
+      const moduleName = this.realModuleName(module);
+      new CodeChanger(
+        '.web/app/init.client.ts',
+        '// start block',
+        '// end block'
+      )
+        .removeLines(moduleName)
+        .removeLines('../../src/web/init')
+        .insertEnd(
+          module === '.'
+            ? `import '../../src/web/init';`
+            : `import '${module}/web/init';`
+        )
+        .save();
+    }
   }
 
   createStaticLink(targetName: string, srcPath: string) {
@@ -29,6 +67,14 @@ class ModuleService {
     } catch (e) {}
     fs.symlinkSync(relativePath, targetName);
     process.chdir(currentDir);
+  }
+
+  realModuleName(moduleName: string): string {
+    if (moduleName === '.') {
+      const packageInfo = getJsonFromFile('package.json');
+      return packageInfo.name;
+    }
+    return moduleName;
   }
 }
 
