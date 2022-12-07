@@ -16,7 +16,7 @@ class ResetPasswordRequest extends ExactProps<ResetPasswordRequest> {
   @MinLength(1)
   public readonly token!: string;
 
-  @MinLength(10)
+  @MinLength(8)
   public readonly password!: string;
 }
 

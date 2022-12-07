@@ -1,7 +1,6 @@
 import { Card, Container } from '@mantine/core';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Routes } from '../../share';
-
 import { LoginForm } from '../components/LoginForm';
 
 const LoginPage = (): JSX.Element => {
@@ -12,7 +11,7 @@ const LoginPage = (): JSX.Element => {
     <Container size={400} py={50}>
       <Card withBorder>
         <LoginForm
-          onSuccess={() => navigate(params.get('ref') || Routes.Home.path)}
+          onSuccess={() => navigate(params.get('ref') || Routes.Me.path)}
         />
       </Card>
     </Container>

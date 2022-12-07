@@ -2,14 +2,14 @@ import { InferApiResponse } from '@roxavn/core/share';
 import { apiFetcher } from '@roxavn/core/web';
 import isEmpty from 'lodash/isEmpty';
 import { Subject } from 'rxjs';
-import { GetUsersApi, LogoutApi } from '../../share';
+import { GetMyUserApi, LogoutApi } from '../../share';
 import { webModule } from '../module';
 
-type AuthData = InferApiResponse<typeof GetUsersApi>;
+type AuthData = InferApiResponse<typeof GetMyUserApi>;
 
-const auth = {
+export const auth = {
   _authData: {} as AuthData,
-  authenticateApi: webModule.api(GetUsersApi),
+  authenticateApi: webModule.api(GetMyUserApi),
   logoutApi: webModule.api(LogoutApi),
 
   authenticatedObserver: new Subject<AuthData>(),
@@ -65,5 +65,3 @@ const auth = {
       .catch(() => false);
   },
 };
-
-export { auth };

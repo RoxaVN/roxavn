@@ -14,5 +14,8 @@
   "setRoleOf": "Thiết lập quyền cho {{name}}",
   "myProfile": "Thông tin của tôi",
   "userList": "Danh sách tài khoản",
-  "changeTheme": "Thay đổi chủ đề"
+  "changeTheme": "Thay đổi chủ đề",
+  "Error": {
+    "UserExistsException": "Người dùng đã tồn tại"
+  }
 }

@@ -3,13 +3,14 @@ import { InferApiResponse } from '@roxavn/core/share';
 import { ApiForm } from '@roxavn/core/web';
 
 import { LoginApi } from '../../share';
+import { auth } from '../services';
 import { webModule } from '../module';
 
 interface LoginFormProps {
   onSuccess?: (data: InferApiResponse<typeof LoginApi>) => void;
 }
 
-const LoginForm = ({ onSuccess }: LoginFormProps): JSX.Element => {
+export const LoginForm = ({ onSuccess }: LoginFormProps): JSX.Element => {
   const { t } = webModule.useTranslation();
   return (
     <div>
@@ -26,10 +27,11 @@ const LoginForm = ({ onSuccess }: LoginFormProps): JSX.Element => {
           />,
           <PasswordInput label={t('password')} name="password" />,
         ]}
-        onSuccess={onSuccess}
+        onSuccess={(data) => {
+          auth.setToken(data.accessToken);
+          onSuccess && onSuccess(data);
+        }}
       />
     </div>
   );
 };
-
-export { LoginForm };

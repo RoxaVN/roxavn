@@ -5,13 +5,11 @@ import { LoginApi } from '../../share';
 import { Env } from '../config';
 import { PasswordIdentity, UserAccessToken } from '../entities';
 import { serverModule } from '../module';
-import { TokenService } from './token';
+import { tokenService } from './token';
 
 @useApi(serverModule, LoginApi)
 export class LoginApiService extends ApiService<typeof LoginApi> {
   async handle(request: InferApiRequest<typeof LoginApi>) {
-    const tokenService = new TokenService();
-
     const identity = await this.dataSource
       .getRepository(PasswordIdentity)
       .findOne({

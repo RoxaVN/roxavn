@@ -1,10 +1,10 @@
 import { WebRoute } from '@roxavn/core/share';
 
 export const Routes = {
-  ResetPassword: { path: '/reset-password', isInternal: true },
-  Login: { path: '/login', isInternal: true },
-  Me: { path: '/me', isInternal: true },
-  Home: { path: '/', isInternal: true },
+  ResetPassword: { path: '/reset-password' },
+  Login: { path: '/login' },
+  Me: { path: '/me' },
+  Home: { path: '/' },
 };
 
 Routes as Record<string, WebRoute>;

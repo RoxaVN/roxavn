@@ -17,6 +17,8 @@ import { StylesPlaceholder } from '@mantine/remix';
 import React from 'react';
 import 'reflect-metadata';
 
+import './init.client';
+
 type LoaderData = { locale: string };
 createEmotionCache({ key: 'mantine' });
 

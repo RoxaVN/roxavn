@@ -10,7 +10,7 @@ import {
 } from '@roxavn/core/share';
 
 import { Type } from 'class-transformer';
-import { User } from '../interfaces/user.interfaces';
+import { User } from '../interfaces';
 import { Permissions } from '../permissions';
 
 class GetUsersRequest extends ExactProps<GetUsersRequest> {

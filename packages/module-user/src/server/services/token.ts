@@ -29,3 +29,5 @@ export class TokenService {
     return this.tokenHasher;
   }
 }
+
+export const tokenService = new TokenService();

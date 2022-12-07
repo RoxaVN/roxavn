@@ -1,5 +1,6 @@
 import { validateSync } from 'class-validator';
 import { Request, Response, Router, NextFunction } from 'express';
+import { DataSource } from 'typeorm';
 import {
   Api,
   ApiRequest,
@@ -14,22 +15,23 @@ import {
 import { databaseManager } from './database';
 import { ApiService } from './service';
 
+export type MiddlerwareContext = {
+  req: Request;
+  resp: Response;
+  dataSource: DataSource;
+};
+
 export type ApiMiddlerware = (
   api: Api,
-  req: Request,
-  resp: Response,
+  context: MiddlerwareContext,
   next: NextFunction
-) => void;
+) => Promise<void> | void;
 
 export type ErrorMiddlerware = (
   error: any,
-  req: Request,
-  resp: Response,
+  context: MiddlerwareContext,
   next: NextFunction
-) => void;
-
-const getRequestInput = (req: Request) =>
-  Object.assign({}, req.query || {}, req.body || {}, req.params || {});
+) => Promise<void> | void;
 
 export class ServerModule extends BaseModule {
   static apiRouter = Router();
@@ -48,12 +50,23 @@ export class ServerModule extends BaseModule {
       ...ServerModule.apiMiddlerwares.map(
         (middleware) =>
           function (req: Request, resp: Response, next: NextFunction) {
-            middleware(api, req, resp, next);
+            middleware(
+              api,
+              { req, resp, dataSource: databaseManager.dataSource },
+              next
+            )?.catch(next);
           }
       ),
       async function (req: Request, resp: Response, next: NextFunction) {
         try {
-          const result = await handler(getRequestInput(req), { req, resp });
+          const inputData = Object.assign(
+            {},
+            req.query,
+            req.body,
+            req.params,
+            resp.locals
+          );
+          const result = await handler(inputData, { req, resp });
           resp.status(200).json({ code: 200, data: result } as FullApiResponse);
         } catch (e) {
           next(e);
@@ -82,18 +95,23 @@ export function useApi<Req extends ApiRequest, Resp extends ApiResponse>(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-ServerModule.errorMiddlerwares.push((error, req, resp, next) => {
+ServerModule.errorMiddlerwares.push((error, context, next) => {
   if (!error.code) {
     error = new ServerException();
   }
-  resp
+  context.resp
     .status(error.code)
     .json({ code: error.code, error: error.toJson() } as FullApiResponse);
 });
 
-ServerModule.apiMiddlerwares.push((api, req, resp, next) => {
+ServerModule.apiMiddlerwares.push((api, { req }, next) => {
   if (api.validator) {
-    const errors = validateSync(new api.validator(getRequestInput(req)), {
+    const inputData = Object.assign(
+      {},
+      req.params || {},
+      api.method === 'GET' ? req.query : req.body
+    );
+    const errors = validateSync(new api.validator(inputData), {
       stopAtFirstError: true,
     });
     if (errors.length) {
@@ -103,8 +121,7 @@ ServerModule.apiMiddlerwares.push((api, req, resp, next) => {
           i18n[error.property] = Object.values(error.contexts)[0];
         }
       });
-      next(new ValidationException(i18n));
-      return;
+      return next(new ValidationException(i18n));
     }
   }
   next();

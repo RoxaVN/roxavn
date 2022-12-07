@@ -7,7 +7,7 @@ import { webModule } from './module';
 
 const uiManager = {
   // alertDialog(message: string, header?: string, icon = 'pi pi-info-circle') {},
-  errorDialog(error: ErrorResponse, title?: React.ReactNode) {
+  errorDialog(error: ErrorResponse | Error, title?: React.ReactNode) {
     openConfirmModal({
       title: title || (
         <Translation ns={webModule.escapedName}>
@@ -16,9 +16,13 @@ const uiManager = {
       ),
       children: (
         <Text size="sm">
-          <Translation ns={error.i18n.default.ns}>
-            {(t) => t(error.i18n.default.key)}
-          </Translation>
+          {'message' in error ? (
+            error.message
+          ) : (
+            <Translation ns={error.i18n.default.ns}>
+              {(t) => t(error.i18n.default.key)}
+            </Translation>
+          )}
         </Text>
       ),
       labels: {

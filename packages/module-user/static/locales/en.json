@@ -14,5 +14,8 @@
   "setRoleOf": "Set role of {{name}}",
   "myProfile": "My profile",
   "userList": "User list",
-  "changeTheme": "Change theme"
+  "changeTheme": "Change theme",
+  "Error": {
+    "UserExistsException": "User exists exception"
+  }
 }

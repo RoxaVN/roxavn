@@ -1,3 +1,6 @@
+// to fix bug when load src/web/init
+import 'reflect-metadata';
+
 export * from './login';
 export * from './logout';
 export * from './create.user';

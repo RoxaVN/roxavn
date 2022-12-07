@@ -13,12 +13,14 @@
   "dependencies": {
     "@roxavn/core": "^0.1.28",
     "@roxavn/web-erp": "^0.1.0",
+    "react": "^18.2.0",
     "react-router-dom": "6.3.0",
     "rxjs": "^7.5.7",
     "typeorm": "^0.3.10"
   },
   "exports": {
     "./web": "./dist/web/index.js",
+    "./web/init": "./dist/web/init.js",
     "./share": "./dist/share/index.js",
     "./server": "./dist/server/index.js"
   },
