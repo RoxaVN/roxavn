@@ -6,6 +6,5 @@ export * from './permission';
 export * from './props';
 export * from './url';
 export * from './route';
-export * from './pagination';
 export * from './validate';
 export * from './validation';

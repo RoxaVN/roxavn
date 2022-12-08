@@ -5,7 +5,7 @@ import { LoginApi, LogoutApi } from '../../share';
 import { Env } from '../config';
 import { PasswordIdentity, UserAccessToken } from '../entities';
 import { serverModule } from '../module';
-import { AuthApiService, InferAuthApiRequest } from './middlerware';
+import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { tokenService } from './token';
 
 @useApi(serverModule, LoginApi)
@@ -54,8 +54,8 @@ export class LoginApiService extends ApiService<typeof LoginApi> {
 
 @useApi(serverModule, LogoutApi)
 export class LogoutApiService extends AuthApiService<typeof LogoutApi> {
-  handle(request: InferAuthApiRequest<typeof LogoutApi>) {
-    this.dataSource
+  async handle(request: InferAuthApiRequest<typeof LogoutApi>) {
+    await this.dataSource
       .getRepository(UserAccessToken)
       .delete({ id: request.accessToken.id });
     return {};

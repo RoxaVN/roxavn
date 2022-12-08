@@ -31,11 +31,6 @@ export interface Pagination {
   pageSize: number;
 
   /**
-   * Total pages.
-   */
-  totalPages: number;
-
-  /**
    * Total items.
    */
   totalItems: number;

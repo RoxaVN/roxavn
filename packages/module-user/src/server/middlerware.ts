@@ -8,8 +8,8 @@ import {
   UnauthorizedException,
 } from '@roxavn/core/share';
 import { Raw } from 'typeorm';
-import { UserAccessToken, UserRole } from '../entities';
-import { tokenService } from './token';
+import { UserAccessToken, UserRole } from './entities';
+import { tokenService } from './services';
 
 ServerModule.apiMiddlerwares.push(
   async (api, { dataSource, resp, req }, next) => {
