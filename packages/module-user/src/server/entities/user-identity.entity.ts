@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   ManyToOne,
   PrimaryGeneratedColumn,
   TableInheritance,
@@ -37,8 +36,4 @@ export class UserIdentity {
 export class PasswordIdentity extends UserIdentity {
   @Column()
   password: string;
-
-  @Index({ unique: true })
-  @Column()
-  email: string;
 }

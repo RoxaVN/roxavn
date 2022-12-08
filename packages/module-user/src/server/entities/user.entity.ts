@@ -1,6 +1,8 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
+  Index,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -13,6 +15,18 @@ import { UserRole } from './user-role.entity';
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Index({ unique: true })
+  @Column({ nullable: true })
+  email?: string;
+
+  @Index({ unique: true })
+  @Column({ nullable: true })
+  phone?: string;
+
+  @Index({ unique: true })
+  @Column()
+  username: string;
 
   @CreateDateColumn()
   createdDate: Date;

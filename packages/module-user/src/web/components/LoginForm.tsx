@@ -20,11 +20,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps): JSX.Element => {
       <ApiForm
         api={webModule.api(LoginApi)}
         fields={[
-          <TextInput
-            label={t('email')}
-            name="email"
-            placeholder="example@email.com"
-          />,
+          <TextInput label={t('username')} name="username" />,
           <PasswordInput label={t('password')} name="password" />,
         ]}
         onSuccess={(data) => {

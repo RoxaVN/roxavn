@@ -15,7 +15,7 @@ export class LoginApiService extends ApiService<typeof LoginApi> {
       .getRepository(PasswordIdentity)
       .findOne({
         select: ['id', 'ownerId', 'password'],
-        where: { email: request.email },
+        where: { owner: { username: request.username } },
       });
 
     if (!identity) {

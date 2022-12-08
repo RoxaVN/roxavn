@@ -1,9 +1,8 @@
 import { useApi } from '@roxavn/core/server';
 import { NotFoundException } from '@roxavn/core/share';
-import { In } from 'typeorm';
 
 import { GetMyUserApi, GetUsersApi } from '../../share';
-import { PasswordIdentity, User, UserIdentity } from '../entities';
+import { User } from '../entities';
 import { serverModule } from '../module';
 import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 
@@ -11,7 +10,6 @@ import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 export class GetMyUserApiService extends AuthApiService<typeof GetMyUserApi> {
   async handle(request: InferAuthApiRequest<typeof GetMyUserApi>) {
     const user = await this.dataSource.getRepository(User).findOne({
-      relations: { identities: true },
       where: { id: request.user.id },
     });
 
@@ -21,7 +19,7 @@ export class GetMyUserApiService extends AuthApiService<typeof GetMyUserApi> {
 
     return {
       id: user.id,
-      email: (user.identities?.[0] as any).email,
+      email: user.email,
     };
   }
 }
@@ -40,23 +38,11 @@ export class GetUsersApiService extends AuthApiService<typeof GetUsersApi> {
         skip: (page - 1) * pageSize,
       });
 
-    const identities = await this.dataSource.getRepository(UserIdentity).find({
-      where: {
-        ownerId: In(users.map((user) => user.id)),
-      },
-    });
-
     return {
-      items: users.map((user) => {
-        const identity = identities.find(
-          (iterIdentity) => iterIdentity.ownerId === user.id
-        );
-
-        return {
-          id: user.id,
-          email: (identity as PasswordIdentity)?.email,
-        };
-      }),
+      items: users.map((user) => ({
+        id: user.id,
+        email: user.email,
+      })),
       pagination: { page, pageSize, totalItems },
     };
   }

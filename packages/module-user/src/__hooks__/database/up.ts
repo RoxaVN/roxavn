@@ -13,10 +13,10 @@ const createAdminUser = async (dataSource: DataSource) => {
   if (count < 1) {
     await dataSource.transaction(async (manager) => {
       const identity = new PasswordIdentity();
-      identity.email = 'admin@example.com';
       const tokenHasher = new TokenHasher();
       identity.password = await tokenHasher.hash('admin');
       const user = new User();
+      user.username = 'admin';
       await manager.save(user);
       identity.owner = user;
       await manager.save(identity);
