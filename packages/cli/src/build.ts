@@ -35,7 +35,7 @@ class BuildService {
     const rawConfig = {
       compilerOptions: {
         outDir: 'dist',
-        target: 'es5',
+        target: 'es6',
         module: 'commonjs',
         lib: ['dom', 'dom.iterable', 'esnext'],
         jsx: 'react-jsx',
