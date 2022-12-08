@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import {
   AppShell,
   Navbar,
@@ -62,7 +62,7 @@ function MeComponent() {
         </Header>
       }
     >
-      <Text>Resize app to see responsive navbar in action</Text>
+      <Outlet />
     </AppShell>
   );
 }

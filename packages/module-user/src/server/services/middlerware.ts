@@ -81,22 +81,22 @@ ServerModule.apiMiddlerwares.push(
       Object.assign(resp.locals, {
         user: { id: accessToken.ownerId },
         accessToken: { id: accessToken.id },
-      } as AuthData);
+      } as AuthenticatedData);
     }
     next();
   }
 );
 
-type AuthData = {
+type AuthenticatedData = {
   user: { id: number };
   accessToken: { id: number };
 };
 
 export type InferAuthApiRequest<T> = T extends Api<infer U, any, any>
-  ? U & AuthData
+  ? U & AuthenticatedData
   : never;
 
 export abstract class AuthApiService<T extends Api> extends BaseService<
-  InferApiRequest<T> & AuthData,
+  InferApiRequest<T> & AuthenticatedData,
   InferApiResponse<T>
 > {}

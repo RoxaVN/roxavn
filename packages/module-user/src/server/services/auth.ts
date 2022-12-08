@@ -1,10 +1,11 @@
 import { ApiService, useApi } from '@roxavn/core/server';
 import { InferApiRequest, UnauthorizedException } from '@roxavn/core/share';
 
-import { LoginApi } from '../../share';
+import { LoginApi, LogoutApi } from '../../share';
 import { Env } from '../config';
 import { PasswordIdentity, UserAccessToken } from '../entities';
 import { serverModule } from '../module';
+import { AuthApiService, InferAuthApiRequest } from './middlerware';
 import { tokenService } from './token';
 
 @useApi(serverModule, LoginApi)
@@ -48,5 +49,15 @@ export class LoginApiService extends ApiService<typeof LoginApi> {
     return {
       accessToken: tokenFinal,
     };
+  }
+}
+
+@useApi(serverModule, LogoutApi)
+export class LogoutApiService extends AuthApiService<typeof LogoutApi> {
+  handle(request: InferAuthApiRequest<typeof LogoutApi>) {
+    this.dataSource
+      .getRepository(UserAccessToken)
+      .delete({ id: request.accessToken.id });
+    return {};
   }
 }
