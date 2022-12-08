@@ -17,10 +17,7 @@ export class GetMyUserApiService extends AuthApiService<typeof GetMyUserApi> {
       throw new NotFoundException();
     }
 
-    return {
-      id: user.id,
-      email: user.email,
-    };
+    return user;
   }
 }
 
@@ -39,10 +36,7 @@ export class GetUsersApiService extends AuthApiService<typeof GetUsersApi> {
       });
 
     return {
-      items: users.map((user) => ({
-        id: user.id,
-        email: user.email,
-      })),
+      items: users,
       pagination: { page, pageSize, totalItems },
     };
   }
