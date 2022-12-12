@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "@roxavn/core": {},
+    "@roxavn/module-user": {},
+    ".": {}
+  }
+}

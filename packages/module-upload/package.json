@@ -1,0 +1,33 @@
+{
+  "name": "@roxavn/module-upload",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "roxavn build",
+    "dev": "roxavn dev"
+  },
+  "license": "UNLICENSED",
+  "author": "",
+  "devDependencies": {
+    "@types/busboy": "^1.5.0",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "@roxavn/core": "^0.1.28",
+    "@roxavn/web-erp": "^0.1.0",
+    "busboy": "^1.6.0",
+    "form-data": "^4.0.0",
+    "react": "^18.2.0",
+    "react-router-dom": "6.3.0",
+    "rxjs": "^7.5.7",
+    "typeorm": "^0.3.10"
+  },
+  "exports": {
+    "./web": "./dist/web/index.js",
+    "./share": "./dist/share/index.js",
+    "./server": "./dist/server/index.js"
+  },
+  "files": [
+    "/dist",
+    "/static"
+  ]
+}

@@ -41,21 +41,30 @@ function objectToQueryStr(obj: Record<string, unknown>) {
 
 const http = {
   Host: '',
-  FileHost: '',
   errorObserver: new Subject<HttpException>(),
   successObserver: new Subject<any>(),
   preSentObserver: new Subject<PreSentData>(),
 
-  _bodyParams(path: string, method: string, data?: Record<string, unknown>) {
+  _bodyParams(path: string, method: string, data?: Record<string, any>) {
     const params = { ...data };
-    const config = {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: '',
-    };
+    const formData = new FormData();
+    let hasFile = false;
+    Object.keys(params).map((key) => {
+      formData.append(key, params[key]);
+      if (params[key] instanceof File) {
+        hasFile = true;
+      }
+    });
+
+    const config: RequestInit = { method };
+    if (hasFile) {
+      config.body = formData;
+    } else {
+      config.headers = { 'Content-Type': 'application/json' };
+      config.body = JSON.stringify(params);
+    }
 
     this.preSentObserver.next({ params, config });
-    config.body = JSON.stringify(params);
     return fetch(this.Host + path, config)
       .then(checkStatus)
       .then((resp) => {
@@ -99,12 +108,6 @@ const http = {
       return true;
     });
     return `${this.Host + path}?${objectToQueryStr(params)}`;
-  },
-  genGetFile(path: string) {
-    if (path && (path.startsWith('http://') || path.startsWith('https://'))) {
-      return path;
-    }
-    return this.FileHost + path;
   },
 };
 

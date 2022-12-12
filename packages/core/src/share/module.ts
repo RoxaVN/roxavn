@@ -47,14 +47,12 @@ export class BaseModule {
     };
   }
 
-  public static escapeName(name: string): string {
-    return name.replace(/\//g, '@');
+  public getFullApiPath(api: Api): string {
+    return '/' + constants.API_BASE_PATH + '/' + this.escapedName + api.path;
   }
 
-  public static genFullApiPath(path: string, name: string): string {
-    return (
-      '/' + constants.API_BASE_PATH + '/' + BaseModule.escapeName(name) + path
-    );
+  public static escapeName(name: string): string {
+    return name.replace(/\//g, '@');
   }
 
   public genWebPath(router: WebRoute, params?: Record<string, any>) {

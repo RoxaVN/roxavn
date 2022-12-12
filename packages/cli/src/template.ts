@@ -5,6 +5,7 @@ import path from 'path';
 class TemplateService {
   createPackage() {
     this.initWebFolder();
+    this.writeIgnore();
   }
 
   initWebFolder() {
@@ -16,6 +17,16 @@ class TemplateService {
     fse.copyFileSync(
       path.join(webModulePath, 'tsconfig.json'),
       'tsconfig.json'
+    );
+  }
+
+  writeIgnore() {
+    fs.writeFileSync(
+      '.gitignore',
+      `/dist
+/node_modules
+/.web
+`
     );
   }
 }
