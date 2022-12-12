@@ -1,15 +1,17 @@
-try {
+import fs from 'fs';
+
+if (fs.existsSync('./src/server/index.ts')) {
   // import typescript module for dev
   require('../src/server');
-} catch (e) {}
+}
 
 const serverConfigs = require('./server');
 
 serverConfigs.callback = () => {
-  try {
+  if (fs.existsSync('./src/__hooks__/install.ts')) {
     // import __hooks__ module to install
     require('../src/__hooks__/install');
-  } catch (e) {}
+  }
 };
 
 export default {};
