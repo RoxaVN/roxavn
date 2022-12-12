@@ -6,6 +6,8 @@ services:
     restart: on-failure
     ports:
       - 5434:5432
+    volumes:
+      - ./docker-data/postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
@@ -25,6 +27,8 @@ services:
       - 28080:28080
       - 18080:18080
       - 9325:9325
+    volumes:
+      - ./docker-data/seaweed:/data
     command: 'volume -mserver="seaweed_master:9333" -ip.bind=0.0.0.0 -port=28080 -publicUrl="localhost:28080"  -metricsPort=9325'
     depends_on:
       - seaweed_master
