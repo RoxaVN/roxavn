@@ -18,12 +18,18 @@ serverModule.useApi(UploadFileApi, (_, { req, dataSource, resp }) => {
           userFile.id = result.fid;
           userFile.size = result.size;
           userFile.etag = result.eTag;
+          userFile.name = Buffer.from(info.filename, 'latin1').toString('utf8');
           userFile.ownerId = resp.locals.user.id;
           userFile.mime = info.mimeType;
 
           dataSource.getRepository(UserFile).save(userFile);
 
-          resolve({ id: userFile.id, mime: userFile.mime, url: result.url });
+          resolve({
+            id: userFile.id,
+            mime: userFile.mime,
+            url: result.url,
+            name: userFile.name,
+          });
         } catch (e) {
           reject(new ServerException());
         }

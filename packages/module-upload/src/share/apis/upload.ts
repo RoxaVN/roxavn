@@ -2,6 +2,7 @@ import { Api, Empty, UnauthorizedException } from '@roxavn/core/share';
 
 interface UploadFileResponse {
   id: string;
+  name: string;
   mime: string;
   url: string;
 }

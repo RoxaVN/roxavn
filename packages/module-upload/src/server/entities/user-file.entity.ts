@@ -15,6 +15,9 @@ export class UserFile {
   id: string;
 
   @Column()
+  name: string;
+
+  @Column()
   size: number;
 
   @Column()
