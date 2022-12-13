@@ -10,7 +10,8 @@ export class SeaweedClient {
 
   private _resolveResponse(
     resp: http.IncomingMessage,
-    resolve: (result: any) => void
+    resolve: (result: any) => void,
+    reject: (error: any) => void
   ) {
     let body = '';
     resp.setEncoding('utf8');
@@ -18,9 +19,21 @@ export class SeaweedClient {
       body += chunk;
     });
     resp.on('end', function () {
-      return resolve(JSON.parse(body));
+      try {
+        const result = JSON.parse(body);
+        if (result.error) {
+          reject(new Error(result.error));
+        } else {
+          resolve(result);
+        }
+      } catch (e) {
+        reject(e);
+      }
     });
   }
+
+  private _urlWithSchema = (url: string): string =>
+    url.startsWith('http') ? url : `http://${url}`;
 
   assign(params?: any): Promise<{
     count: number;
@@ -34,7 +47,7 @@ export class SeaweedClient {
         .request(
           new URL('dir/assign?' + qs.stringify(params), this.baseUrl),
           (resp) => {
-            this._resolveResponse(resp, resolve);
+            this._resolveResponse(resp, resolve, reject);
           }
         )
         .on('error', function (err) {
@@ -48,6 +61,8 @@ export class SeaweedClient {
     file: Readable,
     params?: any
   ): Promise<{
+    fid: string;
+    url: string;
     size: number;
     eTag: string;
     error?: string;
@@ -60,10 +75,7 @@ export class SeaweedClient {
           ? finfo.publicUrl
           : finfo.url;
 
-        const urlParts = new URL(
-          finfo.fid,
-          volumeUrl.startsWith('http') ? volumeUrl : `http://${volumeUrl}`
-        );
+        const urlParts = new URL(finfo.fid, this._urlWithSchema(volumeUrl));
 
         const request = http.request({
           method: 'post',
@@ -77,7 +89,18 @@ export class SeaweedClient {
 
         request
           .on('response', (resp) => {
-            this._resolveResponse(resp, resolve);
+            this._resolveResponse(
+              resp,
+              (result) => {
+                result.fid = finfo.fid;
+                result.url = new URL(
+                  finfo.fid,
+                  this._urlWithSchema(finfo.publicUrl)
+                ).href;
+                resolve(result);
+              },
+              reject
+            );
           })
           .on('error', function (err) {
             reject(err);

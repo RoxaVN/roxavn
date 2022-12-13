@@ -1,6 +1,16 @@
 import { Api, Empty, UnauthorizedException } from '@roxavn/core/share';
 
-export const UploadFileApi: Api<Empty, Empty, UnauthorizedException> = {
+interface UploadFileResponse {
+  id: string;
+  mime: string;
+  url: string;
+}
+
+export const UploadFileApi: Api<
+  Empty,
+  UploadFileResponse,
+  UnauthorizedException
+> = {
   method: 'POST',
   path: '/file/upload',
 };

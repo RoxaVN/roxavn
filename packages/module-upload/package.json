@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@roxavn/core": "^0.1.28",
+    "@roxavn/module-user": "^0.1.0",
     "@roxavn/web-erp": "^0.1.0",
     "busboy": "^1.6.0",
     "form-data": "^4.0.0",

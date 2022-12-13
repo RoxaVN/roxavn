@@ -40,10 +40,7 @@ export class ServerModule extends BaseModule {
 
   useApi<Req extends ApiRequest, Resp extends ApiResponse>(
     api: Api<Req, Resp>,
-    handler: (
-      req: Req,
-      context: { req: Request; resp: Response }
-    ) => Promise<Resp> | Resp
+    handler: (req: Req, context: MiddlerwareContext) => Promise<Resp> | Resp
   ) {
     ServerModule.apiRouter[api.method.toLowerCase()](
       this.getFullApiPath(api),
@@ -66,7 +63,11 @@ export class ServerModule extends BaseModule {
             req.params,
             resp.locals
           );
-          const result = await handler(inputData, { req, resp });
+          const result = await handler(inputData, {
+            req,
+            resp,
+            dataSource: databaseManager.dataSource,
+          });
           resp.status(200).json({ code: 200, data: result } as FullApiResponse);
         } catch (e) {
           next(e);
@@ -87,8 +88,8 @@ export function useApi<Req extends ApiRequest, Resp extends ApiResponse>(
   return function (
     serviceClass: new (...args: any[]) => ApiService<Api<Req, Resp>>
   ) {
-    module.useApi(api, async (req) => {
-      const service = new serviceClass(databaseManager.dataSource);
+    module.useApi(api, async (req, { dataSource }) => {
+      const service = new serviceClass(dataSource);
       return service.handle(req);
     });
   };

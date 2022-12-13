@@ -56,7 +56,7 @@ const http = {
       }
     });
 
-    const config: RequestInit = { method };
+    const config: RequestInit = { method, headers: {} };
     if (hasFile) {
       config.body = formData;
     } else {
