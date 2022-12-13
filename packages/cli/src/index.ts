@@ -4,6 +4,7 @@ import { buildService } from './build';
 import { devService } from './dev';
 import { moduleService } from './module';
 import { templateService } from './template';
+import { hookService } from './hook';
 
 const program = new Command();
 
@@ -26,6 +27,11 @@ program
   .command('dev')
   .description('Run dev server')
   .action(() => devService.run());
+
+program
+  .command('hook')
+  .description('Run hook script')
+  .action(() => hookService.run());
 
 program
   .command('build')

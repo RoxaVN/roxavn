@@ -19,6 +19,7 @@
     "typeorm": "^0.3.10"
   },
   "exports": {
+    "./hook/*": "./dist/hook/*.js",
     "./web": "./dist/web/index.js",
     "./web/init": "./dist/web/init.js",
     "./share": "./dist/share/index.js",

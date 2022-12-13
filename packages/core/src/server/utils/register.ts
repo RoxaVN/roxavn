@@ -2,7 +2,7 @@ import minimatch from 'minimatch';
 import path from 'path';
 
 import { AppConfig } from '@remix-run/dev';
-import { visitFiles } from '.';
+import { visitFiles, getPackageJson } from '.';
 import { appConfig } from '../app.config';
 
 type RoutesConfig = Exclude<AppConfig['routes'], undefined>;
@@ -14,6 +14,19 @@ const routeModuleExts = ['.js', '.jsx', '.ts', '.tsx', '.md', '.mdx'];
 
 function isRouteModuleFile(filename: string): boolean {
   return routeModuleExts.includes(path.extname(filename));
+}
+
+export function runModuleHooks() {
+  Object.keys(appConfig.get().modules).map(runModuleHook);
+}
+
+export function runModuleHook(module: string) {
+  if (module === '.') {
+    module = getPackageJson('.').name;
+  }
+  try {
+    require(module + '/hook/install');
+  } catch (e) {}
 }
 
 export function registerApiRoutes() {

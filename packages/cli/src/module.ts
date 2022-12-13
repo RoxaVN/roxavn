@@ -2,14 +2,15 @@ import fs from 'fs';
 import fse from 'fs-extra';
 import path from 'path';
 import { BaseModule } from '@roxavn/core/share';
-import { getJsonFromFile } from '@roxavn/core/server';
+import { appConfig, getJsonFromFile } from '@roxavn/core/server';
 
 import { CodeChanger } from './lib';
 
 class ModuleService {
   sync() {
-    const config = getJsonFromFile('.app.config.json');
-    Object.keys(config.modules).map((module) => this.syncModule(module));
+    Object.keys(appConfig.get().modules).map((module) =>
+      this.syncModule(module)
+    );
   }
 
   syncModule(module: string) {
@@ -17,13 +18,24 @@ class ModuleService {
     this.addInit(module);
   }
 
+  getPackageRootPath(module: string) {
+    let modulePath = require.resolve(module);
+    while (modulePath.length > 1) {
+      modulePath = path.dirname(modulePath);
+      if (fs.existsSync(path.join(modulePath, 'package.json'))) {
+        return modulePath;
+      }
+    }
+    return null;
+  }
+
   syncStatic(module: string) {
     const staticPath =
-      module === '.'
-        ? 'static'
-        : path.join(require.resolve(module + '/web'), '../../../', 'static');
-    const moduleName = this.realModuleName(module);
-    this.createStaticLink(BaseModule.escapeName(moduleName), staticPath);
+      module === '.' ? 'static' : this.getPackageRootPath(module + '/web');
+    if (staticPath) {
+      const moduleName = this.realModuleName(module);
+      this.createStaticLink(BaseModule.escapeName(moduleName), staticPath);
+    }
   }
 
   addInit(module: string) {
