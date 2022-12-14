@@ -1,0 +1,6 @@
+{
+  "reupload": "Reupload",
+  "Validation": {
+    "MaxFiles": "Max uploaded files is {{ count }}"
+  }
+}

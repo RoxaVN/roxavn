@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { ApiFileInput } from '../components';
 
 const IndexPage = () => {
-  const [value, setValue] = useState<any>(null);
-  return <ApiFileInput value={value} onChange={setValue} />;
+  return (
+    <ApiFileInput maxFiles={4} multiple onChange={(v) => console.log(v)} />
+  );
 };
 
 export default IndexPage;

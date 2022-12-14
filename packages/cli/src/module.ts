@@ -30,8 +30,15 @@ class ModuleService {
   }
 
   syncStatic(module: string) {
-    const staticPath =
-      module === '.' ? 'static' : this.getPackageRootPath(module + '/web');
+    let staticPath: string | null;
+    if (module !== '.') {
+      staticPath = this.getPackageRootPath(module + '/web');
+      if (staticPath) {
+        staticPath = path.join(staticPath, 'static');
+      }
+    } else {
+      staticPath = 'static';
+    }
     if (staticPath) {
       const moduleName = this.realModuleName(module);
       this.createStaticLink(BaseModule.escapeName(moduleName), staticPath);

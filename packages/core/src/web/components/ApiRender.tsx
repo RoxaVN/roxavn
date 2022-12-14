@@ -1,3 +1,4 @@
+import { LoadingOverlay } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
 import { Api, ApiResponse, ApiRequest } from '../../share';
@@ -9,22 +10,58 @@ export interface ApiRenderProps<
 > {
   api: Api<Request, Response>;
   apiParams?: Request;
-  children: (data: Response) => JSX.Element;
+  useLoader?: boolean;
+  onSuccess?: (resp: Response) => void;
+  children: (props: {
+    data: Response | null;
+    error: any;
+    loading: boolean;
+    fetcher: () => void;
+  }) => JSX.Element;
 }
 
 export function ApiRender<
   Request extends ApiRequest,
   Response extends ApiResponse
->({ api, apiParams, children }: ApiRenderProps<Request, Response>) {
-  const [data, setData] = useState<Response>();
+>({
+  api,
+  apiParams,
+  onSuccess,
+  children,
+  useLoader,
+}: ApiRenderProps<Request, Response>) {
+  const [data, setData] = useState<Response | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>();
+
+  const fetcher = async () => {
+    try {
+      setError(null);
+      setLoading(true);
+      const result = await apiFetcher.fetch(api, apiParams);
+      setData(result);
+      onSuccess && onSuccess(result);
+    } catch (e: any) {
+      setError(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    apiFetcher.fetch(api, apiParams).then((data) => setData(data));
-  }, []);
-  return data ? (
-    children(data)
-  ) : (
-    <div className="my-4 text-center">
-      <i className="pi pi-spin pi-spinner text-4xl" />
-    </div>
-  );
+    const timeout = setTimeout(fetcher, 100);
+    return () => clearTimeout(timeout);
+  }, [api, apiParams]);
+
+  const child = children({ data, error, loading, fetcher });
+  if (useLoader) {
+    return (
+      <div style={{ position: 'relative' }}>
+        <LoadingOverlay visible={loading} />
+        {child}
+      </div>
+    );
+  } else {
+    return child;
+  }
 }

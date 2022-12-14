@@ -1,150 +1,225 @@
-import {
-  LoadingOverlay,
-  FileButton,
-  Button,
-  CloseButton,
-  Box,
-} from '@mantine/core';
+import { FileButton, Button, CloseButton, Text, Group } from '@mantine/core';
+import { useListState } from '@mantine/hooks';
 import { InferApiResponse } from '@roxavn/core/share';
-import { apiFetcher } from '@roxavn/core/web';
-import { useEffect, useState } from 'react';
-import { Upload } from 'tabler-icons-react';
+import { ApiRender, uiManager } from '@roxavn/core/web';
+import { Upload, FileCheck } from 'tabler-icons-react';
 
 import { UploadFileApi } from '../../share';
 import { webModule } from '../module';
+import { useFileInputStyles } from './ApiFileInput.styles';
 
-const size = { width: 100, height: 100 };
-
-type UploadedFile = InferApiResponse<typeof UploadFileApi> | null | undefined;
+type UploadedFile = InferApiResponse<typeof UploadFileApi>;
 
 const renderLabel = (fileName: string) => {
   const parts = fileName.split('.');
   return (
     <>
-      {parts[0].length > 10 ? `${parts[0].slice(0, 10)}...` : parts[0]}
-      <br />
+      {parts[0].length > 6 ? `${parts[0].slice(0, 4)}...` : parts[0]}
       {parts[1] && `.${parts[1]}`}
     </>
   );
 };
 
-const Uploadeditem = ({
-  value,
-  onRemove,
-}: {
+export interface UploadeditemProps {
   value: UploadedFile;
   onRemove: () => void;
-}) => {
+}
+
+const Uploadeditem = ({ value, onRemove }: UploadeditemProps) => {
+  const { classes } = useFileInputStyles();
+
   return value ? (
-    <Box
-      sx={(theme) => ({
-        ...size,
-        position: 'relative',
-        border: `1px dashed ${theme.fn.variant({ variant: 'default' }).border}`,
-      })}
-    >
-      <CloseButton
-        onClick={() => onRemove()}
-        style={{ position: 'absolute', top: 0, right: 0 }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          top: '60%',
-          left: '50%',
-          width: size.width,
-          transform: 'translate(-50%, -50%)',
-          textAlign: 'center',
-        }}
-      >
-        {renderLabel(value.name)}
+    <div className={classes.container}>
+      <CloseButton onClick={() => onRemove()} className={classes.closeButton} />
+      <div className={classes.content}>
+        <FileCheck size={32} />
       </div>
-    </Box>
+      <Text align="center" size="sm">
+        {renderLabel(value.name)}
+      </Text>
+    </div>
   ) : null;
 };
 
-const UploadItem = ({
-  file,
-  onChange,
-}: {
+export interface UploaditemProps {
   file: File | null;
-  onChange?: (result: UploadedFile) => void;
-}) => {
-  const [loading, setLoading] = useState(true);
+  onChange?: (result: UploadedFile | null) => void;
+}
 
-  useEffect(() => {
-    if (file) {
-      apiFetcher
-        .fetch(webModule.api(UploadFileApi), { file: file })
-        .then((result) => {
-          setLoading(false);
-          onChange && onChange(result);
-        })
-        .catch(() => setLoading(false));
-    }
-  }, [file]);
+const UploadItem = ({ file, onChange }: UploaditemProps) => {
+  const { t } = webModule.useTranslation();
+  const { classes } = useFileInputStyles();
 
   return (
     file && (
-      <Box
-        sx={(theme) => ({
-          ...size,
-          position: 'relative',
-          border: `1px dashed ${
-            theme.fn.variant({ variant: 'default' }).border
-          }`,
-        })}
-      >
-        <LoadingOverlay visible={loading} />
-        <CloseButton
-          onClick={() => onChange && onChange(null)}
-          style={{ position: 'absolute', top: 0, right: 0 }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: '60%',
-            left: '50%',
-            width: size.width,
-            transform: 'translate(-50%, -50%)',
-            textAlign: 'center',
-          }}
+      <div className={classes.container}>
+        <ApiRender
+          api={webModule.api(UploadFileApi)}
+          apiParams={{ file }}
+          onSuccess={onChange}
+          useLoader
         >
-          {renderLabel(file.name)}
-        </div>
-      </Box>
+          {({ error, fetcher }) => (
+            <>
+              <CloseButton
+                onClick={() => onChange && onChange(null)}
+                className={classes.closeButton}
+              />
+              <div className={classes.content}>
+                {error && (
+                  <Button
+                    variant="subtle"
+                    color="red"
+                    size="sm"
+                    fullWidth
+                    onClick={() => fetcher()}
+                  >
+                    {t('reupload')}
+                  </Button>
+                )}
+              </div>
+              <Text align="center" size="sm">
+                {renderLabel(file.name)}
+              </Text>
+            </>
+          )}
+        </ApiRender>
+      </div>
     )
   );
 };
 
-export const ApiFileInput = ({
+type ApiFileInputProps<Multiple extends boolean = false> = {
+  multiple?: Multiple;
+  accept?: string;
+  maxFiles?: number;
+  value?: Multiple extends false ? UploadedFile | null : UploadedFile[];
+  onChange?: (
+    value: Multiple extends false ? UploadedFile | null : UploadedFile[]
+  ) => void;
+};
+
+export const ApiFileInput = <Multiple extends boolean = false>({
+  accept,
   value,
   onChange,
-}: {
-  value?: UploadedFile;
-  onChange?: (value: UploadedFile) => void;
-}) => {
-  const [file, setFile] = useState<File | null>(null);
+  maxFiles,
+  multiple,
+}: ApiFileInputProps<Multiple>) => {
+  const { classes } = useFileInputStyles();
+  const { t } = webModule.useTranslation();
+  const [data, dataHandler] = useListState<{
+    local: File | null;
+    upload: UploadedFile | null;
+  }>(
+    value
+      ? Array.isArray(value)
+        ? value.map((v) => ({
+            upload: v,
+            local: null,
+          }))
+        : [{ upload: value, local: null }]
+      : []
+  );
+
+  const _onChange = (
+    newData: Array<{
+      local: File | null;
+      upload: UploadedFile | null;
+    }>
+  ) => {
+    if (onChange) {
+      const newValue = newData
+        .filter((d) => d.upload)
+        .map((d) => d.upload) as UploadedFile[];
+      onChange(multiple ? (newValue as any) : newValue[0] || null);
+    }
+  };
+
+  const rendernput = () => {
+    if (maxFiles && data.length > maxFiles) {
+      return null;
+    }
+    if (!multiple && data.length > 0) {
+      return null;
+    }
+    return (
+      <FileButton
+        onChange={(files) => {
+          if (files) {
+            const newFiles: File[] = Array.isArray(files)
+              ? files.filter((f) => !data.find((d) => d.local?.name === f.name))
+              : [files];
+            if (maxFiles && newFiles.length + data.length > maxFiles) {
+              uiManager.errorDialog(
+                new Error(t('Validation.MaxFiles', { count: maxFiles }))
+              );
+            } else {
+              dataHandler.append(
+                ...newFiles.map((f) => ({ local: f, upload: null }))
+              );
+            }
+          }
+        }}
+        accept={accept}
+        multiple={multiple}
+      >
+        {(props) => (
+          <Button {...props} variant="default" className={classes.uploadButton}>
+            <Upload size={32} />
+          </Button>
+        )}
+      </FileButton>
+    );
+  };
+
+  const renderItems = () => {
+    const children: React.ReactNode[] = [];
+    for (const item of data) {
+      if (item.upload) {
+        children.push(
+          <Uploadeditem
+            key={item.upload.name}
+            value={item.upload}
+            onRemove={() => {
+              const newData = data.filter(
+                (i) => i.upload?.name !== item.upload?.name
+              );
+              dataHandler.setState(newData);
+              _onChange(newData);
+            }}
+          />
+        );
+      } else if (item.local) {
+        children.push(
+          <UploadItem
+            key={item.local.name}
+            file={item.local}
+            onChange={(result) => {
+              const index = data.findIndex(
+                (i) => i.local?.name === item.local?.name
+              );
+              if (result) {
+                data[index] = { local: item.local, upload: result };
+                dataHandler.setItem(index, data[index]);
+              } else {
+                // remove item
+                data.splice(index, 1);
+                dataHandler.remove(index);
+              }
+              _onChange(data);
+            }}
+          />
+        );
+      }
+    }
+    return children;
+  };
 
   return (
-    <>
-      <Uploadeditem value={value} onRemove={() => onChange && onChange(null)} />
-      <UploadItem
-        file={file}
-        onChange={(result) => {
-          setFile(null);
-          onChange && onChange(result);
-        }}
-      />
-      {!(file || value) && (
-        <FileButton onChange={setFile}>
-          {(props) => (
-            <Button {...props} variant="default" style={size}>
-              <Upload size={32} />
-            </Button>
-          )}
-        </FileButton>
-      )}
-    </>
+    <Group>
+      {renderItems()}
+      {rendernput()}
+    </Group>
   );
 };
