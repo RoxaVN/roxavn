@@ -43,7 +43,10 @@ export class LogicException extends Error {
 export class BadRequestException extends LogicException {
   code = 400;
   i18n = {
-    default: { key: 'Error.BadRequestException', ns: baseModule.escapedName },
+    default: {
+      key: 'Error.BadRequestException',
+      ns: baseModule.escapedName,
+    } as I18nErrorField,
   };
 }
 
@@ -53,21 +56,27 @@ export class UnauthorizedException extends LogicException {
     default: {
       key: 'Error.UnauthorizedException',
       ns: baseModule.escapedName,
-    },
+    } as I18nErrorField,
   };
 }
 
 export class ForbiddenException extends LogicException {
   code = 403;
   i18n = {
-    default: { key: 'Error.ForbiddenException', ns: baseModule.escapedName },
+    default: {
+      key: 'Error.ForbiddenException',
+      ns: baseModule.escapedName,
+    } as I18nErrorField,
   };
 }
 
 export class NotFoundException extends LogicException {
   code = 404;
   i18n = {
-    default: { key: 'Error.NotFoundException', ns: baseModule.escapedName },
+    default: {
+      key: 'Error.NotFoundException',
+      ns: baseModule.escapedName,
+    } as I18nErrorField,
   };
 }
 
@@ -78,6 +87,9 @@ export class ValidationException extends LogicException {
 export class ServerException extends LogicException {
   code = 500;
   i18n = {
-    default: { key: 'Error.ServerException', ns: baseModule.escapedName },
+    default: {
+      key: 'Error.ServerException',
+      ns: baseModule.escapedName,
+    } as I18nErrorField,
   };
 }

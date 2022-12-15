@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { Api, ApiResponse, ApiRequest } from '../../share';
 import { apiFetcher } from '../services/api.fetcher';
+import { uiManager } from '../services/ui';
 
 export interface ApiRenderProps<
   Request extends ApiRequest,
@@ -43,6 +44,7 @@ export function ApiRender<
       onSuccess && onSuccess(result);
     } catch (e: any) {
       setError(e);
+      uiManager.errorDialog(apiFetcher.getErrorData(e) || e);
     } finally {
       setLoading(false);
     }

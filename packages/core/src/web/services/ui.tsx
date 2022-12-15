@@ -20,7 +20,7 @@ const uiManager = {
             error.message
           ) : (
             <Translation ns={error.i18n.default.ns}>
-              {(t) => t(error.i18n.default.key)}
+              {(t) => t(error.i18n.default.key, error.i18n.default.params)}
             </Translation>
           )}
         </Text>

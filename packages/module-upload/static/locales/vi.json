@@ -2,5 +2,9 @@
   "reupload": "Tải lại",
   "Validation": {
     "MaxFiles": "Chỉ được tải lên tối đa {{ count }} tệp tin"
+  },
+  "Error": {
+    "ExceedsUploadLimitException": "Vượt quá giới hạn tải lên {{ size }}",
+    "ExceedsStorageLimitException": "Vượt quá giới hạn lưu trữ {{ size }}"
   }
 }

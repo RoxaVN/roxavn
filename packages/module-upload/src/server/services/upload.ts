@@ -1,8 +1,8 @@
 import { InferApiResponse, ServerException } from '@roxavn/core/share';
 import busboy from 'busboy';
 
-import { UploadFileApi } from '../../share';
-import { UserFile } from '../entities';
+import { ExceedsStorageLimitException, UploadFileApi } from '../../share';
+import { File, UserFile } from '../entities';
 import { serverModule } from '../module';
 import { seaweedClient } from './seaweed';
 
@@ -13,22 +13,45 @@ serverModule.useApi(UploadFileApi, (_, { req, dataSource, resp }) => {
       bb.on('file', async (name, fileStream, info) => {
         try {
           const result = await seaweedClient.write(fileStream);
+          const fileName = Buffer.from(info.filename, 'latin1').toString(
+            'utf8'
+          );
 
-          const userFile = new UserFile();
-          userFile.id = result.fid;
-          userFile.size = result.size;
-          userFile.etag = result.eTag;
-          userFile.name = Buffer.from(info.filename, 'latin1').toString('utf8');
-          userFile.ownerId = resp.locals.user.id;
-          userFile.mime = info.mimeType;
+          await dataSource.transaction(async (manager) => {
+            const ownerId = resp.locals.user.id;
+            let userFile = await manager
+              .getRepository(UserFile)
+              .findOne({ where: { ownerId: ownerId } });
+            if (!userFile) {
+              userFile = new UserFile();
+              userFile.ownerId = ownerId;
+            }
+            userFile.currentStorageSize += result.size;
+            if (
+              userFile.maxStorageSize &&
+              userFile.currentStorageSize > userFile.maxStorageSize
+            ) {
+              return reject(
+                new ExceedsStorageLimitException(userFile.maxStorageSize)
+              );
+            }
+            await manager.save(userFile);
 
-          dataSource.getRepository(UserFile).save(userFile);
+            const file = new File();
+            file.id = result.fid;
+            file.size = result.size;
+            file.etag = result.eTag;
+            file.name = fileName;
+            file.ownerId = ownerId;
+            file.mime = info.mimeType;
+            await manager.save(file);
 
-          resolve({
-            id: userFile.id,
-            mime: userFile.mime,
-            url: result.url,
-            name: userFile.name,
+            resolve({
+              id: result.fid,
+              mime: info.mimeType,
+              url: result.url,
+              name: fileName,
+            });
           });
         } catch (e) {
           reject(new ServerException());

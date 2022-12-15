@@ -2,5 +2,9 @@
   "reupload": "Reupload",
   "Validation": {
     "MaxFiles": "Max uploaded files is {{ count }}"
+  },
+  "Error": {
+    "ExceedsUploadLimitException": "Exceeds upload limit of {{ size }}",
+    "ExceedsStorageLimitException": "Exceeds storage limit of {{ size }}"
   }
 }
