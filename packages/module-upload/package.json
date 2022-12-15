@@ -15,12 +15,12 @@
     "@roxavn/core": "^0.1.28",
     "@roxavn/module-user": "^0.1.0",
     "@roxavn/web-erp": "^0.1.0",
+    "@tabler/icons": "^1.117.0",
     "busboy": "^1.6.0",
     "form-data": "^4.0.0",
     "react": "^18.2.0",
     "react-router-dom": "6.3.0",
     "rxjs": "^7.5.7",
-    "tabler-icons-react": "^1.56.0",
     "typeorm": "^0.3.10"
   },
   "exports": {

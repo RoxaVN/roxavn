@@ -2,11 +2,11 @@ import { FileButton, Button, CloseButton, Text, Group } from '@mantine/core';
 import { useListState } from '@mantine/hooks';
 import { InferApiResponse } from '@roxavn/core/share';
 import { ApiRender, uiManager } from '@roxavn/core/web';
-import { Upload, FileCheck } from 'tabler-icons-react';
+import { IconUpload, IconFileCheck } from '@tabler/icons';
 
 import { UploadFileApi } from '../../share';
 import { webModule } from '../module';
-import { useFileInputStyles } from './ApiFileInput.styles';
+import { useApiFileInputStyles } from './ApiFileInput.styles';
 
 type UploadedFile = InferApiResponse<typeof UploadFileApi>;
 
@@ -26,13 +26,13 @@ export interface UploadeditemProps {
 }
 
 const Uploadeditem = ({ value, onRemove }: UploadeditemProps) => {
-  const { classes } = useFileInputStyles();
+  const { classes } = useApiFileInputStyles();
 
   return value ? (
     <div className={classes.container}>
       <CloseButton onClick={() => onRemove()} className={classes.closeButton} />
       <div className={classes.content}>
-        <FileCheck size={32} />
+        <IconFileCheck size={32} />
       </div>
       <Text align="center" size="sm">
         {renderLabel(value.name)}
@@ -48,7 +48,7 @@ export interface UploaditemProps {
 
 const UploadItem = ({ file, onChange }: UploaditemProps) => {
   const { t } = webModule.useTranslation();
-  const { classes } = useFileInputStyles();
+  const { classes } = useApiFileInputStyles();
 
   return (
     file && (
@@ -106,7 +106,7 @@ export const ApiFileInput = <Multiple extends boolean = false>({
   maxFiles,
   multiple,
 }: ApiFileInputProps<Multiple>) => {
-  const { classes } = useFileInputStyles();
+  const { classes } = useApiFileInputStyles();
   const { t } = webModule.useTranslation();
   const [data, dataHandler] = useListState<{
     local: File | null;
@@ -166,7 +166,7 @@ export const ApiFileInput = <Multiple extends boolean = false>({
       >
         {(props) => (
           <Button {...props} variant="default" className={classes.uploadButton}>
-            <Upload size={32} />
+            <IconUpload size={32} />
           </Button>
         )}
       </FileButton>

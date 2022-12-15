@@ -1,7 +1,7 @@
 import { LoadingOverlay, Button, Group } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import React, { useState } from 'react';
-import { Send } from 'tabler-icons-react';
+import { IconSend } from '@tabler/icons';
 import { Api, ApiRequest, ApiResponse } from '../../share';
 import { apiFetcher } from '../services/api.fetcher';
 import { webModule } from '../services/module';
@@ -42,7 +42,7 @@ export function ApiForm<
     if (api) {
       return (
         <Group position="center" mt="md">
-          <Button type="submit" leftIcon={<Send />}>
+          <Button type="submit" leftIcon={<IconSend />}>
             {t('submit')}
           </Button>
         </Group>

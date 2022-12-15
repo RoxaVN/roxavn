@@ -1,6 +1,6 @@
 import { createStyles } from '@mantine/core';
 
-export const useFileInputStyles = createStyles((theme) => ({
+export const useApiFileInputStyles = createStyles((theme) => ({
   container: {
     width: 100,
     height: 100,
