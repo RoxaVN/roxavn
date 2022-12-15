@@ -26,21 +26,40 @@ class BuildService {
     );
     if (configParseResult.errors.length > 0) {
       this.reportDiagnostics(configParseResult.errors);
-      process.exit(1);
+      return;
     }
     return configParseResult;
   }
 
+  compileWithConfig(rawConfig: Record<string, any>) {
+    const config = this.parseConfig(rawConfig);
+    if (config) {
+      // Compile
+      const program = ts.createProgram(config.fileNames, config.options);
+      const emitResult = program.emit();
+
+      // Report errors
+      this.reportDiagnostics(
+        ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics)
+      );
+    }
+  }
+
   compile() {
-    const rawConfig = {
+    if (fs.existsSync('dist')) {
+      console.log('Clear dist folder');
+      fs.rmSync('dist', { recursive: true, force: true });
+    }
+
+    const cjsConfig = {
       compilerOptions: {
-        outDir: 'dist',
+        outDir: 'dist/cjs',
         target: 'es6',
         module: 'commonjs',
         lib: ['dom', 'dom.iterable', 'esnext'],
         jsx: 'react-jsx',
         declaration: true,
-        moduleResolution: 'node16',
+        moduleResolution: 'node',
         noUnusedLocals: true,
         esModuleInterop: true,
         noImplicitReturns: true,
@@ -58,26 +77,16 @@ class BuildService {
       include: ['src'],
       exclude: ['node_modules', 'dist'],
     };
-    if (fs.existsSync(rawConfig.compilerOptions.outDir)) {
-      fs.rmSync(rawConfig.compilerOptions.outDir, {
-        recursive: true,
-        force: true,
-      });
-    }
-    const config = this.parseConfig(rawConfig);
+    console.log('Build commonjs');
+    this.compileWithConfig(cjsConfig);
 
-    // Compile
-    const program = ts.createProgram(config.fileNames, config.options);
-    const emitResult = program.emit();
-
-    // Report errors
-    this.reportDiagnostics(
-      ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics)
-    );
-
-    // Return code
-    const exitCode = emitResult.emitSkipped ? 1 : 0;
-    process.exit(exitCode);
+    console.log('Build esm module');
+    const esmConfig = { ...cjsConfig };
+    Object.assign(esmConfig.compilerOptions, {
+      outDir: 'dist/esm',
+      module: 'es6',
+    });
+    this.compileWithConfig(esmConfig);
   }
 }
 
