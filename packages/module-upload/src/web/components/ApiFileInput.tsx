@@ -3,6 +3,7 @@ import { useListState } from '@mantine/hooks';
 import { InferApiResponse } from '@roxavn/core/share';
 import { ApiRender, uiManager } from '@roxavn/core/web';
 import { IconUpload, IconFileCheck } from '@tabler/icons';
+import { Fragment } from 'react';
 
 import { UploadFileApi } from '../../share';
 import { webModule } from '../module';
@@ -42,57 +43,67 @@ const Uploadeditem = ({ value, onRemove }: UploadeditemProps) => {
 };
 
 export interface UploaditemProps {
-  file: File | null;
+  value: File;
   onChange?: (result: UploadedFile | null) => void;
 }
 
-const UploadItem = ({ file, onChange }: UploaditemProps) => {
+const UploadItem = ({ value, onChange }: UploaditemProps) => {
   const { t } = webModule.useTranslation();
   const { classes } = useApiFileInputStyles();
 
   return (
-    file && (
-      <div className={classes.container}>
-        <ApiRender
-          api={webModule.api(UploadFileApi)}
-          apiParams={{ file }}
-          onSuccess={onChange}
-          useLoader
-        >
-          {({ error, fetcher }) => (
-            <>
-              <CloseButton
-                onClick={() => onChange && onChange(null)}
-                className={classes.closeButton}
-              />
-              <div className={classes.content}>
-                {error && (
-                  <Button
-                    variant="subtle"
-                    color="red"
-                    size="sm"
-                    fullWidth
-                    onClick={() => fetcher()}
-                  >
-                    {t('reupload')}
-                  </Button>
-                )}
-              </div>
-              <Text align="center" size="sm">
-                {renderLabel(file.name)}
-              </Text>
-            </>
-          )}
-        </ApiRender>
-      </div>
-    )
+    <div className={classes.container}>
+      <ApiRender
+        api={webModule.api(UploadFileApi)}
+        apiParams={{ file: value }}
+        onSuccess={onChange}
+        useLoader
+      >
+        {({ error, fetcher }) => (
+          <>
+            <CloseButton
+              onClick={() => onChange && onChange(null)}
+              className={classes.closeButton}
+            />
+            <div className={classes.content}>
+              {error && (
+                <Button
+                  variant="subtle"
+                  color="red"
+                  size="sm"
+                  fullWidth
+                  onClick={() => fetcher()}
+                >
+                  {t('reupload')}
+                </Button>
+              )}
+            </div>
+            <Text align="center" size="sm">
+              {renderLabel(value.name)}
+            </Text>
+          </>
+        )}
+      </ApiRender>
+    </div>
   );
 };
 
-type ApiFileInputProps<Multiple extends boolean = false> = {
+export type ApiFileInputProps<Multiple extends boolean = false> = {
   multiple?: Multiple;
-  accept?: string;
+  accept?: string | string[];
   maxFiles?: number;
+  containerTemplate?: (props: { children: React.ReactNode }) => JSX.Element;
+  inputTemplate?: (props: {
+    onChange: (files: File | File[] | null) => void;
+  }) => JSX.Element;
+  uploadedItemTemplate?: (props: {
+    value: UploadedFile;
+    onRemove: () => void;
+  }) => JSX.Element;
+  uploadItemTemplate?: (props: {
+    value: File;
+    onChange: (value: UploadedFile | null) => void;
+  }) => JSX.Element;
   value?: Multiple extends false ? UploadedFile | null : UploadedFile[];
   onChange?: (
     value: Multiple extends false ? UploadedFile | null : UploadedFile[]
@@ -105,6 +116,10 @@ export const ApiFileInput = <Multiple extends boolean = false>({
   onChange,
   maxFiles,
   multiple,
+  inputTemplate,
+  containerTemplate,
+  uploadItemTemplate,
+  uploadedItemTemplate,
 }: ApiFileInputProps<Multiple>) => {
   const { classes } = useApiFileInputStyles();
   const { t } = webModule.useTranslation();
@@ -143,25 +158,28 @@ export const ApiFileInput = <Multiple extends boolean = false>({
     if (!multiple && data.length > 0) {
       return null;
     }
-    return (
+    const inputOnChange = (files: File | File[] | null) => {
+      if (files) {
+        const newFiles: File[] = Array.isArray(files)
+          ? files.filter((f) => !data.find((d) => d.local?.name === f.name))
+          : [files];
+        if (maxFiles && newFiles.length + data.length > maxFiles) {
+          uiManager.errorDialog(
+            new Error(t('Validation.MaxFiles', { count: maxFiles }))
+          );
+        } else {
+          dataHandler.append(
+            ...newFiles.map((f) => ({ local: f, upload: null }))
+          );
+        }
+      }
+    };
+    return inputTemplate ? (
+      inputTemplate({ onChange: inputOnChange })
+    ) : (
       <FileButton
-        onChange={(files) => {
-          if (files) {
-            const newFiles: File[] = Array.isArray(files)
-              ? files.filter((f) => !data.find((d) => d.local?.name === f.name))
-              : [files];
-            if (maxFiles && newFiles.length + data.length > maxFiles) {
-              uiManager.errorDialog(
-                new Error(t('Validation.MaxFiles', { count: maxFiles }))
-              );
-            } else {
-              dataHandler.append(
-                ...newFiles.map((f) => ({ local: f, upload: null }))
-              );
-            }
-          }
-        }}
-        accept={accept}
+        onChange={inputOnChange}
+        accept={Array.isArray(accept) ? accept.join(', ') : accept}
         multiple={multiple}
       >
         {(props) => (
@@ -172,54 +190,68 @@ export const ApiFileInput = <Multiple extends boolean = false>({
       </FileButton>
     );
   };
-
   const renderItems = () => {
     const children: React.ReactNode[] = [];
     for (const item of data) {
       if (item.upload) {
+        const itemOnRemove = () => {
+          const newData = data.filter(
+            (i) => i.upload?.name !== item.upload?.name
+          );
+          dataHandler.setState(newData);
+          _onChange(newData);
+        };
         children.push(
-          <Uploadeditem
-            key={item.upload.name}
-            value={item.upload}
-            onRemove={() => {
-              const newData = data.filter(
-                (i) => i.upload?.name !== item.upload?.name
-              );
-              dataHandler.setState(newData);
-              _onChange(newData);
-            }}
-          />
+          <Fragment key={item.upload.name}>
+            {uploadedItemTemplate ? (
+              uploadedItemTemplate({
+                value: item.upload,
+                onRemove: itemOnRemove,
+              })
+            ) : (
+              <Uploadeditem value={item.upload} onRemove={itemOnRemove} />
+            )}
+          </Fragment>
         );
       } else if (item.local) {
+        const itemOnChange = (result: UploadedFile | null) => {
+          const index = data.findIndex(
+            (i) => i.local?.name === item.local?.name
+          );
+          if (result) {
+            data[index] = { local: item.local, upload: result };
+            dataHandler.setItem(index, data[index]);
+          } else {
+            // remove item
+            data.splice(index, 1);
+            dataHandler.remove(index);
+          }
+          _onChange(data);
+        };
         children.push(
-          <UploadItem
-            key={item.local.name}
-            file={item.local}
-            onChange={(result) => {
-              const index = data.findIndex(
-                (i) => i.local?.name === item.local?.name
-              );
-              if (result) {
-                data[index] = { local: item.local, upload: result };
-                dataHandler.setItem(index, data[index]);
-              } else {
-                // remove item
-                data.splice(index, 1);
-                dataHandler.remove(index);
-              }
-              _onChange(data);
-            }}
-          />
+          <Fragment key={item.local.name}>
+            {uploadItemTemplate ? (
+              uploadItemTemplate({ value: item.local, onChange: itemOnChange })
+            ) : (
+              <UploadItem value={item.local} onChange={itemOnChange} />
+            )}
+          </Fragment>
         );
       }
     }
     return children;
   };
 
-  return (
-    <Group>
-      {renderItems()}
+  const children = (
+    <>
       {rendernput()}
-    </Group>
+      {renderItems()}
+    </>
+  );
+
+  return containerTemplate ? (
+    containerTemplate({ children: children })
+  ) : (
+    <Group>{children}</Group>
   );
 };

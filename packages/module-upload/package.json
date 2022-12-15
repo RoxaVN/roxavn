@@ -12,6 +12,7 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
+    "@mantine/dropzone": "^5.8.2",
     "@roxavn/core": "^0.1.28",
     "@roxavn/module-user": "^0.1.0",
     "@roxavn/web-erp": "^0.1.0",

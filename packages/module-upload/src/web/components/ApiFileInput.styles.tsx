@@ -17,8 +17,10 @@ export const useApiFileInputStyles = createStyles((theme) => ({
 
   closeButton: {
     position: 'absolute',
-    top: 0,
-    right: 0,
+    top: 5,
+    right: 5,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
 
   content: {
