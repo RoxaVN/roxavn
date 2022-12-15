@@ -4,6 +4,7 @@ export const useFileInputStyles = createStyles((theme) => ({
   container: {
     width: 100,
     height: 100,
+    marginBottom: 20,
     position: 'relative',
     border: `1px dashed ${theme.fn.variant({ variant: 'default' }).border}`,
   },
@@ -11,6 +12,7 @@ export const useFileInputStyles = createStyles((theme) => ({
   uploadButton: {
     width: 100,
     height: 100,
+    marginBottom: 20,
   },
 
   closeButton: {
