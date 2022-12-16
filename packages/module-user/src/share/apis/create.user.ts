@@ -7,7 +7,7 @@ import {
   MinLength,
   UnauthorizedException,
 } from '@roxavn/core/share';
-import { UserExistsException } from '../interfaces';
+import { UserExistsException } from '../errors';
 import { Permissions } from '../permissions';
 
 class CreateUserRequest extends ExactProps<CreateUserRequest> {
