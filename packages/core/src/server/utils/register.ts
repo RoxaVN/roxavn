@@ -59,7 +59,9 @@ function definePageRoutes(
       const pathToModule =
         module === '.'
           ? '../../src/web'
-          : path.dirname(require.resolve(module + '/web'));
+          : path
+              .dirname(require.resolve(module + '/web'))
+              .replace('/cjs/', '/esm/'); // simple get esm path, should use import.meta if posible
       const routesDir = path.join(pathToModule, 'pages');
       const routes = defineConventionsRoutes(
         path.relative('.', routesDir),

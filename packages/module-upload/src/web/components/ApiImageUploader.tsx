@@ -60,6 +60,7 @@ const UploadImageItem = ({ value, onChange }: UploaditemProps) => {
             <div className={classes.content}>
               {error && (
                 <Button
+                  variant="subtle"
                   color="red"
                   size="sm"
                   fullWidth
