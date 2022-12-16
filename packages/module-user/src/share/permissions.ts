@@ -33,11 +33,6 @@ export const Roles = {
     scope: Scopes.Module,
     permissions: Object.values(Permissions),
   },
-  Member: {
-    name: 'Member',
-    scope: Scopes.Module,
-    permissions: [],
-  },
 };
 
 if (!scopeManager.hasScope(Scopes.Module)) {
