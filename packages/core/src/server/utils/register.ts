@@ -1,3 +1,4 @@
+import fs from 'fs';
 import minimatch from 'minimatch';
 import path from 'path';
 
@@ -53,7 +54,7 @@ function definePageRoutes(
   modules: string[],
   defineRoutes: DefineRoutes
 ): RouteManifest {
-  const result: RouteManifest = {};
+  const pagesFolders: string[] = [];
   for (const module of modules) {
     try {
       const pathToModule =
@@ -62,43 +63,45 @@ function definePageRoutes(
           : path
               .dirname(require.resolve(module + '/web'))
               .replace('/cjs/', '/esm/'); // simple get esm path, should use import.meta if posible
-      const routesDir = path.join(pathToModule, 'pages');
-      const routes = defineConventionsRoutes(
-        path.relative('.', routesDir),
-        defineRoutes
-      );
-      Object.assign(result, routes);
+      const pagesFolder = path.join(pathToModule, 'pages');
+      if (fs.existsSync(pagesFolder)) {
+        pagesFolders.push(path.relative('.', pagesFolder));
+      }
     } catch (e) {}
   }
-  return result;
+  return defineConventionsRoutes(pagesFolders, defineRoutes);
 }
 
 function defineConventionsRoutes(
-  dir: string,
+  dirs: string[],
   defineRoutes: DefineRoutes,
   ignoredFilePatterns?: string[]
 ): RouteManifest {
   const files: { [routeId: string]: string } = {};
 
-  visitFiles(dir, (file) => {
-    if (
-      file.endsWith('.d.ts') ||
-      (ignoredFilePatterns &&
-        ignoredFilePatterns.some((pattern) => minimatch(file, pattern)))
-    ) {
-      return;
-    }
+  dirs.map((dir) => {
+    visitFiles(dir, (file) => {
+      if (
+        file.endsWith('.d.ts') ||
+        (ignoredFilePatterns &&
+          ignoredFilePatterns.some((pattern) => minimatch(file, pattern)))
+      ) {
+        return;
+      }
 
-    if (isRouteModuleFile(file)) {
-      const routeId = createRouteId(path.join(dir, file));
-      files[routeId] = path.join(dir, file);
-      return;
-    }
+      if (isRouteModuleFile(file)) {
+        const routeId = createRouteId(path.join(dir, file));
+        files[routeId] = path.join(dir, file);
+        return;
+      }
 
-    throw new Error(`Invalid route module file: ${path.join(dir, file)}`);
+      throw new Error(`Invalid route module file: ${path.join(dir, file)}`);
+    });
   });
 
-  const routeIds = Object.keys(files).sort(byLongestFirst);
+  const routeIds = Object.keys(files).sort(
+    (a, b) => getPartialRouteId(b).length - getPartialRouteId(a).length
+  );
 
   const uniqueRoutes = new Map<string, string>();
 
@@ -113,11 +116,11 @@ function defineConventionsRoutes(
 
     for (const routeId of childRouteIds) {
       const routePath: string | undefined = createRoutePath(
-        routeId.slice((parentId || dir).length + 1)
+        getPartialRouteId(routeId, parentId)
       );
 
       const isIndexRoute = routeId.endsWith('/index');
-      const fullPath = createRoutePath(routeId.slice(dir.length + 1));
+      const fullPath = createRoutePath(getPartialRouteId(routeId));
       const uniqueRouteId = (fullPath || '') + (isIndexRoute ? '?index' : '');
 
       if (uniqueRouteId) {
@@ -245,11 +248,18 @@ function findParentRouteId(
   routeIds: string[],
   childRouteId: string
 ): string | undefined {
-  return routeIds.find((id) => childRouteId.startsWith(`${id}/`));
+  return routeIds.find((id) =>
+    childRouteId
+      .slice(childRouteId.indexOf('/pages'))
+      .startsWith(`${id.slice(id.indexOf('/pages'))}/`)
+  );
 }
 
-function byLongestFirst(a: string, b: string): number {
-  return b.length - a.length;
+function getPartialRouteId(routeId: string, parentId?: string) {
+  const pattern = '/pages';
+  const routIdSliced = routeId.slice(routeId.indexOf(pattern));
+  const parentIdSliced = parentId && parentId.slice(parentId.indexOf(pattern));
+  return routIdSliced.slice((parentIdSliced || pattern).length + 1);
 }
 
 function createRouteId(file: string) {
