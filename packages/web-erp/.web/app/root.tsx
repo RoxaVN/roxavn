@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import i18next from './i18next.server';
 import { createEmotionCache, MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
+import { NotificationsProvider } from '@mantine/notifications';
 import { StylesPlaceholder } from '@mantine/remix';
 import React from 'react';
 import 'reflect-metadata';
@@ -48,19 +49,21 @@ export default function Root() {
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <ModalsProvider>
-        <html lang={locale} dir={i18n.dir()}>
-          <head>
-            <StylesPlaceholder />
-            <Meta />
-            <Links />
-          </head>
-          <body>
-            <Outlet />
-            <ScrollRestoration />
-            <Scripts />
-            <LiveReload />
-          </body>
-        </html>
+        <NotificationsProvider>
+          <html lang={locale} dir={i18n.dir()}>
+            <head>
+              <StylesPlaceholder />
+              <Meta />
+              <Links />
+            </head>
+            <body>
+              <Outlet />
+              <ScrollRestoration />
+              <Scripts />
+              <LiveReload />
+            </body>
+          </html>
+        </NotificationsProvider>
       </ModalsProvider>
     </MantineProvider>
   );
