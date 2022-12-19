@@ -84,7 +84,7 @@ class BuildService {
     const esmConfig = { ...cjsConfig };
     Object.assign(esmConfig.compilerOptions, {
       outDir: 'dist/esm',
-      module: 'es6',
+      module: 'esnext',
     });
     this.compileWithConfig(esmConfig);
   }
