@@ -12,7 +12,7 @@ class TemplateService {
     if (fs.existsSync('.web')) {
       fs.rmSync('.web', { recursive: true, force: true });
     }
-    const webModulePath = path.dirname(require.resolve('@roxavn/web-erp'));
+    const webModulePath = path.dirname(require.resolve('@roxavn/dev-web'));
     fse.copySync(path.join(webModulePath, '.web'), '.web');
     fse.copyFileSync(
       path.join(webModulePath, 'tsconfig.json'),

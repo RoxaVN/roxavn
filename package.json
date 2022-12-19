@@ -9,7 +9,7 @@
     "packages/core",
     "packages/module-upload",
     "packages/module-user",
-    "packages/web-erp"
+    "packages/dev-web"
   ],
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",

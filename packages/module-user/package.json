@@ -8,11 +8,11 @@
   "license": "UNLICENSED",
   "author": "",
   "devDependencies": {
+    "@roxavn/dev-web": "^0.1.0",
     "typescript": "^4.3.5"
   },
   "dependencies": {
     "@roxavn/core": "^0.1.28",
-    "@roxavn/web-erp": "^0.1.0",
     "react": "^18.2.0",
     "react-router-dom": "6.3.0",
     "rxjs": "^7.5.7",
