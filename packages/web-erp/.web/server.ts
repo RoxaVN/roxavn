@@ -5,4 +5,6 @@ if (fs.existsSync('./src/server/index.ts')) {
   require('../src/server');
 }
 
+require('./server');
+
 export default {};
