@@ -11,7 +11,7 @@ type ModalTriggerTemplate = (props: {
 }) => React.ReactElement<any>;
 
 export interface ModalTriggerProps
-  extends Omit<ModalProps, 'children' | 'opened'> {
+  extends Omit<ModalProps, 'children' | 'opened' | 'onClose'> {
   children: React.ReactElement<any> | ModalTriggerTemplate;
   content: React.ReactNode | ModalTriggerTemplate;
 }
@@ -29,7 +29,12 @@ export const ModalTrigger = ({
         ? children({ opened, setOpened })
         : React.cloneElement(children, { onClick: () => setOpened(true) })}
       {opened && (
-        <Modal {...modalProps} opened={opened}>
+        <Modal
+          closeOnClickOutside={false}
+          {...modalProps}
+          opened={opened}
+          onClose={() => setOpened(false)}
+        >
           {typeof content === 'function'
             ? content({ opened, setOpened })
             : content}

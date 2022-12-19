@@ -1,10 +1,17 @@
 import { useApi } from '@roxavn/core/server';
 import { NotFoundException } from '@roxavn/core/share';
 
-import { GetMyUserApi, GetUsersApi } from '../../share';
-import { User } from '../entities';
+import {
+  GetMyUserApi,
+  GetUsersApi,
+  CreateUserApi,
+  UserExistsException,
+} from '../../share';
+import { PasswordIdentity, User } from '../entities';
 import { serverModule } from '../module';
 import { AuthApiService, InferAuthApiRequest } from '../middlerware';
+import { tokenService } from './token';
+import { Env } from '../config';
 
 @useApi(serverModule, GetMyUserApi)
 export class GetMyUserApiService extends AuthApiService<typeof GetMyUserApi> {
@@ -39,5 +46,36 @@ export class GetUsersApiService extends AuthApiService<typeof GetUsersApi> {
       items: users,
       pagination: { page, pageSize, totalItems },
     };
+  }
+}
+
+@useApi(serverModule, CreateUserApi)
+export class CreateUserApiService extends AuthApiService<typeof CreateUserApi> {
+  async handle(request: InferAuthApiRequest<typeof CreateUserApi>) {
+    try {
+      const token = await tokenService.creator.create({
+        alphabetType: 'LOWERCASE_ALPHA_NUM',
+        size: 21,
+      });
+      const hash = await tokenService.hasher.hash(token);
+      const expiredAt = Date.now() + Env.SHORT_TIME_TO_LIVE;
+
+      return await this.dataSource.transaction(async (manager) => {
+        const identity = new PasswordIdentity();
+        identity.metadata = { token: { hash, expiredAt } };
+        const user = new User();
+        user.username = request.username;
+        await manager.save(user);
+        identity.owner = user;
+        await manager.save(identity);
+
+        return {
+          id: user.id,
+          resetPasswordToken: token,
+        };
+      });
+    } catch (error) {
+      throw new UserExistsException();
+    }
   }
 }

@@ -17,5 +17,8 @@
   "changeTheme": "Change theme",
   "Error": {
     "UserExistsException": "User exists exception"
+  },
+  "Validation": {
+    "IsUsername": "Contains only lowercase letters, numbers and periods. Must starts with a letter"
   }
 }

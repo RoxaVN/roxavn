@@ -3,19 +3,19 @@ import {
   ExactProps,
   ForbiddenException,
   Id,
-  IsEmail,
+  MaxLength,
   MinLength,
   UnauthorizedException,
 } from '@roxavn/core/share';
 import { UserExistsException } from '../errors';
 import { Permissions } from '../permissions';
+import { IsUsername } from '../validation';
 
 class CreateUserRequest extends ExactProps<CreateUserRequest> {
-  @MinLength(1)
-  public readonly name!: string;
-
-  @IsEmail()
-  public readonly email!: string;
+  @IsUsername()
+  @MinLength(6)
+  @MaxLength(32)
+  public readonly username!: string;
 }
 
 interface CreateUserResponse extends Id {
