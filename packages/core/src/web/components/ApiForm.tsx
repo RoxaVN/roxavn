@@ -2,10 +2,9 @@ import { LoadingOverlay, Button, Group } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import React, { useState } from 'react';
 import { IconSend } from '@tabler/icons';
+
 import { Api, ApiRequest, ApiResponse } from '../../share';
-import { apiFetcher } from '../services/api.fetcher';
-import { webModule } from '../services/module';
-import { uiManager } from '../services/ui';
+import { uiManager, webModule, apiFetcher } from '../services';
 
 export interface ApiFormProps<
   Request extends ApiRequest,

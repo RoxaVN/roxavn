@@ -2,8 +2,7 @@ import { LoadingOverlay } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
 import { Api, ApiResponse, ApiRequest } from '../../share';
-import { apiFetcher } from '../services/api.fetcher';
-import { uiManager } from '../services/ui';
+import { uiManager, apiFetcher } from '../services';
 
 export interface ApiRenderProps<
   Request extends ApiRequest,
