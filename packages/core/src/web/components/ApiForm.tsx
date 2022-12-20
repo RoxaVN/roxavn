@@ -1,7 +1,6 @@
-import { LoadingOverlay, Button, Group } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { LoadingOverlay } from '@mantine/core';
+import { useForm, UseFormReturnType } from '@mantine/form';
 import React, { useState } from 'react';
-import { IconSend } from '@tabler/icons';
 
 import { Api, ApiRequest, ApiResponse } from '../../share';
 import { uiManager, webModule, apiFetcher } from '../services';
@@ -10,59 +9,42 @@ export interface ApiFormProps<
   Request extends ApiRequest,
   Response extends ApiResponse
 > {
-  fields: Array<React.ReactElement<any>>;
-  type?: 'vertical' | 'inline';
-  onBeforeSubmit?: (
-    params: Partial<Request> & Record<string, any>
-  ) => Partial<Request>;
+  initialValues?: Request & Record<string, any>;
+  children: (form: UseFormReturnType<Request>) => React.ReactNode;
+  onBeforeSubmit?: (params: Request & Record<string, any>) => Promise<Request>;
   onSuccess?: (data: Response, params: Request) => void;
   api?: Api<Request, Response, any>;
-  renderSubmit?: () => React.ReactNode;
 }
 
 export function ApiForm<
   Request extends ApiRequest,
   Response extends ApiResponse
 >({
-  fields,
+  initialValues,
+  children,
   onBeforeSubmit,
   onSuccess,
   api,
-  renderSubmit,
 }: ApiFormProps<Request, Response>) {
-  const form = useForm({});
+  const form = useForm<Request & Record<string, any>>({
+    initialValues: initialValues,
+  });
   const [submitting, setSubmitting] = useState(false);
   const { t } = webModule.useTranslation();
-
-  const _rendersubmit = () => {
-    if (renderSubmit) {
-      return renderSubmit();
-    }
-    if (api) {
-      return (
-        <Group position="center" mt="md">
-          <Button type="submit" leftIcon={<IconSend />}>
-            {t('submit')}
-          </Button>
-        </Group>
-      );
-    }
-    return null;
-  };
 
   return (
     <div>
       <LoadingOverlay visible={submitting} />
       <form
-        onSubmit={form.onSubmit((values) => {
+        onSubmit={form.onSubmit(async (values) => {
           if (api) {
             setSubmitting(true);
             if (onBeforeSubmit) {
               try {
-                values = onBeforeSubmit(values as Partial<Request>);
+                values = await onBeforeSubmit(values);
               } catch (e: any) {
-                setSubmitting(false);
                 form.setErrors(e);
+                return setSubmitting(false);
               }
             }
             apiFetcher
@@ -93,18 +75,7 @@ export function ApiForm<
           }
         })}
       >
-        {fields.map((field) => {
-          const name = field.props.name;
-          if (name) {
-            const attrs = form.getInputProps(name);
-            attrs.value = attrs.value || '';
-            attrs.key = name;
-            attrs.mt = 'md';
-            return React.cloneElement(field, attrs);
-          }
-          return field;
-        })}
-        {_rendersubmit()}
+        {children(form)}
       </form>
     </div>
   );

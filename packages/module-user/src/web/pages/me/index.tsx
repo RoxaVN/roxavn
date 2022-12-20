@@ -1,5 +1,10 @@
 import { TextInput } from '@mantine/core';
-import { AddButton, FormModalTrigger, ApiForm } from '@roxavn/core/web';
+import {
+  AddButton,
+  SubmitButton,
+  FormModalTrigger,
+  ApiForm,
+} from '@roxavn/core/web';
 
 import { CreateUserApi } from '../../../share';
 import { webModule } from '../../module';
@@ -12,8 +17,19 @@ const IndexPage = () => {
       content={
         <ApiForm
           api={webModule.api(CreateUserApi)}
-          fields={[<TextInput label={t('username')} name="username" />]}
-        />
+          initialValues={{ username: '' }}
+        >
+          {(form) => (
+            <>
+              <TextInput
+                mb="md"
+                label={t('username')}
+                {...form.getInputProps('username')}
+              />
+              <SubmitButton fullWidth />
+            </>
+          )}
+        </ApiForm>
       }
     >
       <AddButton />
