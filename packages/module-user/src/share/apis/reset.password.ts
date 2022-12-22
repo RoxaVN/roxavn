@@ -4,14 +4,13 @@ import {
   Empty,
   ExactProps,
   ForbiddenException,
-  IsEmail,
   MinLength,
   UnauthorizedException,
 } from '@roxavn/core/share';
 
 class ResetPasswordRequest extends ExactProps<ResetPasswordRequest> {
-  @IsEmail()
-  public readonly email!: string;
+  @MinLength(1)
+  public readonly username!: string;
 
   @MinLength(1)
   public readonly token!: string;

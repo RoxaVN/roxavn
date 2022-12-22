@@ -11,7 +11,9 @@ export interface ApiFormProps<
 > {
   initialValues?: Request & Record<string, any>;
   children: (form: UseFormReturnType<Request>) => React.ReactNode;
-  onBeforeSubmit?: (params: Request & Record<string, any>) => Promise<Request>;
+  onBeforeSubmit?: (
+    params: Request & Record<string, any>
+  ) => Promise<Request> | Request;
   onSuccess?: (data: Response, params: Request) => void;
   api?: Api<Request, Response, any>;
 }

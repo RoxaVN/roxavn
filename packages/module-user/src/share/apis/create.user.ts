@@ -19,7 +19,7 @@ class CreateUserRequest extends ExactProps<CreateUserRequest> {
 }
 
 interface CreateUserResponse extends Id {
-  resetPasswordToken?: string;
+  resetPasswordToken: string;
 }
 
 export const CreateUserApi: Api<

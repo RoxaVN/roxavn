@@ -1,5 +1,11 @@
-import { Button, ButtonProps } from '@mantine/core';
-import { IconPlus, IconSend } from '@tabler/icons';
+import {
+  Button,
+  CopyButton as MantineCopyButton,
+  Tooltip,
+  ActionIcon,
+  ButtonProps,
+} from '@mantine/core';
+import { IconPlus, IconSend, IconCopy, IconCheck } from '@tabler/icons';
 
 import { webModule } from '../services';
 
@@ -18,5 +24,24 @@ export const SubmitButton = (props: ButtonProps) => {
     <Button mb="md" type="submit" leftIcon={<IconSend />} {...props}>
       {t('submit')}
     </Button>
+  );
+};
+
+export const CopyButton = ({ value }: { value: string }) => {
+  const { t } = webModule.useTranslation();
+  return (
+    <MantineCopyButton value={value} timeout={2000}>
+      {({ copied, copy }) => (
+        <Tooltip
+          label={copied ? t('copied') : t('copy')}
+          withArrow
+          position="right"
+        >
+          <ActionIcon color={copied ? 'green' : 'gray'} onClick={copy}>
+            {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
+          </ActionIcon>
+        </Tooltip>
+      )}
+    </MantineCopyButton>
   );
 };

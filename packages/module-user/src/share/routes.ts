@@ -1,10 +1,13 @@
-import { WebRoute } from '@roxavn/core/share';
+import { Empty, WebRoute } from '@roxavn/core/share';
 
-export const Routes = {
-  ResetPassword: { path: '/reset-password' },
-  Login: { path: '/login' },
-  Me: { path: '/me' },
-  Home: { path: '/' },
+export const WebRoutes = {
+  ResetPassword: new WebRoute<
+    Empty,
+    { username: string; token: string; ref?: string }
+  >('/reset-password'),
+  Login: new WebRoute<Empty, { ref?: string }>('/login'),
+  Me: new WebRoute('/me'),
+  Home: new WebRoute('/'),
 };
 
-Routes as Record<string, WebRoute>;
+WebRoutes as Record<string, WebRoute>;

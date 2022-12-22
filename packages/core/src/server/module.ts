@@ -97,7 +97,7 @@ export function useApi<Req extends ApiRequest, Resp extends ApiResponse>(
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 ServerModule.errorMiddlerwares.push((error, context, next) => {
-  if (!error.code) {
+  if (!error.code || !error.toJson) {
     error = new ServerException();
   }
   context.resp

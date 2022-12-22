@@ -31,14 +31,6 @@ async function checkStatus(response: Response) {
   } as HttpException;
 }
 
-function objectToQueryStr(obj: Record<string, unknown>) {
-  return Object.keys(obj)
-    .map(
-      (key) => `${encodeURIComponent(key)}=${encodeURIComponent(`${obj[key]}`)}`
-    )
-    .join('&');
-}
-
 const http = {
   Host: '',
   errorObserver: new Subject<HttpException>(),
@@ -107,7 +99,7 @@ const http = {
       }
       return true;
     });
-    return `${this.Host + path}?${objectToQueryStr(params)}`;
+    return `${this.Host + path}?${new URLSearchParams(params)}`;
   },
 };
 

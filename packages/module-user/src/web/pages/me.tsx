@@ -11,7 +11,7 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { IsAuthenticated } from '../components';
-import { Routes } from '../../share';
+import { WebRoutes } from '../../share';
 
 function MeComponent() {
   const theme = useMantineTheme();
@@ -70,7 +70,7 @@ function MeComponent() {
 const MePage = () => (
   <IsAuthenticated
     userComponent={<MeComponent />}
-    guestComponent={<Navigate to={Routes.Login.path} />}
+    guestComponent={<Navigate to={WebRoutes.Login.path} />}
   />
 );
 

@@ -4,7 +4,7 @@
   "retypePassword": "Retype password",
   "wrongRetypePassword": "Wrong retype password",
   "resetPassword": "Reset password",
-  "sendResetPasswordLink": "Please send this link ({{link}}) to {{name}} to reset password",
+  "sendResetPasswordLink": "Please copy and send this link to {{name}} to reset password",
   "name": "Name",
   "addUser": "Add user",
   "login": "Login",

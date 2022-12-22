@@ -6,7 +6,25 @@ import { ErrorResponse } from '../../share';
 import { webModule } from './module';
 
 const uiManager = {
-  // alertDialog(message: string, header?: string, icon = 'pi pi-info-circle') {},
+  alertDialog(message: React.ReactNode, title?: React.ReactNode) {
+    openConfirmModal({
+      title: title || (
+        <Translation ns={webModule.escapedName}>
+          {(t) => t('notification')}
+        </Translation>
+      ),
+      children: message,
+      labels: {
+        confirm: (
+          <Translation ns={webModule.escapedName}>
+            {(t) => t('accept')}
+          </Translation>
+        ),
+        cancel: '',
+      },
+      cancelProps: { hidden: true },
+    });
+  },
   errorDialog(error: ErrorResponse | Error, title?: React.ReactNode) {
     openConfirmModal({
       title: title || (

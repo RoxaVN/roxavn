@@ -1,13 +1,15 @@
-import { TextInput, Box } from '@mantine/core';
+import { TextInput, Box, Grid } from '@mantine/core';
 import {
   AddButton,
   SubmitButton,
   FormModalTrigger,
   ApiForm,
   ApiTable,
+  uiManager,
+  CopyButton,
 } from '@roxavn/core/web';
 
-import { CreateUserApi, GetUsersApi } from '../../../share';
+import { CreateUserApi, GetUsersApi, WebRoutes } from '../../../share';
 import { webModule } from '../../module';
 
 const IndexPage = () => {
@@ -17,10 +19,32 @@ const IndexPage = () => {
       <Box mb="md">
         <FormModalTrigger
           title={t('addUser')}
-          content={
+          content={({ successHandler }) => (
             <ApiForm
               api={webModule.api(CreateUserApi)}
               initialValues={{ username: '' }}
+              onSuccess={(data, params) => {
+                successHandler();
+                const link = WebRoutes.ResetPassword.generate(
+                  {},
+                  {
+                    username: params.username,
+                    token: data.resetPasswordToken,
+                  }
+                );
+                uiManager.alertDialog(
+                  <Grid>
+                    <Grid.Col span={2}>
+                      <CopyButton
+                        value={`${location.protocol}://${location.host}${link}`}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={10}>
+                      {t('sendResetPasswordLink', { name: params.username })}
+                    </Grid.Col>
+                  </Grid>
+                );
+              }}
             >
               {(form) => (
                 <>
@@ -33,7 +57,7 @@ const IndexPage = () => {
                 </>
               )}
             </ApiForm>
-          }
+          )}
         >
           <AddButton />
         </FormModalTrigger>

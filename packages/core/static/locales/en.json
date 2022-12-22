@@ -22,6 +22,8 @@
   "apps": "Applications",
   "report": "Report",
   "config": "Config",
+  "copy": "Copy",
+  "copied": "Copied",
   "statistic": "Statistic",
 
   "Error": {

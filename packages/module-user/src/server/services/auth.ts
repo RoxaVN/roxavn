@@ -1,7 +1,11 @@
 import { ApiService, useApi } from '@roxavn/core/server';
-import { InferApiRequest, UnauthorizedException } from '@roxavn/core/share';
+import {
+  BadRequestException,
+  InferApiRequest,
+  UnauthorizedException,
+} from '@roxavn/core/share';
 
-import { LoginApi, LogoutApi } from '../../share';
+import { LoginApi, LogoutApi, ResetPasswordApi } from '../../share';
 import { Env } from '../config';
 import { PasswordIdentity, UserAccessToken } from '../entities';
 import { serverModule } from '../module';
@@ -58,6 +62,45 @@ export class LogoutApiService extends AuthApiService<typeof LogoutApi> {
     await this.dataSource
       .getRepository(UserAccessToken)
       .delete({ id: request.accessToken.id });
+    return {};
+  }
+}
+
+@useApi(serverModule, ResetPasswordApi)
+export class ResetPasswordService extends AuthApiService<
+  typeof ResetPasswordApi
+> {
+  async handle(request: InferAuthApiRequest<typeof ResetPasswordApi>) {
+    const identity = await this.dataSource
+      .getRepository(PasswordIdentity)
+      .findOne({
+        select: ['id', 'metadata'],
+        where: { owner: { username: request.username } },
+      });
+
+    if (!identity) {
+      throw new BadRequestException();
+    }
+
+    const hash = identity.metadata?.token?.hash;
+    const expiredAt = identity.metadata?.token?.expiredAt;
+
+    const now = new Date();
+    const isValid =
+      expiredAt > now &&
+      hash &&
+      (await tokenService.hasher.verify(request.token, hash));
+
+    if (!isValid) {
+      throw new BadRequestException();
+    }
+
+    const passwordHash = await tokenService.hasher.hash(request.password);
+
+    identity.password = passwordHash;
+    identity.metadata = null;
+    this.dataSource.getRepository(PasswordIdentity).save(identity);
+
     return {};
   }
 }

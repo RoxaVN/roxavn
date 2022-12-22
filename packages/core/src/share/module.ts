@@ -1,6 +1,5 @@
 import { Api, ApiError, ApiRequest, ApiResponse } from './api';
 import { constants } from './constants';
-import { WebRoute } from './route';
 import { urlUtils } from './url';
 
 export class BaseModule {
@@ -43,7 +42,7 @@ export class BaseModule {
         constants.API_BASE_PATH +
         '/' +
         this._escapedName +
-        (params ? urlUtils.gen(api.path, params) : api.path),
+        (params ? urlUtils.generatePath(api.path, params) : api.path),
     };
   }
 
@@ -53,11 +52,6 @@ export class BaseModule {
 
   public static escapeName(name: string): string {
     return name.replace(/\//g, '@');
-  }
-
-  public genWebPath(router: WebRoute, params?: Record<string, any>) {
-    const { path } = router;
-    return params ? urlUtils.gen(path, params) : path;
   }
 }
 

@@ -1,5 +1,5 @@
 const urlUtils = {
-  gen(urlPattern: string, params: Record<string, any>) {
+  generatePath(urlPattern: string, params: Record<string, any>) {
     const parts = urlPattern.split('/');
     const result = [] as string[];
     for (let i = 0; i < parts.length; i += 1) {
