@@ -2,7 +2,7 @@
   "name": "@roxavn/core",
   "version": "0.1.28",
   "scripts": {
-    "build": "rimraf dist && tsc -p tsconfig.cjs.json && tsc -p tsconfig.esm.json",
+    "build": "tsc -p tsconfig.cjs.json && tsc -p tsconfig.esm.json",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --passWithNoTests --watch",
     "test:cov": "rimraf coverage && jest --passWithNoTests --coverage"
