@@ -4,11 +4,8 @@ import { useState } from 'react';
 import { Api, ApiRequest, PaginatedCollection } from '../../share';
 import { ApiRender } from './ApiRender';
 
-export interface ApiTableColumn<
-  T extends Record<string, any>,
-  K extends keyof T = keyof T
-> {
-  key: K | string;
+export interface ApiTableColumn<T, K extends keyof T> {
+  key: K;
   title: React.ReactNode;
   render?: (value: T[K], item: T) => React.ReactNode;
 }
@@ -19,8 +16,9 @@ export interface ApiTable<
 > {
   api: Api<Request, PaginatedCollection<ResponseItem>>;
   apiParams?: Request;
-  columns: Array<ApiTableColumn<ResponseItem>>;
+  columns: Array<ApiTableColumn<ResponseItem, keyof ResponseItem>>;
   keyColumnName?: keyof ResponseItem;
+  rowActions?: (item: ResponseItem) => React.ReactNode;
 }
 
 export const ApiTable = <
@@ -31,6 +29,7 @@ export const ApiTable = <
   apiParams,
   columns,
   keyColumnName,
+  rowActions,
 }: ApiTable<Request, ResponseItem>) => {
   const [page, setPage] = useState(1);
 
@@ -45,6 +44,7 @@ export const ApiTable = <
                 {columns.map((column) => (
                   <th key={column.key as string}>{column.title}</th>
                 ))}
+                {rowActions && <th></th>}
               </tr>
             </thead>
             <tbody>
@@ -57,6 +57,7 @@ export const ApiTable = <
                         : (item[column.key] as any)}
                     </td>
                   ))}
+                  {rowActions && <td>{rowActions(item)}</td>}
                 </tr>
               ))}
             </tbody>

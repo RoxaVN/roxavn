@@ -1,4 +1,5 @@
 import { TextInput, Box } from '@mantine/core';
+import { Prism } from '@mantine/prism';
 import {
   AddButton,
   SubmitButton,
@@ -6,7 +7,6 @@ import {
   ApiForm,
   ApiTable,
   uiManager,
-  CopyButton,
   webModule as coreWebModule,
   utils,
 } from '@roxavn/core/web';
@@ -37,14 +37,16 @@ const IndexPage = () => {
                 );
                 uiManager.alertDialog(
                   <div>
-                    <Box sx={{ float: 'left' }} mr="md">
-                      <CopyButton
-                        value={`${location.protocol}://${location.host}${link}`}
-                      />
-                    </Box>
-                    <span>
+                    <p>
                       {t('sendResetPasswordLink', { name: params.username })}
-                    </span>
+                    </p>
+                    <Prism
+                      language="markdown"
+                      copyLabel={tCore('copy')}
+                      copiedLabel={tCore('copied')}
+                    >
+                      {`${location.protocol}://${location.host}${link}`}
+                    </Prism>
                   </div>
                 );
               }}
@@ -73,14 +75,13 @@ const IndexPage = () => {
           {
             key: 'createdDate',
             title: tCore('createdDate'),
-            render: utils.Render.datetime as any,
+            render: utils.Render.datetime,
           },
           {
             key: 'updatedDate',
             title: tCore('updatedDate'),
-            render: utils.Render.relativeTime as any,
+            render: utils.Render.relativeTime,
           },
-          { key: 'action', title: '' },
         ]}
       />
     </div>
