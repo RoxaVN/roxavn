@@ -25,6 +25,8 @@
   "copy": "Sao chép",
   "copied": "Đã sao chép",
   "statistic": "Thống kê",
+  "createdDate": "Ngày tạo",
+  "updatedDate": "Ngày sửa",
 
   "Error": {
     "BadRequestException": "Yêu cầu không hợp lệ",

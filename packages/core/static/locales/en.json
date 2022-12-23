@@ -25,6 +25,8 @@
   "copy": "Copy",
   "copied": "Copied",
   "statistic": "Statistic",
+  "createdDate": "Created date",
+  "updatedDate": "Updated date",
 
   "Error": {
     "BadRequestException": "Bad request exception",

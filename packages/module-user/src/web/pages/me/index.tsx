@@ -1,4 +1,4 @@
-import { TextInput, Box, Grid } from '@mantine/core';
+import { TextInput, Box } from '@mantine/core';
 import {
   AddButton,
   SubmitButton,
@@ -7,6 +7,8 @@ import {
   ApiTable,
   uiManager,
   CopyButton,
+  webModule as coreWebModule,
+  utils,
 } from '@roxavn/core/web';
 
 import { CreateUserApi, GetUsersApi, WebRoutes } from '../../../share';
@@ -14,6 +16,7 @@ import { webModule } from '../../module';
 
 const IndexPage = () => {
   const { t } = webModule.useTranslation();
+  const tCore = coreWebModule.useTranslation().t;
   return (
     <div>
       <Box mb="md">
@@ -33,16 +36,16 @@ const IndexPage = () => {
                   }
                 );
                 uiManager.alertDialog(
-                  <Grid>
-                    <Grid.Col span={2}>
+                  <div>
+                    <Box sx={{ float: 'left' }} mr="md">
                       <CopyButton
                         value={`${location.protocol}://${location.host}${link}`}
                       />
-                    </Grid.Col>
-                    <Grid.Col span={10}>
+                    </Box>
+                    <span>
                       {t('sendResetPasswordLink', { name: params.username })}
-                    </Grid.Col>
-                  </Grid>
+                    </span>
+                  </div>
                 );
               }}
             >
@@ -67,6 +70,16 @@ const IndexPage = () => {
         columns={[
           { key: 'username', title: t('username') },
           { key: 'email', title: t('email') },
+          {
+            key: 'createdDate',
+            title: tCore('createdDate'),
+            render: utils.Render.datetime as any,
+          },
+          {
+            key: 'updatedDate',
+            title: tCore('updatedDate'),
+            render: utils.Render.relativeTime as any,
+          },
           { key: 'action', title: '' },
         ]}
       />

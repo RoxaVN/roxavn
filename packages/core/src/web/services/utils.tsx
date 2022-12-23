@@ -1,5 +1,9 @@
-import { format, formatRelative, parseJSON } from 'date-fns';
-import { i18nClient } from './i18n';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+
+dayjs.extend(relativeTime);
+dayjs.extend(localizedFormat);
 
 const utils = {
   Number: {
@@ -41,21 +45,9 @@ const utils = {
     percent: (v: number) => v && `${v}%`,
     number: (v: number) => utils.Number.formatLocale(v),
     abbrNumber: (v: number) => utils.Number.abbreviate(v),
-    datetimeRelative: (v: string) =>
-      v &&
-      formatRelative(parseJSON(v), new Date(), {
-        locale: i18nClient.dateFnsLocale,
-      }),
-    datetime: (v: string) =>
-      v &&
-      format(parseJSON(v), 'PPPp', {
-        locale: i18nClient.dateFnsLocale,
-      }),
-    date: (v: string) =>
-      v &&
-      format(parseJSON(v), 'PPP', {
-        locale: i18nClient.dateFnsLocale,
-      }),
+    relativeTime: (v: dayjs.ConfigType) => v && dayjs(v).fromNow(),
+    datetime: (v: dayjs.ConfigType) => v && dayjs(v).format('LLL'),
+    date: (v: dayjs.ConfigType) => v && dayjs(v).format('LL'),
   },
 };
 

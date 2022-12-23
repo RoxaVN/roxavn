@@ -3,4 +3,6 @@ export interface User {
   username: string;
   email?: string;
   phone?: string;
+  createdDate: Date;
+  updatedDate: Date;
 }
