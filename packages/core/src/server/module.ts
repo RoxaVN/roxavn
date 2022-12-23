@@ -1,3 +1,4 @@
+import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { Request, Response, Router, NextFunction } from 'express';
 import { DataSource } from 'typeorm';
@@ -56,14 +57,7 @@ export class ServerModule extends BaseModule {
       ),
       async function (req: Request, resp: Response, next: NextFunction) {
         try {
-          const inputData = Object.assign(
-            {},
-            req.query,
-            req.body,
-            req.params,
-            resp.locals
-          );
-          const result = await handler(inputData, {
+          const result = await handler(resp.locals as Req, {
             req,
             resp,
             dataSource: databaseManager.dataSource,
@@ -105,14 +99,16 @@ ServerModule.errorMiddlerwares.push((error, context, next) => {
     .json({ code: error.code, error: error.toJson() } as FullApiResponse);
 });
 
-ServerModule.apiMiddlerwares.push((api, { req }, next) => {
+ServerModule.apiMiddlerwares.push((api, { req, resp }, next) => {
   if (api.validator) {
-    const inputData = Object.assign(
+    const rawData = Object.assign(
       {},
       req.params || {},
       api.method === 'GET' ? req.query : req.body
     );
-    const errors = validateSync(new api.validator(inputData), {
+    const parsedData = plainToInstance(api.validator, rawData);
+
+    const errors = validateSync(parsedData, {
       stopAtFirstError: true,
     });
     if (errors.length) {
@@ -124,6 +120,8 @@ ServerModule.apiMiddlerwares.push((api, { req }, next) => {
       });
       return next(new ValidationException(i18n));
     }
+
+    Object.assign(resp.locals, parsedData);
   }
   next();
 });
