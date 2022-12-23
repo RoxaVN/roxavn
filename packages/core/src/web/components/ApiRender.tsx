@@ -16,7 +16,7 @@ export interface ApiRenderProps<
     data: Response | null;
     error: any;
     loading: boolean;
-    fetcher: () => void;
+    fetcher: (params?: Request) => void;
   }) => JSX.Element;
 }
 
@@ -34,11 +34,11 @@ export function ApiRender<
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>();
 
-  const fetcher = async () => {
+  const fetcher = async (params?: Request) => {
     try {
       setError(null);
       setLoading(true);
-      const result = await apiFetcher.fetch(api, apiParams);
+      const result = await apiFetcher.fetch(api, params);
       setData(result);
       onSuccess && onSuccess(result);
     } catch (e: any) {
@@ -50,7 +50,7 @@ export function ApiRender<
   };
 
   useEffect(() => {
-    const timeout = setTimeout(fetcher, 100);
+    const timeout = setTimeout(() => fetcher(apiParams), 100);
     return () => clearTimeout(timeout);
   }, [api, apiParams]);
 

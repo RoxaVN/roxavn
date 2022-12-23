@@ -9,12 +9,15 @@ import {
   uiManager,
   webModule as coreWebModule,
   utils,
+  ApiFetcherRef,
 } from '@roxavn/core/web';
+import { useRef } from 'react';
 
 import { CreateUserApi, GetUsersApi, WebRoutes } from '../../../share';
 import { webModule } from '../../module';
 
 const IndexPage = () => {
+  const fetcherRef = useRef<ApiFetcherRef<typeof GetUsersApi>>();
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
   return (
@@ -28,6 +31,7 @@ const IndexPage = () => {
               initialValues={{ username: '' }}
               onSuccess={(data, params) => {
                 successHandler();
+                fetcherRef.current?.handle({ page: 1 });
                 const link = WebRoutes.ResetPassword.generate(
                   {},
                   {
@@ -68,6 +72,7 @@ const IndexPage = () => {
         </FormModalTrigger>
       </Box>
       <ApiTable
+        fetcherRef={fetcherRef}
         api={webModule.api(GetUsersApi)}
         columns={[
           { key: 'username', title: t('username') },
