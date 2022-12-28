@@ -15,6 +15,10 @@
   "myProfile": "My profile",
   "userList": "User list",
   "changeTheme": "Change theme",
+  "Meta": {
+    "name": "User",
+    "description": "System account management"
+  },
   "Error": {
     "UserExistsException": "User exists exception"
   },

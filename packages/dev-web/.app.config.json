@@ -1,6 +1,7 @@
 {
   "modules": {
     "@roxavn/core": {},
+    "@roxavn/module-upload": {},
     "@roxavn/module-user": {}
   }
 }

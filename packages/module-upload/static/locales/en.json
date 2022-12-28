@@ -1,5 +1,9 @@
 {
   "reupload": "Reupload",
+  "Meta": {
+    "name": "Upload file",
+    "description": "Manage file uploads"
+  },
   "Validation": {
     "MaxFiles": "Max uploaded files is {{ count }}"
   },

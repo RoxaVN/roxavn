@@ -15,6 +15,10 @@
   "myProfile": "Thông tin của tôi",
   "userList": "Danh sách tài khoản",
   "changeTheme": "Thay đổi chủ đề",
+  "Meta": {
+    "name": "Tài khoản",
+    "description": "Quản lý tài khoản hệ thống"
+  },
   "Error": {
     "UserExistsException": "Người dùng đã tồn tại"
   },

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import fse from 'fs-extra';
 import path from 'path';
-import { BaseModule } from '@roxavn/core/share';
+import { BaseModule, constants } from '@roxavn/core/share';
 import { appConfig, getJsonFromFile } from '@roxavn/core/server';
 
 import { CodeChanger } from './lib';
@@ -14,7 +14,11 @@ class ModuleService {
   }
 
   syncModule(module: string) {
-    this.syncStatic(module);
+    const staticPath = this.getStaticPath(module);
+    if (staticPath) {
+      this.syncStatic(module, staticPath);
+      this.syncMetaLoacale(module, staticPath);
+    }
     this.addInit(module);
   }
 
@@ -29,19 +33,34 @@ class ModuleService {
     return null;
   }
 
-  syncStatic(module: string) {
-    let staticPath: string | null;
-    if (module !== '.') {
-      staticPath = this.getPackageRootPath(module + '/web');
-      if (staticPath) {
-        staticPath = path.join(staticPath, 'static');
+  syncStatic(module: string, staticPath: string) {
+    const moduleName = this.realModuleName(module);
+    this.createStaticLink(BaseModule.escapeName(moduleName), staticPath);
+  }
+
+  syncMetaLoacale(module: string, staticPath: string) {
+    const localesPath = path.join(staticPath, 'locales');
+    const files = fs.readdirSync(localesPath);
+    const realModuleName = this.realModuleName(module);
+    for (const file of files) {
+      const srcFile = path.join(localesPath, file);
+      const targetFile = path.join(
+        '.web/public/static',
+        constants.META,
+        'locales',
+        file
+      );
+      let data: Record<string, any> = {};
+      if (fs.existsSync(targetFile)) {
+        data = fse.readJSONSync(targetFile, { throws: false }) || {};
+      } else {
+        fse.ensureFileSync(targetFile);
       }
-    } else {
-      staticPath = 'static';
-    }
-    if (staticPath) {
-      const moduleName = this.realModuleName(module);
-      this.createStaticLink(BaseModule.escapeName(moduleName), staticPath);
+      const localesData = fse.readJSONSync(srcFile);
+      if (localesData.Meta) {
+        data[realModuleName] = localesData.Meta;
+        fse.writeJSONSync(targetFile, data);
+      }
     }
   }
 
@@ -86,6 +105,19 @@ class ModuleService {
     } catch (e) {}
     fs.symlinkSync(relativePath, targetName);
     process.chdir(currentDir);
+  }
+
+  getStaticPath(moduleName: string): string | null {
+    let staticPath: string | null;
+    if (moduleName !== '.') {
+      staticPath = this.getPackageRootPath(moduleName + '/web');
+      if (staticPath) {
+        staticPath = path.join(staticPath, 'static');
+      }
+    } else {
+      staticPath = 'static';
+    }
+    return staticPath ? (fs.existsSync(staticPath) ? staticPath : null) : null;
   }
 
   realModuleName(moduleName: string): string {
