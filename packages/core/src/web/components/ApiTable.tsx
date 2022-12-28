@@ -31,8 +31,8 @@ export interface ApiTable<
   apiParams?: Request;
   fetcherRef?: MutableRefObject<ApiFetcherRef<Api<Request>> | undefined>;
   columns: Array<ApiTableColumn<ResponseItem, keyof ResponseItem>>;
-  keyColumnName?: keyof ResponseItem;
-  rowActions?: (item: ResponseItem) => React.ReactNode;
+  rowKey?: keyof ResponseItem;
+  actionsCell?: (item: ResponseItem) => React.ReactNode;
 }
 
 export const ApiTable = <
@@ -42,8 +42,8 @@ export const ApiTable = <
   api,
   apiParams,
   columns,
-  keyColumnName,
-  rowActions,
+  rowKey,
+  actionsCell,
   fetcherRef,
 }: ApiTable<Request, ResponseItem>) => {
   const [params, setParams] = useSetState<Request>(
@@ -68,12 +68,12 @@ export const ApiTable = <
                   {columns.map((column) => (
                     <th key={column.key as string}>{column.title}</th>
                   ))}
-                  {rowActions && <th></th>}
+                  {actionsCell && <th></th>}
                 </tr>
               </thead>
               <tbody>
                 {data?.items.map((item) => (
-                  <tr key={item[(keyColumnName || 'id') as any]}>
+                  <tr key={item[(rowKey || 'id') as any]}>
                     {columns.map((column) => (
                       <td key={column.key as string}>
                         {column.render
@@ -81,7 +81,7 @@ export const ApiTable = <
                           : (item[column.key] as any)}
                       </td>
                     ))}
-                    {rowActions && <td>{rowActions(item)}</td>}
+                    {actionsCell && <td>{actionsCell(item)}</td>}
                   </tr>
                 ))}
               </tbody>
