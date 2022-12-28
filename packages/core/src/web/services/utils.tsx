@@ -1,7 +1,9 @@
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import utc from 'dayjs/plugin/utc';
 
+dayjs.extend(utc);
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
@@ -45,9 +47,9 @@ const utils = {
     percent: (v: number) => v && `${v}%`,
     number: (v: number) => utils.Number.formatLocale(v),
     abbrNumber: (v: number) => utils.Number.abbreviate(v),
-    relativeTime: (v: dayjs.ConfigType) => v && dayjs(v).fromNow(),
-    datetime: (v: dayjs.ConfigType) => v && dayjs(v).format('LLL'),
-    date: (v: dayjs.ConfigType) => v && dayjs(v).format('LL'),
+    relativeTime: (v: dayjs.ConfigType) => v && dayjs.utc(v).fromNow(),
+    datetime: (v: dayjs.ConfigType) => v && dayjs.utc(v).local().format('LLL'),
+    date: (v: dayjs.ConfigType) => v && dayjs.utc(v).local().format('LL'),
   },
 };
 
