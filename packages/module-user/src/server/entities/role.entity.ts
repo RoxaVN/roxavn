@@ -25,10 +25,10 @@ export class Role {
   @Column()
   isPredefined: boolean;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: Date;
 
   @OneToMany(() => UserRole, (role) => role.owner)

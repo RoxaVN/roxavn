@@ -28,10 +28,10 @@ export class User {
   @Column()
   username: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: Date;
 
   @OneToMany(() => UserIdentity, (identity) => identity.owner)

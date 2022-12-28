@@ -25,12 +25,12 @@ export class UserAccessToken {
   @ManyToOne(() => User, (owner) => owner.accessTokens)
   owner: User;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamptz' })
   expiredDate: Date;
 }
