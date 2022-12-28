@@ -20,6 +20,7 @@
     "typeorm": "^0.3.10"
   },
   "exports": {
+    "./hook/install": "./dist/cjs/hook/install.js",
     "./web": {
       "require": "./dist/cjs/web/index.js",
       "import": "./dist/esm/web/index.js"
