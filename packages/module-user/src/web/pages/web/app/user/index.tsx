@@ -13,15 +13,15 @@ import {
 } from '@roxavn/core/web';
 import { useRef } from 'react';
 
-import { CreateUserApi, GetUsersApi, WebRoutes } from '../../../share';
-import { webModule } from '../../module';
+import { CreateUserApi, GetUsersApi, WebRoutes } from '../../../../../share';
+import { webModule } from '../../../../module';
 
 const IndexPage = () => {
   const fetcherRef = useRef<ApiFetcherRef<typeof GetUsersApi>>();
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
   return (
-    <div>
+    <div title="test">
       <Box mb="md">
         <FormModalTrigger
           title={t('addUser')}
