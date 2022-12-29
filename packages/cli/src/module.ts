@@ -8,7 +8,7 @@ import { CodeChanger } from './lib';
 
 class ModuleService {
   sync() {
-    Object.keys(appConfig.get().modules).map((module) =>
+    Object.keys(appConfig.data.modules).map((module) =>
       this.syncModule(module)
     );
   }
