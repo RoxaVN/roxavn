@@ -1,5 +1,9 @@
 {
   "reupload": "Tải lại",
+  "userFiles": "File người dùng",
+  "maxFileSize": "Kích thước tệp tối đa",
+  "currentStorageSize": "Dung lượng lưu trữ hiện tại",
+  "maxStorageSize": "Dung lượng lưu trữ tối đa",
   "Meta": {
     "name": "Tệp tin",
     "description": "Quản lý file tải lên"
