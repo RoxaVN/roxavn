@@ -11,7 +11,7 @@ const program = new Command();
 program
   .name('RoxavN cli')
   .description('Support roxavn development')
-  .version('0.8.0');
+  .version('0.1.0');
 
 program
   .command('sync:module')
@@ -29,9 +29,9 @@ program
   .action(() => devService.run());
 
 program
-  .command('hook')
-  .description('Run hook script')
-  .action(() => hookService.run());
+  .command('hook <mode> [module]')
+  .description('Run hook script, or all if no module supplied')
+  .action((mode: string, module: string) => hookService.run(mode, module));
 
 program
   .command('build')

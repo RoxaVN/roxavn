@@ -1,11 +1,19 @@
-import { databaseManager, runModuleHooks } from '@roxavn/core/server';
+import {
+  databaseManager,
+  runModuleHook,
+  runModuleHooks,
+} from '@roxavn/core/server';
 import { devService } from './dev';
 
 class HookService {
-  async run() {
+  async run(mode: string, module?: string) {
     devService.initEnv();
     await databaseManager.createSource();
-    runModuleHooks();
+    if (module) {
+      runModuleHook(module, mode);
+    } else {
+      runModuleHooks(mode);
+    }
   }
 }
 

@@ -18,19 +18,6 @@ function isRouteModuleFile(filename: string): boolean {
   return routeModuleExts.includes(path.extname(filename));
 }
 
-export function runModuleHooks() {
-  Object.keys(appConfig.data.modules).map(runModuleHook);
-}
-
-export function runModuleHook(module: string) {
-  if (module === '.') {
-    module = appConfig.currentModule;
-  }
-  try {
-    require(module + '/hook/install');
-  } catch (e) {}
-}
-
 export function registerApiRoutes() {
   Object.keys(appConfig.data.modules).map((module) => {
     try {

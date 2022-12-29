@@ -9,5 +9,3 @@ export default async function install(): Promise<any> {
     console.error(error);
   }
 }
-
-install();

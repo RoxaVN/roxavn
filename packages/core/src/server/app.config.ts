@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 import { getJsonFromFile, getPackageJson } from './utils';
 
 export interface AppConfigData {
@@ -9,7 +11,11 @@ class AppConfig {
   currentModule: string;
 
   constructor() {
-    this.data = getJsonFromFile('.app.config.json');
+    if (fs.existsSync('.app.config.json')) {
+      this.data = getJsonFromFile('.app.config.json');
+    } else {
+      this.data = { modules: {} };
+    }
     this.currentModule = getPackageJson('.').name;
   }
 }
