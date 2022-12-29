@@ -1,17 +1,16 @@
-import { getJsonFromFile } from './utils';
+import { getJsonFromFile, getPackageJson } from './utils';
 
 export interface AppConfigData {
   modules: { [key: string]: any };
 }
 
 class AppConfig {
-  data?: AppConfigData;
+  data: AppConfigData;
+  currentModule: string;
 
-  get(): AppConfigData {
-    if (!this.data) {
-      this.data = getJsonFromFile('.app.config.json') as AppConfigData;
-    }
-    return this.data;
+  constructor() {
+    this.data = getJsonFromFile('.app.config.json');
+    this.currentModule = getPackageJson('.').name;
   }
 }
 

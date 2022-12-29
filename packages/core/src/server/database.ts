@@ -9,7 +9,7 @@ class DatabaseManager {
   dataSource!: DataSource;
 
   async createSource() {
-    const modules = Object.keys(appConfig.get().modules);
+    const modules = Object.keys(appConfig.data.modules);
     const modelPaths: string[] = [];
     modules.map((module) => {
       if (module === '.') {

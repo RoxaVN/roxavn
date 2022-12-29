@@ -3,8 +3,9 @@ import minimatch from 'minimatch';
 import path from 'path';
 
 import { AppConfig } from '@remix-run/dev';
-import { visitFiles, getPackageJson } from '.';
+import { visitFiles } from '.';
 import { appConfig } from '../app.config';
+import { BaseModule } from '../../share';
 
 type RoutesConfig = Exclude<AppConfig['routes'], undefined>;
 type RouteManifest = Awaited<ReturnType<RoutesConfig>>;
@@ -18,12 +19,12 @@ function isRouteModuleFile(filename: string): boolean {
 }
 
 export function runModuleHooks() {
-  Object.keys(appConfig.get().modules).map(runModuleHook);
+  Object.keys(appConfig.data.modules).map(runModuleHook);
 }
 
 export function runModuleHook(module: string) {
   if (module === '.') {
-    module = getPackageJson('.').name;
+    module = appConfig.currentModule;
   }
   try {
     require(module + '/hook/install');
@@ -31,7 +32,7 @@ export function runModuleHook(module: string) {
 }
 
 export function registerApiRoutes() {
-  Object.keys(appConfig.get().modules).map((module) => {
+  Object.keys(appConfig.data.modules).map((module) => {
     try {
       if (module !== '.') {
         require(module + '/server');
@@ -41,7 +42,7 @@ export function registerApiRoutes() {
 }
 
 export function registerWebRoutes(defineRoutes: DefineRoutes) {
-  const modules = Object.keys(appConfig.get().modules);
+  const modules = Object.keys(appConfig.data.modules);
   const result: RouteManifest = {};
   const currentDir = process.cwd();
   process.chdir('.web/app');
@@ -54,7 +55,7 @@ function definePageRoutes(
   modules: string[],
   defineRoutes: DefineRoutes
 ): RouteManifest {
-  const pagesFolders: string[] = [];
+  const modulePages: { name: string; path: string }[] = [];
   for (const module of modules) {
     try {
       const pathToModule =
@@ -65,22 +66,25 @@ function definePageRoutes(
               .replace('/cjs/', '/esm/'); // simple get esm path, should use import.meta if posible
       const pagesFolder = path.join(pathToModule, 'pages');
       if (fs.existsSync(pagesFolder)) {
-        pagesFolders.push(path.relative('.', pagesFolder));
+        modulePages.push({
+          name: module === '.' ? appConfig.currentModule : module,
+          path: path.relative('.', pagesFolder),
+        });
       }
     } catch (e) {}
   }
-  return defineConventionsRoutes(pagesFolders, defineRoutes);
+  return defineConventionsRoutes(modulePages, defineRoutes);
 }
 
 function defineConventionsRoutes(
-  dirs: string[],
+  modulePages: { name: string; path: string }[],
   defineRoutes: DefineRoutes,
   ignoredFilePatterns?: string[]
 ): RouteManifest {
   const files: { [routeId: string]: string } = {};
 
-  dirs.map((dir) => {
-    visitFiles(dir, (file) => {
+  modulePages.map((modulePage) => {
+    visitFiles(modulePage.path, (file) => {
       if (
         file.endsWith('.d.ts') ||
         (ignoredFilePatterns &&
@@ -90,12 +94,17 @@ function defineConventionsRoutes(
       }
 
       if (isRouteModuleFile(file)) {
-        const routeId = createRouteId(path.join(dir, file));
-        files[routeId] = path.join(dir, file);
+        const routeId = createRouteId(path.join(modulePage.path, file)).replace(
+          '{moduleName}',
+          BaseModule.escapeName(modulePage.name)
+        );
+        files[routeId] = path.join(modulePage.path, file);
         return;
       }
 
-      throw new Error(`Invalid route module file: ${path.join(dir, file)}`);
+      throw new Error(
+        `Invalid route module file: ${path.join(modulePage.path, file)}`
+      );
     });
   });
 
