@@ -1,10 +1,11 @@
+import { type Role as RoleType } from '@roxavn/core/share';
 import { databaseManager, TokenHasher } from '@roxavn/core/server';
 import { DataSource } from 'typeorm';
 import { PasswordIdentity, Role, User, UserRole } from '../../server';
 import { Roles } from '../../share/permissions';
 
 export const up = async () => {
-  await createRoles(databaseManager.dataSource);
+  await createRoles(databaseManager.dataSource, Roles);
   await createAdminUser(databaseManager.dataSource);
 };
 
@@ -35,17 +36,53 @@ const createAdminUser = async (dataSource: DataSource) => {
   }
 };
 
-const createRoles = async (dataSource: DataSource) => {
-  const roleRepository = dataSource.getRepository(Role);
-  if ((await roleRepository.count()) < 1) {
-    const roles = Object.values(Roles).map((r) => {
-      const role = new Role();
-      role.isPredefined = true;
-      role.name = r.name;
-      role.scope = r.scope.type;
-      role.permissions = r.permissions.map((p) => p.value);
-      return role;
+export const setAdminRole = async (dataSource: DataSource, role: RoleType) => {
+  const users = await dataSource.getRepository(UserRole).find({
+    select: { ownerId: true },
+    where: {
+      role: {
+        name: Roles.Admin.name,
+        scope: Roles.Admin.scope.type,
+      },
+    },
+  });
+  const roleModel = await dataSource.getRepository(Role).findOneBy({
+    name: role.name,
+    scope: role.scope.type,
+  });
+  if (roleModel) {
+    const adminRoles = users.map((user) => {
+      const adminRole = new UserRole();
+      adminRole.ownerId = user.ownerId;
+      adminRole.roleId = roleModel.id;
+      return adminRole;
     });
-    roleRepository.save(roles);
+    await dataSource
+      .createQueryBuilder()
+      .insert()
+      .into(UserRole)
+      .values(adminRoles)
+      .orIgnore()
+      .execute();
+  }
+};
+
+export const createRoles = async (
+  dataSource: DataSource,
+  roles: Record<string, RoleType>
+) => {
+  const roleRepository = dataSource.getRepository(Role);
+  for (const role of Object.values(roles)) {
+    const count = await roleRepository.count({
+      where: { name: role.name, scope: role.scope.type },
+    });
+    if (count < 1) {
+      const roleModel = new Role();
+      roleModel.isPredefined = true;
+      roleModel.name = role.name;
+      roleModel.scope = role.scope.type;
+      roleModel.permissions = role.permissions.map((p) => p.value);
+      await roleRepository.save(roleModel);
+    }
   }
 };

@@ -5,7 +5,7 @@
   "scripts": {
     "build": "remix build .web",
     "dev": "roxavn dev",
-    "hook": "roxavn hook",
+    "hook": "roxavn hook install",
     "start": "cross-env NODE_ENV=production node .web/server.js"
   },
   "dependencies": {

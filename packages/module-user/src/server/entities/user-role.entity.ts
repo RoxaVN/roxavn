@@ -1,9 +1,8 @@
 import {
-  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Role } from './role.entity';
@@ -11,23 +10,20 @@ import { User } from './user.entity';
 
 @Entity()
 export class UserRole {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn('character varying', { default: '' })
+  scopeId: string;
 
-  @Column()
+  @PrimaryColumn()
   ownerId: number;
 
   @ManyToOne(() => User, (owner) => owner.roles)
   owner: User;
 
-  @Column()
+  @PrimaryColumn()
   roleId: number;
 
   @ManyToOne(() => Role, (role) => role.owners)
   role: Role;
-
-  @Column({ nullable: true })
-  scopeId?: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;

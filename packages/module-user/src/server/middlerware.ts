@@ -7,7 +7,7 @@ import {
   predefinedRoleManager,
   UnauthorizedException,
 } from '@roxavn/core/share';
-import { IsNull, Raw } from 'typeorm';
+import { Raw } from 'typeorm';
 import { UserAccessToken, UserRole } from './entities';
 import { tokenService } from './services';
 
@@ -61,11 +61,10 @@ ServerModule.apiMiddlerwares.push(
           return next(new ForbiddenException());
         }
 
-        const role = await dataSource.getRepository(UserRole).findOne({
-          select: { id: true },
+        const hasRole = await dataSource.getRepository(UserRole).count({
           where: predefinedRoles.map((predefinedRole) => ({
             ownerId: accessToken.ownerId,
-            scopeId: predefinedRole.scope.hasId ? req.params.id : IsNull(),
+            scopeId: predefinedRole.scope.hasId ? req.params.id : '',
             role: {
               scope: predefinedRole.scope.type,
               name: predefinedRole.name,
@@ -73,7 +72,7 @@ ServerModule.apiMiddlerwares.push(
           })),
         });
 
-        if (!role) {
+        if (!hasRole) {
           return next(new ForbiddenException());
         }
       }
