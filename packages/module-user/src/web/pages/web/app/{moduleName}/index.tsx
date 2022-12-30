@@ -74,20 +74,18 @@ const IndexPage = () => {
       <ApiTable
         fetcherRef={fetcherRef}
         api={webModule.api(GetUsersApi)}
-        columns={[
-          { key: 'username', title: t('username') },
-          { key: 'email', title: t('email') },
-          {
-            key: 'createdDate',
+        columns={{
+          username: { title: t('username') },
+          email: { title: t('email') },
+          createdDate: {
             title: tCore('createdDate'),
             render: utils.Render.datetime,
           },
-          {
-            key: 'updatedDate',
+          updatedDate: {
             title: tCore('updatedDate'),
             render: utils.Render.relativeTime,
           },
-        ]}
+        }}
       />
     </div>
   );

@@ -10,11 +10,12 @@ import {
 } from '../../share';
 import { ApiRender } from './ApiRender';
 
-export interface ApiTableColumn<T, K extends keyof T> {
-  key: K;
-  title: React.ReactNode;
-  render?: (value: T[K], item: T) => React.ReactNode;
-}
+export type ApiTableColumns<T> = {
+  [k in keyof Partial<T>]: {
+    title: React.ReactNode;
+    render?: (value: T[k], item: T) => React.ReactNode;
+  };
+};
 
 type ApiPaginationRequest = ApiRequest & { page: number };
 
@@ -30,7 +31,7 @@ export interface ApiTable<
   api: Api<Request, PaginatedCollection<ResponseItem>>;
   apiParams?: Request;
   fetcherRef?: MutableRefObject<ApiFetcherRef<Api<Request>> | undefined>;
-  columns: Array<ApiTableColumn<ResponseItem, keyof ResponseItem>>;
+  columns: ApiTableColumns<ResponseItem>;
   rowKey?: keyof ResponseItem;
   actionsCell?: (item: ResponseItem) => React.ReactNode;
 }
@@ -65,8 +66,8 @@ export const ApiTable = <
             <Table mb="md">
               <thead>
                 <tr>
-                  {columns.map((column) => (
-                    <th key={column.key as string}>{column.title}</th>
+                  {Object.keys(columns).map((key) => (
+                    <th key={key}>{columns[key].title}</th>
                   ))}
                   {actionsCell && <th></th>}
                 </tr>
@@ -74,11 +75,11 @@ export const ApiTable = <
               <tbody>
                 {data?.items.map((item) => (
                   <tr key={item[(rowKey || 'id') as any]}>
-                    {columns.map((column) => (
-                      <td key={column.key as string}>
+                    {Object.entries(columns).map(([key, column]) => (
+                      <td key={key}>
                         {column.render
-                          ? column.render(item[column.key], item)
-                          : (item[column.key] as any)}
+                          ? column.render(item[key], item)
+                          : item[key]}
                       </td>
                     ))}
                     {actionsCell && <td>{actionsCell(item)}</td>}

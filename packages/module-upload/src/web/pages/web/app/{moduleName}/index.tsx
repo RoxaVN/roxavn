@@ -9,16 +9,15 @@ const IndexPage = () => {
   return (
     <ApiTable
       api={webModule.api(GetUserFilesApi)}
-      columns={[
-        { key: 'maxFileSize', title: t('maxFileSize') },
-        { key: 'currentStorageSize', title: t('currentStorageSize') },
-        { key: 'maxStorageSize', title: t('maxStorageSize') },
-        {
-          key: 'updatedDate',
+      columns={{
+        maxFileSize: { title: t('maxFileSize') },
+        currentStorageSize: { title: t('currentStorageSize') },
+        maxStorageSize: { title: t('maxStorageSize') },
+        updatedDate: {
           title: tCore('updatedDate'),
-          render: utils.Render.relativeTime as any,
+          render: utils.Render.relativeTime,
         },
-      ]}
+      }}
     />
   );
 };
