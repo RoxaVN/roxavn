@@ -8,6 +8,8 @@ import { CodeChanger } from './lib';
 
 class ModuleService {
   sync() {
+    this.initWebFolder();
+
     Object.keys(appConfig.data.modules).map((module) =>
       this.syncModule(module)
     );
@@ -126,6 +128,14 @@ class ModuleService {
       return packageInfo.name;
     }
     return moduleName;
+  }
+
+  initWebFolder() {
+    if (fs.existsSync('.web')) {
+      fs.rmSync('.web', { recursive: true, force: true });
+    }
+    const webModulePath = path.dirname(require.resolve('@roxavn/dev-web'));
+    fse.copySync(path.join(webModulePath, '.web'), '.web');
   }
 }
 

@@ -31,9 +31,11 @@
     "@roxavn/core": "^0.1.28",
     "commander": "^9.4.1",
     "fs-extra": "^10.1.0",
+    "hygen": "^6.2.11",
     "nodemon": "^2.0.20"
   },
   "files": [
-    "/dist"
+    "/dist",
+    "/_templates"
   ]
 }

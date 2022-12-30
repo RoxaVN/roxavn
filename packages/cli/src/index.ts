@@ -14,14 +14,16 @@ program
   .version('0.1.0');
 
 program
-  .command('sync:module')
+  .command('sync')
   .description('Sync module after installing')
   .action(() => moduleService.sync());
 
 program
-  .command('create')
-  .description('Create package')
-  .action(() => templateService.createPackage());
+  .command('gen <generator> <action>')
+  .description('Generate from template')
+  .action((generator: string, action: string) =>
+    templateService.generate([generator, action])
+  );
 
 program
   .command('dev')
