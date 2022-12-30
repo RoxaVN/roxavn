@@ -7,16 +7,27 @@ export interface AppConfigData {
 }
 
 class AppConfig {
-  data: AppConfigData;
-  currentModule: string;
+  private _data?: AppConfigData;
+  private _currentModule?: string;
 
-  constructor() {
-    if (fs.existsSync('.app.config.json')) {
-      this.data = getJsonFromFile('.app.config.json');
-    } else {
-      this.data = { modules: {} };
+  get data(): AppConfigData {
+    if (this._data) {
+      return this._data;
     }
-    this.currentModule = getPackageJson('.').name;
+    if (fs.existsSync('.app.config.json')) {
+      this._data = getJsonFromFile('.app.config.json');
+      return this._data as AppConfigData;
+    } else {
+      return { modules: {} };
+    }
+  }
+
+  get currentModule(): string {
+    if (this._currentModule) {
+      return this._currentModule;
+    }
+    this._currentModule = getPackageJson('.').name;
+    return this._currentModule as string;
   }
 }
 
