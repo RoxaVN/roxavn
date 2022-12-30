@@ -6,7 +6,7 @@ import { File, UserFile } from '../entities';
 import { serverModule } from '../module';
 import { seaweedClient } from './seaweed';
 
-serverModule.useApi(UploadFileApi, (_, { req, dataSource, resp }) => {
+serverModule.useRawApi(UploadFileApi, (_, { req, dataSource, resp }) => {
   return new Promise<InferApiResponse<typeof UploadFileApi>>(
     (resolve, reject) => {
       const bb = busboy({ headers: req.headers });

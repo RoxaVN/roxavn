@@ -1,4 +1,3 @@
-import { useApi } from '@roxavn/core/server';
 import { NotFoundException } from '@roxavn/core/share';
 
 import {
@@ -13,7 +12,7 @@ import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { tokenService } from './token';
 import { Env } from '../config';
 
-@useApi(serverModule, GetMyUserApi)
+@serverModule.useApi(GetMyUserApi)
 export class GetMyUserApiService extends AuthApiService<typeof GetMyUserApi> {
   async handle(request: InferAuthApiRequest<typeof GetMyUserApi>) {
     const user = await this.dataSource.getRepository(User).findOne({
@@ -28,7 +27,7 @@ export class GetMyUserApiService extends AuthApiService<typeof GetMyUserApi> {
   }
 }
 
-@useApi(serverModule, GetUsersApi)
+@serverModule.useApi(GetUsersApi)
 export class GetUsersApiService extends AuthApiService<typeof GetUsersApi> {
   async handle(request: InferAuthApiRequest<typeof GetUsersApi>) {
     const page = request.page || 1;
@@ -49,7 +48,7 @@ export class GetUsersApiService extends AuthApiService<typeof GetUsersApi> {
   }
 }
 
-@useApi(serverModule, CreateUserApi)
+@serverModule.useApi(CreateUserApi)
 export class CreateUserApiService extends AuthApiService<typeof CreateUserApi> {
   async handle(request: InferAuthApiRequest<typeof CreateUserApi>) {
     try {

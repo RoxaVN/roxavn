@@ -1,4 +1,3 @@
-import { useApi } from '@roxavn/core/server';
 import {
   AuthApiService,
   InferAuthApiRequest,
@@ -8,7 +7,7 @@ import { GetUserFilesApi } from '../../share';
 import { UserFile } from '../entities';
 import { serverModule } from '../module';
 
-@useApi(serverModule, GetUserFilesApi)
+@serverModule.useApi(GetUserFilesApi)
 export class GetUsersApiService extends AuthApiService<typeof GetUserFilesApi> {
   async handle(request: InferAuthApiRequest<typeof GetUserFilesApi>) {
     const page = request.page || 1;

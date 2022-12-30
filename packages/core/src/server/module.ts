@@ -39,7 +39,7 @@ export class ServerModule extends BaseModule {
   static apiMiddlerwares = [] as Array<ApiMiddlerware>;
   static errorMiddlerwares = [] as Array<ErrorMiddlerware>;
 
-  useApi<Req extends ApiRequest, Resp extends ApiResponse>(
+  useRawApi<Req extends ApiRequest, Resp extends ApiResponse>(
     api: Api<Req, Resp>,
     handler: (req: Req, context: MiddlerwareContext) => Promise<Resp> | Resp
   ) {
@@ -70,23 +70,22 @@ export class ServerModule extends BaseModule {
     );
   }
 
+  useApi<Req extends ApiRequest, Resp extends ApiResponse>(
+    api: Api<Req, Resp>
+  ) {
+    return (
+      serviceClass: new (...args: any[]) => ApiService<Api<Req, Resp>>
+    ) => {
+      this.useRawApi(api, async (req, { dataSource }) => {
+        const service = new serviceClass(dataSource);
+        return service.handle(req);
+      });
+    };
+  }
+
   static fromBase(base: BaseModule) {
     return new ServerModule(base.name);
   }
-}
-
-export function useApi<Req extends ApiRequest, Resp extends ApiResponse>(
-  module: ServerModule,
-  api: Api<Req, Resp>
-) {
-  return function (
-    serviceClass: new (...args: any[]) => ApiService<Api<Req, Resp>>
-  ) {
-    module.useApi(api, async (req, { dataSource }) => {
-      const service = new serviceClass(dataSource);
-      return service.handle(req);
-    });
-  };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

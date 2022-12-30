@@ -1,4 +1,4 @@
-import { ApiService, useApi } from '@roxavn/core/server';
+import { ApiService } from '@roxavn/core/server';
 import {
   BadRequestException,
   InferApiRequest,
@@ -12,7 +12,7 @@ import { serverModule } from '../module';
 import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { tokenService } from './token';
 
-@useApi(serverModule, LoginApi)
+@serverModule.useApi(LoginApi)
 export class LoginApiService extends ApiService<typeof LoginApi> {
   async handle(request: InferApiRequest<typeof LoginApi>) {
     const identity = await this.dataSource
@@ -56,7 +56,7 @@ export class LoginApiService extends ApiService<typeof LoginApi> {
   }
 }
 
-@useApi(serverModule, LogoutApi)
+@serverModule.useApi(LogoutApi)
 export class LogoutApiService extends AuthApiService<typeof LogoutApi> {
   async handle(request: InferAuthApiRequest<typeof LogoutApi>) {
     await this.dataSource
@@ -66,7 +66,7 @@ export class LogoutApiService extends AuthApiService<typeof LogoutApi> {
   }
 }
 
-@useApi(serverModule, ResetPasswordApi)
+@serverModule.useApi(ResetPasswordApi)
 export class ResetPasswordService extends AuthApiService<
   typeof ResetPasswordApi
 > {
