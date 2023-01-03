@@ -36,6 +36,6 @@
   },
   "files": [
     "/dist",
-    "/_templates"
+    "/templates"
   ]
 }

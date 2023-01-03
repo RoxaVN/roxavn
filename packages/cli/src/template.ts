@@ -2,7 +2,7 @@ import { Logger, runner } from 'hygen';
 import path from 'path';
 
 class TemplateService {
-  defaultPath = path.join(__dirname, '../_templates');
+  defaultPath = path.join(__dirname, '../templates');
 
   async generate(args: string[]) {
     await runner(args, {
