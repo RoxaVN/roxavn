@@ -19,10 +19,10 @@ program
   .action(() => moduleService.sync());
 
 program
-  .command('gen <generator> <action>')
+  .command('gen <generator> [action]')
   .description('Generate from template')
-  .action((generator: string, action: string) =>
-    templateService.generate([generator, action])
+  .action((generator: string, action?: string) =>
+    templateService.generate([generator, action || 'new'])
   );
 
 program
