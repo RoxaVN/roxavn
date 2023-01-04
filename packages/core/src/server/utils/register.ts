@@ -29,6 +29,8 @@ export function registerApiRoutes() {
 }
 
 export function registerWebRoutes(defineRoutes: DefineRoutes) {
+  // load config data before process change current dir
+  appConfig.currentModule;
   const modules = Object.keys(appConfig.data.modules);
   const result: RouteManifest = {};
   const currentDir = process.cwd();
