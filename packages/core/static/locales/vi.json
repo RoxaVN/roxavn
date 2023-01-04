@@ -37,6 +37,8 @@
   },
 
   "Validation": {
+    "IsQueryFilter": "Phải là {{filter}}",
+    "IsQueryFilters": "Không thuộc {{filters, list}}",
     "IsDefined": "Không được bỏ qua",
     "NotEquals": "Không được bằng {{comparison}}",
     "IsNotEmpty": "Không được bỏ trống",

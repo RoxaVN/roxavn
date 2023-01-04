@@ -1,5 +1,5 @@
 import { TextInput, PasswordInput, Title } from '@mantine/core';
-import { InferApiRequest, InferApiResponse } from '@roxavn/core/share';
+import { InferApiResponse } from '@roxavn/core/share';
 import { ApiForm, SubmitButton } from '@roxavn/core/web';
 
 import { ResetPasswordApi } from '../../share';
@@ -24,14 +24,12 @@ export const ResetPasswordForm = ({
       </Title>
       <ApiForm
         api={webModule.api(ResetPasswordApi)}
-        initialValues={
-          {
-            username,
-            token,
-            password: '',
-            retypePassword: '',
-          } as InferApiRequest<typeof ResetPasswordApi>
-        }
+        apiParams={{
+          username,
+          token,
+          password: '',
+          retypePassword: '',
+        }}
         onSuccess={(data) => onSuccess && onSuccess(data)}
         onBeforeSubmit={(params) => {
           if (params.password !== params.retypePassword) {
@@ -43,8 +41,7 @@ export const ResetPasswordForm = ({
             token,
           };
         }}
-      >
-        {(form) => (
+        formRender={(form) => (
           <>
             <TextInput
               mb="md"
@@ -66,7 +63,7 @@ export const ResetPasswordForm = ({
             <SubmitButton fullWidth />
           </>
         )}
-      </ApiForm>
+      />
     </div>
   );
 };

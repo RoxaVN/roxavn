@@ -1,6 +1,7 @@
-import { LoadingOverlay, Table, Pagination, Group, Box } from '@mantine/core';
+import { Table, Pagination, Group, Flex, Input } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
-import { MutableRefObject } from 'react';
+import { IconSearch } from '@tabler/icons';
+import React, { MutableRefObject } from 'react';
 
 import {
   Api,
@@ -8,7 +9,7 @@ import {
   InferApiRequest,
   PaginatedCollection,
 } from '../../share';
-import { ApiRender } from './ApiRender';
+import { ApiForm } from './ApiForm';
 
 export type ApiTableColumns<T> = {
   [k in keyof Partial<T>]: {
@@ -17,10 +18,14 @@ export type ApiTableColumns<T> = {
   };
 };
 
+export type ApiTableFilters<T> = {
+  [k in keyof Partial<T>]: React.ReactElement;
+};
+
 type ApiPaginationRequest = ApiRequest & { page: number };
 
 export type ApiFetcherRef<T extends Api<ApiPaginationRequest>> = {
-  handle: (params?: InferApiRequest<T>) => void;
+  fetch: (params: InferApiRequest<T>) => void;
   currentParams: InferApiRequest<T>;
 };
 
@@ -32,6 +37,7 @@ export interface ApiTable<
   apiParams?: Request;
   fetcherRef?: MutableRefObject<ApiFetcherRef<Api<Request>> | undefined>;
   columns: ApiTableColumns<ResponseItem>;
+  filters?: ApiTableFilters<ResponseItem>;
   rowKey?: keyof ResponseItem;
   actionsCell?: (item: ResponseItem) => React.ReactNode;
 }
@@ -44,6 +50,7 @@ export const ApiTable = <
   apiParams,
   columns,
   rowKey,
+  filters,
   actionsCell,
   fetcherRef,
 }: ApiTable<Request, ResponseItem>) => {
@@ -52,17 +59,45 @@ export const ApiTable = <
   );
 
   return (
-    <ApiRender api={api} apiParams={params}>
-      {({ data, loading, fetcher }) => {
+    <ApiForm
+      api={api}
+      apiParams={params}
+      fetchOnMount
+      formRender={
+        filters &&
+        ((form) => {
+          return (
+            <Flex
+              justify="flex-start"
+              align="start"
+              direction="row"
+              gap="md"
+              wrap="wrap"
+            >
+              {Object.entries(filters).map(([key, value]) =>
+                React.cloneElement(value, { key, ...form.getInputProps(key) })
+              )}
+              <Input.Wrapper label="&nbsp;">
+                <Input
+                  type="submit"
+                  component="input"
+                  value="Search"
+                  icon={<IconSearch />}
+                />
+              </Input.Wrapper>
+            </Flex>
+          );
+        })
+      }
+      dataRender={({ data, fetcher }) => {
         if (fetcherRef) {
           fetcherRef.current = {
-            handle: fetcher,
+            fetch: fetcher,
             currentParams: params,
           };
         }
         return (
-          <Box sx={{ position: 'relative' }}>
-            <LoadingOverlay visible={loading} />
+          <div>
             <Table mb="md">
               <thead>
                 <tr>
@@ -99,9 +134,9 @@ export const ApiTable = <
                 />
               </Group>
             )}
-          </Box>
+          </div>
         );
       }}
-    </ApiRender>
+    />
   );
 };

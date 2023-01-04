@@ -1,4 +1,5 @@
 import { TextInput, Box } from '@mantine/core';
+import { DatePicker } from '@mantine/dates';
 import { Prism } from '@mantine/prism';
 import {
   AddButton,
@@ -28,10 +29,10 @@ const IndexPage = () => {
           content={({ successHandler }) => (
             <ApiForm
               api={webModule.api(CreateUserApi)}
-              initialValues={{ username: '' }}
+              apiParams={{ username: '' }}
               onSuccess={(data, params) => {
                 successHandler();
-                fetcherRef.current?.handle({ page: 1 });
+                fetcherRef.current?.fetch({ page: 1 });
                 const link = WebRoutes.ResetPassword.generate(
                   {},
                   {
@@ -54,8 +55,7 @@ const IndexPage = () => {
                   </div>
                 );
               }}
-            >
-              {(form) => (
+              formRender={(form) => (
                 <>
                   <TextInput
                     mb="md"
@@ -65,7 +65,7 @@ const IndexPage = () => {
                   <SubmitButton fullWidth />
                 </>
               )}
-            </ApiForm>
+            />
           )}
         >
           <AddButton />
@@ -74,6 +74,10 @@ const IndexPage = () => {
       <ApiTable
         fetcherRef={fetcherRef}
         api={webModule.api(GetUsersApi)}
+        filters={{
+          username: <TextInput label={t('username')} />,
+          createdDate: <DatePicker label={tCore('createdDate')} />,
+        }}
         columns={{
           username: { title: t('username') },
           email: { title: t('email') },

@@ -5,7 +5,13 @@ import {
   ActionIcon,
   ButtonProps,
 } from '@mantine/core';
-import { IconPlus, IconSend, IconCopy, IconCheck } from '@tabler/icons';
+import {
+  IconPlus,
+  IconSend,
+  IconCopy,
+  IconCheck,
+  IconSearch,
+} from '@tabler/icons';
 
 import { webModule } from '../services';
 
@@ -23,6 +29,15 @@ export const SubmitButton = (props: ButtonProps) => {
   return (
     <Button mb="md" type="submit" leftIcon={<IconSend />} {...props}>
       {t('submit')}
+    </Button>
+  );
+};
+
+export const SearchButton = (props: ButtonProps) => {
+  const { t } = webModule.useTranslation();
+  return (
+    <Button type="submit" leftIcon={<IconSearch />} {...props}>
+      {t('search')}
     </Button>
   );
 };

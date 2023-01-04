@@ -12,12 +12,14 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "@mantine/prism": "^5.9.5",
-    "@roxavn/core": "^0.1.28",
-    "react": "^18.2.0",
-    "react-router-dom": "6.3.0",
-    "rxjs": "^7.5.7",
-    "typeorm": "^0.3.10"
+    "@mantine/core": "*",
+    "@mantine/dates": "*",
+    "@mantine/prism": "*",
+    "@roxavn/core": "*",
+    "react": "*",
+    "react-router-dom": "*",
+    "rxjs": "*",
+    "typeorm": "*"
   },
   "exports": {
     "./hook": "./dist/cjs/hook/index.js",

@@ -18,14 +18,13 @@ export const LoginForm = ({ onSuccess }: LoginFormProps): JSX.Element => {
         {t('login')}
       </Title>
       <ApiForm
-        initialValues={{ username: '', password: '' }}
+        apiParams={{ username: '', password: '' }}
         api={webModule.api(LoginApi)}
         onSuccess={(data) => {
           auth.setToken(data.accessToken);
           onSuccess && onSuccess(data);
         }}
-      >
-        {(form) => (
+        formRender={(form) => (
           <>
             <TextInput
               mb="md"
@@ -41,7 +40,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps): JSX.Element => {
             <SubmitButton fullWidth />
           </>
         )}
-      </ApiForm>
+      />
     </div>
   );
 };

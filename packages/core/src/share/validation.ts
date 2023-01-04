@@ -50,11 +50,13 @@ import {
   MinLength as _MinLength,
   NotContains as _NotContains,
   NotEquals as _NotEquals,
+  registerDecorator,
   UUIDVersion,
   ValidationOptions,
 } from 'class-validator';
 import { CountryCode } from 'libphonenumber-js';
 import validator from 'validator';
+import { ApiFilter } from './api';
 import { I18nErrorField } from './errors';
 import { baseModule } from './module';
 
@@ -66,6 +68,58 @@ const buildContext = (
   ns: baseModule.escapedName,
   params,
 });
+
+export function IsQueryFilter(
+  filter: string,
+  validationOptions?: ValidationOptions
+) {
+  return function (object: Record<string, any>, propertyName: string) {
+    registerDecorator({
+      name: 'isQueryFilter',
+      target: object.constructor,
+      propertyName: propertyName,
+      constraints: [filter],
+      options: {
+        context: buildContext('IsQueryFilter', { filter }),
+        ...validationOptions,
+      },
+      validator: {
+        defaultMessage: () => `Must be ${filter}`,
+        validate(value: any) {
+          return value instanceof ApiFilter && value.mode === filter;
+        },
+      },
+    });
+  };
+}
+
+export function IsQueryFilters(
+  filters: string[],
+  validationOptions?: ValidationOptions
+) {
+  return function (object: Record<string, any>, propertyName: string) {
+    registerDecorator({
+      name: 'isQueryFilters',
+      target: object.constructor,
+      propertyName: propertyName,
+      constraints: [filters],
+      options: {
+        context: buildContext('IsQueryFilters', { filters }),
+        ...validationOptions,
+      },
+      validator: {
+        defaultMessage: () => `Not in ${filters.join(', ')}`,
+        validate(value: any) {
+          return (
+            value instanceof ApiFilter &&
+            !!value.mode &&
+            filters.includes(value.mode)
+          );
+        },
+      },
+    });
+  };
+}
 
 export const IsDefined = (
   validationOptions?: ValidationOptions

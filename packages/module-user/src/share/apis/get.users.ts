@@ -1,22 +1,32 @@
 import {
   Api,
+  ApiFilter,
   ExactProps,
   ForbiddenException,
   IsOptional,
   Min,
-  MinLength,
   PaginatedCollection,
+  IsQueryFilter,
   UnauthorizedException,
+  IsQueryFilters,
+  IsArray,
 } from '@roxavn/core/share';
 
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import { User } from '../interfaces';
 import { Permissions } from '../permissions';
 
 class GetUsersRequest extends ExactProps<GetUsersRequest> {
-  @MinLength(1)
+  @Transform(({ value }) => new ApiFilter(value))
+  @IsQueryFilter(ApiFilter.CONTAINS)
   @IsOptional()
-  public readonly name?: string;
+  public readonly username?: ApiFilter;
+
+  @IsArray()
+  @Transform(({ value }) => new ApiFilter(value))
+  @IsQueryFilters([ApiFilter.GREATER_THAN, ApiFilter.LESS_THAN])
+  @IsOptional()
+  public readonly createdDate?: ApiFilter[];
 
   @Min(1)
   @Type(() => Number)
