@@ -69,23 +69,26 @@ export class ServerApiFilter {
         MoreThanOrEqual(value),
     };
 
-  static make(params: Record<string, any>) {
+  static convert(request: Record<string, any>) {
     const result = {};
-    Object.entries(params).map(([key, value]) => {
+    Object.entries(request).map(([key, value]) => {
       if (value instanceof ApiFilter && value.mode) {
-        result[key] = this.filters[value.mode].apply(
-          undefined,
-          value.value as any
-        );
+        const args: any = value.value.filter((v) => v);
+        if (args.length) {
+          result[key] = this.filters[value.mode].apply(undefined, args);
+        }
       } else if (
         Array.isArray(value) &&
         value.every((i) => i instanceof ApiFilter)
       ) {
-        result[key] = And(
-          ...value.map((v) =>
-            this.filters[v.mode].apply(undefined, v.value as any)
-          )
-        );
+        const operations: Array<FindOperator<any>> = [];
+        for (const item of value as Array<ApiFilter>) {
+          const args: any = item.value.filter((v) => v);
+          if (args.length && item.mode) {
+            operations.push(this.filters[item.mode].apply(undefined, args));
+          }
+        }
+        result[key] = And(...operations);
       }
     });
     return result;

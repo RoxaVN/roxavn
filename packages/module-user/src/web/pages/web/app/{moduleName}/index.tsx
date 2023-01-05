@@ -22,7 +22,7 @@ const IndexPage = () => {
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
   return (
-    <div title="test">
+    <div>
       <Box mb="md">
         <FormModalTrigger
           title={t('addUser')}

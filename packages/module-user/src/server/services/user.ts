@@ -37,7 +37,7 @@ export class GetUsersApiService extends AuthApiService<typeof GetUsersApi> {
     const [users, totalItems] = await this.dataSource
       .getRepository(User)
       .findAndCount({
-        where: ServerApiFilter.make(request),
+        where: ServerApiFilter.convert(request),
         order: { id: 'desc' },
         take: pageSize,
         skip: (page - 1) * pageSize,

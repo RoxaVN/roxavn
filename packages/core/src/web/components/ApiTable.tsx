@@ -9,6 +9,7 @@ import {
   InferApiRequest,
   PaginatedCollection,
 } from '../../share';
+import { ApiFilterIcons } from './ApiFilterInput';
 import { ApiForm } from './ApiForm';
 
 export type ApiTableColumns<T> = {
@@ -66,6 +67,8 @@ export const ApiTable = <
       formRender={
         filters &&
         ((form) => {
+          const filtersValidator = (api.validator as any).__filters__ || {};
+
           return (
             <Flex
               justify="flex-start"
@@ -74,15 +77,30 @@ export const ApiTable = <
               gap="md"
               wrap="wrap"
             >
-              {Object.entries(filters).map(([key, value]) =>
-                React.cloneElement(value, { key, ...form.getInputProps(key) })
-              )}
+              {Object.entries(filters).map(([key, value]) => {
+                const props: any = form.getInputProps(key);
+                props.key = key;
+                const filter = filtersValidator[key];
+                if (filter.length === 1) {
+                  props.icon = ApiFilterIcons[filter[0]];
+                  props.value = (props.value || '').replace(
+                    filter[0] + ':',
+                    ''
+                  );
+                  const orgOnChange = props.onChange;
+                  props.onChange = (e: any) => {
+                    e.target.value = filter[0] + ':' + e.target.value;
+                    orgOnChange(e);
+                  };
+                }
+                return React.cloneElement(value, props);
+              })}
               <Input.Wrapper label="&nbsp;">
                 <Input
                   type="submit"
-                  component="input"
-                  value="Search"
-                  icon={<IconSearch />}
+                  children="Search"
+                  component="button"
+                  icon={<IconSearch size={16} />}
                 />
               </Input.Wrapper>
             </Flex>

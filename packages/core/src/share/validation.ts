@@ -70,41 +70,23 @@ const buildContext = (
 });
 
 export function IsQueryFilter(
-  filter: string,
-  validationOptions?: ValidationOptions
-) {
-  return function (object: Record<string, any>, propertyName: string) {
-    registerDecorator({
-      name: 'isQueryFilter',
-      target: object.constructor,
-      propertyName: propertyName,
-      constraints: [filter],
-      options: {
-        context: buildContext('IsQueryFilter', { filter }),
-        ...validationOptions,
-      },
-      validator: {
-        defaultMessage: () => `Must be ${filter}`,
-        validate(value: any) {
-          return value instanceof ApiFilter && value.mode === filter;
-        },
-      },
-    });
-  };
-}
-
-export function IsQueryFilters(
   filters: string[],
   validationOptions?: ValidationOptions
 ) {
   return function (object: Record<string, any>, propertyName: string) {
+    const target: any = object.constructor;
+    if (!target.__filters__) {
+      target.__filters__ = {};
+    }
+    target.__filters__[propertyName] = filters;
+
     registerDecorator({
-      name: 'isQueryFilters',
+      name: 'isQueryFilter',
       target: object.constructor,
       propertyName: propertyName,
       constraints: [filters],
       options: {
-        context: buildContext('IsQueryFilters', { filters }),
+        context: buildContext('IsQueryFilter', { filters }),
         ...validationOptions,
       },
       validator: {

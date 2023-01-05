@@ -8,7 +8,6 @@ import {
   PaginatedCollection,
   IsQueryFilter,
   UnauthorizedException,
-  IsQueryFilters,
   IsArray,
 } from '@roxavn/core/share';
 
@@ -18,13 +17,13 @@ import { Permissions } from '../permissions';
 
 class GetUsersRequest extends ExactProps<GetUsersRequest> {
   @Transform(({ value }) => new ApiFilter(value))
-  @IsQueryFilter(ApiFilter.CONTAINS)
+  @IsQueryFilter([ApiFilter.CONTAINS])
   @IsOptional()
   public readonly username?: ApiFilter;
 
   @IsArray()
   @Transform(({ value }) => new ApiFilter(value))
-  @IsQueryFilters([ApiFilter.GREATER_THAN, ApiFilter.LESS_THAN])
+  @IsQueryFilter([ApiFilter.GREATER_THAN, ApiFilter.LESS_THAN])
   @IsOptional()
   public readonly createdDate?: ApiFilter[];
 
