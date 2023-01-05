@@ -36,6 +36,10 @@ export function ApiFormGroup<
           props.mb = 'md';
           props.key = component.props.name;
           props.value = props.value === undefined ? '' : props.value;
+          if (component.props.fields) {
+            // auto add form for ArrayInput
+            props.form = form;
+          }
           return React.cloneElement(component, props);
         };
 

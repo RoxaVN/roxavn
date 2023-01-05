@@ -5,6 +5,7 @@ import {
   ActionIcon,
   ButtonProps,
 } from '@mantine/core';
+import { PolymorphicComponentProps } from '@mantine/utils';
 import {
   IconPlus,
   IconSend,
@@ -15,7 +16,12 @@ import {
 
 import { webModule } from '../services';
 
-export const AddButton = (props: ButtonProps) => {
+type ButtonMantineProps<C = 'button'> = PolymorphicComponentProps<
+  C,
+  ButtonProps
+>;
+
+export const AddButton = (props: ButtonMantineProps) => {
   const { t } = webModule.useTranslation();
   return (
     <Button leftIcon={<IconPlus size={16} />} variant="outline" {...props}>
@@ -24,7 +30,7 @@ export const AddButton = (props: ButtonProps) => {
   );
 };
 
-export const SubmitButton = (props: ButtonProps) => {
+export const SubmitButton = (props: ButtonMantineProps) => {
   const { t } = webModule.useTranslation();
   return (
     <Button type="submit" leftIcon={<IconSend size={16} />} {...props}>
@@ -33,7 +39,7 @@ export const SubmitButton = (props: ButtonProps) => {
   );
 };
 
-export const SearchButton = (props: ButtonProps) => {
+export const SearchButton = (props: ButtonMantineProps) => {
   const { t } = webModule.useTranslation();
   return (
     <Button type="submit" leftIcon={<IconSearch size={16} />} {...props}>
