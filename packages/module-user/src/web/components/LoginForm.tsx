@@ -1,6 +1,6 @@
 import { TextInput, PasswordInput, Title } from '@mantine/core';
 import { InferApiResponse } from '@roxavn/core/share';
-import { ApiForm, SubmitButton } from '@roxavn/core/web';
+import { ApiFormGroup } from '@roxavn/core/web';
 
 import { LoginApi } from '../../share';
 import { auth } from '../services';
@@ -17,29 +17,20 @@ export const LoginForm = ({ onSuccess }: LoginFormProps): JSX.Element => {
       <Title order={4} align="center" mb="md">
         {t('login')}
       </Title>
-      <ApiForm
-        apiParams={{ username: '', password: '' }}
+      <ApiFormGroup
         api={webModule.api(LoginApi)}
         onSuccess={(data) => {
           auth.setToken(data.accessToken);
           onSuccess && onSuccess(data);
         }}
-        formRender={(form) => (
-          <>
-            <TextInput
-              mb="md"
-              label={t('username')}
-              {...form.getInputProps('username')}
-            />
-            <PasswordInput
-              mb="md"
-              autoComplete="true"
-              label={t('password')}
-              {...form.getInputProps('password')}
-            />
-            <SubmitButton fullWidth />
-          </>
-        )}
+        fields={[
+          <TextInput label={t('username')} name="username" />,
+          <PasswordInput
+            autoComplete="true"
+            name="password"
+            label={t('password')}
+          />,
+        ]}
       />
     </div>
   );

@@ -18,7 +18,7 @@ import { webModule } from '../services';
 export const AddButton = (props: ButtonProps) => {
   const { t } = webModule.useTranslation();
   return (
-    <Button leftIcon={<IconPlus />} variant="outline" {...props}>
+    <Button leftIcon={<IconPlus size={16} />} variant="outline" {...props}>
       {t('add')}
     </Button>
   );
@@ -27,7 +27,7 @@ export const AddButton = (props: ButtonProps) => {
 export const SubmitButton = (props: ButtonProps) => {
   const { t } = webModule.useTranslation();
   return (
-    <Button mb="md" type="submit" leftIcon={<IconSend />} {...props}>
+    <Button type="submit" leftIcon={<IconSend size={16} />} {...props}>
       {t('submit')}
     </Button>
   );
@@ -36,7 +36,7 @@ export const SubmitButton = (props: ButtonProps) => {
 export const SearchButton = (props: ButtonProps) => {
   const { t } = webModule.useTranslation();
   return (
-    <Button type="submit" leftIcon={<IconSearch />} {...props}>
+    <Button type="submit" leftIcon={<IconSearch size={16} />} {...props}>
       {t('search')}
     </Button>
   );

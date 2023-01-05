@@ -1,6 +1,6 @@
 import { TextInput, PasswordInput, Title } from '@mantine/core';
 import { InferApiResponse } from '@roxavn/core/share';
-import { ApiForm, SubmitButton } from '@roxavn/core/web';
+import { ApiFormGroup } from '@roxavn/core/web';
 
 import { ResetPasswordApi } from '../../share';
 import { webModule } from '../module';
@@ -22,7 +22,7 @@ export const ResetPasswordForm = ({
       <Title order={4} align="center" mb="md">
         {t('resetPassword')}
       </Title>
-      <ApiForm
+      <ApiFormGroup
         api={webModule.api(ResetPasswordApi)}
         apiParams={{
           username,
@@ -41,28 +41,15 @@ export const ResetPasswordForm = ({
             token,
           };
         }}
-        formRender={(form) => (
-          <>
-            <TextInput
-              mb="md"
-              disabled
-              label={t('username')}
-              {...form.getInputProps('username')}
-            />
-            <PasswordInput
-              mb="md"
-              autoComplete="true"
-              label={t('password')}
-              {...form.getInputProps('password')}
-            />
-            <PasswordInput
-              mb="md"
-              label={t('retypePassword')}
-              {...form.getInputProps('retypePassword')}
-            />
-            <SubmitButton fullWidth />
-          </>
-        )}
+        fields={[
+          <TextInput disabled label={t('username')} name="username" />,
+          <PasswordInput
+            autoComplete="true"
+            label={t('password')}
+            name="password"
+          />,
+          <PasswordInput label={t('retypePassword')} name="retypePassword" />,
+        ]}
       />
     </div>
   );

@@ -3,9 +3,8 @@ import { DatePicker } from '@mantine/dates';
 import { Prism } from '@mantine/prism';
 import {
   AddButton,
-  SubmitButton,
   FormModalTrigger,
-  ApiForm,
+  ApiFormGroup,
   ApiTable,
   uiManager,
   webModule as coreWebModule,
@@ -27,7 +26,7 @@ const IndexPage = () => {
         <FormModalTrigger
           title={t('addUser')}
           content={({ successHandler }) => (
-            <ApiForm
+            <ApiFormGroup
               api={webModule.api(CreateUserApi)}
               apiParams={{ username: '' }}
               onSuccess={(data, params) => {
@@ -55,16 +54,7 @@ const IndexPage = () => {
                   </div>
                 );
               }}
-              formRender={(form) => (
-                <>
-                  <TextInput
-                    mb="md"
-                    label={t('username')}
-                    {...form.getInputProps('username')}
-                  />
-                  <SubmitButton fullWidth />
-                </>
-              )}
+              fields={[<TextInput label={t('username')} name="username" />]}
             />
           )}
         >
