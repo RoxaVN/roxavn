@@ -1,6 +1,7 @@
 {
   "confirm": "Xác nhận",
   "accept": "Đồng ý",
+  "apply": "Áp dụng",
   "reject": "Từ chối",
   "choose": "Lựa chọn",
   "upload": "Tải lên",
@@ -27,6 +28,22 @@
   "statistic": "Thống kê",
   "createdDate": "Ngày tạo",
   "updatedDate": "Ngày sửa",
+  "filter": "Lọc",
+  "operator": "Phương thức",
+
+  "Filter": {
+    "startsWith": "Bắt đầu với",
+    "contains": "Chứa",
+    "notContains": "Không chứa",
+    "endsWith": "Kết thúc với",
+    "equals": "Bằng",
+    "notEquals": "Không bằng",
+    "in": "Thuộc",
+    "lt": "Nhỏ hơn",
+    "lte": "Nhỏ hơn hoặc bằng",
+    "gt": "Lớn hơn",
+    "gte": "Lớn hơn hoặc bằng"
+  },
 
   "Error": {
     "BadRequestException": "Yêu cầu không hợp lệ",

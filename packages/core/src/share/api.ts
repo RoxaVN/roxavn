@@ -74,7 +74,9 @@ export interface Api<
   auth?: 'LOGGED' | 'NOT_LOGGED';
 
   // request validator
-  validator?: typeof ExactProps<Req>;
+  validator?: typeof ExactProps<Req> & {
+    __filters__?: Record<keyof Req, string[]>;
+  };
 
   /**
    * Permission.

@@ -87,19 +87,21 @@ const http = {
     if (path && path[0] !== '/') {
       return path;
     }
-    const params: Record<string, any> = { ...(data || {}) };
-    Object.entries(params).map(([key, value]) => {
-      if (typeof value === 'object') {
-        params[key] = JSON.stringify(value);
-      }
-      if (typeof value === 'boolean') {
-        params[key] = value ? 1 : 0;
-      } else if (value === '' || value === null || value === undefined) {
-        delete params[key];
-      }
-      return true;
-    });
-    return `${this.Host + path}?${new URLSearchParams(params)}`;
+    const params = new URLSearchParams();
+    if (data) {
+      Object.entries(data).map(([key, value]) => {
+        if (Array.isArray(value)) {
+          value.map((v) => params.append(key, v));
+        } else if (typeof value === 'boolean') {
+          params.append(key, value ? '1' : '0');
+        } else if (value === '' || value === null || value === undefined) {
+          return;
+        } else {
+          params.append(key, value);
+        }
+      });
+    }
+    return `${this.Host + path}?${params}`;
   },
 };
 

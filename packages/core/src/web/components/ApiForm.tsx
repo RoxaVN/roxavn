@@ -47,17 +47,17 @@ export function ApiForm<
   const { t } = webModule.useTranslation();
 
   const fetcher = async (params: Request) => {
-    if (api) {
-      setError(null);
-      setLoading(true);
-      if (onBeforeSubmit) {
-        try {
-          params = await onBeforeSubmit(params);
-        } catch (e: any) {
-          form.setErrors(e);
-          return setLoading(false);
-        }
+    setError(null);
+    setLoading(true);
+    if (onBeforeSubmit) {
+      try {
+        params = await onBeforeSubmit(params);
+      } catch (e: any) {
+        form.setErrors(e);
+        return setLoading(false);
       }
+    }
+    if (api) {
       try {
         const result = await apiFetcher.fetch(api, params);
         setData(result);
@@ -83,6 +83,8 @@ export function ApiForm<
       } finally {
         setLoading(false);
       }
+    } else {
+      setLoading(false);
     }
   };
 
@@ -97,7 +99,12 @@ export function ApiForm<
   return (
     <Box sx={{ position: 'relative' }}>
       <LoadingOverlay visible={loading} />
-      <form onSubmit={form.onSubmit(fetcher)}>
+      <form
+        onSubmit={(e) => {
+          e.stopPropagation();
+          form.onSubmit(fetcher)(e);
+        }}
+      >
         {formRender && formRender(form)}
       </form>
       {dataRender && dataRender({ data, error, loading, fetcher })}

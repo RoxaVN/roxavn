@@ -4,3 +4,4 @@ export * from './ApiFormGroup';
 export * from './ModalTrigger';
 export * from './Buttons';
 export * from './ApiTable';
+export * from './ApiFilter';

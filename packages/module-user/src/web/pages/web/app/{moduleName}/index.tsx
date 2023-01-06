@@ -10,6 +10,7 @@ import {
   webModule as coreWebModule,
   utils,
   ApiFetcherRef,
+  ArrayInput,
 } from '@roxavn/core/web';
 import { useRef } from 'react';
 
@@ -54,7 +55,15 @@ const IndexPage = () => {
                   </div>
                 );
               }}
-              fields={[<TextInput label={t('username')} name="username" />]}
+              fields={[
+                <TextInput label={t('username')} name="username" />,
+                <ArrayInput
+                  name="test"
+                  fields={
+                    <DatePicker placeholder={t('username')} name="username" />
+                  }
+                />,
+              ]}
             />
           )}
         >
@@ -64,19 +73,19 @@ const IndexPage = () => {
       <ApiTable
         fetcherRef={fetcherRef}
         api={webModule.api(GetUsersApi)}
-        filters={{
-          username: <TextInput label={t('username')} />,
-          createdDate: <DatePicker label={tCore('createdDate')} />,
-        }}
         columns={{
-          username: { title: t('username') },
-          email: { title: t('email') },
+          username: {
+            label: t('username'),
+            filterInput: <TextInput placeholder={t('username')} />,
+          },
+          email: { label: t('email') },
           createdDate: {
-            title: tCore('createdDate'),
+            label: tCore('createdDate'),
             render: utils.Render.datetime,
+            filterInput: <DatePicker placeholder={tCore('createdDate')} />,
           },
           updatedDate: {
-            title: tCore('updatedDate'),
+            label: tCore('updatedDate'),
             render: utils.Render.relativeTime,
           },
         }}

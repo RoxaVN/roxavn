@@ -1,8 +1,9 @@
 import { ActionIcon, Box, BoxProps, Flex, Input } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
+import { randomId, useListState } from '@mantine/hooks';
 import { IconTrash } from '@tabler/icons';
 import get from 'lodash/get';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AddButton } from './Buttons';
 
 export interface ArrayInputProps extends BoxProps {
@@ -12,6 +13,8 @@ export interface ArrayInputProps extends BoxProps {
   label?: React.ReactNode;
   description?: React.ReactNode;
   required?: boolean;
+  min?: number;
+  max?: number;
 }
 
 export const ArrayInput = ({
@@ -21,8 +24,43 @@ export const ArrayInput = ({
   form,
   name,
   fields,
+  min,
+  max,
   ...props
 }: ArrayInputProps) => {
+  const [ids, IdsHandler] = useListState<string>(
+    Array.from(
+      { length: (form && get(form.values, name)?.length) || 0 },
+      randomId
+    )
+  );
+
+  useEffect(() => {
+    if (form && min) {
+      const value = get(form.values, name);
+      const currentLength: number = value?.length || 0;
+      add(form, min - currentLength);
+    }
+  }, [min]);
+
+  const add = (formIns: UseFormReturnType<any>, quantity: number) => {
+    const value = get(formIns.values, name);
+    const newValue = Array.from({ length: quantity }, () =>
+      Array.isArray(fields) ? {} : ''
+    );
+    IdsHandler.append(...newValue.map(() => randomId()));
+    if (value) {
+      formIns.setFieldValue(name, value.concat(newValue));
+    } else {
+      formIns.setFieldValue(name, newValue);
+    }
+  };
+
+  const remove = (formIns: UseFormReturnType<any>, index: number) => {
+    formIns.removeListItem(name, index);
+    IdsHandler.remove(index);
+  };
+
   const cloneField = (
     formIns: UseFormReturnType<any>,
     f: React.ReactElement,
@@ -37,25 +75,39 @@ export const ArrayInput = ({
   };
 
   const renderFields = (formIns: UseFormReturnType<any>) => {
-    return get(formIns.values, name)?.map((item: any, index: number) => (
-      <Flex
-        justify="flex-start"
-        align="start"
-        direction="row"
-        gap="xs"
-        wrap="wrap"
-        key={index}
-      >
-        {Array.isArray(fields)
-          ? fields.map((f) =>
-              cloneField(formIns, f, name + '.' + index + '.' + f.props.name)
-            )
-          : cloneField(formIns, fields, name + '.' + index)}
-        <ActionIcon onClick={() => formIns.removeListItem(name, index)}>
-          <IconTrash size={16} />
-        </ActionIcon>
-      </Flex>
-    ));
+    const value = get(formIns.values, name);
+    return (
+      <Box mt="sm">
+        {value?.map((item: any, index: number) => (
+          <Flex
+            justify="flex-start"
+            align="start"
+            direction="row"
+            gap="xs"
+            wrap="wrap"
+            key={ids[index]}
+          >
+            {Array.isArray(fields)
+              ? fields.map((f) =>
+                  cloneField(
+                    formIns,
+                    f,
+                    name + '.' + index + '.' + f.props.name
+                  )
+                )
+              : cloneField(formIns, fields, name + '.' + index)}
+            {(!min || min < value.length) && (
+              <ActionIcon onClick={() => remove(formIns, index)}>
+                <IconTrash size={16} />
+              </ActionIcon>
+            )}
+          </Flex>
+        ))}
+        {(!max || !value || max > value.length) && (
+          <AddButton onClick={() => add(formIns, 1)} />
+        )}
+      </Box>
+    );
   };
   if (!form) {
     throw Error('ArrayInput: must set form prop');
@@ -67,19 +119,7 @@ export const ArrayInput = ({
         {label && <Input.Label required={required}>{label}</Input.Label>}
         {description && <Input.Description>{description}</Input.Description>}
       </div>
-      <Box mt="sm">
-        {renderFields(form)}
-        <AddButton
-          onClick={() => {
-            const value = get(form.values, name);
-            if (value) {
-              form.insertListItem(name, Array.isArray(fields) ? {} : '');
-            } else {
-              form.setFieldValue(name, Array.isArray(fields) ? [{}] : ['']);
-            }
-          }}
-        />
-      </Box>
+      {renderFields(form)}
     </Box>
   );
 };

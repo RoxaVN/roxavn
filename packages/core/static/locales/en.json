@@ -1,6 +1,7 @@
 {
   "confirm": "Confirm",
   "accept": "Yes",
+  "apply": "Apply",
   "reject": "No",
   "choose": "Choose",
   "upload": "Upload",
@@ -27,6 +28,22 @@
   "statistic": "Statistic",
   "createdDate": "Created date",
   "updatedDate": "Updated date",
+  "filter": "Filter",
+  "operator": "Operator",
+
+  "Filter": {
+    "startsWith": "Starts with",
+    "contains": "Contains",
+    "notContains": "Not contains",
+    "endsWith": "Ends with",
+    "equals": "Equals",
+    "notEquals": "Not equals",
+    "in": "In",
+    "lt": "Less than",
+    "lte": "Less than or equal",
+    "gt": "Greater than",
+    "gte": "Greater than or equal"
+  },
 
   "Error": {
     "BadRequestException": "Bad request exception",
