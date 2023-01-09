@@ -9,6 +9,7 @@
     "packages/core",
     "packages/module-upload",
     "packages/module-user",
+    "packages/module-utils",
     "packages/dev-web"
   ],
   "devDependencies": {
