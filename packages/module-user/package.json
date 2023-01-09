@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@mantine/core": "*",
-    "@mantine/dates": "*",
     "@mantine/prism": "*",
     "@roxavn/core": "*",
     "react": "*",

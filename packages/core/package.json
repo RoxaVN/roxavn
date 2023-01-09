@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@mantine/core": "^5.8.2",
+    "@mantine/dates": "^5.8.2",
     "@mantine/form": "^5.8.2",
     "@mantine/modals": "^5.8.2",
     "@mantine/notifications": "^5.8.2",

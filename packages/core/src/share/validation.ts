@@ -92,11 +92,9 @@ export function IsQueryFilter(
       validator: {
         defaultMessage: () => `Not in ${filters.join(', ')}`,
         validate(value: any) {
-          return (
-            value instanceof ApiFilter &&
-            !!value.mode &&
-            filters.includes(value.mode)
-          );
+          const validate = (v: any) =>
+            v instanceof ApiFilter && !!v.mode && filters.includes(v.mode);
+          return Array.isArray(value) ? value.every(validate) : validate(value);
         },
       },
     });

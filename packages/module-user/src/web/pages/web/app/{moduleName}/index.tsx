@@ -1,5 +1,4 @@
 import { TextInput, Box } from '@mantine/core';
-import { DatePicker } from '@mantine/dates';
 import { Prism } from '@mantine/prism';
 import {
   AddButton,
@@ -10,7 +9,7 @@ import {
   webModule as coreWebModule,
   utils,
   ApiFetcherRef,
-  ArrayInput,
+  DatePicker,
 } from '@roxavn/core/web';
 import { useRef } from 'react';
 
@@ -55,15 +54,7 @@ const IndexPage = () => {
                   </div>
                 );
               }}
-              fields={[
-                <TextInput label={t('username')} name="username" />,
-                <ArrayInput
-                  name="test"
-                  fields={
-                    <DatePicker placeholder={t('username')} name="username" />
-                  }
-                />,
-              ]}
+              fields={[<TextInput label={t('username')} name="username" />]}
             />
           )}
         >

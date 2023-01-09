@@ -101,7 +101,7 @@ export const ApiFilterButton = <
               Object.entries(params).map(([k, value]) => {
                 newFilterValue[k] = value.filter((v) => v.operator && v.value);
                 newFilterParams[k] = newFilterValue[k].map(
-                  (v) => v.operator + ':' + v.value
+                  (v) => v.operator + ':' + encodeURIComponent(v.value)
                 );
               });
               setFilterValue(newFilterValue);

@@ -117,4 +117,13 @@ export class ApiFilter {
     this.mode = parts.shift();
     this.value = parts.map(decodeURIComponent);
   }
+
+  static parse(value: any) {
+    if (Array.isArray(value)) {
+      return value.map((v) => new ApiFilter(v));
+    } else if (typeof value === 'string') {
+      return new ApiFilter(value);
+    }
+    return undefined;
+  }
 }
