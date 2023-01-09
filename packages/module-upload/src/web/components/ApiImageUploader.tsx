@@ -1,6 +1,6 @@
 import { CloseButton, Button } from '@mantine/core';
 import { IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import { ApiRender } from '@roxavn/core/web';
+import { ApiForm } from '@roxavn/core/web';
 import { useEffect, useState } from 'react';
 
 import { UploadFileApi } from '../../share';
@@ -45,13 +45,12 @@ const UploadImageItem = ({ value, onChange }: UploaditemProps) => {
       className={classes.container}
       style={image ? { backgroundImage: `url('${image}')` } : {}}
     >
-      <ApiRender
+      <ApiForm
         api={webModule.api(UploadFileApi)}
         apiParams={{ file: value }}
         onSuccess={onChange}
-        useLoader
-      >
-        {({ error, fetcher }) => (
+        fetchOnMount
+        dataRender={({ error, fetcher }) => (
           <>
             <CloseButton
               onClick={() => onChange && onChange(null)}
@@ -64,7 +63,7 @@ const UploadImageItem = ({ value, onChange }: UploaditemProps) => {
                   color="red"
                   size="sm"
                   fullWidth
-                  onClick={() => fetcher()}
+                  onClick={() => fetcher({})}
                 >
                   {t('reupload')}
                 </Button>
@@ -72,7 +71,7 @@ const UploadImageItem = ({ value, onChange }: UploaditemProps) => {
             </div>
           </>
         )}
-      </ApiRender>
+      />
     </div>
   );
 };

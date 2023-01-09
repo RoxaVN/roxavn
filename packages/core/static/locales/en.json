@@ -30,6 +30,8 @@
   "updatedDate": "Updated date",
   "filter": "Filter",
   "operator": "Operator",
+  "id": "Id",
+  "ownerId": "Owner id",
 
   "Filter": {
     "startsWith": "Starts with",
@@ -44,7 +46,6 @@
     "gt": "Greater than",
     "gte": "Greater than or equal"
   },
-
   "Error": {
     "BadRequestException": "Bad request exception",
     "UnauthorizedException": "Unauthorized exception",

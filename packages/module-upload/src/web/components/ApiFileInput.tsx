@@ -1,7 +1,7 @@
 import { FileButton, Button, CloseButton, Text, Group } from '@mantine/core';
 import { useListState } from '@mantine/hooks';
 import { InferApiResponse } from '@roxavn/core/share';
-import { ApiRender, uiManager } from '@roxavn/core/web';
+import { ApiForm, uiManager } from '@roxavn/core/web';
 import { IconUpload, IconFileCheck } from '@tabler/icons';
 import { Fragment } from 'react';
 
@@ -53,13 +53,12 @@ const UploadItem = ({ value, onChange }: UploaditemProps) => {
 
   return (
     <div className={classes.container}>
-      <ApiRender
+      <ApiForm
         api={webModule.api(UploadFileApi)}
         apiParams={{ file: value }}
         onSuccess={onChange}
-        useLoader
-      >
-        {({ error, fetcher }) => (
+        fetchOnMount
+        dataRender={({ error, fetcher }) => (
           <>
             <CloseButton
               onClick={() => onChange && onChange(null)}
@@ -72,7 +71,7 @@ const UploadItem = ({ value, onChange }: UploaditemProps) => {
                   color="red"
                   size="sm"
                   fullWidth
-                  onClick={() => fetcher()}
+                  onClick={() => fetcher({})}
                 >
                   {t('reupload')}
                 </Button>
@@ -83,7 +82,7 @@ const UploadItem = ({ value, onChange }: UploaditemProps) => {
             </Text>
           </>
         )}
-      </ApiRender>
+      />
     </div>
   );
 };

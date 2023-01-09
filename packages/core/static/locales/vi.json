@@ -30,6 +30,8 @@
   "updatedDate": "Ngày sửa",
   "filter": "Lọc",
   "operator": "Phương thức",
+  "id": "Id",
+  "ownerId": "Id người sở hữu",
 
   "Filter": {
     "startsWith": "Bắt đầu với",
@@ -44,7 +46,6 @@
     "gt": "Lớn hơn",
     "gte": "Lớn hơn hoặc bằng"
   },
-
   "Error": {
     "BadRequestException": "Yêu cầu không hợp lệ",
     "UnauthorizedException": "Lỗi xác thực",
