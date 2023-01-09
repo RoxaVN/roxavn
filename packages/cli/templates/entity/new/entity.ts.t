@@ -26,9 +26,9 @@ export class <%= h.capitalize(entity_name) %> {
   @Column({ type: 'jsonb', nullable: true })
   metadata?: any;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: Date;
 }
