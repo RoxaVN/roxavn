@@ -1,4 +1,4 @@
-import { ServerApiFilter } from '@roxavn/core/server';
+import { QueryUtils } from '@roxavn/core/server';
 import { NotFoundException } from '@roxavn/core/share';
 
 import {
@@ -37,7 +37,7 @@ export class GetUsersApiService extends AuthApiService<typeof GetUsersApi> {
     const [users, totalItems] = await this.dataSource
       .getRepository(User)
       .findAndCount({
-        where: ServerApiFilter.convert(request),
+        where: QueryUtils.filter(request),
         order: { id: 'desc' },
         take: pageSize,
         skip: (page - 1) * pageSize,

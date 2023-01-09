@@ -52,7 +52,7 @@ class DatabaseManager {
 
 export const databaseManager = new DatabaseManager();
 
-export class ServerApiFilter {
+export class QueryUtils {
   static readonly filters: Record<string, (params: any) => FindOperator<any>> =
     {
       [ApiFilter.STARTS_WITH]: (value: string) => ILike(`${value}%`),
@@ -69,7 +69,7 @@ export class ServerApiFilter {
         MoreThanOrEqual(value),
     };
 
-  static convert(request: Record<string, any>) {
+  static filter(request: Record<string, any>) {
     const result = {};
     Object.entries(request).map(([key, value]) => {
       if (value instanceof ApiFilter && value.mode) {
