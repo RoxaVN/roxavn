@@ -1,11 +1,39 @@
 import { Text } from '@mantine/core';
-import { openConfirmModal } from '@mantine/modals';
+import { randomId } from '@mantine/hooks';
+import { openConfirmModal, openModal, closeModal } from '@mantine/modals';
+import { showNotification } from '@mantine/notifications';
+import { IconCheck } from '@tabler/icons';
+import React from 'react';
 import { Translation } from 'react-i18next';
 
 import { ErrorResponse } from '../../share';
 import { webModule } from './module';
 
 const uiManager = {
+  formDialog(title: React.ReactNode, content: React.ReactElement) {
+    const modalId = randomId();
+    openModal({
+      modalId,
+      title: title,
+      children: React.cloneElement(content, {
+        onSuccess: (...args: any) => {
+          showNotification({
+            autoClose: 10000,
+            title: title,
+            message: (
+              <Translation ns={webModule.escapedName}>
+                {(t) => t('success')}
+              </Translation>
+            ),
+            color: 'green',
+            icon: <IconCheck />,
+          });
+          closeModal(modalId);
+          content.props.onSuccess?.apply(content, args);
+        },
+      }),
+    });
+  },
   alertDialog(message: React.ReactNode, title?: React.ReactNode) {
     openConfirmModal({
       title: title || (

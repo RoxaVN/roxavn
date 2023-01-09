@@ -99,12 +99,7 @@ export function ApiForm<
   return (
     <Box sx={{ position: 'relative' }}>
       <LoadingOverlay visible={loading} />
-      <form
-        onSubmit={(e) => {
-          e.stopPropagation();
-          form.onSubmit(fetcher)(e);
-        }}
-      >
+      <form onSubmit={form.onSubmit(fetcher)}>
         {formRender && formRender(form)}
       </form>
       {dataRender && dataRender({ data, error, loading, fetcher })}
