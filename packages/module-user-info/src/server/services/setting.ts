@@ -8,6 +8,7 @@ import {
 import {
   GetSettingsApi,
   SetFieldsForUserToUpdateApi,
+  SetFieldsForAdminToUpdateApi,
   settingConstant,
 } from '../../share';
 import { serverModule } from '../module';
@@ -24,10 +25,22 @@ export class SetFieldsForUserToUpdateService extends ApiService<
   typeof SetFieldsForUserToUpdateApi
 > {
   handle(request: InferApiRequest<typeof SetFieldsForUserToUpdateApi>) {
-    const service = this.create(UpdateSettingService);
-    return service.handle({
+    return this.create(UpdateSettingService).handle({
       module: serverModule.name,
       name: settingConstant.fieldsForUserToUpdate,
+      metadata: { fields: request.fields },
+    });
+  }
+}
+
+@serverModule.useApi(SetFieldsForAdminToUpdateApi)
+export class SetFieldsForAdminToUpdateService extends ApiService<
+  typeof SetFieldsForAdminToUpdateApi
+> {
+  handle(request: InferApiRequest<typeof SetFieldsForAdminToUpdateApi>) {
+    return this.create(UpdateSettingService).handle({
+      module: serverModule.name,
+      name: settingConstant.fieldsForAdminToUpdate,
       metadata: { fields: request.fields },
     });
   }
