@@ -1,6 +1,6 @@
 ---
 inject: true
-to: src/server/index.ts
+to: src/share/index.ts
 append: true
 skip_if: apis
 ---

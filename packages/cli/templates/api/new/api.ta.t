@@ -1,5 +1,5 @@
 ---
-to: src/server/apis/<%= h.changeCase.dot(api_name) %>.ts
+to: src/share/apis/<%= h.changeCase.dot(api_name) %>.ts
 ---
 import {
   Api,
