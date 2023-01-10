@@ -1,6 +1,5 @@
 ---
 to: static/locales/en.json
-sh: npx roxavn sync
 ---
 {
   "myModel": "My model",
