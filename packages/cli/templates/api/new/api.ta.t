@@ -31,6 +31,6 @@ export const <%= api_name %>Api: Api<
   UnauthorizedException | ForbiddenException
 > = {
   method: 'GET',
-  path: '/<%= h.changeCase.camel(api_name) %>',
+  path: '/<%= h.changeCase.param(api_name) %>',
   validator: <%= api_name %>Request,
 };
