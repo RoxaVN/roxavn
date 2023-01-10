@@ -1,5 +1,5 @@
 ---
-to: src/server/entities/<%= h.inflection.underscore(entity_name).replaceAll('_', '.') %>.entity.ts
+to: src/server/entities/<%= h.changeCase.dot(entity_name) %>.entity.ts
 ---
 import {
   Column,
@@ -13,7 +13,7 @@ import {
 import { User } from '@roxavn/module-user/server';
 
 @Entity()
-export class <%= h.capitalize(entity_name) %> {
+export class <%= h.changeCase.pascal(entity_name) %> {
   @PrimaryGeneratedColumn()
   id: number;
 
