@@ -2,17 +2,17 @@ import { BaseService } from '@roxavn/core/server';
 import { Empty } from '@roxavn/core/share';
 
 import {
-  CreateSettingRequest,
+  UpdateSettingRequest,
   GetModuleSettingRequest,
   GetModuleSettingResponse,
 } from '../../share';
 import { Setting } from '../entities';
 
-export class CreateSettingService extends BaseService<
-  CreateSettingRequest,
+export class UpdateSettingService extends BaseService<
+  UpdateSettingRequest,
   Empty
 > {
-  async handle(request: CreateSettingRequest) {
+  async handle(request: UpdateSettingRequest) {
     const setting = new Setting();
     setting.module = request.module;
     setting.name = request.name;

@@ -1,6 +1,6 @@
 import { Collection } from '@roxavn/core/share';
 
-export interface CreateSettingRequest {
+export interface UpdateSettingRequest {
   module: string;
   name: string;
   metadata: any;
