@@ -1,12 +1,12 @@
 import { BaseService } from '@roxavn/core/server';
-import { Collection, Empty } from '@roxavn/core/share';
-import { Setting } from '../entities';
+import { Empty } from '@roxavn/core/share';
 
-interface CreateSettingRequest {
-  module: string;
-  name: string;
-  metadata: any;
-}
+import {
+  CreateSettingRequest,
+  GetModuleSettingRequest,
+  GetModuleSettingResponse,
+} from '../../share';
+import { Setting } from '../entities';
 
 export class CreateSettingService extends BaseService<
   CreateSettingRequest,
@@ -22,17 +22,13 @@ export class CreateSettingService extends BaseService<
   }
 }
 
-interface GetModuleSettingRequest {
-  module: string;
-}
-
 export class GetModuleSettingService extends BaseService<
   GetModuleSettingRequest,
-  Collection<Setting>
+  GetModuleSettingResponse
 > {
   async handle(request: GetModuleSettingRequest) {
     const items = await this.dataSource.getRepository(Setting).find({
-      where: { module: request.module },
+      where: { module: request.module, name: request.name },
     });
     return { items };
   }

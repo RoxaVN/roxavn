@@ -8,8 +8,8 @@ export class Setting {
   @PrimaryColumn()
   name: string;
 
-  @Column({ type: 'jsonb', nullable: true })
-  metadata?: any;
+  @Column({ type: 'jsonb' })
+  metadata: any;
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: Date;
