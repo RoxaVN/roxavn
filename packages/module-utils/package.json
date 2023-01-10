@@ -1,5 +1,5 @@
 {
-  "name": "module-utils",
+  "name": "@roxavn/module-utils",
   "version": "0.1.0",
   "scripts": {
     "build": "roxavn build",
