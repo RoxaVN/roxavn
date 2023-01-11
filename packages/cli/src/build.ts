@@ -45,8 +45,8 @@ class BuildService {
     }
   }
 
-  compile() {
-    if (fs.existsSync('dist')) {
+  compile(options: { clear?: boolean }) {
+    if (options.clear && fs.existsSync('dist')) {
       console.log('Clear dist folder');
       fs.rmSync('dist', { recursive: true, force: true });
     }
