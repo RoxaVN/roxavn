@@ -12,6 +12,7 @@ import {
 
 import { Type, Transform } from 'class-transformer';
 import { User } from '../interfaces';
+import { baseModule } from '../module';
 import { Permissions } from '../permissions';
 
 class GetUsersRequest extends ExactProps<GetUsersRequest> {
@@ -33,13 +34,13 @@ class GetUsersRequest extends ExactProps<GetUsersRequest> {
 
 type GetUsersResponse = PaginatedCollection<User>;
 
-export const GetUsersApi: Api<
+export const getUsersApi: Api<
   GetUsersRequest,
   GetUsersResponse,
   UnauthorizedException | ForbiddenException
-> = {
+> = baseModule.api({
   method: 'GET',
   path: '/users',
   validator: GetUsersRequest,
   permission: Permissions.ReadUser,
-};
+});

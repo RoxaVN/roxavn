@@ -1,6 +1,6 @@
 import { ApiTable, webModule as coreWebModule, utils } from '@roxavn/core/web';
 
-import { GetUserFilesApi } from '../../../../../share';
+import { getUserFilesApi } from '../../../../../share';
 import { webModule } from '../../../../module';
 
 const IndexPage = () => {
@@ -8,7 +8,7 @@ const IndexPage = () => {
   const tCore = coreWebModule.useTranslation().t;
   return (
     <ApiTable
-      api={webModule.api(GetUserFilesApi)}
+      api={getUserFilesApi}
       rowKey="ownerId"
       columns={{
         ownerId: { label: tCore('ownerId') },

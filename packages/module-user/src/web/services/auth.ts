@@ -2,15 +2,14 @@ import { InferApiResponse } from '@roxavn/core/share';
 import { apiFetcher } from '@roxavn/core/web';
 import isEmpty from 'lodash/isEmpty';
 import { Subject } from 'rxjs';
-import { GetMyUserApi, LogoutApi } from '../../share';
-import { webModule } from '../module';
+import { getMyUserApi, logoutApi } from '../../share';
 
-type AuthData = InferApiResponse<typeof GetMyUserApi>;
+type AuthData = InferApiResponse<typeof getMyUserApi>;
 
 export const auth = {
   _authData: {} as AuthData,
-  authenticateApi: webModule.api(GetMyUserApi),
-  logoutApi: webModule.api(LogoutApi),
+  authenticateApi: getMyUserApi,
+  logoutApi: logoutApi,
 
   authenticatedObserver: new Subject<AuthData>(),
   logoutObserver: new Subject<undefined>(),

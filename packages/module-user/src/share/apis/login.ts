@@ -4,6 +4,7 @@ import {
   MinLength,
   UnauthorizedException,
 } from '@roxavn/core/share';
+import { baseModule } from '../module';
 
 class LoginRequest extends ExactProps<LoginRequest> {
   @MinLength(1)
@@ -17,10 +18,10 @@ interface LoginResponse {
   accessToken: string;
 }
 
-export const LoginApi: Api<LoginRequest, LoginResponse, UnauthorizedException> =
-  {
+export const loginApi: Api<LoginRequest, LoginResponse, UnauthorizedException> =
+  baseModule.api({
     method: 'POST',
     path: '/login',
     auth: 'NOT_LOGGED',
     validator: LoginRequest,
-  };
+  });

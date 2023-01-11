@@ -5,16 +5,16 @@ import {
   UnauthorizedException,
 } from '@roxavn/core/share';
 
-import { LoginApi, LogoutApi, ResetPasswordApi } from '../../share';
+import { loginApi, logoutApi, resetPasswordApi } from '../../share';
 import { Env } from '../config';
 import { PasswordIdentity, UserAccessToken } from '../entities';
 import { serverModule } from '../module';
 import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { tokenService } from './token';
 
-@serverModule.useApi(LoginApi)
-export class LoginApiService extends ApiService<typeof LoginApi> {
-  async handle(request: InferApiRequest<typeof LoginApi>) {
+@serverModule.useApi(loginApi)
+export class LoginService extends ApiService<typeof loginApi> {
+  async handle(request: InferApiRequest<typeof loginApi>) {
     const identity = await this.dataSource
       .getRepository(PasswordIdentity)
       .findOne({
@@ -56,9 +56,9 @@ export class LoginApiService extends ApiService<typeof LoginApi> {
   }
 }
 
-@serverModule.useApi(LogoutApi)
-export class LogoutApiService extends AuthApiService<typeof LogoutApi> {
-  async handle(request: InferAuthApiRequest<typeof LogoutApi>) {
+@serverModule.useApi(logoutApi)
+export class LogoutService extends AuthApiService<typeof logoutApi> {
+  async handle(request: InferAuthApiRequest<typeof logoutApi>) {
     await this.dataSource
       .getRepository(UserAccessToken)
       .delete({ id: request.accessToken.id });
@@ -66,11 +66,11 @@ export class LogoutApiService extends AuthApiService<typeof LogoutApi> {
   }
 }
 
-@serverModule.useApi(ResetPasswordApi)
+@serverModule.useApi(resetPasswordApi)
 export class ResetPasswordService extends AuthApiService<
-  typeof ResetPasswordApi
+  typeof resetPasswordApi
 > {
-  async handle(request: InferAuthApiRequest<typeof ResetPasswordApi>) {
+  async handle(request: InferAuthApiRequest<typeof resetPasswordApi>) {
     const identity = await this.dataSource
       .getRepository(PasswordIdentity)
       .findOne({

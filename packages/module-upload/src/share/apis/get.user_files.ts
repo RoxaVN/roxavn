@@ -10,6 +10,7 @@ import {
 
 import { Type } from 'class-transformer';
 import { UserFile } from '../interfaces';
+import { baseModule } from '../module';
 import { Permissions } from '../permissions';
 
 class GetUserFilesRequest extends ExactProps<GetUserFilesRequest> {
@@ -21,13 +22,13 @@ class GetUserFilesRequest extends ExactProps<GetUserFilesRequest> {
 
 type GetUserFilesResponse = PaginatedCollection<UserFile>;
 
-export const GetUserFilesApi: Api<
+export const getUserFilesApi: Api<
   GetUserFilesRequest,
   GetUserFilesResponse,
   UnauthorizedException | ForbiddenException
-> = {
+> = baseModule.api({
   method: 'GET',
   path: '/user_files',
   validator: GetUserFilesRequest,
   permission: Permissions.ReadUserFIles,
-};
+});

@@ -6,25 +6,25 @@ import {
 } from '@roxavn/module-utils/server';
 
 import {
-  GetSettingsApi,
-  SetFieldsForUserToUpdateApi,
-  SetFieldsForAdminToUpdateApi,
+  getSettingsApi,
+  setFieldsForUserToUpdateApi,
+  setFieldsForAdminToUpdateApi,
   settingConstant,
 } from '../../share';
 import { serverModule } from '../module';
 
-@serverModule.useApi(GetSettingsApi)
+@serverModule.useApi(getSettingsApi)
 export class GetSettingsService extends GetModuleSettingService {
-  handle(request: InferApiRequest<typeof GetSettingsApi>) {
+  handle(request: InferApiRequest<typeof getSettingsApi>) {
     return super.handle({ ...request, module: serverModule.name });
   }
 }
 
-@serverModule.useApi(SetFieldsForUserToUpdateApi)
+@serverModule.useApi(setFieldsForUserToUpdateApi)
 export class SetFieldsForUserToUpdateService extends ApiService<
-  typeof SetFieldsForUserToUpdateApi
+  typeof setFieldsForUserToUpdateApi
 > {
-  handle(request: InferApiRequest<typeof SetFieldsForUserToUpdateApi>) {
+  handle(request: InferApiRequest<typeof setFieldsForUserToUpdateApi>) {
     return this.create(UpdateSettingService).handle({
       module: serverModule.name,
       name: settingConstant.fieldsForUserToUpdate,
@@ -33,11 +33,11 @@ export class SetFieldsForUserToUpdateService extends ApiService<
   }
 }
 
-@serverModule.useApi(SetFieldsForAdminToUpdateApi)
+@serverModule.useApi(setFieldsForAdminToUpdateApi)
 export class SetFieldsForAdminToUpdateService extends ApiService<
-  typeof SetFieldsForAdminToUpdateApi
+  typeof setFieldsForAdminToUpdateApi
 > {
-  handle(request: InferApiRequest<typeof SetFieldsForAdminToUpdateApi>) {
+  handle(request: InferApiRequest<typeof setFieldsForAdminToUpdateApi>) {
     return this.create(UpdateSettingService).handle({
       module: serverModule.name,
       name: settingConstant.fieldsForAdminToUpdate,

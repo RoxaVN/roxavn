@@ -3,9 +3,9 @@ import { ApiFormGroup } from '@roxavn/core/web';
 import { ModuleSettings } from '@roxavn/module-utils/web';
 
 import {
-  GetSettingsApi,
-  SetFieldsForAdminToUpdateApi,
-  SetFieldsForUserToUpdateApi,
+  getSettingsApi,
+  setFieldsForAdminToUpdateApi,
+  setFieldsForUserToUpdateApi,
   settingConstant,
 } from '../../../../../share';
 import { webModule } from '../../../../module';
@@ -20,13 +20,13 @@ const Page = () => {
 
   return (
     <ModuleSettings
-      getListApi={webModule.api(GetSettingsApi)}
+      getListApi={getSettingsApi}
       forms={{
         [settingConstant.fieldsForUserToUpdate]: {
           title: t('fieldsForUserToUpdateTitle'),
           form: (
             <ApiFormGroup
-              api={webModule.api(SetFieldsForUserToUpdateApi)}
+              api={setFieldsForUserToUpdateApi}
               fields={[
                 <MultiSelect data={fields} withinPortal name="fields" />,
               ]}
@@ -37,7 +37,7 @@ const Page = () => {
           title: t('fieldsForAdminToUpdateTitle'),
           form: (
             <ApiFormGroup
-              api={webModule.api(SetFieldsForAdminToUpdateApi)}
+              api={setFieldsForAdminToUpdateApi}
               fields={[
                 <MultiSelect data={fields} withinPortal name="fields" />,
               ]}

@@ -5,11 +5,11 @@ import { ApiForm, uiManager } from '@roxavn/core/web';
 import { IconUpload, IconFileCheck } from '@tabler/icons';
 import { Fragment } from 'react';
 
-import { UploadFileApi } from '../../share';
+import { uploadFileApi } from '../../share';
 import { webModule } from '../module';
 import { useApiFileInputStyles } from './ApiFileInput.styles';
 
-type UploadedFile = InferApiResponse<typeof UploadFileApi>;
+type UploadedFile = InferApiResponse<typeof uploadFileApi>;
 
 const renderLabel = (fileName: string) => {
   const parts = fileName.split('.');
@@ -54,7 +54,7 @@ const UploadItem = ({ value, onChange }: UploaditemProps) => {
   return (
     <div className={classes.container}>
       <ApiForm
-        api={webModule.api(UploadFileApi)}
+        api={uploadFileApi}
         apiParams={{ file: value }}
         onSuccess={onChange}
         fetchOnMount

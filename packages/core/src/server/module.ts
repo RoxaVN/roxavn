@@ -44,7 +44,7 @@ export class ServerModule extends BaseModule {
     handler: (req: Req, context: MiddlerwareContext) => Promise<Resp> | Resp
   ) {
     ServerModule.apiRouter[api.method.toLowerCase()](
-      this.getFullApiPath(api),
+      api.path,
       ...ServerModule.apiMiddlerwares.map(
         (middleware) =>
           function (req: Request, resp: Response, next: NextFunction) {

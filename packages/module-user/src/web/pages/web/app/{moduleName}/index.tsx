@@ -10,7 +10,7 @@ import {
 } from '@roxavn/core/web';
 import { IconPlus } from '@tabler/icons';
 
-import { CreateUserApi, GetUsersApi, WebRoutes } from '../../../../../share';
+import { createUserApi, getUsersApi, WebRoutes } from '../../../../../share';
 import { webModule } from '../../../../module';
 
 const IndexPage = () => {
@@ -27,7 +27,7 @@ const IndexPage = () => {
             uiManager.formDialog(
               t('addUser'),
               <ApiFormGroup
-                api={webModule.api(CreateUserApi)}
+                api={createUserApi}
                 apiParams={{ username: '' }}
                 onSuccess={(data, params) => {
                   fetcherRef.fetch({ page: 1 });
@@ -58,7 +58,7 @@ const IndexPage = () => {
             ),
         },
       ]}
-      api={webModule.api(GetUsersApi)}
+      api={getUsersApi}
       columns={{
         username: {
           label: t('username'),

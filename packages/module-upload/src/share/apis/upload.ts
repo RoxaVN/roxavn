@@ -1,4 +1,5 @@
 import { Api, Empty, UnauthorizedException } from '@roxavn/core/share';
+import { baseModule } from '../module';
 
 interface UploadFileResponse {
   id: string;
@@ -7,11 +8,11 @@ interface UploadFileResponse {
   url: string;
 }
 
-export const UploadFileApi: Api<
+export const uploadFileApi: Api<
   Empty,
   UploadFileResponse,
   UnauthorizedException
-> = {
+> = baseModule.api({
   method: 'POST',
   path: '/file/upload',
-};
+});

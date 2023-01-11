@@ -1,13 +1,13 @@
 import { InferApiResponse, ServerException } from '@roxavn/core/share';
 import busboy from 'busboy';
 
-import { ExceedsStorageLimitException, UploadFileApi } from '../../share';
+import { ExceedsStorageLimitException, uploadFileApi } from '../../share';
 import { File, UserFile } from '../entities';
 import { serverModule } from '../module';
 import { seaweedClient } from './seaweed';
 
-serverModule.useRawApi(UploadFileApi, (_, { req, dataSource, resp }) => {
-  return new Promise<InferApiResponse<typeof UploadFileApi>>(
+serverModule.useRawApi(uploadFileApi, (_, { req, dataSource, resp }) => {
+  return new Promise<InferApiResponse<typeof uploadFileApi>>(
     (resolve, reject) => {
       const bb = busboy({ headers: req.headers });
       bb.on('file', async (name, fileStream, info) => {

@@ -1,6 +1,5 @@
 import { Api, ApiError, ApiRequest, ApiResponse } from './api';
 import { constants } from './constants';
-import { urlUtils } from './url';
 
 export class BaseModule {
   private readonly _name: string;
@@ -31,23 +30,11 @@ export class BaseModule {
     Request extends ApiRequest,
     Response extends ApiResponse,
     Error extends ApiError
-  >(
-    api: Api<Request, Response, Error>,
-    params?: Record<string, any>
-  ): Api<Request, Response, Error> {
+  >(api: Api<Request, Response, Error>): Api<Request, Response, Error> {
     return {
       ...api,
-      path:
-        '/' +
-        constants.API_BASE_PATH +
-        '/' +
-        this._escapedName +
-        (params ? urlUtils.generatePath(api.path, params) : api.path),
+      path: '/' + constants.API_BASE_PATH + '/' + this._escapedName + api.path,
     };
-  }
-
-  public getFullApiPath(api: Api): string {
-    return '/' + constants.API_BASE_PATH + '/' + this.escapedName + api.path;
   }
 
   public static escapeName(name: string): string {

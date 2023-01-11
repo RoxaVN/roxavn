@@ -3,13 +3,15 @@ import {
   InferAuthApiRequest,
 } from '@roxavn/module-user/server';
 
-import { GetUserFilesApi } from '../../share';
+import { getUserFilesApi } from '../../share';
 import { UserFile } from '../entities';
 import { serverModule } from '../module';
 
-@serverModule.useApi(GetUserFilesApi)
-export class GetUsersApiService extends AuthApiService<typeof GetUserFilesApi> {
-  async handle(request: InferAuthApiRequest<typeof GetUserFilesApi>) {
+@serverModule.useApi(getUserFilesApi)
+export class GetUserFilesService extends AuthApiService<
+  typeof getUserFilesApi
+> {
+  async handle(request: InferAuthApiRequest<typeof getUserFilesApi>) {
     const page = request.page || 1;
     const pageSize = 10;
 

@@ -7,6 +7,7 @@ import {
   MinLength,
   UnauthorizedException,
 } from '@roxavn/core/share';
+import { baseModule } from '../module';
 
 class ResetPasswordRequest extends ExactProps<ResetPasswordRequest> {
   @MinLength(1)
@@ -19,13 +20,13 @@ class ResetPasswordRequest extends ExactProps<ResetPasswordRequest> {
   public readonly password!: string;
 }
 
-export const ResetPasswordApi: Api<
+export const resetPasswordApi: Api<
   ResetPasswordRequest,
   Empty,
   BadRequestException | UnauthorizedException | ForbiddenException
-> = {
+> = baseModule.api({
   method: 'POST',
   path: '/reset-password',
   auth: 'NOT_LOGGED',
   validator: ResetPasswordRequest,
-};
+});

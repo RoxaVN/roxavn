@@ -8,6 +8,7 @@ import {
 } from '@roxavn/core/share';
 
 import { settingConstant } from '../constants';
+import { baseModule } from '../module';
 import { Permissions } from '../roles';
 
 class SetFieldsForAdminToUpdateRequest extends ExactProps<SetFieldsForAdminToUpdateRequest> {
@@ -17,13 +18,13 @@ class SetFieldsForAdminToUpdateRequest extends ExactProps<SetFieldsForAdminToUpd
 
 type SetFieldsForAdminToUpdateResponse = Empty;
 
-export const SetFieldsForAdminToUpdateApi: Api<
+export const setFieldsForAdminToUpdateApi: Api<
   SetFieldsForAdminToUpdateRequest,
   SetFieldsForAdminToUpdateResponse,
   UnauthorizedException | ForbiddenException
-> = {
+> = baseModule.api({
   method: 'POST',
   path: '/fields-for-admin-to-update',
   validator: SetFieldsForAdminToUpdateRequest,
   permission: Permissions.UpdateSetting,
-};
+});

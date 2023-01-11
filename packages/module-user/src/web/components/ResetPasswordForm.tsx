@@ -2,13 +2,13 @@ import { TextInput, PasswordInput, Title } from '@mantine/core';
 import { InferApiResponse } from '@roxavn/core/share';
 import { ApiFormGroup } from '@roxavn/core/web';
 
-import { ResetPasswordApi } from '../../share';
+import { resetPasswordApi } from '../../share';
 import { webModule } from '../module';
 
 interface ResetPasswordFormProps {
   username: string;
   token: string;
-  onSuccess?: (data: InferApiResponse<typeof ResetPasswordApi>) => void;
+  onSuccess?: (data: InferApiResponse<typeof resetPasswordApi>) => void;
 }
 
 export const ResetPasswordForm = ({
@@ -23,7 +23,7 @@ export const ResetPasswordForm = ({
         {t('resetPassword')}
       </Title>
       <ApiFormGroup
-        api={webModule.api(ResetPasswordApi)}
+        api={resetPasswordApi}
         apiParams={{
           username,
           token,

@@ -2,9 +2,9 @@ import { QueryUtils } from '@roxavn/core/server';
 import { NotFoundException } from '@roxavn/core/share';
 
 import {
-  GetMyUserApi,
-  GetUsersApi,
-  CreateUserApi,
+  getMyUserApi,
+  getUsersApi,
+  createUserApi,
   UserExistsException,
 } from '../../share';
 import { PasswordIdentity, User } from '../entities';
@@ -13,9 +13,9 @@ import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { tokenService } from './token';
 import { Env } from '../config';
 
-@serverModule.useApi(GetMyUserApi)
-export class GetMyUserApiService extends AuthApiService<typeof GetMyUserApi> {
-  async handle(request: InferAuthApiRequest<typeof GetMyUserApi>) {
+@serverModule.useApi(getMyUserApi)
+export class GetMyUserService extends AuthApiService<typeof getMyUserApi> {
+  async handle(request: InferAuthApiRequest<typeof getMyUserApi>) {
     const user = await this.dataSource.getRepository(User).findOne({
       where: { id: request.user.id },
     });
@@ -28,9 +28,9 @@ export class GetMyUserApiService extends AuthApiService<typeof GetMyUserApi> {
   }
 }
 
-@serverModule.useApi(GetUsersApi)
-export class GetUsersApiService extends AuthApiService<typeof GetUsersApi> {
-  async handle(request: InferAuthApiRequest<typeof GetUsersApi>) {
+@serverModule.useApi(getUsersApi)
+export class GetUsersService extends AuthApiService<typeof getUsersApi> {
+  async handle(request: InferAuthApiRequest<typeof getUsersApi>) {
     const page = request.page || 1;
     const pageSize = 10;
 
@@ -50,9 +50,9 @@ export class GetUsersApiService extends AuthApiService<typeof GetUsersApi> {
   }
 }
 
-@serverModule.useApi(CreateUserApi)
-export class CreateUserApiService extends AuthApiService<typeof CreateUserApi> {
-  async handle(request: InferAuthApiRequest<typeof CreateUserApi>) {
+@serverModule.useApi(createUserApi)
+export class CreateUserService extends AuthApiService<typeof createUserApi> {
+  async handle(request: InferAuthApiRequest<typeof createUserApi>) {
     try {
       const token = await tokenService.creator.create({
         alphabetType: 'LOWERCASE_ALPHA_NUM',
