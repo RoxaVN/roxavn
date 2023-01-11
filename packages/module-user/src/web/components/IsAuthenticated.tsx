@@ -23,19 +23,23 @@ export const IsAuthenticated = ({
     } else {
       const token = auth.getToken();
       if (token) {
-        auth
-          .authenticate(token)
-          .then((user) => {
-            setUser(user);
-            setLoading(false);
-          })
-          .catch(() => {
-            setLoading(false);
-          });
+        const timeout = setTimeout(() => {
+          auth
+            .authenticate(token)
+            .then((user) => {
+              setUser(user);
+              setLoading(false);
+            })
+            .catch(() => {
+              setLoading(false);
+            });
+        }, 100);
+        return () => clearTimeout(timeout);
       } else {
         setLoading(false);
       }
     }
+    return;
   }, []);
 
   return loading

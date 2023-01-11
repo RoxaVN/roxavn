@@ -18,6 +18,8 @@ import {
   Burger,
   useMantineTheme,
   NavLink,
+  Group,
+  Loader,
 } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons';
 import { MenuItem, WebModule } from '@roxavn/core/web';
@@ -109,6 +111,11 @@ function WebComponent() {
 
 const WebPage = () => (
   <IsAuthenticated
+    loadingComponent={
+      <Group position="center" align="center" sx={{ height: '100vh' }}>
+        <Loader />
+      </Group>
+    }
     userComponent={<WebComponent />}
     guestComponent={<Navigate to={WebRoutes.Login.path} />}
   />
