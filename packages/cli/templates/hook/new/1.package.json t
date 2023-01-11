@@ -1,0 +1,9 @@
+---
+inject: true
+to: package.json
+before: '"web": \['
+skip_if: '"hook"'
+---
+      "hook": [
+        "dist/cjs/hook/index.d.ts"
+      ],
