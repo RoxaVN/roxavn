@@ -1,4 +1,4 @@
-import { Text, Card, Grid } from '@mantine/core';
+import { Text, Card, SimpleGrid } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { Api } from '@roxavn/core/share';
 import { ApiForm, webModule as coreWebModule } from '@roxavn/core/web';
@@ -22,12 +22,19 @@ export const ModuleSettings = ({ getListApi, forms }: ModuleSettingsProps) => {
   const tCore = coreWebModule.useTranslation().t;
   return (
     <ApiForm
+      fetchOnMount
       api={getListApi}
-      dataRender={({ data }) => (
-        <Grid>
-          {Object.entries(forms).map(([name, item]) => (
-            <Grid.Col span={6} sm={12} key={name}>
-              <Card withBorder>
+      dataRender={({ data }) =>
+        data && (
+          <SimpleGrid
+            cols={3}
+            breakpoints={[
+              { maxWidth: 'lg', cols: 2, spacing: 'md' },
+              { maxWidth: 'sm', cols: 1, spacing: 'sm' },
+            ]}
+          >
+            {Object.entries(forms).map(([name, item]) => (
+              <Card withBorder key={name}>
                 <Text weight={500} mb="xs">
                   {item.title}
                 </Text>
@@ -35,7 +42,7 @@ export const ModuleSettings = ({ getListApi, forms }: ModuleSettingsProps) => {
                   {item.description}
                 </Text>
                 {React.cloneElement(item.form, {
-                  apiParams: data?.items.find((i) => i.name === name),
+                  apiParams: data.items.find((i) => i.name === name)?.metadata,
                   onSuccess: (...args: any) => {
                     showNotification({
                       autoClose: 10000,
@@ -48,10 +55,10 @@ export const ModuleSettings = ({ getListApi, forms }: ModuleSettingsProps) => {
                   },
                 })}
               </Card>
-            </Grid.Col>
-          ))}
-        </Grid>
-      )}
+            ))}
+          </SimpleGrid>
+        )
+      }
     />
   );
 };

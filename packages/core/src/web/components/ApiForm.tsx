@@ -15,7 +15,7 @@ export interface ApiFormProps<
     error: any;
     loading: boolean;
     fetcher: (params: Request) => void;
-  }) => JSX.Element;
+  }) => React.ReactNode;
   onBeforeSubmit?: (
     params: Request & Record<string, any>
   ) => Promise<Request> | Request;

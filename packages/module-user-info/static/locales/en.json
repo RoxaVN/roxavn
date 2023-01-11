@@ -1,4 +1,6 @@
 {
+  "fieldsForUserToUpdateTitle": "Fields for user to update",
+  "fieldsForAdminToUpdateTitle": "Fields for admin to update",
   "Meta": {
     "name": "User info",
     "description": "User info"
