@@ -52,7 +52,10 @@ export class ServerModule extends BaseModule {
               api,
               { req, resp, dataSource: databaseManager.dataSource },
               next
-            )?.catch(next);
+            )?.catch((e) => {
+              console.error(e);
+              next(e);
+            });
           }
       ),
       async function (req: Request, resp: Response, next: NextFunction) {
@@ -64,6 +67,7 @@ export class ServerModule extends BaseModule {
           });
           resp.status(200).json({ code: 200, data: result } as FullApiResponse);
         } catch (e) {
+          console.error(e);
           next(e);
         }
       }
