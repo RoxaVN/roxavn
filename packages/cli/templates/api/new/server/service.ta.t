@@ -6,12 +6,12 @@ import {
   InferAuthApiRequest,
 } from '@roxavn/module-user/server';
 
-import { <%= api_name %>Api } from '../../share';
+import { <%= h.changeCase.camel(api_name) %>Api } from '../../share';
 import { serverModule } from '../module';
 
-@serverModule.useApi(<%= api_name %>Api)
-export class <%= api_name %>ApiService extends AuthApiService<typeof <%= api_name %>Api> {
-  async handle(request: InferAuthApiRequest<typeof <%= api_name %>Api>) {
+@serverModule.useApi(<%= h.changeCase.camel(api_name) %>Api)
+export class <%= api_name %>ApiService extends AuthApiService<typeof <%= h.changeCase.camel(api_name) %>Api> {
+  async handle(request: InferAuthApiRequest<typeof <%= h.changeCase.camel(api_name) %>Api>) {
     
   }
 }

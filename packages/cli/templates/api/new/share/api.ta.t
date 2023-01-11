@@ -10,8 +10,9 @@ import {
   PaginatedCollection,
   UnauthorizedException,
 } from '@roxavn/core/share';
-
 import { Type } from 'class-transformer';
+
+import { baseModule } from '../module';
 
 class <%= api_name %>Request extends ExactProps<<%= api_name %>Request> {
   @IsOptional()
@@ -25,12 +26,12 @@ class <%= api_name %>Request extends ExactProps<<%= api_name %>Request> {
 
 type <%= api_name %>Response = PaginatedCollection<{}>;
 
-export const <%= api_name %>Api: Api<
+export const <%= h.changeCase.camel(api_name) %>Api: Api<
   <%= api_name %>Request,
   <%= api_name %>Response,
   UnauthorizedException | ForbiddenException
-> = {
+> = baseModule.api({
   method: 'GET',
   path: '/<%= h.changeCase.param(api_name) %>',
   validator: <%= api_name %>Request,
-};
+});
