@@ -1,20 +1,21 @@
 ---
 to: src/web/pages/web/app/{moduleName}.tsx
 ---
+import { MenuItem } from '@roxavn/core/web';
+import { IconUsers } from '@tabler/icons';
 import { useEffect } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
-import { IconUsers } from '@tabler/icons';
 
 import { webModule } from '../../../module';
 
 webModule.appMenu.push(
-  ...[
+  ...([
     {
-      label: '<%= path_name %>',
+      label: (t) => t('<%= path_name %>'),
       path: '<%= path_name %>',
       icon: IconUsers,
     },
-  ]
+  ] as MenuItem[])
 );
 
 export default function () {

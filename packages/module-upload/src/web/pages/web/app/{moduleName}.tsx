@@ -1,17 +1,18 @@
+import { MenuItem } from '@roxavn/core/web';
+import { IconUsers } from '@tabler/icons';
 import { useEffect } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
-import { IconUsers } from '@tabler/icons';
 
 import { webModule } from '../../../module';
 
 webModule.appMenu.push(
-  ...[
+  ...([
     {
-      label: 'userFiles',
+      label: (t) => t('userFiles'),
       path: '',
       icon: IconUsers,
     },
-  ]
+  ] as MenuItem[])
 );
 
 export default function () {

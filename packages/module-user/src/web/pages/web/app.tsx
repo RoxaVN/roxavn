@@ -33,10 +33,13 @@ function WebComponent() {
   const { t } = useTranslation(webModule && webModule.escapedName);
 
   const renderMenuItems = (_menuItems: MenuItem[]) =>
-    _menuItems.map((menuItem) => {
+    _menuItems.map((menuItem, index) => {
       const props: any = {
-        key: menuItem.label,
-        label: t(menuItem.label),
+        key: index + 1,
+        label:
+          typeof menuItem.label === 'function'
+            ? menuItem.label(t)
+            : menuItem.label,
         description: menuItem.description,
         icon: menuItem.icon && <menuItem.icon size={16} stroke={1.5} />,
       };

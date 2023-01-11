@@ -1,8 +1,8 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation, TFunction } from 'react-i18next';
 import { baseModule, BaseModule } from '../../share';
 
 export interface MenuItem {
-  label: string;
+  label: React.ReactNode | { (t: TFunction): React.ReactNode };
   path?: string;
   description?: React.ReactNode;
   icon?: React.ComponentType<{
