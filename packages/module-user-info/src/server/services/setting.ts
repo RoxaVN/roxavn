@@ -14,14 +14,14 @@ import {
 import { serverModule } from '../module';
 
 @serverModule.useApi(getSettingsApi)
-export class GetSettingsService extends GetModuleSettingService {
+export class GetSettingsApiService extends GetModuleSettingService {
   handle(request: InferApiRequest<typeof getSettingsApi>) {
     return super.handle({ ...request, module: serverModule.name });
   }
 }
 
 @serverModule.useApi(setFieldsForUserToUpdateApi)
-export class SetFieldsForUserToUpdateService extends ApiService<
+export class SetFieldsForUserToUpdateApiService extends ApiService<
   typeof setFieldsForUserToUpdateApi
 > {
   handle(request: InferApiRequest<typeof setFieldsForUserToUpdateApi>) {
@@ -34,7 +34,7 @@ export class SetFieldsForUserToUpdateService extends ApiService<
 }
 
 @serverModule.useApi(setFieldsForAdminToUpdateApi)
-export class SetFieldsForAdminToUpdateService extends ApiService<
+export class SetFieldsForAdminToUpdateApiService extends ApiService<
   typeof setFieldsForAdminToUpdateApi
 > {
   handle(request: InferApiRequest<typeof setFieldsForAdminToUpdateApi>) {

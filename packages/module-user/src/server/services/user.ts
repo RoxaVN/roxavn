@@ -14,7 +14,7 @@ import { tokenService } from './token';
 import { Env } from '../config';
 
 @serverModule.useApi(getMyUserApi)
-export class GetMyUserService extends AuthApiService<typeof getMyUserApi> {
+export class GetMyUserApiService extends AuthApiService<typeof getMyUserApi> {
   async handle(request: InferAuthApiRequest<typeof getMyUserApi>) {
     const user = await this.dataSource.getRepository(User).findOne({
       where: { id: request.user.id },
@@ -29,7 +29,7 @@ export class GetMyUserService extends AuthApiService<typeof getMyUserApi> {
 }
 
 @serverModule.useApi(getUsersApi)
-export class GetUsersService extends AuthApiService<typeof getUsersApi> {
+export class GetUsersApiService extends AuthApiService<typeof getUsersApi> {
   async handle(request: InferAuthApiRequest<typeof getUsersApi>) {
     const page = request.page || 1;
     const pageSize = 10;
@@ -51,7 +51,7 @@ export class GetUsersService extends AuthApiService<typeof getUsersApi> {
 }
 
 @serverModule.useApi(createUserApi)
-export class CreateUserService extends AuthApiService<typeof createUserApi> {
+export class CreateUserApiService extends AuthApiService<typeof createUserApi> {
   async handle(request: InferAuthApiRequest<typeof createUserApi>) {
     try {
       const token = await tokenService.creator.create({

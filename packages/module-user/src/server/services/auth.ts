@@ -13,7 +13,7 @@ import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { tokenService } from './token';
 
 @serverModule.useApi(loginApi)
-export class LoginService extends ApiService<typeof loginApi> {
+export class LoginApiService extends ApiService<typeof loginApi> {
   async handle(request: InferApiRequest<typeof loginApi>) {
     const identity = await this.dataSource
       .getRepository(PasswordIdentity)
@@ -57,7 +57,7 @@ export class LoginService extends ApiService<typeof loginApi> {
 }
 
 @serverModule.useApi(logoutApi)
-export class LogoutService extends AuthApiService<typeof logoutApi> {
+export class LogoutApiService extends AuthApiService<typeof logoutApi> {
   async handle(request: InferAuthApiRequest<typeof logoutApi>) {
     await this.dataSource
       .getRepository(UserAccessToken)
@@ -67,7 +67,7 @@ export class LogoutService extends AuthApiService<typeof logoutApi> {
 }
 
 @serverModule.useApi(resetPasswordApi)
-export class ResetPasswordService extends AuthApiService<
+export class ResetPasswordApiService extends AuthApiService<
   typeof resetPasswordApi
 > {
   async handle(request: InferAuthApiRequest<typeof resetPasswordApi>) {

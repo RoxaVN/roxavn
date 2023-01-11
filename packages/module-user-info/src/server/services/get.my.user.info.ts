@@ -8,7 +8,7 @@ import { UserInfo } from '../entities';
 import { serverModule } from '../module';
 
 @serverModule.useApi(getMyUserInfoApi)
-export class GetMyUserInfoService extends AuthApiService<
+export class GetMyUserInfoApiService extends AuthApiService<
   typeof getMyUserInfoApi
 > {
   async handle(request: InferAuthApiRequest<typeof getMyUserInfoApi>) {

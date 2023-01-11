@@ -8,7 +8,7 @@ import { UserFile } from '../entities';
 import { serverModule } from '../module';
 
 @serverModule.useApi(getUserFilesApi)
-export class GetUserFilesService extends AuthApiService<
+export class GetUserFilesApiService extends AuthApiService<
   typeof getUserFilesApi
 > {
   async handle(request: InferAuthApiRequest<typeof getUserFilesApi>) {
