@@ -21,6 +21,10 @@ export const Permissions = {
     value: 'setting.read',
     allowedScopes: [Scopes.Module],
   },
+  ReadUsersInfo: {
+    value: 'users.info.read',
+    allowedScopes: [Scopes.Module],
+  },
 };
 
 export const Roles = {
