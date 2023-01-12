@@ -11,7 +11,15 @@ export class GetUserRolesApiService extends ApiService<typeof getUserRolesApi> {
   async handle(request: InferApiRequest<typeof getUserRolesApi>) {
     const items = await this.dataSource.getRepository(UserRole).find({
       relations: { role: true },
-      select: { role: {} },
+      select: {
+        scopeId: true,
+        role: {
+          id: true,
+          name: true,
+          permissions: true,
+          scope: true,
+        },
+      },
       where: {
         ownerId: request.userId,
         scopeId: request.scopeId,

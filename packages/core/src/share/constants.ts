@@ -3,7 +3,7 @@
  */
 export const constants = {
   API_BASE_PATH: '__api',
-  META: 'meta',
+  META_I18N_NAMESPACE: 'meta',
 
   ENV_PRODUCTION: 'production',
   ENV_DEVELOPMENT: 'development',

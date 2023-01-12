@@ -324,7 +324,7 @@ export const NotContains = (
 };
 
 export const IsAlpha = (
-  locale?: string,
+  locale?: validator.AlphaLocale,
   validationOptions?: ValidationOptions
 ): PropertyDecorator => {
   return _IsAlpha(locale, {
@@ -334,7 +334,7 @@ export const IsAlpha = (
 };
 
 export const IsAlphanumeric = (
-  locale?: string,
+  locale?: validator.AlphaLocale,
   validationOptions?: ValidationOptions
 ): PropertyDecorator => {
   return _IsAlphanumeric(locale, {

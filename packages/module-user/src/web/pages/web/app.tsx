@@ -13,16 +13,20 @@ import {
   Navbar,
   Header,
   Footer,
-  Text,
   MediaQuery,
   Burger,
   useMantineTheme,
   NavLink,
   Group,
   Loader,
+  Button,
 } from '@mantine/core';
-import { IconChevronRight } from '@tabler/icons';
-import { MenuItem, WebModule } from '@roxavn/core/web';
+import { IconChevronRight, IconApps } from '@tabler/icons';
+import {
+  MenuItem,
+  WebModule,
+  webModule as coreWebModule,
+} from '@roxavn/core/web';
 
 import { IsAuthenticated } from '../../components';
 import { WebRoutes } from '../../../share';
@@ -33,6 +37,7 @@ function WebComponent() {
   const [opened, setOpened] = useState(false);
   const [webModule, setWebModule] = useState<WebModule>();
   const { t } = useTranslation(webModule && webModule.escapedName);
+  const tCore = coreWebModule.useTranslation().t;
 
   const renderMenuItems = (_menuItems: MenuItem[]) =>
     _menuItems.map((menuItem, index) => {
@@ -99,7 +104,14 @@ function WebComponent() {
               />
             </MediaQuery>
 
-            <Text>Application header</Text>
+            <Button
+              component={Link}
+              to="/web/app"
+              variant="subtle"
+              leftIcon={<IconApps size={20} />}
+            >
+              {tCore('apps')}
+            </Button>
           </div>
         </Header>
       }

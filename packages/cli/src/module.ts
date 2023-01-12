@@ -48,7 +48,7 @@ class ModuleService {
       const srcFile = path.join(localesPath, file);
       const targetFile = path.join(
         '.web/public/static',
-        constants.META,
+        constants.META_I18N_NAMESPACE,
         'locales',
         file
       );
