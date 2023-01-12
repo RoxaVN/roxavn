@@ -17,7 +17,7 @@ export class GetUserRolesApiService extends AuthApiService<
       relations: { role: true },
       select: { role: {} },
       where: {
-        ownerId: request.user.id,
+        ownerId: request.userId,
         scopeId: request.scopeId,
         role: request.scopes?.length
           ? {
