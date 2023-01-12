@@ -12,6 +12,7 @@ import { Type } from 'class-transformer';
 
 import { RoleResponse } from '../interfaces';
 import { baseModule } from '../module';
+import { Permissions } from '../permissions';
 
 class GetUserRolesRequest extends ExactProps<GetUserRolesRequest> {
   @Min(1)
@@ -36,4 +37,5 @@ export const getUserRolesApi: Api<
   method: 'GET',
   path: '/user-roles',
   validator: GetUserRolesRequest,
+  permission: Permissions.ReadUserRoles,
 });

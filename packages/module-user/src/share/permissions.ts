@@ -21,6 +21,10 @@ export const Permissions = {
     value: 'user.read',
     allowedScopes: [Scopes.Module],
   },
+  ReadUserRoles: {
+    value: 'user.roles.read',
+    allowedScopes: [Scopes.Module],
+  },
   ManageUserModuleRoles: {
     value: 'user.module-role.manage',
     allowedScopes: [Scopes.Module],
