@@ -10,7 +10,7 @@ import { baseModule } from './module';
 
 export const Scopes = {
   Module: {
-    type: baseModule.escapedName,
+    type: baseModule.name,
     hasId: false,
   },
 };
