@@ -7,6 +7,7 @@
   "workspaces": [
     "packages/cli",
     "packages/core",
+    "packages/module-installer",
     "packages/module-upload",
     "packages/module-user",
     "packages/module-user-info",
