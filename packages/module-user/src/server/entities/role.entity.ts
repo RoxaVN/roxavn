@@ -2,19 +2,19 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from './user-role.entity';
 
 @Entity()
+@Unique(['scope', 'name'])
 export class Role {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Index()
   @Column()
   scope: string;
 
