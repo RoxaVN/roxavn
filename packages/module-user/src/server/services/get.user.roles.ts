@@ -1,11 +1,8 @@
-import {
-  AuthApiService,
-  InferAuthApiRequest,
-} from '@roxavn/module-user/server';
 import { In } from 'typeorm';
 
 import { getUserRolesApi } from '../../share';
 import { UserRole } from '../entities';
+import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { serverModule } from '../module';
 
 @serverModule.useApi(getUserRolesApi)
