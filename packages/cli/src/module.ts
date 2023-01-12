@@ -22,6 +22,7 @@ class ModuleService {
       this.syncMetaLoacale(module, staticPath);
     }
     this.addInit(module);
+    console.log('Sync ' + module);
   }
 
   getPackageRootPath(module: string) {

@@ -22,6 +22,7 @@
     "typeorm": "*"
   },
   "exports": {
+    "./hook": "./dist/cjs/hook/index.js",
     "./web": {
       "require": "./dist/cjs/web/index.js",
       "import": "./dist/esm/web/index.js"
@@ -37,6 +38,9 @@
   },
   "typesVersions": {
     "*": {
+      "hook": [
+        "dist/cjs/hook/index.d.ts"
+      ],
       "web": [
         "dist/esm/web/index.d.ts"
       ],
