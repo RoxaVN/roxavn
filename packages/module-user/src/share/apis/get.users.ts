@@ -11,7 +11,7 @@ import {
 } from '@roxavn/core/share';
 
 import { Type, Transform } from 'class-transformer';
-import { User } from '../interfaces';
+import { UserResponse } from '../interfaces';
 import { baseModule } from '../module';
 import { Permissions } from '../permissions';
 
@@ -32,7 +32,7 @@ class GetUsersRequest extends ExactProps<GetUsersRequest> {
   public readonly page = 1;
 }
 
-type GetUsersResponse = PaginatedCollection<User>;
+type GetUsersResponse = PaginatedCollection<UserResponse>;
 
 export const getUsersApi: Api<
   GetUsersRequest,

@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -13,6 +14,7 @@ export class Role {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index()
   @Column()
   scope: string;
 
