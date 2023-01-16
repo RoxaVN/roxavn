@@ -15,7 +15,7 @@ import { tokenService } from './token';
 @serverModule.useApi(loginApi)
 export class LoginApiService extends ApiService<typeof loginApi> {
   async handle(request: InferApiRequest<typeof loginApi>) {
-    const identity = await this.dataSource
+    const identity = await this.dbSession
       .getRepository(PasswordIdentity)
       .findOne({
         select: ['id', 'ownerId', 'password'],
@@ -48,7 +48,7 @@ export class LoginApiService extends ApiService<typeof loginApi> {
     accessToken.identityId = identity.id;
     accessToken.token = signature;
     accessToken.expiredDate = expiredAt;
-    this.dataSource.getRepository(UserAccessToken).save(accessToken);
+    this.dbSession.getRepository(UserAccessToken).save(accessToken);
 
     return {
       accessToken: tokenFinal,
@@ -59,7 +59,7 @@ export class LoginApiService extends ApiService<typeof loginApi> {
 @serverModule.useApi(logoutApi)
 export class LogoutApiService extends AuthApiService<typeof logoutApi> {
   async handle(request: InferAuthApiRequest<typeof logoutApi>) {
-    await this.dataSource
+    await this.dbSession
       .getRepository(UserAccessToken)
       .delete({ id: request.accessToken.id });
     return {};
@@ -71,7 +71,7 @@ export class ResetPasswordApiService extends AuthApiService<
   typeof resetPasswordApi
 > {
   async handle(request: InferAuthApiRequest<typeof resetPasswordApi>) {
-    const identity = await this.dataSource
+    const identity = await this.dbSession
       .getRepository(PasswordIdentity)
       .findOne({
         select: ['id', 'metadata'],
@@ -99,7 +99,7 @@ export class ResetPasswordApiService extends AuthApiService<
 
     identity.password = passwordHash;
     identity.metadata = null;
-    this.dataSource.getRepository(PasswordIdentity).save(identity);
+    this.dbSession.getRepository(PasswordIdentity).save(identity);
 
     return {};
   }

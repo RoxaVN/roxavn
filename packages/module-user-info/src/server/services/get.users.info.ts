@@ -15,7 +15,7 @@ export class GetUsersInfoApiService extends AuthApiService<
     const page = request.page || 1;
     const pageSize = 10;
 
-    const [users, totalItems] = await this.dataSource
+    const [users, totalItems] = await this.dbSession
       .getRepository(UserInfo)
       .findAndCount({
         order: { id: 'desc' },

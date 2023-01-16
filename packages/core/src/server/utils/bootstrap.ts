@@ -11,7 +11,7 @@ export async function bootstrap(app: Express) {
     app.use((error: any, req: Request, resp: Response, next: NextFunction) =>
       handler(
         error,
-        { req, resp, dataSource: databaseManager.dataSource },
+        { req, resp, dbSession: resp.locals.$queryRunner.manager },
         next
       )?.catch(next)
     );

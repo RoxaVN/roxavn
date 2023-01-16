@@ -1,13 +1,13 @@
-import { DataSource } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { Api, InferApiRequest, InferApiResponse } from '../share';
 
 export abstract class BaseService<Request, Response> {
-  constructor(public dataSource: DataSource) {}
+  constructor(public dbSession: EntityManager) {}
 
   abstract handle(request: Request): Promise<Response> | Response;
 
   create<Req, Resp>(classType: new (...args: any[]) => BaseService<Req, Resp>) {
-    return new classType(this.dataSource);
+    return new classType(this.dbSession);
   }
 }
 

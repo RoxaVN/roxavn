@@ -6,7 +6,7 @@ import { File, UserFile } from '../entities';
 import { serverModule } from '../module';
 import { seaweedClient } from './seaweed';
 
-serverModule.useRawApi(uploadFileApi, (_, { req, dataSource, resp }) => {
+serverModule.useRawApi(uploadFileApi, (_, { req, dbSession, resp }) => {
   return new Promise<InferApiResponse<typeof uploadFileApi>>(
     (resolve, reject) => {
       const bb = busboy({ headers: req.headers });
@@ -17,41 +17,39 @@ serverModule.useRawApi(uploadFileApi, (_, { req, dataSource, resp }) => {
             'utf8'
           );
 
-          await dataSource.transaction(async (manager) => {
-            const ownerId = resp.locals.user.id;
-            let userFile = await manager
-              .getRepository(UserFile)
-              .findOne({ where: { ownerId: ownerId } });
-            if (!userFile) {
-              userFile = new UserFile();
-              userFile.ownerId = ownerId;
-            }
-            userFile.currentStorageSize += result.size;
-            if (
-              userFile.maxStorageSize &&
-              userFile.currentStorageSize > userFile.maxStorageSize
-            ) {
-              return reject(
-                new ExceedsStorageLimitException(userFile.maxStorageSize)
-              );
-            }
-            await manager.save(userFile);
+          const ownerId = resp.locals.user.id;
+          let userFile = await dbSession
+            .getRepository(UserFile)
+            .findOne({ where: { ownerId: ownerId } });
+          if (!userFile) {
+            userFile = new UserFile();
+            userFile.ownerId = ownerId;
+          }
+          userFile.currentStorageSize += result.size;
+          if (
+            userFile.maxStorageSize &&
+            userFile.currentStorageSize > userFile.maxStorageSize
+          ) {
+            return reject(
+              new ExceedsStorageLimitException(userFile.maxStorageSize)
+            );
+          }
+          await dbSession.save(userFile);
 
-            const file = new File();
-            file.id = result.fid;
-            file.size = result.size;
-            file.etag = result.eTag;
-            file.name = fileName;
-            file.ownerId = ownerId;
-            file.mime = info.mimeType;
-            await manager.save(file);
+          const file = new File();
+          file.id = result.fid;
+          file.size = result.size;
+          file.etag = result.eTag;
+          file.name = fileName;
+          file.ownerId = ownerId;
+          file.mime = info.mimeType;
+          await dbSession.save(file);
 
-            resolve({
-              id: result.fid,
-              mime: info.mimeType,
-              url: result.url,
-              name: fileName,
-            });
+          resolve({
+            id: result.fid,
+            mime: info.mimeType,
+            url: result.url,
+            name: fileName,
           });
         } catch (e) {
           reject(new ServerException());

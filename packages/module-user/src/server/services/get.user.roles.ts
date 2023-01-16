@@ -9,7 +9,7 @@ import { serverModule } from '../module';
 @serverModule.useApi(getUserRolesApi)
 export class GetUserRolesApiService extends ApiService<typeof getUserRolesApi> {
   async handle(request: InferApiRequest<typeof getUserRolesApi>) {
-    const items = await this.dataSource.getRepository(UserRole).find({
+    const items = await this.dbSession.getRepository(UserRole).find({
       relations: { role: true },
       select: {
         scopeId: true,

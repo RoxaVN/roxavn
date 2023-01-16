@@ -17,7 +17,7 @@ export class UpdateSettingService extends BaseService<
     setting.module = request.module;
     setting.name = request.name;
     setting.metadata = request.metadata;
-    await this.dataSource.getRepository(Setting).save(setting);
+    await this.dbSession.getRepository(Setting).save(setting);
     return {};
   }
 }
@@ -27,7 +27,7 @@ export class GetModuleSettingService extends BaseService<
   GetModuleSettingResponse
 > {
   async handle(request: GetModuleSettingRequest) {
-    const items = await this.dataSource.getRepository(Setting).find({
+    const items = await this.dbSession.getRepository(Setting).find({
       where: { module: request.module, name: request.name },
     });
     return { items };

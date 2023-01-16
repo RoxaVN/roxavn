@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { Request, Response, Router, NextFunction } from 'express';
-import { DataSource } from 'typeorm';
+import { EntityManager, QueryRunner } from 'typeorm';
 import {
   Api,
   ApiRequest,
@@ -19,7 +19,7 @@ import { ApiService } from './service';
 export type MiddlerwareContext = {
   req: Request;
   resp: Response;
-  dataSource: DataSource;
+  dbSession: EntityManager;
 };
 
 export type ApiMiddlerware = (
@@ -45,12 +45,19 @@ export class ServerModule extends BaseModule {
   ) {
     ServerModule.apiRouter[api.method.toLowerCase()](
       api.path,
+      async function (req: Request, resp: Response, next: NextFunction) {
+        const queryRunner = databaseManager.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        resp.locals.$queryRunner = queryRunner;
+        next();
+      },
       ...ServerModule.apiMiddlerwares.map(
         (middleware) =>
           function (req: Request, resp: Response, next: NextFunction) {
             middleware(
               api,
-              { req, resp, dataSource: databaseManager.dataSource },
+              { req, resp, dbSession: resp.locals.$queryRunner.manager },
               next
             )?.catch((e) => {
               console.error(e);
@@ -59,16 +66,21 @@ export class ServerModule extends BaseModule {
           }
       ),
       async function (req: Request, resp: Response, next: NextFunction) {
+        const queryRunner: QueryRunner = resp.locals.$queryRunner;
         try {
           const result = await handler(resp.locals as Req, {
             req,
             resp,
-            dataSource: databaseManager.dataSource,
+            dbSession: queryRunner.manager,
           });
+          await queryRunner.commitTransaction();
           resp.status(200).json({ code: 200, data: result } as FullApiResponse);
         } catch (e) {
           console.error(e);
+          await queryRunner.rollbackTransaction();
           next(e);
+        } finally {
+          await queryRunner.release();
         }
       }
     );
@@ -80,8 +92,8 @@ export class ServerModule extends BaseModule {
     return (
       serviceClass: new (...args: any[]) => ApiService<Api<Req, Resp>>
     ) => {
-      this.useRawApi(api, async (req, { dataSource }) => {
-        const service = new serviceClass(dataSource);
+      this.useRawApi(api, async (req, { dbSession }) => {
+        const service = new serviceClass(dbSession);
         return service.handle(req);
       });
     };
@@ -93,11 +105,16 @@ export class ServerModule extends BaseModule {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-ServerModule.errorMiddlerwares.push((error, context, next) => {
+ServerModule.errorMiddlerwares.push(async (error, { resp }, next) => {
   if (!error.code || !error.toJson) {
     error = new ServerException();
   }
-  context.resp
+  const queryRunner: QueryRunner = resp.locals.$queryRunner;
+  if (!queryRunner.isReleased) {
+    await queryRunner.rollbackTransaction();
+    await queryRunner.release();
+  }
+  resp
     .status(error.code)
     .json({ code: error.code, error: error.toJson() } as FullApiResponse);
 });

@@ -16,7 +16,7 @@ import { Env } from '../config';
 @serverModule.useApi(getMyUserApi)
 export class GetMyUserApiService extends AuthApiService<typeof getMyUserApi> {
   async handle(request: InferAuthApiRequest<typeof getMyUserApi>) {
-    const user = await this.dataSource.getRepository(User).findOne({
+    const user = await this.dbSession.getRepository(User).findOne({
       where: { id: request.user.id },
     });
 
@@ -34,7 +34,7 @@ export class GetUsersApiService extends AuthApiService<typeof getUsersApi> {
     const page = request.page || 1;
     const pageSize = 10;
 
-    const [users, totalItems] = await this.dataSource
+    const [users, totalItems] = await this.dbSession
       .getRepository(User)
       .findAndCount({
         where: QueryUtils.filter(request),
@@ -61,7 +61,7 @@ export class CreateUserApiService extends AuthApiService<typeof createUserApi> {
       const hash = await tokenService.hasher.hash(token);
       const expiredAt = Date.now() + Env.SHORT_TIME_TO_LIVE;
 
-      return await this.dataSource.transaction(async (manager) => {
+      return await this.dbSession.transaction(async (manager) => {
         const identity = new PasswordIdentity();
         identity.metadata = { token: { hash, expiredAt } };
         const user = new User();

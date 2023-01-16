@@ -15,7 +15,7 @@ export class GetUserFilesApiService extends AuthApiService<
     const page = request.page || 1;
     const pageSize = 10;
 
-    const [users, totalItems] = await this.dataSource
+    const [users, totalItems] = await this.dbSession
       .getRepository(UserFile)
       .findAndCount({
         relations: { owner: true },

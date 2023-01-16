@@ -12,7 +12,7 @@ import { UserAccessToken, UserRole } from './entities';
 import { tokenService } from './services';
 
 ServerModule.apiMiddlerwares.push(
-  async (api, { dataSource, resp, req }, next) => {
+  async (api, { dbSession, resp, req }, next) => {
     if (api.auth !== 'NOT_LOGGED') {
       const authorizationHeader = req.get('authorization');
       if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
@@ -38,7 +38,7 @@ ServerModule.apiMiddlerwares.push(
 
       const userId = tokenPart.split('.')[1];
 
-      const accessToken = await dataSource
+      const accessToken = await dbSession
         .getRepository(UserAccessToken)
         .findOne({
           select: ['ownerId', 'id'],
@@ -61,7 +61,7 @@ ServerModule.apiMiddlerwares.push(
           return next(new ForbiddenException());
         }
 
-        const hasRole = await dataSource.getRepository(UserRole).count({
+        const hasRole = await dbSession.getRepository(UserRole).count({
           where: predefinedRoles.map((predefinedRole) => ({
             ownerId: accessToken.ownerId,
             scopeId: predefinedRole.scope.hasId ? req.params.id : '',
