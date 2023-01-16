@@ -25,8 +25,8 @@ export const Permissions = {
     value: 'user.roles.read',
     allowedScopes: [Scopes.Module],
   },
-  ManageUserModuleRoles: {
-    value: 'user.module-role.manage',
+  SetUserRoles: {
+    value: 'user.roles.set',
     allowedScopes: [Scopes.Module],
   },
 };
