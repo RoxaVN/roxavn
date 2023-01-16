@@ -4,8 +4,8 @@ import path from 'path';
 
 import { AppConfig } from '@remix-run/dev';
 import { visitFiles } from '.';
-import { appConfig } from '../app.config';
 import { BaseModule } from '../../share';
+import { moduleManager } from '../module.manager';
 
 type RoutesConfig = Exclude<AppConfig['routes'], undefined>;
 type RouteManifest = Awaited<ReturnType<RoutesConfig>>;
@@ -19,19 +19,17 @@ function isRouteModuleFile(filename: string): boolean {
 }
 
 export function registerApiRoutes() {
-  Object.keys(appConfig.data.modules).map((module) => {
+  moduleManager.modules.map((module) => {
     try {
-      if (module !== '.') {
-        require(module + '/server');
+      if (module.name !== moduleManager.currentModule.name) {
+        require(module.name + '/server');
       }
     } catch (e) {}
   });
 }
 
 export function registerWebRoutes(defineRoutes: DefineRoutes) {
-  // load config data before process change current dir
-  appConfig.currentModule;
-  const modules = Object.keys(appConfig.data.modules);
+  const modules = moduleManager.modules.map((m) => m.name);
   const result: RouteManifest = {};
   const currentDir = process.cwd();
   process.chdir('.web/app');
@@ -48,7 +46,7 @@ function definePageRoutes(
   for (const module of modules) {
     try {
       const pathToModule =
-        module === '.'
+        module === moduleManager.currentModule.name
           ? '../../src/web'
           : path
               .dirname(require.resolve(module + '/web'))
@@ -56,7 +54,7 @@ function definePageRoutes(
       const pagesFolder = path.join(pathToModule, 'pages');
       if (fs.existsSync(pagesFolder)) {
         modulePages.push({
-          name: module === '.' ? appConfig.currentModule : module,
+          name: module,
           path: path.relative('.', pagesFolder),
         });
       }

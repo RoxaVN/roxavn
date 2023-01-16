@@ -1,4 +1,4 @@
-import { appConfig } from '@roxavn/core/server';
+import { moduleManager } from '@roxavn/core/server';
 import {
   AuthApiService,
   GetUserRolesApiService,
@@ -16,9 +16,7 @@ export class GetMyAdminModulesApiService extends AuthApiService<
     const service = this.create(GetUserRolesApiService);
     const result = await service.handle({
       userId: request.user.id,
-      scopes: Object.keys(appConfig.data.modules).map((m) =>
-        m === '.' ? appConfig.currentModule : m
-      ),
+      scopes: moduleManager.modules.map((m) => m.name),
     });
     return { items: result.items.map((i) => ({ name: i.scope })) };
   }

@@ -1,34 +1,24 @@
 import fs from 'fs';
+import fse from 'fs-extra';
 import path from 'path';
 
 /**
- * Gets JSON file content.
- *
- * @param filePath A path to a file.
+ * Gets `package.json` file content of module
  */
-export const getJsonFromFile = (filePath: string): any => {
-  const text = fs.readFileSync(filePath, 'utf8');
-  return JSON.parse(text);
+export const getPackageJson = (module?: string) => {
+  const filePath = module ? getPackageRootPath(module) : '';
+  return fse.readJSONSync(path.join(filePath, 'package.json'));
 };
 
-/**
- * Gets JSON file content.
- *
- * @param filePath A path to a file.
- */
-export const getJsonFromFileAsync = async (filePath: string): Promise<any> => {
-  const text = await fs.promises.readFile(filePath, 'utf8');
-  return JSON.parse(text);
-};
-
-/**
- * Gets `package.json` file content.
- *
- * @param packageDir A package directory.
- */
-export const getPackageJson = (packageDir: string) => {
-  const filePath = path.join(packageDir, 'package.json');
-  return getJsonFromFile(filePath);
+export const getPackageRootPath = (module: string) => {
+  let modulePath = require.resolve(module);
+  while (modulePath.length > 1) {
+    modulePath = path.dirname(modulePath);
+    if (fs.existsSync(path.join(modulePath, 'package.json'))) {
+      return modulePath;
+    }
+  }
+  throw Error("Can't find package.json of module " + module);
 };
 
 export const visitFiles = (

@@ -15,16 +15,16 @@ import {
   FindOperator,
 } from 'typeorm';
 import { constants, ApiFilter } from '../share';
-import { appConfig } from './app.config';
+import { moduleManager } from './module.manager';
 
 class DatabaseManager {
   dataSource!: DataSource;
 
   async createSource() {
-    const modules = Object.keys(appConfig.data.modules);
+    const modules = moduleManager.modules.map((m) => m.name);
     const modelPaths: string[] = [];
     modules.map((module) => {
-      if (module === '.') {
+      if (module === moduleManager.currentModule.name) {
         if (fs.existsSync('./src/server/entities')) {
           modelPaths.push('./src/server/entities/**/*.entity.ts');
         }

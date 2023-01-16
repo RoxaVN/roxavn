@@ -2,17 +2,14 @@ import fs from 'fs';
 import fse from 'fs-extra';
 import path from 'path';
 import { BaseModule, constants } from '@roxavn/core/share';
-import { appConfig, getJsonFromFile } from '@roxavn/core/server';
+import { moduleManager } from '@roxavn/core/server';
 
 import { CodeChanger } from './lib';
 
 class ModuleService {
   sync() {
     this.initWebFolder();
-
-    Object.keys(appConfig.data.modules).map((module) =>
-      this.syncModule(module)
-    );
+    moduleManager.modules.map((module) => this.syncModule(module.name));
   }
 
   syncModule(module: string) {
@@ -37,14 +34,12 @@ class ModuleService {
   }
 
   syncStatic(module: string, staticPath: string) {
-    const moduleName = this.realModuleName(module);
-    this.createStaticLink(BaseModule.escapeName(moduleName), staticPath);
+    this.createStaticLink(BaseModule.escapeName(module), staticPath);
   }
 
   syncMetaLoacale(module: string, staticPath: string) {
     const localesPath = path.join(staticPath, 'locales');
     const files = fs.readdirSync(localesPath);
-    const realModuleName = this.realModuleName(module);
     for (const file of files) {
       const srcFile = path.join(localesPath, file);
       const targetFile = path.join(
@@ -61,7 +56,7 @@ class ModuleService {
       }
       const localesData = fse.readJSONSync(srcFile);
       if (localesData.Meta) {
-        data[realModuleName] = localesData.Meta;
+        data[module] = localesData.Meta;
         fse.writeJSONSync(targetFile, data);
       }
     }
@@ -69,7 +64,7 @@ class ModuleService {
 
   addInit(module: string) {
     const webPath =
-      module === '.'
+      module === moduleManager.currentModule.name
         ? 'src/web'
         : path.dirname(require.resolve(module + '/web'));
     if (
@@ -78,16 +73,15 @@ class ModuleService {
       fs.existsSync(`${webPath}/init.js`) ||
       fs.existsSync(`${webPath}/init.jsx`)
     ) {
-      const moduleName = this.realModuleName(module);
       new CodeChanger(
         '.web/app/init.client.ts',
         '// start block',
         '// end block'
       )
-        .removeLines(moduleName)
+        .removeLines(module)
         .removeLines('../../src/web/init')
         .insertEnd(
-          module === '.'
+          module === moduleManager.currentModule.name
             ? `import '../../src/web/init';`
             : `import '${module}/web/init';`
         )
@@ -112,7 +106,7 @@ class ModuleService {
 
   getStaticPath(moduleName: string): string | null {
     let staticPath: string | null;
-    if (moduleName !== '.') {
+    if (moduleName !== moduleManager.currentModule.name) {
       staticPath = this.getPackageRootPath(moduleName + '/web');
       if (staticPath) {
         staticPath = path.join(staticPath, 'static');
@@ -121,14 +115,6 @@ class ModuleService {
       staticPath = 'static';
     }
     return staticPath ? (fs.existsSync(staticPath) ? staticPath : null) : null;
-  }
-
-  realModuleName(moduleName: string): string {
-    if (moduleName === '.') {
-      const packageInfo = getJsonFromFile('package.json');
-      return packageInfo.name;
-    }
-    return moduleName;
   }
 
   initWebFolder() {

@@ -10,14 +10,17 @@ to: package.json
   },
   "license": "UNLICENSED",
   "author": "",
+  "roxavn": {},
   "devDependencies": {
     "@roxavn/dev-web": "^0.1.0",
     "typescript": "^4.3.5"
   },
   "dependencies": {
+  },
+  "peerDependencies": {
     "@mantine/core": "*",
     "@roxavn/core": "*",
-    "@roxavn/module-user": "*",
+    "@roxavn/module-user": "*"
     "@tabler/icons": "*",
     "react": "*",
     "react-router-dom": "*",
@@ -25,6 +28,7 @@ to: package.json
     "typeorm": "*"
   },
   "exports": {
+    ".": "./dist/cjs/index.js",
     "./web": {
       "require": "./dist/cjs/web/index.js",
       "import": "./dist/esm/web/index.js"

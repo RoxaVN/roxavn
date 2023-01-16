@@ -6,14 +6,15 @@
     "dev": "roxavn dev"
   },
   "license": "UNLICENSED",
-  "author": "",
+  "author": "Roxavn",
+  "roxavn": {},
   "devDependencies": {
     "@roxavn/dev-web": "^0.1.0",
     "typescript": "^4.3.5"
   },
-  "dependencies": {
+  "dependencies": {},
+  "peerDependencies": {
     "@mantine/core": "*",
-    "@mantine/prism": "*",
     "@roxavn/core": "*",
     "@tabler/icons": "*",
     "react": "*",
@@ -22,6 +23,7 @@
     "typeorm": "*"
   },
   "exports": {
+    ".": "./dist/cjs/index.js",
     "./hook": "./dist/cjs/hook/index.js",
     "./web": {
       "require": "./dist/cjs/web/index.js",

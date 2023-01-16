@@ -44,6 +44,7 @@
     "typeorm": "^0.3.10"
   },
   "exports": {
+    ".": "./dist/cjs/index.js",
     "./web": {
       "require": "./dist/cjs/web/index.js",
       "import": "./dist/esm/web/index.js"
