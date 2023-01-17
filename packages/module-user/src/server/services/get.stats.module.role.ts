@@ -1,10 +1,6 @@
-import {
-  AuthApiService,
-  InferAuthApiRequest,
-} from '@roxavn/module-user/server';
-
 import { getStatsModuleRoleApi } from '../../share';
 import { UserRole } from '../entities';
+import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { serverModule } from '../module';
 
 @serverModule.useApi(getStatsModuleRoleApi)
@@ -15,19 +11,25 @@ export class GetStatsModuleRoleApiService extends AuthApiService<
     const page = request.page || 1;
     const pageSize = 10;
 
-    const query = this.dbSession
+    const totalItems = parseInt(
+      (
+        await this.dbSession
+          .createQueryBuilder(UserRole, 'userRole')
+          .select('COUNT(DISTINCT("ownerId"))', 'count')
+          .where('userRole.scopeId = :scopeId', { scopeId: '' })
+          .getRawOne()
+      ).count
+    );
+
+    const users: any = await this.dbSession
       .createQueryBuilder(UserRole, 'userRole')
-      .leftJoinAndSelect('userRole.owner', 'owner')
-      .select('userRole.ownerId')
+      .select('userRole.ownerId', 'ownerId')
       .addSelect('COUNT(userRole.ownerId)', 'rolesCount')
       .where('userRole.scopeId = :scopeId', { scopeId: '' })
-      .groupBy('userRole.ownerId');
-
-    const totalItems = await query.getCount();
-    const users: any = await query
+      .groupBy('userRole.ownerId')
       .limit(pageSize)
       .offset((page - 1) * pageSize)
-      .getMany();
+      .getRawMany();
 
     return {
       items: users,
