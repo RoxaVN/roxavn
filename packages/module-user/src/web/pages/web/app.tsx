@@ -6,6 +6,7 @@ import {
   Outlet,
   useLocation,
   resolvePath,
+  matchPath,
   Link,
 } from 'react-router-dom';
 import {
@@ -31,6 +32,8 @@ import {
 import { IsAuthenticated } from '../../components';
 import { WebRoutes } from '../../../share';
 
+const BASE = '/web/app';
+
 function WebComponent() {
   const location = useLocation();
   const theme = useMantineTheme();
@@ -39,7 +42,7 @@ function WebComponent() {
   const { t } = useTranslation(webModule && webModule.escapedName);
   const tCore = coreWebModule.useTranslation().t;
 
-  const renderMenuItems = (_menuItems: MenuItem[]) =>
+  const renderMenuItems = (_menuItems: MenuItem[], module: WebModule) =>
     _menuItems.map((menuItem, index) => {
       const props: any = {
         key: index + 1,
@@ -53,8 +56,20 @@ function WebComponent() {
       if (menuItem.children) {
         props.rightSection = <IconChevronRight size={14} stroke={1.5} />;
       } else if (typeof menuItem.path === 'string') {
-        props.component = Link;
-        props.to = resolvePath(menuItem.path, location.pathname);
+        if (menuItem.path.startsWith('/')) {
+          const path = resolvePath(module.escapedName + menuItem.path, BASE);
+          if (matchPath(path.pathname, location.pathname)) {
+            props.variant = 'filled';
+            props.active = true;
+          } else {
+            props.component = Link;
+            props.to = path;
+          }
+        } else {
+          throw Error(
+            'Path must start with / in menu ' + JSON.stringify(menuItem)
+          );
+        }
       } else {
         throw Error(
           'Must define path or children in menu ' + JSON.stringify(menuItem)
@@ -81,7 +96,7 @@ function WebComponent() {
           hidden={!opened}
           width={{ sm: 200, lg: 300 }}
         >
-          {webModule && renderMenuItems(webModule.appMenu)}
+          {webModule && renderMenuItems(webModule.appMenu, webModule)}
         </Navbar>
       }
       footer={
@@ -106,7 +121,7 @@ function WebComponent() {
 
             <Button
               component={Link}
-              to="/web/app"
+              to={BASE}
               variant="subtle"
               leftIcon={<IconApps size={20} />}
             >

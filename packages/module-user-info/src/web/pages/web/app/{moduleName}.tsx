@@ -14,7 +14,7 @@ webModule.appMenu.push(
           {(t) => t('settings')}
         </Translation>
       ),
-      path: 'settings',
+      path: '/settings',
       icon: IconSettings,
     },
   ] as MenuItem[])

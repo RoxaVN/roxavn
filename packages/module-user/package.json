@@ -15,6 +15,7 @@
   "dependencies": {},
   "peerDependencies": {
     "@mantine/core": "*",
+    "@remix-run/react": "*",
     "@roxavn/core": "*",
     "@tabler/icons": "*",
     "react": "*",

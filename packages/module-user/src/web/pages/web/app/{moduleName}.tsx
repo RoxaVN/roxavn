@@ -9,12 +9,12 @@ webModule.appMenu.push(
   ...([
     {
       label: (t) => t('userList'),
-      path: '',
+      path: '/',
       icon: IconUsers,
     },
     {
       label: (t) => t('roles'),
-      path: 'user-roles',
+      path: '/user-roles',
       icon: IconShieldChevron,
     },
   ] as MenuItem[])

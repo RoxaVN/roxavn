@@ -9,7 +9,7 @@ webModule.appMenu.push(
   ...([
     {
       label: (t) => t('userFiles'),
-      path: '',
+      path: '/',
       icon: IconUsers,
     },
   ] as MenuItem[])

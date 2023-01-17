@@ -9,6 +9,7 @@ const Page = () => {
   return (
     <ApiTable
       api={getStatsModuleRoleApi}
+      rowKey="ownerId"
       columns={{
         ownerId: { label: tCore('ownerId') },
         rolesCount: { label: t('roles') },
