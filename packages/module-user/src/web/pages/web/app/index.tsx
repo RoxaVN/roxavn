@@ -4,8 +4,7 @@ import { ApiForm, WebModule } from '@roxavn/core/web';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useOutletContext } from 'react-router-dom';
-
-import { getMyAdminModulesApi } from '../../../../share';
+import { getMyModuleRolesApi } from '../../../../share';
 
 export const Page = () => {
   const { t } = useTranslation(constants.META_I18N_NAMESPACE);
@@ -18,7 +17,7 @@ export const Page = () => {
   return (
     <ApiForm
       fetchOnMount
-      api={getMyAdminModulesApi}
+      api={getMyModuleRolesApi}
       dataRender={({ data }) =>
         data && (
           <SimpleGrid
@@ -30,18 +29,18 @@ export const Page = () => {
             ]}
           >
             {data.items.map((item) => (
-              <Card key={item.name}>
+              <Card key={item.id}>
                 <Card.Section>
-                  <Link to={BaseModule.escapeName(item.name)}>
+                  <Link to={BaseModule.escapeName(item.scope)}>
                     <Image
-                      src={WebModule.resolveStaticPath(item.name, '/icon.svg')}
+                      src={WebModule.resolveStaticPath(item.scope, '/icon.svg')}
                       height={160}
-                      alt={item.name}
+                      alt={item.scope}
                     />
                   </Link>
                 </Card.Section>
                 <Text weight={500} mt="md" align="center">
-                  {t(item.name + '.name')}
+                  {t(item.scope + '.name')}
                 </Text>
               </Card>
             ))}
