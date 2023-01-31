@@ -1,19 +1,21 @@
 import { useTranslation, TFunction } from 'react-i18next';
-import { baseModule, BaseModule } from '../../share';
+import { Api, baseModule, BaseModule } from '../../share';
 
-export interface MenuItem {
+export interface PageItem {
   label: React.ReactNode | { (t: TFunction): React.ReactNode };
-  path?: string;
   description?: React.ReactNode;
   icon?: React.ComponentType<{
     size?: number | string;
     stroke?: number | string;
   }>;
-  children?: Array<MenuItem>;
+  path?: string;
+  element?: React.ReactElement<{ api?: Api }>;
+  children?: Array<PageItem>;
 }
 
 export class WebModule extends BaseModule {
-  readonly appMenu: Array<MenuItem> = [];
+  readonly adminPages: Array<PageItem> = [];
+  readonly mePages: Array<PageItem> = [];
 
   resolveStaticPath(path: string) {
     return WebModule.resolveStaticPath(this.name, path);

@@ -23,7 +23,7 @@ export type ApiTableColumns<T> = {
 };
 
 interface TableHeaderAction<Request extends ApiPaginationRequest> {
-  label: string;
+  label: React.ReactNode;
   icon?: React.ComponentType<{
     size?: number | string;
     stroke?: number | string;
@@ -115,9 +115,9 @@ export const ApiTable = <
               <Text fz="lg">{header}</Text>
               <Group>
                 {renderFilterButton()}
-                {headerActions?.map((c) => (
+                {headerActions?.map((c, index) => (
                   <Button
-                    key={c.label}
+                    key={index}
                     variant="outline"
                     leftIcon={c.icon && <c.icon size={16} />}
                     onClick={() => c.onClick(ref)}
@@ -149,11 +149,11 @@ export const ApiTable = <
                     {cellActions && (
                       <td>
                         <Group>
-                          {cellActions.map((c) => (
+                          {cellActions.map((c, index) => (
                             <Button
                               compact
                               variant="subtle"
-                              key={c.label}
+                              key={index}
                               leftIcon={c.icon && <c.icon size={16} />}
                               onClick={() => c.onClick(item, ref)}
                             >

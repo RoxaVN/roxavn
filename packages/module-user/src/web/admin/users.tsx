@@ -8,16 +8,17 @@ import {
   utils,
   DatePicker,
 } from '@roxavn/core/web';
-import { IconPlus } from '@tabler/icons';
+import { IconPlus, IconUsers } from '@tabler/icons';
 
-import { createUserApi, getUsersApi, WebRoutes } from '../../../../../share';
-import { webModule } from '../../../../module';
+import { createUserApi, getUsersApi, WebRoutes } from '../../share';
+import { webModule } from '../module';
 
-const IndexPage = () => {
+const Page = ({ api }: { api: typeof getUsersApi }) => {
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
   return (
     <ApiTable
+      api={api}
       header={t('userList')}
       headerActions={[
         {
@@ -41,7 +42,9 @@ const IndexPage = () => {
                   uiManager.alertDialog(
                     <div>
                       <p>
-                        {t('sendResetPasswordLink', { name: params.username })}
+                        {t('sendResetPasswordLink', {
+                          name: params.username,
+                        })}
                       </p>
                       <Prism
                         language="markdown"
@@ -58,7 +61,6 @@ const IndexPage = () => {
             ),
         },
       ]}
-      api={getUsersApi}
       columns={{
         username: {
           label: t('username'),
@@ -79,4 +81,9 @@ const IndexPage = () => {
   );
 };
 
-export default IndexPage;
+webModule.adminPages.push({
+  label: (t) => t('userList'),
+  path: '/',
+  icon: IconUsers,
+  element: <Page api={getUsersApi} />,
+});

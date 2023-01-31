@@ -24,7 +24,7 @@ import {
 } from '@mantine/core';
 import { IconChevronRight, IconApps } from '@tabler/icons';
 import {
-  MenuItem,
+  PageItem,
   WebModule,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
@@ -32,9 +32,9 @@ import {
 import { IsAuthenticated } from '../../components';
 import { WebRoutes } from '../../../share';
 
-const BASE = '/web/app';
+const BASE = '/admin/app';
 
-function WebComponent() {
+function AdminComponent() {
   const location = useLocation();
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
@@ -42,22 +42,22 @@ function WebComponent() {
   const { t } = useTranslation(webModule && webModule.escapedName);
   const tCore = coreWebModule.useTranslation().t;
 
-  const renderMenuItems = (_menuItems: MenuItem[], module: WebModule) =>
-    _menuItems.map((menuItem, index) => {
+  const renderMenuItems = (_pageItems: PageItem[], module: WebModule) =>
+    _pageItems.map((pageItem, index) => {
       const props: any = {
         key: index + 1,
         label:
-          typeof menuItem.label === 'function'
-            ? menuItem.label(t)
-            : menuItem.label,
-        description: menuItem.description,
-        icon: menuItem.icon && <menuItem.icon size={16} stroke={1.5} />,
+          typeof pageItem.label === 'function'
+            ? pageItem.label(t)
+            : pageItem.label,
+        description: pageItem.description,
+        icon: pageItem.icon && <pageItem.icon size={16} stroke={1.5} />,
       };
-      if (menuItem.children) {
+      if (pageItem.children) {
         props.rightSection = <IconChevronRight size={14} stroke={1.5} />;
-      } else if (typeof menuItem.path === 'string') {
-        if (menuItem.path.startsWith('/')) {
-          const path = resolvePath(module.escapedName + menuItem.path, BASE);
+      } else if (typeof pageItem.path === 'string') {
+        if (pageItem.path.startsWith('/')) {
+          const path = resolvePath(module.escapedName + pageItem.path, BASE);
           if (matchPath(path.pathname, location.pathname)) {
             props.variant = 'filled';
             props.active = true;
@@ -67,12 +67,12 @@ function WebComponent() {
           }
         } else {
           throw Error(
-            'Path must start with / in menu ' + JSON.stringify(menuItem)
+            'Path must start with / in menu ' + JSON.stringify(pageItem)
           );
         }
       } else {
         throw Error(
-          'Must define path or children in menu ' + JSON.stringify(menuItem)
+          'Must define path or children in menu ' + JSON.stringify(pageItem)
         );
       }
       return <NavLink {...props} />;
@@ -96,7 +96,7 @@ function WebComponent() {
           hidden={!opened}
           width={{ sm: 200, lg: 300 }}
         >
-          {webModule && renderMenuItems(webModule.appMenu, webModule)}
+          {webModule && renderMenuItems(webModule.adminPages, webModule)}
         </Navbar>
       }
       footer={
@@ -136,14 +136,14 @@ function WebComponent() {
   );
 }
 
-const WebPage = () => (
+const AdminPage = () => (
   <IsAuthenticated
     loadingComponent={
       <Group position="center" align="center" sx={{ height: '100vh' }}>
         <Loader />
       </Group>
     }
-    userComponent={<WebComponent />}
+    userComponent={<AdminComponent />}
     guestComponent={<Navigate to={WebRoutes.Login.path} />}
   />
 );
@@ -152,4 +152,4 @@ export const meta: MetaFunction = () => ({
   title: 'Web Erp',
 });
 
-export default WebPage;
+export default AdminPage;
