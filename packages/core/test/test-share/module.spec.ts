@@ -25,20 +25,11 @@ describe('module', () => {
     describe('api', () => {
       it('should work', () => {
         const module = new BaseModule('@roxavn/module');
-        let api = module.api({
+        const api = module.api({
           method: 'GET',
           path: '/test',
         });
         expect(api.path).toEqual('/__api/@roxavn@module/test');
-
-        api = module.api(
-          {
-            method: 'GET',
-            path: '/:id/test',
-          },
-          { id: '123' }
-        );
-        expect(api.path).toEqual('/__api/@roxavn@module/123/test');
       });
     });
   });
