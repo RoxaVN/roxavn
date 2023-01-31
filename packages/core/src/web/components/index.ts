@@ -6,3 +6,4 @@ export * from './Buttons';
 export * from './ApiTable';
 export * from './ApiFilter';
 export * from './DatePicker';
+export * from './ApiPermission';
