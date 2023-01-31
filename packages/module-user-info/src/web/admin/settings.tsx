@@ -1,26 +1,31 @@
 import { MultiSelect } from '@mantine/core';
-import { ApiFormGroup } from '@roxavn/core/web';
+import {
+  ApiFormGroup,
+  ModuleT,
+  webModule as coreWebModule,
+} from '@roxavn/core/web';
 import { ModuleSettings } from '@roxavn/module-utils/web';
+import { IconSettings } from '@tabler/icons';
 
 import {
   getSettingsApi,
   setFieldsForAdminToUpdateApi,
   setFieldsForUserToUpdateApi,
   settingConstant,
-} from '../../../../../share';
-import { webModule } from '../../../../module';
+} from '../../share';
+import { webModule } from '../module';
 
 const fields = settingConstant.userInfoFields.map((v) => ({
   value: v,
   label: v,
 }));
 
-const Page = () => {
+const Page = ({ api }: { api: typeof getSettingsApi }) => {
   const { t } = webModule.useTranslation();
 
   return (
     <ModuleSettings
-      getListApi={getSettingsApi}
+      getListApi={api}
       forms={{
         [settingConstant.fieldsForUserToUpdate]: {
           title: t('fieldsForUserToUpdateTitle'),
@@ -49,4 +54,9 @@ const Page = () => {
   );
 };
 
-export default Page;
+webModule.adminPages.push({
+  label: <ModuleT module={coreWebModule} k="settings" />,
+  icon: IconSettings,
+  path: '/settings',
+  element: <Page api={getSettingsApi} />,
+});

@@ -14,9 +14,12 @@ import {
 import { serverModule } from '../module';
 
 @serverModule.useApi(getSettingsApi)
-export class GetSettingsApiService extends GetModuleSettingService {
+export class GetSettingsApiService extends ApiService<typeof getSettingsApi> {
   handle(request: InferApiRequest<typeof getSettingsApi>) {
-    return super.handle({ ...request, module: serverModule.name });
+    return this.create(GetModuleSettingService).handle({
+      ...request,
+      module: serverModule.name,
+    });
   }
 }
 
