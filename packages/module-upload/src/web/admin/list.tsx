@@ -1,14 +1,15 @@
 import { ApiTable, webModule as coreWebModule, utils } from '@roxavn/core/web';
+import { IconUsers } from '@tabler/icons';
 
-import { getUserFilesApi } from '../../../../../share';
-import { webModule } from '../../../../module';
+import { getUserFilesApi } from '../../share';
+import { webModule } from '../module';
 
-const IndexPage = () => {
+const Page = ({ api }: { api: typeof getUserFilesApi }) => {
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
   return (
     <ApiTable
-      api={getUserFilesApi}
+      api={api}
       rowKey="ownerId"
       columns={{
         ownerId: { label: tCore('ownerId') },
@@ -24,4 +25,9 @@ const IndexPage = () => {
   );
 };
 
-export default IndexPage;
+webModule.adminPages.push({
+  label: (t) => t('userFiles'),
+  path: '/',
+  icon: IconUsers,
+  element: <Page api={getUserFilesApi} />,
+});
