@@ -10,3 +10,4 @@ export * from './get.my.user';
 export * from './get.user.roles';
 export * from './get.stats.module.role';
 export * from './get.my.module.roles';
+export * from './get.module.roles';

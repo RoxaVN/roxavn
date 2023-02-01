@@ -69,7 +69,7 @@ export class QueryUtils {
         MoreThanOrEqual(value),
     };
 
-  static filter(request: Record<string, any>) {
+  static filter(request: Record<string, any>): Record<string, any> {
     const result = {};
     Object.entries(request).map(([key, value]) => {
       if (value instanceof ApiFilter && value.mode) {

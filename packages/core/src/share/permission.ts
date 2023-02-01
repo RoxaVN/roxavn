@@ -36,6 +36,10 @@ class ScopeManager {
     });
   }
 
+  public getScopes() {
+    return [...this.scopes];
+  }
+
   public getScopeTypes(): string[] {
     return this.scopes.map((scope) => {
       return scope.type;
