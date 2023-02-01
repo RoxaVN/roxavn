@@ -1,4 +1,4 @@
-import { TextInput } from '@mantine/core';
+import { Badge, Group, TextInput } from '@mantine/core';
 import { ApiTable, webModule as coreWebModule } from '@roxavn/core/web';
 import { IconCrown } from '@tabler/icons';
 
@@ -20,7 +20,13 @@ const Page = ({ api }: { api: typeof getModuleRolesApi }) => {
         name: { label: t('roleName') },
         permissions: {
           label: t('permissions'),
-          render: (value) => value.join(', '),
+          render: (value) => (
+            <Group>
+              {value.map((v) => (
+                <Badge key={v}>{v}</Badge>
+              ))}
+            </Group>
+          ),
         },
       }}
     />

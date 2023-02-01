@@ -1,6 +1,4 @@
 import { QueryUtils } from '@roxavn/core/server';
-import { scopeManager } from '@roxavn/core/share';
-import { And, In } from 'typeorm';
 
 import { getModuleRolesApi } from '../../share';
 import { Role } from '../entities';
@@ -15,21 +13,13 @@ export class GetModuleRolesApiService extends AuthApiService<
     const page = request.page || 1;
     const pageSize = 10;
 
-    const moduleScopes = scopeManager
-      .getScopes()
-      .filter((s) => !s.hasId)
-      .map((s) => s.type);
-    const query = QueryUtils.filter(request);
-    if (query.scope) {
-      query.scope = And(query.scope, In(moduleScopes));
-    } else {
-      query.scope = In(moduleScopes);
-    }
-
     const [roles, totalItems] = await this.dbSession
       .getRepository(Role)
       .findAndCount({
-        where: query,
+        where: {
+          ...QueryUtils.filter(request),
+          hasId: false,
+        },
         order: { id: 'desc' },
         take: pageSize,
         skip: (page - 1) * pageSize,

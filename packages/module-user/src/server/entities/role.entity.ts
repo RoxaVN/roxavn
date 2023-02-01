@@ -25,6 +25,9 @@ export class Role {
   permissions: string[];
 
   @Column()
+  hasId: boolean;
+
+  @Column()
   isPredefined: boolean;
 
   @CreateDateColumn({ type: 'timestamptz' })
