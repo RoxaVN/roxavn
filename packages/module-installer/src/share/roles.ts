@@ -1,4 +1,5 @@
 import {
+  constants,
   permissionManager,
   predefinedRoleManager,
   scopeManager,
@@ -14,18 +15,18 @@ export const Scopes = {
 
 export const Permissions = {
   AddModule: {
-    value: 'module.add',
+    value: 'add.module',
     allowedScopes: [Scopes.Module],
   },
   ActiveModule: {
-    value: 'module.active',
+    value: 'active.module',
     allowedScopes: [Scopes.Module],
   },
 };
 
 export const Roles = {
   Admin: {
-    name: 'Admin',
+    name: constants.Role.ADMIN,
     scope: Scopes.Module,
     permissions: Object.values(Permissions),
   },
