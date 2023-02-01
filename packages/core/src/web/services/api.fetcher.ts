@@ -1,7 +1,8 @@
+import { useEffect, useState } from 'react';
 import { Api, ApiRequest, ApiResponse, ErrorResponse } from '../../share';
 import { HttpException, http } from './http';
 
-const apiFetcher = {
+export const apiFetcher = {
   getErrorData(e: HttpException): ErrorResponse | undefined {
     return e?.data?.error;
   },
@@ -33,4 +34,34 @@ const apiFetcher = {
     http._bodyParams(path, 'DELETE', data),
 };
 
-export { apiFetcher };
+export const useApi = <
+  Request extends ApiRequest,
+  Response extends ApiResponse
+>(
+  api: Api<Request, Response>,
+  apiParams?: Request
+) => {
+  const [data, setData] = useState<Response | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>();
+
+  useEffect(() => {
+    const timeout = setTimeout(
+      () =>
+        apiFetcher
+          .fetch(api, apiParams)
+          .then((resp) => {
+            setLoading(false);
+            setData(resp);
+          })
+          .catch((error) => {
+            setLoading(false);
+            setError(error);
+          }),
+      100
+    );
+    return () => clearTimeout(timeout);
+  }, [api, apiParams]);
+
+  return { data, loading, error };
+};

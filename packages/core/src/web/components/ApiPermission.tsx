@@ -1,66 +1,62 @@
 import { useListState, UseListStateHandlers } from '@mantine/hooks';
-import React, { useContext } from 'react';
+import React, { Fragment, useContext, useEffect } from 'react';
 import { Api, ApiRequest, Collection, Permission } from '../../share';
-import { ApiForm } from './ApiForm';
+import { useApi } from '../services';
 
-const RoleContext = React.createContext<{
+export const RolesContext = React.createContext<{
   roles: Array<RoleItem>;
   handlers: UseListStateHandlers<RoleItem>;
 }>({} as any);
 
 export interface RoleItem {
   scope: string;
-  scopeId: string;
+  scopeId?: string;
   permissions: string[];
   name: string;
   id: number;
 }
 
-export const RoleProvider = ({ children }: { children: React.ReactNode }) => {
+export const RolesProvider = ({ children }: { children: React.ReactNode }) => {
   const [roles, handlers] = useListState<RoleItem>([]);
   return (
-    <RoleContext.Provider value={{ roles, handlers }}>
+    <RolesContext.Provider value={{ roles, handlers }}>
       {children}
-    </RoleContext.Provider>
+    </RolesContext.Provider>
   );
 };
 
-interface ApiRoleGetterProps<Request extends ApiRequest> {
-  children: React.ReactNode;
+interface ApiRolesGetterProps<Request extends ApiRequest> {
+  children: React.ReactElement;
   api: Api<Request, Collection<RoleItem>>;
   apiParams?: Request;
 }
 
-export const ApiRoleGetter = <Request extends ApiRequest>({
+export const ApiRolesGetter = <Request extends ApiRequest>({
   children,
   api,
   apiParams,
-}: ApiRoleGetterProps<Request>) => {
-  const { roles, handlers } = useContext(RoleContext);
-  return (
-    <ApiForm
-      api={api}
-      apiParams={apiParams}
-      fetchOnMount
-      dataRender={({ data }) => {
-        if (data) {
-          const newRoles = data.items.filter(
-            (item) =>
-              !roles.find(
-                (role) => role.id === item.id && role.scopeId === item.scopeId
-              )
-          );
-          handlers.append(...newRoles);
-          return children;
-        }
-        return null;
-      }}
-    />
-  );
+}: ApiRolesGetterProps<Request>) => {
+  const { roles, handlers } = useContext(RolesContext);
+  const { data } = useApi(api, apiParams);
+  useEffect(() => {
+    if (data) {
+      const newRoles = data.items.filter(
+        (item) =>
+          !roles.find(
+            (role) => role.id === item.id && role.scopeId === item.scopeId
+          )
+      );
+      if (newRoles.length) {
+        handlers.append(...newRoles);
+      }
+    }
+  }, [data]);
+
+  return data ? children : <Fragment />;
 };
 
 export const useCanAccess = (permission: Permission, scopeId?: string) => {
-  const { roles } = useContext(RoleContext);
+  const { roles } = useContext(RolesContext);
   return permission.allowedScopes.some(
     (scope) =>
       roles.findIndex(

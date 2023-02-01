@@ -1,5 +1,6 @@
 import { ClientProvider } from '@mantine/remix';
 import { RemixBrowser } from '@remix-run/react';
+import { RolesProvider } from '@roxavn/core/web';
 import i18next from 'i18next';
 import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
@@ -42,9 +43,11 @@ function hydrate() {
           document,
           <StrictMode>
             <ClientProvider>
-              <I18nextProvider i18n={i18next}>
-                <RemixBrowser />
-              </I18nextProvider>
+              <RolesProvider>
+                <I18nextProvider i18n={i18next}>
+                  <RemixBrowser />
+                </I18nextProvider>
+              </RolesProvider>
             </ClientProvider>
           </StrictMode>
         );

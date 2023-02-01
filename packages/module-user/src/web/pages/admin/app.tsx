@@ -27,10 +27,11 @@ import {
   PageItem,
   WebModule,
   webModule as coreWebModule,
+  ApiRolesGetter,
 } from '@roxavn/core/web';
 
 import { IsAuthenticated } from '../../components';
-import { WebRoutes } from '../../../share';
+import { getMyModuleRolesApi, WebRoutes } from '../../../share';
 
 const BASE = '/admin/app';
 
@@ -143,7 +144,11 @@ const AdminPage = () => (
         <Loader />
       </Group>
     }
-    userComponent={<AdminComponent />}
+    userComponent={
+      <ApiRolesGetter api={getMyModuleRolesApi}>
+        <AdminComponent />
+      </ApiRolesGetter>
+    }
     guestComponent={<Navigate to={WebRoutes.Login.path} />}
   />
 );
