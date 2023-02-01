@@ -1,11 +1,10 @@
-import database from './database';
+import { BaseService } from '@roxavn/core/server';
+import { Roles } from '../share';
+import { CreateRolesHook, CreateAdminUserHook } from './database';
 
-export async function install(): Promise<any> {
-  try {
-    // only use for demo, should move it to cli or some place to run migration
-    // in better way
-    await database.up();
-  } catch (error) {
-    console.error(error);
+export class InstallHook extends BaseService {
+  async handle() {
+    await this.create(CreateRolesHook).handle(Roles);
+    await this.create(CreateAdminUserHook).handle(null);
   }
 }

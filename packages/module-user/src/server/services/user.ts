@@ -53,30 +53,31 @@ export class GetUsersApiService extends AuthApiService<typeof getUsersApi> {
 @serverModule.useApi(createUserApi)
 export class CreateUserApiService extends AuthApiService<typeof createUserApi> {
   async handle(request: InferAuthApiRequest<typeof createUserApi>) {
-    try {
-      const token = await tokenService.creator.create({
-        alphabetType: 'LOWERCASE_ALPHA_NUM',
-        size: 21,
-      });
-      const hash = await tokenService.hasher.hash(token);
-      const expiredAt = Date.now() + Env.SHORT_TIME_TO_LIVE;
+    const token = await tokenService.creator.create({
+      alphabetType: 'LOWERCASE_ALPHA_NUM',
+      size: 21,
+    });
+    const hash = await tokenService.hasher.hash(token);
+    const expiredAt = Date.now() + Env.SHORT_TIME_TO_LIVE;
 
-      return await this.dbSession.transaction(async (manager) => {
-        const identity = new PasswordIdentity();
-        identity.metadata = { token: { hash, expiredAt } };
-        const user = new User();
-        user.username = request.username;
-        await manager.save(user);
-        identity.owner = user;
-        await manager.save(identity);
-
-        return {
-          id: user.id,
-          resetPasswordToken: token,
-        };
-      });
-    } catch (error) {
+    const exists = await this.dbSession
+      .getRepository(User)
+      .count({ where: { username: request.username } });
+    if (exists) {
       throw new UserExistsException();
     }
+
+    const identity = new PasswordIdentity();
+    identity.metadata = { token: { hash, expiredAt } };
+    const user = new User();
+    user.username = request.username;
+    await this.dbSession.save(user);
+    identity.owner = user;
+    await this.dbSession.save(identity);
+
+    return {
+      id: user.id,
+      resetPasswordToken: token,
+    };
   }
 }

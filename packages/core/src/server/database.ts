@@ -21,10 +21,11 @@ class DatabaseManager {
   dataSource!: DataSource;
 
   async createSource() {
+    const isDev = process.env.NODE_ENV === constants.ENV_DEVELOPMENT;
     const modules = moduleManager.modules.map((m) => m.name);
     const modelPaths: string[] = [];
     modules.map((module) => {
-      if (module === moduleManager.currentModule.name) {
+      if (module === moduleManager.currentModule.name && isDev) {
         if (fs.existsSync('./src/server/entities')) {
           modelPaths.push('./src/server/entities/**/*.entity.ts');
         }
@@ -38,7 +39,6 @@ class DatabaseManager {
       }
     });
 
-    const isDev = process.env.NODE_ENV === constants.ENV_DEVELOPMENT;
     this.dataSource = new DataSource({
       type: 'postgres',
       url: process.env.DATABASE_URL,

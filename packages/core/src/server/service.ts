@@ -1,7 +1,7 @@
 import { EntityManager } from 'typeorm';
 import { Api, InferApiRequest, InferApiResponse } from '../share';
 
-export abstract class BaseService<Request, Response> {
+export abstract class BaseService<Request = any, Response = any> {
   constructor(public dbSession: EntityManager) {}
 
   abstract handle(request: Request): Promise<Response> | Response;
