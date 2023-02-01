@@ -1,9 +1,11 @@
-import { databaseManager } from '@roxavn/core/server';
-import { createRoles, setAdminRole } from '@roxavn/module-user/hook';
+import { BaseService } from '@roxavn/core/server';
+import { CreateRolesHook, SetAdminRoleHook } from '@roxavn/module-user/hook';
 
 import { Roles } from '../share';
 
-export async function install() {
-  await createRoles(databaseManager.dataSource, Roles);
-  await setAdminRole(databaseManager.dataSource, Roles.Admin);
+export class InstallHook extends BaseService {
+  async handle() {
+    await this.create(CreateRolesHook).handle(Roles);
+    await this.create(SetAdminRoleHook).handle(Roles.Admin);
+  }
 }
