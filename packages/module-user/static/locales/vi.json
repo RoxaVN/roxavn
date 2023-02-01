@@ -15,6 +15,9 @@
   "myProfile": "Thông tin của tôi",
   "userList": "Danh sách tài khoản",
   "roles": "Chức vụ",
+  "roleName": "Tên chức vụ",
+  "permissions": "Quyền",
+  "userRoles": "Chức vụ người dùng",
   "changeTheme": "Thay đổi chủ đề",
   "Meta": {
     "name": "Tài khoản",

@@ -8,7 +8,7 @@ import { getStatsModuleRoleApi } from '../../share';
 import { webModule } from '../module';
 
 webModule.adminPages.push({
-  label: (t) => t('roles'),
+  label: (t) => t('userRoles'),
   path: '/user-roles',
   icon: IconShieldChevron,
   element: (

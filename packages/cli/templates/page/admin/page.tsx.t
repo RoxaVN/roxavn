@@ -14,7 +14,7 @@ const Page = ({ api }: { api: typeof getUsersApi }) => {
   return (
     <ApiTable
       api={api}
-      header={t('userList')}
+      header={t('<%= h.changeCase.camel(path_name) %>')}
       columns={{
         username: {
           label: t('username'),
@@ -30,7 +30,7 @@ const Page = ({ api }: { api: typeof getUsersApi }) => {
 };
 
 webModule.adminPages.push({
-  label: (t) => t('userList'),
+  label: (t) => t('<%= h.changeCase.camel(path_name) %>'),
   path: '/<%= h.changeCase.param(path_name) %>',
   icon: IconUsers,
   element: <Page api={getUsersApi} />,

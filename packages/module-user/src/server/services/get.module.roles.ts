@@ -1,13 +1,10 @@
 import { QueryUtils } from '@roxavn/core/server';
 import { scopeManager } from '@roxavn/core/share';
-import {
-  AuthApiService,
-  InferAuthApiRequest,
-} from '@roxavn/module-user/server';
 import { And, In } from 'typeorm';
 
 import { getModuleRolesApi } from '../../share';
 import { Role } from '../entities';
+import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { serverModule } from '../module';
 
 @serverModule.useApi(getModuleRolesApi)
