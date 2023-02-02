@@ -61,7 +61,7 @@ export class LogoutApiService extends AuthApiService<typeof logoutApi> {
   async handle(request: InferAuthApiRequest<typeof logoutApi>) {
     await this.dbSession
       .getRepository(UserAccessToken)
-      .delete({ id: request.accessToken.id });
+      .delete({ id: request.$accessToken.id });
     return {};
   }
 }

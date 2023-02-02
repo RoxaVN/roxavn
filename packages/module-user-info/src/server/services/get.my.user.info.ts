@@ -13,7 +13,7 @@ export class GetMyUserInfoApiService extends AuthApiService<
 > {
   async handle(request: InferAuthApiRequest<typeof getMyUserInfoApi>) {
     const user = await this.dbSession.getRepository(UserInfo).findOne({
-      where: { id: request.user.id },
+      where: { id: request.$user.id },
     });
     return user || {};
   }

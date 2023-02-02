@@ -17,7 +17,7 @@ import { Env } from '../config';
 export class GetMyUserApiService extends AuthApiService<typeof getMyUserApi> {
   async handle(request: InferAuthApiRequest<typeof getMyUserApi>) {
     const user = await this.dbSession.getRepository(User).findOne({
-      where: { id: request.user.id },
+      where: { id: request.$user.id },
     });
 
     if (!user) {

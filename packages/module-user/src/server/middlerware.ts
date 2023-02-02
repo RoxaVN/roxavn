@@ -78,8 +78,8 @@ ServerModule.apiMiddlerwares.push(
       }
 
       Object.assign(resp.locals, {
-        user: { id: accessToken.ownerId },
-        accessToken: { id: accessToken.id },
+        $user: { id: accessToken.ownerId },
+        $accessToken: { id: accessToken.id },
       } as AuthenticatedData);
     }
     next();
@@ -87,8 +87,8 @@ ServerModule.apiMiddlerwares.push(
 );
 
 type AuthenticatedData = {
-  user: { id: number };
-  accessToken: { id: number };
+  $user: { id: number };
+  $accessToken: { id: number };
 };
 
 export type InferAuthApiRequest<T> = T extends Api<infer U, any, any>
