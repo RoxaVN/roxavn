@@ -21,7 +21,7 @@ export class GetUserRolesApiService extends ApiService<typeof getUserRolesApi> {
         },
       },
       where: {
-        ownerId: request.userId,
+        ownerId: request.id,
         scopeId: request.scopeId,
         role: request.scopes?.length
           ? {

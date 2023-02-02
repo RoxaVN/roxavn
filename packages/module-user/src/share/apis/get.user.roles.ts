@@ -17,7 +17,7 @@ import { Permissions } from '../permissions';
 class GetUserRolesRequest extends ExactProps<GetUserRolesRequest> {
   @Min(1)
   @Type(() => Number)
-  public readonly userId: number;
+  public readonly id: number;
 
   @IsArray()
   @IsOptional()
@@ -35,7 +35,7 @@ export const getUserRolesApi: Api<
   UnauthorizedException | ForbiddenException
 > = baseModule.api({
   method: 'GET',
-  path: '/user-roles',
+  path: '/user/:id/roles',
   validator: GetUserRolesRequest,
   permission: Permissions.ReadUserRoles,
 });

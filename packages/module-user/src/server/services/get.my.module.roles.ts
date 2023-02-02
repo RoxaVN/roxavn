@@ -11,7 +11,7 @@ export class GetMyModuleRolesApiService extends AuthApiService<
   async handle(request: InferAuthApiRequest<typeof getMyModuleRolesApi>) {
     const service = this.create(GetUserRolesApiService);
     const result = await service.handle({
-      userId: request.user.id,
+      id: request.user.id,
       scopes: moduleManager.modules.map((m) => m.name),
     });
     return result;

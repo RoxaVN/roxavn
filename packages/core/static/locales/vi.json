@@ -31,6 +31,7 @@
   "operator": "Phương thức",
   "id": "Id",
   "ownerId": "Id người sở hữu",
+  "detail": "Chi tiết",
 
   "Filter": {
     "startsWith": "Bắt đầu với",
