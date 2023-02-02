@@ -11,7 +11,7 @@ webModule.adminPages.push({
   label: (t) => t('userRoles'),
   path: '/user-roles',
   icon: IconShieldChevron,
-  element: (
+  render: () => (
     <ApiTable
       api={getStatsModuleRoleApi}
       rowKey="ownerId"

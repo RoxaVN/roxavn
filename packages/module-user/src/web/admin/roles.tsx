@@ -5,12 +5,12 @@ import { IconCrown } from '@tabler/icons';
 import { getModuleRolesApi } from '../../share';
 import { webModule } from '../module';
 
-const Page = ({ api }: { api: typeof getModuleRolesApi }) => {
+const Page = () => {
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
   return (
     <ApiTable
-      api={api}
+      api={getModuleRolesApi}
       header={t('roles')}
       columns={{
         scope: {
@@ -37,5 +37,5 @@ webModule.adminPages.push({
   label: (t) => t('roles'),
   path: '/roles',
   icon: IconCrown,
-  element: <Page api={getModuleRolesApi} />,
+  render: Page,
 });

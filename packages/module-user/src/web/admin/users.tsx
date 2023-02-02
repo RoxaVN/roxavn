@@ -13,12 +13,13 @@ import { IconPlus, IconUsers } from '@tabler/icons';
 import { createUserApi, getUsersApi, WebRoutes } from '../../share';
 import { webModule } from '../module';
 
-const Page = ({ api }: { api: typeof getUsersApi }) => {
+const Page = () => {
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
+
   return (
     <ApiTable
-      api={api}
+      api={getUsersApi}
       header={t('userList')}
       headerActions={(fetcherRef) => [
         {
@@ -86,5 +87,5 @@ webModule.adminPages.push({
   label: (t) => t('userList'),
   path: '/',
   icon: IconUsers,
-  element: <Page api={getUsersApi} />,
+  render: Page,
 });

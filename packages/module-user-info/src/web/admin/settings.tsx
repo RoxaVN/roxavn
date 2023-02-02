@@ -20,12 +20,12 @@ const fields = settingConstant.userInfoFields.map((v) => ({
   label: v,
 }));
 
-const Page = ({ api }: { api: typeof getSettingsApi }) => {
+const Page = () => {
   const { t } = webModule.useTranslation();
 
   return (
     <ModuleSettings
-      getListApi={api}
+      getListApi={getSettingsApi}
       forms={{
         [settingConstant.fieldsForUserToUpdate]: {
           title: t('fieldsForUserToUpdateTitle'),
@@ -58,5 +58,5 @@ webModule.adminPages.push({
   label: <ModuleT module={coreWebModule} k="settings" />,
   icon: IconSettings,
   path: '/settings',
-  element: <Page api={getSettingsApi} />,
+  render: Page,
 });

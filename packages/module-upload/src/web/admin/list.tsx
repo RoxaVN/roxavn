@@ -4,12 +4,12 @@ import { IconUsers } from '@tabler/icons';
 import { getUserFilesApi } from '../../share';
 import { webModule } from '../module';
 
-const Page = ({ api }: { api: typeof getUserFilesApi }) => {
+const Page = () => {
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
   return (
     <ApiTable
-      api={api}
+      api={getUserFilesApi}
       rowKey="ownerId"
       columns={{
         ownerId: { label: tCore('ownerId') },
@@ -29,5 +29,5 @@ webModule.adminPages.push({
   label: (t) => t('userFiles'),
   path: '/',
   icon: IconUsers,
-  element: <Page api={getUserFilesApi} />,
+  render: Page,
 });
