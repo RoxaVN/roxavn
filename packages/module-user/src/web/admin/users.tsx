@@ -20,13 +20,13 @@ const Page = ({ api }: { api: typeof getUsersApi }) => {
     <ApiTable
       api={api}
       header={t('userList')}
-      headerActions={[
+      headerActions={(fetcherRef) => [
         {
           label: tCore('add'),
           icon: IconPlus,
-          onClick: (fetcherRef) =>
-            uiManager.formDialog(
-              t('addUser'),
+          dialog: {
+            title: t('addUser'),
+            content: (
               <ApiFormGroup
                 api={createUserApi}
                 apiParams={{ username: '' }}
@@ -59,6 +59,7 @@ const Page = ({ api }: { api: typeof getUsersApi }) => {
                 fields={[<TextInput label={t('username')} name="username" />]}
               />
             ),
+          },
         },
       ]}
       columns={{

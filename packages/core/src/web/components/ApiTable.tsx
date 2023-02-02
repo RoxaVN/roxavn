@@ -1,18 +1,11 @@
-import {
-  Table,
-  Pagination,
-  Group,
-  Button,
-  Stack,
-  Flex,
-  Text,
-} from '@mantine/core';
+import { Table, Pagination, Group, Stack, Flex, Text } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
 import React, { MutableRefObject } from 'react';
 
 import { Api, ApiRequest, PaginatedCollection } from '../../share';
 import { ApiFilterButton } from './ApiFilter';
 import { ApiForm } from './ApiForm';
+import { ActionButton, ActionProps } from './Buttons';
 
 export type ApiTableColumns<T> = {
   [k in keyof Partial<T>]: {
@@ -21,22 +14,6 @@ export type ApiTableColumns<T> = {
     render?: (value: T[k], item: T) => React.ReactNode;
   };
 };
-
-interface TableHeaderAction<Request extends ApiPaginationRequest> {
-  label: React.ReactNode;
-  icon?: React.ComponentType<{
-    size?: number | string;
-    stroke?: number | string;
-  }>;
-  onClick: (fetcherRef: ApiFetcherRef<Request>) => void;
-}
-
-interface TableCellAction<
-  Request extends ApiPaginationRequest,
-  ResponseItem extends Record<string, any>
-> extends Omit<TableHeaderAction<Request>, 'onClick'> {
-  onClick: (item: ResponseItem, fetcherRef: ApiFetcherRef<Request>) => void;
-}
 
 type ApiPaginationRequest = ApiRequest & { page: number };
 
@@ -55,8 +32,11 @@ export interface ApiTableProps<
   columns: ApiTableColumns<ResponseItem>;
   rowKey?: keyof ResponseItem;
   header?: React.ReactNode;
-  headerActions?: Array<TableHeaderAction<Request>>;
-  cellActions?: Array<TableCellAction<Request, ResponseItem>>;
+  headerActions?: (fetcherRef: ApiFetcherRef<Request>) => Array<ActionProps>;
+  cellActions?: (
+    item: ResponseItem,
+    fetcherRef: ApiFetcherRef<Request>
+  ) => Array<ActionProps>;
 }
 
 export const ApiTable = <
@@ -115,16 +95,10 @@ export const ApiTable = <
               <Text fz="lg">{header}</Text>
               <Group>
                 {renderFilterButton()}
-                {headerActions?.map((c, index) => (
-                  <Button
-                    key={index}
-                    variant="outline"
-                    leftIcon={c.icon && <c.icon size={16} />}
-                    onClick={() => c.onClick(ref)}
-                  >
-                    {c.label}
-                  </Button>
-                ))}
+                {headerActions &&
+                  headerActions(ref).map((c, index) => (
+                    <ActionButton key={index} variant="outline" {...c} />
+                  ))}
               </Group>
             </Flex>
             <Table mb="md">
@@ -149,16 +123,13 @@ export const ApiTable = <
                     {cellActions && (
                       <td>
                         <Group>
-                          {cellActions.map((c, index) => (
-                            <Button
+                          {cellActions(item, ref).map((c, index) => (
+                            <ActionButton
+                              key={index}
                               compact
                               variant="subtle"
-                              key={index}
-                              leftIcon={c.icon && <c.icon size={16} />}
-                              onClick={() => c.onClick(item, ref)}
-                            >
-                              {c.label}
-                            </Button>
+                              {...c}
+                            />
                           ))}
                         </Group>
                       </td>

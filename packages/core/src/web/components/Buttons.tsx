@@ -13,8 +13,11 @@ import {
   IconCheck,
   IconSearch,
 } from '@tabler/icons';
+import { useNavigate } from 'react-router-dom';
 
-import { webModule } from '../services';
+import { Api } from '../../share';
+import { uiManager, webModule } from '../services';
+import { IfCanAccessApi, IfCanAccessApiProps } from './ApiPermission';
 
 type ButtonMantineProps<C = 'button'> = PolymorphicComponentProps<
   C,
@@ -64,5 +67,55 @@ export const CopyButton = ({ value }: { value: string }) => {
         </Tooltip>
       )}
     </MantineCopyButton>
+  );
+};
+
+export interface ActionProps {
+  label: React.ReactNode;
+  icon?: React.ComponentType<{
+    size?: number | string;
+    stroke?: number | string;
+  }>;
+  onClick?: () => void;
+  access?: Omit<IfCanAccessApiProps, 'children'>;
+  dialog?: {
+    title: React.ReactNode;
+    content: React.ReactElement<{ api?: Api }>;
+  };
+  link?: { href: string };
+}
+
+export const ActionButton = ({
+  label,
+  icon,
+  dialog,
+  link,
+  access,
+  onClick,
+  ...props
+}: ActionProps & ButtonMantineProps) => {
+  const navigate = useNavigate();
+  const Icon = icon;
+
+  return (
+    <IfCanAccessApi {...{ ...dialog?.content.props, ...access }}>
+      <Button
+        leftIcon={Icon && <Icon size={16} />}
+        {...props}
+        onClick={
+          onClick
+            ? onClick
+            : () => {
+                if (dialog) {
+                  uiManager.formDialog(dialog.title, dialog.content);
+                } else if (link) {
+                  navigate(link.href);
+                }
+              }
+        }
+      >
+        {label}
+      </Button>
+    </IfCanAccessApi>
   );
 };

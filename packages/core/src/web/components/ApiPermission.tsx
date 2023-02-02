@@ -1,6 +1,6 @@
 import { useListState, UseListStateHandlers } from '@mantine/hooks';
 import React, { Fragment, useContext, useEffect } from 'react';
-import { Api, ApiRequest, Collection, Permission } from '../../share';
+import { Api, ApiRequest, Collection } from '../../share';
 import { useApi } from '../services';
 
 export const RolesContext = React.createContext<{
@@ -55,15 +55,36 @@ export const ApiRolesGetter = <Request extends ApiRequest>({
   return data ? children : <Fragment />;
 };
 
-export const useCanAccess = (permission: Permission, scopeId?: string) => {
+export const useCanAccessApi = <Request extends ApiRequest>(
+  api?: Api<Request>,
+  apiParams?: Request
+) => {
   const { roles } = useContext(RolesContext);
-  return permission.allowedScopes.some(
-    (scope) =>
-      roles.findIndex(
-        (role) =>
-          role.scope === scope.type &&
-          role.permissions.indexOf(permission.value) > -1 &&
-          (scope.hasId ? role.scopeId === scopeId : true)
-      ) > -1
-  );
+  const permission = api?.permission;
+  return permission
+    ? permission.allowedScopes.some(
+        (scope) =>
+          roles.findIndex(
+            (role) =>
+              role.scope === scope.type &&
+              role.permissions.indexOf(permission.value) > -1 &&
+              (scope.hasId ? role.scopeId === apiParams?.id : true)
+          ) > -1
+      )
+    : true;
+};
+
+export interface IfCanAccessApiProps<Request extends ApiRequest = ApiRequest> {
+  api?: Api<Request>;
+  apiParams?: Request;
+  children: React.ReactElement;
+}
+
+export const IfCanAccessApi = <Request extends ApiRequest>({
+  api,
+  apiParams,
+  children,
+}: IfCanAccessApiProps<Request>) => {
+  const allow = useCanAccessApi(api, apiParams);
+  return allow ? children : <Fragment />;
 };
