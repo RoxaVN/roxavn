@@ -9,7 +9,7 @@ export class AddUserRoleApiService extends AuthApiService<
 > {
   async handle(request: InferAuthApiRequest<typeof addUserRoleApi>) {
     const userRole = new UserRole();
-    userRole.ownerId = request.$user.id;
+    userRole.ownerId = request.id;
     userRole.roleId = request.roleId;
     if (request.scopeId) {
       userRole.scopeId = request.scopeId;
