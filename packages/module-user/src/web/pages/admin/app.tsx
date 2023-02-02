@@ -45,6 +45,9 @@ function AdminComponent() {
 
   const renderMenuItems = (_pageItems: PageItem[], module: WebModule) =>
     _pageItems.map((pageItem, index) => {
+      if (!pageItem.label) {
+        return null;
+      }
       const props: any = {
         key: index + 1,
         label:

@@ -2,7 +2,7 @@ import { Table, Pagination, Group, Stack, Flex, Text } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
 import React, { MutableRefObject } from 'react';
 
-import { Api, ApiRequest, PaginatedCollection } from '../../share';
+import { Api, ApiRequest, Collection, PaginatedCollection } from '../../share';
 import { ApiFilterButton } from './ApiFilter';
 import { ApiForm } from './ApiForm';
 import { ActionButton, ActionProps } from './Buttons';
@@ -15,7 +15,7 @@ export type ApiTableColumns<T> = {
   };
 };
 
-type ApiPaginationRequest = ApiRequest & { page: number };
+type ApiPaginationRequest = ApiRequest & { page?: number };
 
 export type ApiFetcherRef<Request extends ApiPaginationRequest> = {
   fetch: (params: Request) => void;
@@ -26,7 +26,10 @@ export interface ApiTableProps<
   Request extends ApiPaginationRequest,
   ResponseItem extends Record<string, any>
 > {
-  api: Api<Request, PaginatedCollection<ResponseItem>>;
+  api: Api<
+    Request,
+    PaginatedCollection<ResponseItem> | Collection<ResponseItem>
+  >;
   apiParams?: Request;
   fetcherRef?: MutableRefObject<ApiFetcherRef<Request> | undefined>;
   columns: ApiTableColumns<ResponseItem>;
@@ -138,7 +141,7 @@ export const ApiTable = <
                 ))}
               </tbody>
             </Table>
-            {data && (
+            {data && 'pagination' in data && (
               <Group position="center">
                 <Pagination
                   mb="md"

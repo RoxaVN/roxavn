@@ -5,7 +5,7 @@ import { RouteObject, useOutletContext, useRoutes } from 'react-router-dom';
 import { baseModule, BaseModule } from '../../share';
 
 export interface PageItem {
-  label: React.ReactNode | { (t: TFunction): React.ReactNode };
+  label?: React.ReactNode | { (t: TFunction): React.ReactNode };
   description?: React.ReactNode;
   icon?: React.ComponentType<{
     size?: number | string;

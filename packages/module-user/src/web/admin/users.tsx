@@ -8,9 +8,14 @@ import {
   utils,
   DatePicker,
 } from '@roxavn/core/web';
-import { IconPlus, IconUsers } from '@tabler/icons';
+import { IconEye, IconPlus, IconUsers } from '@tabler/icons';
 
-import { createUserApi, getUsersApi, WebRoutes } from '../../share';
+import {
+  createUserApi,
+  getUserRolesApi,
+  getUsersApi,
+  WebRoutes,
+} from '../../share';
 import { webModule } from '../module';
 
 const Page = () => {
@@ -79,6 +84,14 @@ const Page = () => {
           render: utils.Render.relativeTime,
         },
       }}
+      cellActions={(item) => [
+        {
+          label: t('roles'),
+          icon: IconEye,
+          access: { api: getUserRolesApi },
+          link: { href: `user-roles/${item.id}` },
+        },
+      ]}
     />
   );
 };

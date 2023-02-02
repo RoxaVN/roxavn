@@ -1,3 +1,4 @@
+import { Badge, Group } from '@mantine/core';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -50,6 +51,13 @@ const utils = {
     relativeTime: (v: dayjs.ConfigType) => v && dayjs.utc(v).fromNow(),
     datetime: (v: dayjs.ConfigType) => v && dayjs.utc(v).local().format('LLL'),
     date: (v: dayjs.ConfigType) => v && dayjs.utc(v).local().format('LL'),
+    tags: (v: Array<string>) => (
+      <Group>
+        {v.map((item) => (
+          <Badge key={item}>{item}</Badge>
+        ))}
+      </Group>
+    ),
   },
 };
 
