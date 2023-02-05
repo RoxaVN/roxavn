@@ -5,14 +5,7 @@
   },
   "private": true,
   "workspaces": [
-    "packages/cli",
-    "packages/core",
-    "packages/module-installer",
-    "packages/module-upload",
-    "packages/module-user",
-    "packages/module-user-info",
-    "packages/module-utils",
-    "packages/dev-web"
+    "packages/*"
   ],
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",

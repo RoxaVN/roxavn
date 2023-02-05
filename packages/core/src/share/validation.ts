@@ -54,7 +54,6 @@ import {
   UUIDVersion,
   ValidationOptions,
 } from 'class-validator';
-import { CountryCode } from 'libphonenumber-js';
 import validator from 'validator';
 import { ApiFilter } from './api';
 import { I18nErrorField } from './errors';
@@ -419,7 +418,7 @@ export const IsUppercase = (
 };
 
 export const IsPhoneNumber = (
-  region?: CountryCode,
+  region?: Parameters<typeof _IsPhoneNumber>[0],
   validationOptions?: ValidationOptions
 ): PropertyDecorator => {
   return _IsPhoneNumber(region, {
