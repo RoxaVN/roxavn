@@ -9,7 +9,7 @@ export interface ApiFormProps<
   Request extends ApiRequest,
   Response extends ApiResponse
 > {
-  formRender?: (form: UseFormReturnType<Request>) => React.ReactNode;
+  formRender?: (form: UseFormReturnType<Partial<Request>>) => React.ReactNode;
   dataRender?: (props: {
     data: Response | null;
     error: any;
@@ -17,11 +17,11 @@ export interface ApiFormProps<
     fetcher: (params: Request) => void;
   }) => React.ReactNode;
   onBeforeSubmit?: (
-    params: Request & Record<string, any>
-  ) => Promise<Request> | Request;
+    params: Partial<Request>
+  ) => Promise<Partial<Request>> | Partial<Request>;
   onSuccess?: (data: Response, params: Request) => void;
   api?: Api<Request, Response, any>;
-  apiParams?: Request & Record<string, any>;
+  apiParams?: Partial<Request>;
   fetchOnMount?: boolean;
 }
 
@@ -37,7 +37,7 @@ export function ApiForm<
   onBeforeSubmit,
   onSuccess,
 }: ApiFormProps<Request, Response>) {
-  const form = useForm<Request & Record<string, any>>({
+  const form = useForm<Partial<Request>>({
     initialValues: apiParams,
   });
   const [data, setData] = useState<Response | null>(null);
@@ -46,7 +46,7 @@ export function ApiForm<
 
   const { t } = webModule.useTranslation();
 
-  const fetcher = async (params: Request) => {
+  const fetcher = async (params: Partial<Request>) => {
     setError(null);
     setLoading(true);
     if (onBeforeSubmit) {
@@ -61,7 +61,7 @@ export function ApiForm<
       try {
         const result = await apiFetcher.fetch(api, params);
         setData(result);
-        onSuccess && onSuccess(result, params);
+        onSuccess && onSuccess(result, params as any);
       } catch (e: any) {
         setError(e);
         const error = apiFetcher.getErrorData(e);
@@ -99,7 +99,7 @@ export function ApiForm<
   return (
     <Box sx={{ position: 'relative' }}>
       <LoadingOverlay visible={loading} />
-      <form onSubmit={form.onSubmit(fetcher)}>
+      <form onSubmit={form.onSubmit((params) => fetcher(params as any))}>
         {formRender && formRender(form)}
       </form>
       {dataRender && dataRender({ data, error, loading, fetcher })}

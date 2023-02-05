@@ -50,12 +50,10 @@ import {
   MinLength as _MinLength,
   NotContains as _NotContains,
   NotEquals as _NotEquals,
-  registerDecorator,
   UUIDVersion,
   ValidationOptions,
 } from 'class-validator';
 import validator from 'validator';
-import { ApiFilter } from './api';
 import { I18nErrorField } from './errors';
 import { baseModule } from './module';
 
@@ -67,38 +65,6 @@ const buildContext = (
   ns: baseModule.escapedName,
   params,
 });
-
-export function IsQueryFilter(
-  filters: string[],
-  validationOptions?: ValidationOptions
-) {
-  return function (object: Record<string, any>, propertyName: string) {
-    const target: any = object.constructor;
-    if (!target.__filters__) {
-      target.__filters__ = {};
-    }
-    target.__filters__[propertyName] = filters;
-
-    registerDecorator({
-      name: 'isQueryFilter',
-      target: object.constructor,
-      propertyName: propertyName,
-      constraints: [filters],
-      options: {
-        context: buildContext('IsQueryFilter', { filters }),
-        ...validationOptions,
-      },
-      validator: {
-        defaultMessage: () => `Not in ${filters.join(', ')}`,
-        validate(value: any) {
-          const validate = (v: any) =>
-            v instanceof ApiFilter && !!v.mode && filters.includes(v.mode);
-          return Array.isArray(value) ? value.every(validate) : validate(value);
-        },
-      },
-    });
-  };
-}
 
 export const IsDefined = (
   validationOptions?: ValidationOptions

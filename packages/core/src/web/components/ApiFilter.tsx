@@ -1,54 +1,29 @@
-import { Button, Group, Popover, Select, Indicator } from '@mantine/core';
-import { useSetState } from '@mantine/hooks';
+import { Button, Group, Popover, Indicator } from '@mantine/core';
 import { IconCheck, IconFilter, IconX } from '@tabler/icons';
-import React, { useState } from 'react';
-import { Api, ApiFilter, ApiRequest, ApiResponse } from '../../share';
+import { useState } from 'react';
+import { Api, ApiRequest, ApiResponse } from '../../share';
 import { webModule } from '../services';
-import { ApiFormGroup } from './ApiFormGroup';
-import { ArrayInput } from './ArrayInput';
-
-export const ApiFilterIcons: Record<string, React.ReactNode> = {
-  [ApiFilter.STARTS_WITH]: '*_',
-  [ApiFilter.ENDS_WITH]: '_*',
-  [ApiFilter.CONTAINS]: '*',
-  [ApiFilter.NOT_CONTAINS]: '!*',
-  [ApiFilter.EQUALS]: '=',
-  [ApiFilter.NOT_EQUALS]: '!=',
-  [ApiFilter.IN]: '∈',
-  [ApiFilter.LESS_THAN]: '<',
-  [ApiFilter.LESS_THAN_OR_EQUAL_TO]: '<=',
-  [ApiFilter.GREATER_THAN]: '>',
-  [ApiFilter.GREATER_THAN_OR_EQUAL_TO]: '>=',
-};
+import { ApiFormGroup, FormGroupField } from './ApiFormGroup';
 
 export interface ApiFilterButtonProps<
   Request extends ApiRequest,
   Response extends ApiResponse
 > {
   api: Api<Request, Response>;
-  filters: {
-    [k in keyof Partial<Request>]: {
-      label: React.ReactNode;
-      filterInput: React.ReactElement;
-    };
-  };
-  onApply?: (params: Request) => void;
+  fields: Array<FormGroupField<Request>>;
+  onApply?: (params: Partial<Request>) => void;
 }
-
-type FilterValue = Record<string, { operator: string; value: string }[]>;
 
 export const ApiFilterButton = <
   Request extends ApiRequest,
   Response extends ApiResponse
 >({
-  api,
-  filters,
+  fields,
   onApply,
 }: ApiFilterButtonProps<Request, Response>) => {
   const { t } = webModule.useTranslation();
   const [opened, setOpened] = useState(false);
-  const [filterValue, setFilterValue] = useSetState<FilterValue>({});
-  const filtersValidator = api.validator?.__filters__ || {};
+  const [filterValue, setFilterValue] = useState<Partial<Request>>({});
 
   return (
     <Group align="flex-end">
@@ -63,7 +38,11 @@ export const ApiFilterButton = <
       >
         <Popover.Target>
           <Indicator
-            label={Object.values(filterValue).flat().length}
+            label={
+              Object.values(filterValue).filter((v) =>
+                Array.isArray(v) ? v.length && v.every((i) => i) : !!v
+              ).length
+            }
             showZero={false}
             dot={false}
             inline
@@ -95,47 +74,13 @@ export const ApiFilterButton = <
                 </Button>
               </Group>
             }
-            onBeforeSubmit={(params: FilterValue) => {
-              const newFilterValue: FilterValue = {};
-              const newFilterParams: any = {};
-              Object.entries(params).map(([k, value]) => {
-                newFilterValue[k] = value.filter((v) => v.operator && v.value);
-                newFilterParams[k] = newFilterValue[k].map(
-                  (v) => v.operator + ':' + encodeURIComponent(v.value)
-                );
-              });
-              setFilterValue(newFilterValue);
+            onBeforeSubmit={(params) => {
+              setFilterValue(params);
               setOpened(false);
-              onApply && onApply(newFilterParams);
+              onApply && onApply(params);
               return params;
             }}
-            fields={Object.entries(filters).map(([key, value]) => {
-              const filter: string[] = filtersValidator[key];
-              if (!filter) {
-                throw Error(
-                  `ApiFilterButton api ${api.path} not define filter for ${key}`
-                );
-              }
-              return (
-                <ArrayInput
-                  name={key}
-                  label={value.label}
-                  fields={[
-                    <Select
-                      name="operator"
-                      placeholder={t('operator')}
-                      data={filter.map((f) => ({
-                        value: f,
-                        label: t('Filter.' + f),
-                      }))}
-                    />,
-                    React.cloneElement(value.filterInput, { name: 'value' }),
-                  ]}
-                  min={1}
-                  max={filter.length === 1 ? 1 : undefined}
-                />
-              );
-            })}
+            fields={fields}
           />
         </Popover.Dropdown>
       </Popover>

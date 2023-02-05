@@ -54,7 +54,6 @@
     "ServerException": "Server exception"
   },
   "Validation": {
-    "IsQueryFilter": "Not in {{filters, list}}",
     "IsDefined": "Must be defined",
     "NotEquals": "Must not be equal to {{comparison}}",
     "IsNotEmpty": "Must not be empty",

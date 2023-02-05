@@ -1,25 +1,21 @@
 import {
   Api,
-  ApiFilter,
   ExactProps,
   ForbiddenException,
   IsOptional,
-  IsQueryFilter,
   Min,
   PaginatedCollection,
   UnauthorizedException,
 } from '@roxavn/core/share';
-import { Type, Transform } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { RoleResponse } from '../interfaces';
 
 import { baseModule } from '../module';
 import { Permissions } from '../permissions';
 
 class GetModuleRolesRequest extends ExactProps<GetModuleRolesRequest> {
-  @Transform(({ value }) => ApiFilter.parse(value))
-  @IsQueryFilter([ApiFilter.CONTAINS])
   @IsOptional()
-  public readonly scope?: ApiFilter;
+  public readonly scope?: string;
 
   @Min(1)
   @Type(() => Number)

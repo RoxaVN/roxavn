@@ -95,35 +95,3 @@ export type InferApiCollectionItem<T> = T extends Api<any, infer U, any>
 
 export type InferArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
-
-export class ApiFilter {
-  static readonly STARTS_WITH = 'startsWith';
-  static readonly CONTAINS = 'contains';
-  static readonly NOT_CONTAINS = 'notContains';
-  static readonly ENDS_WITH = 'endsWith';
-  static readonly EQUALS = 'equals';
-  static readonly NOT_EQUALS = 'notEquals';
-  static readonly IN = 'in';
-  static readonly LESS_THAN = 'lt';
-  static readonly LESS_THAN_OR_EQUAL_TO = 'lte';
-  static readonly GREATER_THAN = 'gt';
-  static readonly GREATER_THAN_OR_EQUAL_TO = 'gte';
-
-  readonly mode?: string;
-  readonly value: string[];
-
-  constructor(str: string) {
-    const parts = str.split(':');
-    this.mode = parts.shift();
-    this.value = parts.map(decodeURIComponent);
-  }
-
-  static parse(value: any) {
-    if (Array.isArray(value)) {
-      return value.map((v) => new ApiFilter(v));
-    } else if (typeof value === 'string') {
-      return new ApiFilter(value);
-    }
-    return undefined;
-  }
-}

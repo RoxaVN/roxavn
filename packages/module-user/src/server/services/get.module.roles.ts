@@ -1,5 +1,4 @@
-import { QueryUtils } from '@roxavn/core/server';
-
+import { ILike } from 'typeorm';
 import { getModuleRolesApi } from '../../share';
 import { Role } from '../entities';
 import { AuthApiService, InferAuthApiRequest } from '../middlerware';
@@ -17,7 +16,7 @@ export class GetModuleRolesApiService extends AuthApiService<
       .getRepository(Role)
       .findAndCount({
         where: {
-          ...QueryUtils.filter(request),
+          scope: request.scope && ILike(`%${request.scope}%`),
           hasId: false,
         },
         order: { id: 'desc' },

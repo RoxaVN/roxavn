@@ -6,25 +6,30 @@ import { ApiRequest, ApiResponse } from '../../share';
 import { ApiForm, ApiFormProps } from './ApiForm';
 import { SubmitButton } from './Buttons';
 
-export interface FormGroupProps<T extends 'horizontal' | 'vertical'> {
-  layout?: T;
-  submitButton?: React.ReactElement;
-  form: UseFormReturnType<any>;
-  fields: T extends 'horizontal'
-    ? Array<React.ReactElement>
-    : Array<React.ReactElement | Array<React.ReactElement>>;
+export interface FormGroupField<T> {
+  name: keyof T;
+  input: React.ReactElement;
 }
 
-export function FormGroup<T extends 'horizontal' | 'vertical'>({
+export interface FormGroupProps<T extends 'horizontal' | 'vertical', V> {
+  layout?: T;
+  submitButton?: React.ReactElement;
+  form: UseFormReturnType<Partial<V>>;
+  fields: T extends 'horizontal'
+    ? Array<FormGroupField<V>>
+    : Array<FormGroupField<V> | Array<FormGroupField<V>>>;
+}
+
+export function FormGroup<T extends 'horizontal' | 'vertical', V>({
   layout,
   form,
   submitButton,
   fields,
-}: FormGroupProps<T>) {
-  const renderField = (component: React.ReactElement) => {
-    const props: any = form.getInputProps(component.props.name);
+}: FormGroupProps<T, V>) {
+  const renderField = (name: keyof V, component: React.ReactElement) => {
+    const props: any = form.getInputProps(name);
     props.mb = 'md';
-    props.key = component.props.name;
+    props.key = name;
     props.value = props.value === undefined ? '' : props.value;
     if (component.props.fields) {
       // auto add form for ArrayInput
@@ -61,16 +66,12 @@ export function FormGroup<T extends 'horizontal' | 'vertical'>({
       {fields.map((field) => {
         if (Array.isArray(field)) {
           return (
-            <Group
-              grow
-              spacing="md"
-              key={field.map((f) => f.props.name).join(' ')}
-            >
-              {field.map(renderField)}
+            <Group grow spacing="md" key={field.map((f) => f.name).join(' ')}>
+              {field.map((item) => renderField(item.name, item.input))}
             </Group>
           );
         } else {
-          return renderField(field);
+          return renderField(field.name, field.input);
         }
       })}
       {submitButton ? submitButton : <SubmitButton fullWidth />}
@@ -83,7 +84,7 @@ export interface ApiFormGroupProps<
   Response extends ApiResponse,
   T extends 'horizontal' | 'vertical'
 > extends Omit<ApiFormProps<Request, Response>, 'formRender'>,
-    Omit<FormGroupProps<T>, 'form'> {}
+    Omit<FormGroupProps<T, Request>, 'form'> {}
 
 export function ApiFormGroup<
   Request extends ApiRequest,

@@ -24,12 +24,11 @@ export const LoginForm = ({ onSuccess }: LoginFormProps): JSX.Element => {
           onSuccess && onSuccess(data);
         }}
         fields={[
-          <TextInput label={t('username')} name="username" />,
-          <PasswordInput
-            autoComplete="true"
-            name="password"
-            label={t('password')}
-          />,
+          { name: 'username', input: <TextInput label={t('username')} /> },
+          {
+            name: 'password',
+            input: <PasswordInput autoComplete="true" label={t('password')} />,
+          },
         ]}
       />
     </div>

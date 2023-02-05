@@ -5,12 +5,12 @@ import React, { MutableRefObject } from 'react';
 import { Api, ApiRequest, Collection, PaginatedCollection } from '../../share';
 import { ApiFilterButton } from './ApiFilter';
 import { ApiForm } from './ApiForm';
+import { FormGroupField } from './ApiFormGroup';
 import { ActionButton, ActionProps } from './Buttons';
 
 export type ApiTableColumns<T> = {
   [k in keyof Partial<T>]: {
     label: React.ReactNode;
-    filterInput?: React.ReactNode;
     render?: (value: T[k], item: T) => React.ReactNode;
   };
 };
@@ -33,6 +33,7 @@ export interface ApiTableProps<
   apiParams?: Request;
   fetcherRef?: MutableRefObject<ApiFetcherRef<Request> | undefined>;
   columns: ApiTableColumns<ResponseItem>;
+  filters?: Array<FormGroupField<Request>>;
   rowKey?: keyof ResponseItem;
   header?: React.ReactNode;
   headerActions?: (fetcherRef: ApiFetcherRef<Request>) => Array<ActionProps>;
@@ -49,6 +50,7 @@ export const ApiTable = <
   api,
   apiParams,
   columns,
+  filters,
   rowKey,
   header,
   headerActions,
@@ -58,22 +60,6 @@ export const ApiTable = <
   const [params, setParams] = useSetState<Request>(
     apiParams || ({ page: 1 } as Request)
   );
-
-  const renderFilterButton = () => {
-    const filters: any = {};
-    Object.keys(columns)
-      .filter((k) => columns[k].filterInput)
-      .map((k) => {
-        filters[k] = columns[k];
-      });
-    return Object.keys(filters).length ? (
-      <ApiFilterButton
-        api={api}
-        filters={filters}
-        onApply={(p) => setParams(p)}
-      />
-    ) : null;
-  };
 
   return (
     <ApiForm
@@ -97,7 +83,13 @@ export const ApiTable = <
             >
               <Text fz="lg">{header}</Text>
               <Group>
-                {renderFilterButton()}
+                {filters && (
+                  <ApiFilterButton
+                    api={api}
+                    fields={filters}
+                    onApply={(p) => setParams(p)}
+                  />
+                )}
                 {headerActions &&
                   headerActions(ref).map((c, index) => (
                     <ActionButton key={index} variant="outline" {...c} />

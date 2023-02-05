@@ -1,5 +1,5 @@
-import { QueryUtils } from '@roxavn/core/server';
 import { NotFoundException } from '@roxavn/core/share';
+import { And, ILike, LessThan, MoreThan } from 'typeorm';
 
 import {
   getMyUserApi,
@@ -37,7 +37,15 @@ export class GetUsersApiService extends AuthApiService<typeof getUsersApi> {
     const [users, totalItems] = await this.dbSession
       .getRepository(User)
       .findAndCount({
-        where: QueryUtils.filter(request),
+        where: {
+          username: request.username && ILike(request.username + '%'),
+          createdDate:
+            request.createdDate &&
+            And(
+              MoreThan(request.createdDate[0]),
+              LessThan(request.createdDate[1])
+            ),
+        },
         order: { id: 'desc' },
         take: pageSize,
         skip: (page - 1) * pageSize,

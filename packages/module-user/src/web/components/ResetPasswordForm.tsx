@@ -1,5 +1,5 @@
 import { TextInput, PasswordInput, Title } from '@mantine/core';
-import { InferApiResponse } from '@roxavn/core/share';
+import { Api, InferApiRequest, InferApiResponse } from '@roxavn/core/share';
 import { ApiFormGroup } from '@roxavn/core/web';
 
 import { resetPasswordApi } from '../../share';
@@ -23,32 +23,34 @@ export const ResetPasswordForm = ({
         {t('resetPassword')}
       </Title>
       <ApiFormGroup
-        api={resetPasswordApi}
-        apiParams={{
-          username,
-          token,
-          password: '',
-          retypePassword: '',
-        }}
+        api={
+          resetPasswordApi as Api<
+            InferApiRequest<typeof resetPasswordApi> & {
+              retypePassword: string;
+            }
+          >
+        }
+        apiParams={{ username, token }}
         onSuccess={(data) => onSuccess && onSuccess(data)}
         onBeforeSubmit={(params) => {
           if (params.password !== params.retypePassword) {
             throw { retypePassword: t('wrongRetypePassword') };
           }
-          return {
-            password: params.password,
-            username,
-            token,
-          };
+          return params;
         }}
         fields={[
-          <TextInput disabled label={t('username')} name="username" />,
-          <PasswordInput
-            autoComplete="true"
-            label={t('password')}
-            name="password"
-          />,
-          <PasswordInput label={t('retypePassword')} name="retypePassword" />,
+          {
+            name: 'username',
+            input: <TextInput disabled label={t('username')} />,
+          },
+          {
+            name: 'password',
+            input: <PasswordInput autoComplete="true" label={t('password')} />,
+          },
+          {
+            name: 'retypePassword',
+            input: <PasswordInput label={t('retypePassword')} />,
+          },
         ]}
       />
     </div>
