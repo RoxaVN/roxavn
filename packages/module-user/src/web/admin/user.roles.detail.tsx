@@ -1,7 +1,14 @@
-import { ApiTable, webModule as coreWebModule, utils } from '@roxavn/core/web';
+import {
+  ApiTable,
+  webModule as coreWebModule,
+  utils,
+  ApiFormGroup,
+} from '@roxavn/core/web';
+import { IconPlus } from '@tabler/icons';
 import { useParams } from 'react-router-dom';
 
-import { getUserRolesApi } from '../../share';
+import { getUserRolesApi, addUserRoleApi } from '../../share';
+import { ModuleRoleInput } from '../components';
 import { webModule } from '../module';
 
 webModule.adminPages.push({
@@ -14,6 +21,28 @@ webModule.adminPages.push({
       <ApiTable
         api={getUserRolesApi}
         apiParams={{ id }}
+        headerActions={({ fetch }) => [
+          {
+            label: tCore('add'),
+            icon: IconPlus,
+            dialog: {
+              title: t('addRole'),
+              content: (
+                <ApiFormGroup
+                  api={addUserRoleApi}
+                  apiParams={{ id }}
+                  onSuccess={() => fetch({ id })}
+                  fields={[
+                    {
+                      name: 'roleId',
+                      input: <ModuleRoleInput label={t('role')} />,
+                    },
+                  ]}
+                />
+              ),
+            },
+          },
+        ]}
         columns={{
           scope: {
             label: tCore('apps'),

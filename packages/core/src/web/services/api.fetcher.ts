@@ -38,7 +38,7 @@ export const useApi = <
   Request extends ApiRequest,
   Response extends ApiResponse
 >(
-  api: Api<Request, Response>,
+  api?: Api<Request, Response>,
   apiParams?: Request
 ) => {
   const [data, setData] = useState<Response | null>(null);
@@ -46,22 +46,25 @@ export const useApi = <
   const [error, setError] = useState<any>();
 
   useEffect(() => {
-    const timeout = setTimeout(
-      () =>
-        apiFetcher
-          .fetch(api, apiParams)
-          .then((resp) => {
-            setLoading(false);
-            setData(resp);
-          })
-          .catch((error) => {
-            setLoading(false);
-            setError(error);
-          }),
-      100
-    );
-    return () => clearTimeout(timeout);
-  }, [api, apiParams]);
+    if (api) {
+      const timeout = setTimeout(
+        () =>
+          apiFetcher
+            .fetch(api, apiParams)
+            .then((resp) => {
+              setLoading(false);
+              setData(resp);
+            })
+            .catch((error) => {
+              setLoading(false);
+              setError(error);
+            }),
+        100
+      );
+      return () => clearTimeout(timeout);
+    }
+    return;
+  }, [api?.path, JSON.stringify(apiParams)]);
 
   return { data, loading, error };
 };

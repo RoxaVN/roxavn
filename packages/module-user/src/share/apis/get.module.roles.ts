@@ -2,6 +2,7 @@ import {
   Api,
   ExactProps,
   ForbiddenException,
+  IsNumberString,
   IsOptional,
   Min,
   PaginatedCollection,
@@ -14,6 +15,10 @@ import { baseModule } from '../module';
 import { Permissions } from '../permissions';
 
 class GetModuleRolesRequest extends ExactProps<GetModuleRolesRequest> {
+  @IsNumberString({}, { each: true })
+  @IsOptional()
+  public readonly ids?: number[];
+
   @IsOptional()
   public readonly scope?: string;
 

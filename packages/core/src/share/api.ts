@@ -93,5 +93,5 @@ export type InferApiCollectionItem<T> = T extends Api<any, infer U, any>
     : never
   : never;
 
-export type InferArrayElement<ArrayType extends readonly unknown[]> =
+export type InferArrayElement<ArrayType extends any[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;

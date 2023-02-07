@@ -7,6 +7,7 @@
   "sendResetPasswordLink": "Please copy and send this link to {{name}} to reset password",
   "name": "Name",
   "addUser": "Add user",
+  "addRole": "Add role",
   "login": "Login",
   "logout": "Logout",
   "email": "Email",
