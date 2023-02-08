@@ -8,12 +8,11 @@ import {
   useLoaderData,
   Outlet,
 } from '@remix-run/react';
+import { AppProvider } from '@roxavn/core/web';
 import { useChangeLanguage } from 'remix-i18next';
 import { useTranslation } from 'react-i18next';
 import i18next from './i18next.server';
-import { createEmotionCache, MantineProvider } from '@mantine/core';
-import { ModalsProvider } from '@mantine/modals';
-import { NotificationsProvider } from '@mantine/notifications';
+import { createEmotionCache } from '@mantine/core';
 import { StylesPlaceholder } from '@mantine/remix';
 import React from 'react';
 import 'reflect-metadata';
@@ -46,24 +45,20 @@ export default function Root() {
   useChangeLanguage(locale);
 
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
-      <ModalsProvider>
-        <NotificationsProvider>
-          <html lang={locale} dir={i18n.dir()}>
-            <head>
-              <StylesPlaceholder />
-              <Meta />
-              <Links />
-            </head>
-            <body>
-              <Outlet />
-              <ScrollRestoration />
-              <Scripts />
-              <LiveReload />
-            </body>
-          </html>
-        </NotificationsProvider>
-      </ModalsProvider>
-    </MantineProvider>
+    <AppProvider>
+      <html lang={locale} dir={i18n.dir()}>
+        <head>
+          <StylesPlaceholder />
+          <Meta />
+          <Links />
+        </head>
+        <body>
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </body>
+      </html>
+    </AppProvider>
   );
 }
