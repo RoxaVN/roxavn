@@ -2,7 +2,7 @@ import { Loader } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 
-import { Api, ApiRequest, Collection } from '../../share';
+import { Api, ApiRequest, Collection } from '../../base';
 import { useApi, webModule } from '../services';
 
 export type ApiInputProps<

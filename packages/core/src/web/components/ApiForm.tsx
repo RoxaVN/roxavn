@@ -2,7 +2,7 @@ import { Box, LoadingOverlay } from '@mantine/core';
 import { useForm, UseFormReturnType } from '@mantine/form';
 import React, { useEffect, useState } from 'react';
 
-import { Api, ApiRequest, ApiResponse } from '../../share';
+import { Api, ApiRequest, ApiResponse } from '../../base';
 import { uiManager, webModule, apiFetcher } from '../services';
 
 export interface ApiFormProps<

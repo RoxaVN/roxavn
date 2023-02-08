@@ -4,7 +4,7 @@ import path from 'path';
 
 import { AppConfig } from '@remix-run/dev';
 import { visitFiles } from '.';
-import { BaseModule } from '../../share';
+import { BaseModule } from '../../base';
 import { moduleManager } from '../module.manager';
 
 type RoutesConfig = Exclude<AppConfig['routes'], undefined>;

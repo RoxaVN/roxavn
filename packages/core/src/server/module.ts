@@ -12,7 +12,7 @@ import {
   FullApiResponse,
   ServerException,
   ValidationException,
-} from '../share';
+} from '../base';
 import { databaseManager } from './database';
 import { ApiService } from './service';
 

@@ -1,5 +1,5 @@
 import { EntityManager } from 'typeorm';
-import { Api, InferApiRequest, InferApiResponse } from '../share';
+import { Api, InferApiRequest, InferApiResponse } from '../base';
 
 export abstract class BaseService<Request = any, Response = any> {
   constructor(public dbSession: EntityManager) {}

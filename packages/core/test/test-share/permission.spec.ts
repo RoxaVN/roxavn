@@ -2,7 +2,7 @@ import {
   permissionManager,
   predefinedRoleManager,
   scopeManager,
-} from '../../src/share';
+} from '../../src/base';
 
 const Scopes = {
   Module: {

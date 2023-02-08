@@ -2,7 +2,7 @@ import { Flex, Group, Input } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import React from 'react';
 
-import { ApiRequest, ApiResponse } from '../../share';
+import { ApiRequest, ApiResponse } from '../../base';
 import { ApiForm, ApiFormProps } from './ApiForm';
 import { SubmitButton } from './Buttons';
 

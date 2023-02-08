@@ -1,4 +1,4 @@
-import { ExactProps, PartialProps } from '../../src/share';
+import { ExactProps, PartialProps } from '../../src/base';
 
 describe('props', () => {
   describe('ExactProps', () => {

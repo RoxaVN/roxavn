@@ -3,7 +3,7 @@ import {
   InferApiCollectionItem,
   Empty,
   PaginatedCollection,
-} from '../../src/share';
+} from '../../src/base';
 
 describe('api', () => {
   describe('ApiCollectionItem', () => {

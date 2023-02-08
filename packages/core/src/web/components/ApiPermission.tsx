@@ -1,6 +1,6 @@
 import { useListState, UseListStateHandlers } from '@mantine/hooks';
 import React, { Fragment, useContext, useEffect } from 'react';
-import { Api, ApiRequest, Collection } from '../../share';
+import { Api, ApiRequest, Collection } from '../../base';
 import { useApi } from '../services';
 
 export const RolesContext = React.createContext<{

@@ -4,7 +4,7 @@ import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons';
 import React, { MutableRefObject } from 'react';
 
-import { Api, ApiRequest, Collection, PaginatedCollection } from '../../share';
+import { Api, ApiRequest, Collection, PaginatedCollection } from '../../base';
 import { webModule } from '../services';
 import { ApiFilterButton } from './ApiFilter';
 import { ApiForm } from './ApiForm';

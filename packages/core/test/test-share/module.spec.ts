@@ -1,4 +1,4 @@
-import { BaseModule } from '../../src/share';
+import { BaseModule } from '../../src/base';
 
 describe('module', () => {
   describe('BaseModule', () => {

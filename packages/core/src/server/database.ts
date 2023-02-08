@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { DataSource } from 'typeorm';
-import { constants } from '../share';
+import { constants } from '../base';
 import { moduleManager } from './module.manager';
 
 class DatabaseManager {

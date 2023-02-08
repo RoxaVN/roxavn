@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Api, ApiRequest, ApiResponse, ErrorResponse } from '../../share';
+import { Api, ApiRequest, ApiResponse, ErrorResponse } from '../../base';
 import { HttpException, http } from './http';
 
 export const apiFetcher = {

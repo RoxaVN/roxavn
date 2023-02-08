@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useTranslation, TFunction } from 'react-i18next';
 import { RouteObject, useOutletContext, useRoutes } from 'react-router-dom';
 
-import { baseModule, BaseModule } from '../../share';
+import { baseModule, BaseModule } from '../../base';
 
 export interface PageItem {
   label?: React.ReactNode | { (t: TFunction): React.ReactNode };

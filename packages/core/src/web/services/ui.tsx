@@ -3,7 +3,7 @@ import { openConfirmModal } from '@mantine/modals';
 import React from 'react';
 import { Translation } from 'react-i18next';
 
-import { ErrorResponse } from '../../share';
+import { ErrorResponse } from '../../base';
 import { webModule } from './module';
 
 const uiManager = {

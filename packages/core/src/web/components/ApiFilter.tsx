@@ -1,7 +1,7 @@
 import { Button, Group, Popover, Indicator } from '@mantine/core';
 import { IconCheck, IconFilter, IconX } from '@tabler/icons';
 import { useState } from 'react';
-import { Api, ApiRequest, ApiResponse } from '../../share';
+import { Api, ApiRequest, ApiResponse } from '../../base';
 import { webModule } from '../services';
 import { ApiFormGroup, FormGroupField } from './ApiFormGroup';
 

@@ -1,4 +1,4 @@
-import { urlUtils } from '../../src/share';
+import { urlUtils } from '../../src/base';
 
 describe('url', () => {
   describe('urlUtils', () => {
