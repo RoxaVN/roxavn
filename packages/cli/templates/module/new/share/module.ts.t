@@ -1,6 +1,6 @@
 ---
-to: src/share/module.ts
+to: src/base/module.ts
 ---
-import { BaseModule } from '@roxavn/core/share';
+import { BaseModule } from '@roxavn/core/base';
 
 export const baseModule = new BaseModule('<%= module_name %>');

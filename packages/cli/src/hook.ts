@@ -3,7 +3,7 @@ import {
   runModuleHook,
   runModuleHooks,
 } from '@roxavn/core/server';
-import { constants } from '@roxavn/core/share';
+import { constants } from '@roxavn/core/base';
 import { buildService } from './build';
 import { devService } from './dev';
 

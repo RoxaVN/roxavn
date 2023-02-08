@@ -1,5 +1,5 @@
 ---
-to: src/share/apis/<%= h.changeCase.dot(api_name) %>.ts
+to: src/base/apis/<%= h.changeCase.dot(api_name) %>.ts
 ---
 import {
   Api,
@@ -9,7 +9,7 @@ import {
   Min,
   PaginatedCollection,
   UnauthorizedException,
-} from '@roxavn/core/share';
+} from '@roxavn/core/base';
 import { Type } from 'class-transformer';
 
 import { baseModule } from '../module';

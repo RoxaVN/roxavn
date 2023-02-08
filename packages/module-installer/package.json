@@ -30,9 +30,9 @@
       "require": "./dist/cjs/web/index.js",
       "import": "./dist/esm/web/index.js"
     },
-    "./share": {
-      "require": "./dist/cjs/share/index.js",
-      "import": "./dist/esm/share/index.js"
+    "./base": {
+      "require": "./dist/cjs/base/index.js",
+      "import": "./dist/esm/base/index.js"
     },
     "./server": {
       "require": "./dist/cjs/server/index.js",
@@ -48,7 +48,7 @@
         "dist/esm/web/index.d.ts"
       ],
       "share": [
-        "dist/esm/share/index.d.ts"
+        "dist/esm/base/index.d.ts"
       ],
       "server": [
         "dist/esm/server/index.d.ts"

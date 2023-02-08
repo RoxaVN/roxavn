@@ -1,5 +1,5 @@
 import { ApiService } from '@roxavn/core/server';
-import { InferApiRequest } from '@roxavn/core/share';
+import { InferApiRequest } from '@roxavn/core/base';
 import {
   GetModuleSettingService,
   UpdateSettingService,
@@ -10,7 +10,7 @@ import {
   setFieldsForUserToUpdateApi,
   setFieldsForAdminToUpdateApi,
   settingConstant,
-} from '../../share';
+} from '../../base';
 import { serverModule } from '../module';
 
 @serverModule.useApi(getSettingsApi)

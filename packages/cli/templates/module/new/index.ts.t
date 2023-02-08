@@ -1,4 +1,4 @@
 ---
 to: src/index.ts
 ---
-export * from './share';
+export * from './base';

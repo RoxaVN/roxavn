@@ -1,11 +1,11 @@
 import { Text, Card, SimpleGrid } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { Api } from '@roxavn/core/share';
+import { Api } from '@roxavn/core/base';
 import { ApiForm, webModule as coreWebModule } from '@roxavn/core/web';
 import { IconCheck } from '@tabler/icons';
 import React from 'react';
 
-import { GetModuleSettingResponse } from '../../share';
+import { GetModuleSettingResponse } from '../../base';
 
 export interface ModuleSettingsProps {
   getListApi: Api<any, GetModuleSettingResponse>;

@@ -15,7 +15,7 @@ import {
   getUserRolesApi,
   getUsersApi,
   WebRoutes,
-} from '../../share';
+} from '../../base';
 import { webModule } from '../module';
 
 webModule.adminPages.push({

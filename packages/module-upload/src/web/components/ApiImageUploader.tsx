@@ -3,7 +3,7 @@ import { IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { ApiForm } from '@roxavn/core/web';
 import { useEffect, useState } from 'react';
 
-import { uploadFileApi } from '../../share';
+import { uploadFileApi } from '../../base';
 import { webModule } from '../module';
 import {
   ApiFileInput,

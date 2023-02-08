@@ -12,7 +12,7 @@ import {
   setFieldsForAdminToUpdateApi,
   setFieldsForUserToUpdateApi,
   settingConstant,
-} from '../../share';
+} from '../../base';
 import { webModule } from '../module';
 
 const fields = settingConstant.userInfoFields.map((v) => ({

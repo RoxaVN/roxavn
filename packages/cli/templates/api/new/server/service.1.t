@@ -6,7 +6,7 @@ import {
   InferAuthApiRequest,
 } from '@roxavn/module-user/server';
 
-import { <%= h.changeCase.camel(api_name) %>Api } from '../../share';
+import { <%= h.changeCase.camel(api_name) %>Api } from '../../base';
 import { serverModule } from '../module';
 
 @serverModule.useApi(<%= h.changeCase.camel(api_name) %>Api)

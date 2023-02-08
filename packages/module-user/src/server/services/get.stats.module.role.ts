@@ -1,4 +1,4 @@
-import { getStatsModuleRoleApi } from '../../share';
+import { getStatsModuleRoleApi } from '../../base';
 import { UserRole } from '../entities';
 import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { serverModule } from '../module';

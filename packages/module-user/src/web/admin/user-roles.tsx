@@ -1,6 +1,6 @@
 import { ApiTable, webModule as coreWebModule } from '@roxavn/core/web';
 import { IconEye, IconShieldChevron } from '@tabler/icons';
-import { getStatsModuleRoleApi, getUserRolesApi } from '../../share';
+import { getStatsModuleRoleApi, getUserRolesApi } from '../../base';
 import { webModule } from '../module';
 
 webModule.adminPages.push({

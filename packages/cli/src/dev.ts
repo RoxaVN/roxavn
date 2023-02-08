@@ -1,6 +1,6 @@
 import nodemon from 'nodemon';
 import { cli } from '@remix-run/dev';
-import { constants } from '@roxavn/core/share';
+import { constants } from '@roxavn/core/base';
 
 class DevService {
   initEnv() {

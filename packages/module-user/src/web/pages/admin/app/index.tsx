@@ -1,5 +1,5 @@
 import { Card, SimpleGrid, Image, Text } from '@mantine/core';
-import { BaseModule, constants } from '@roxavn/core/share';
+import { BaseModule, constants } from '@roxavn/core/base';
 import { RolesContext, WebModule } from '@roxavn/core/web';
 import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';

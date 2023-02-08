@@ -1,11 +1,11 @@
 import { FileButton, Button, CloseButton, Text, Group } from '@mantine/core';
 import { useListState } from '@mantine/hooks';
-import { InferApiResponse } from '@roxavn/core/share';
+import { InferApiResponse } from '@roxavn/core/base';
 import { ApiForm, uiManager } from '@roxavn/core/web';
 import { IconUpload, IconFileCheck } from '@tabler/icons';
 import { Fragment } from 'react';
 
-import { uploadFileApi } from '../../share';
+import { uploadFileApi } from '../../base';
 import { webModule } from '../module';
 import { useApiFileInputStyles } from './ApiFileInput.styles';
 

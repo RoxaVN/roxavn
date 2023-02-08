@@ -1,5 +1,5 @@
 import { BaseService } from '@roxavn/core/server';
-import { Roles } from '../share';
+import { Roles } from '../base';
 import { CreateRolesHook, CreateAdminUserHook } from './database';
 
 export class InstallHook extends BaseService {

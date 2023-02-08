@@ -1,7 +1,7 @@
 import fs from 'fs';
 import fse from 'fs-extra';
 import path from 'path';
-import { BaseModule, constants } from '@roxavn/core/share';
+import { BaseModule, constants } from '@roxavn/core/base';
 import { moduleManager } from '@roxavn/core/server';
 
 import { CodeChanger } from './lib';

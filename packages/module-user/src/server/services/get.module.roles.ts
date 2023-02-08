@@ -1,5 +1,5 @@
 import { ILike, In } from 'typeorm';
-import { getModuleRolesApi } from '../../share';
+import { getModuleRolesApi } from '../../base';
 import { Role } from '../entities';
 import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { serverModule } from '../module';

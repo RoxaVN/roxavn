@@ -1,4 +1,4 @@
-import { IsOptional, MinLength, validateByClass } from '@roxavn/core/share';
+import { IsOptional, MinLength, validateByClass } from '@roxavn/core/base';
 import { Type } from 'class-transformer';
 
 class EnvClass {

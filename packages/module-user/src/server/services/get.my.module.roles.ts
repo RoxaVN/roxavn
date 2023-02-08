@@ -1,5 +1,5 @@
 import { moduleManager } from '@roxavn/core/server';
-import { getMyModuleRolesApi } from '../../share';
+import { getMyModuleRolesApi } from '../../base';
 import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { serverModule } from '../module';
 import { GetUserRolesApiService } from './get.user.roles';

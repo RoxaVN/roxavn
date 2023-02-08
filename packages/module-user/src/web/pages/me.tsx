@@ -11,7 +11,7 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { IsAuthenticated } from '../components';
-import { WebRoutes } from '../../share';
+import { WebRoutes } from '../../base';
 
 function MeComponent() {
   const theme = useMantineTheme();

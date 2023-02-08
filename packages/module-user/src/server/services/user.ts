@@ -1,4 +1,4 @@
-import { NotFoundException } from '@roxavn/core/share';
+import { NotFoundException } from '@roxavn/core/base';
 import { And, ILike, LessThan, MoreThan } from 'typeorm';
 
 import {
@@ -6,7 +6,7 @@ import {
   getUsersApi,
   createUserApi,
   UserExistsException,
-} from '../../share';
+} from '../../base';
 import { PasswordIdentity, User } from '../entities';
 import { serverModule } from '../module';
 import { AuthApiService, InferAuthApiRequest } from '../middlerware';

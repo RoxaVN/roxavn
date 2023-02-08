@@ -1,4 +1,4 @@
-import { deleteUserRoleApi } from '../../share';
+import { deleteUserRoleApi } from '../../base';
 import { UserRole } from '../entities';
 import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { serverModule } from '../module';

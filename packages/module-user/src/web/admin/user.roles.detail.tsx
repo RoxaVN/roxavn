@@ -7,7 +7,7 @@ import {
 import { IconPlus } from '@tabler/icons';
 import { useParams } from 'react-router-dom';
 
-import { getUserRolesApi, addUserRoleApi } from '../../share';
+import { getUserRolesApi, addUserRoleApi } from '../../base';
 import { ModuleRoleInput } from '../components';
 import { webModule } from '../module';
 

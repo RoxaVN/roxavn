@@ -1,11 +1,11 @@
 import { BaseService } from '@roxavn/core/server';
-import { Empty } from '@roxavn/core/share';
+import { Empty } from '@roxavn/core/base';
 
 import {
   UpdateSettingRequest,
   GetModuleSettingRequest,
   GetModuleSettingResponse,
-} from '../../share';
+} from '../../base';
 import { Setting } from '../entities';
 
 export class UpdateSettingService extends BaseService<

@@ -1,7 +1,7 @@
-import { InferApiResponse, ServerException } from '@roxavn/core/share';
+import { InferApiResponse, ServerException } from '@roxavn/core/base';
 import busboy from 'busboy';
 
-import { ExceedsStorageLimitException, uploadFileApi } from '../../share';
+import { ExceedsStorageLimitException, uploadFileApi } from '../../base';
 import { File, UserFile } from '../entities';
 import { serverModule } from '../module';
 import { seaweedClient } from './seaweed';

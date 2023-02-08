@@ -1,8 +1,8 @@
 import { TextInput, PasswordInput, Title } from '@mantine/core';
-import { InferApiResponse } from '@roxavn/core/share';
+import { InferApiResponse } from '@roxavn/core/base';
 import { ApiFormGroup } from '@roxavn/core/web';
 
-import { loginApi } from '../../share';
+import { loginApi } from '../../base';
 import { auth } from '../services';
 import { webModule } from '../module';
 

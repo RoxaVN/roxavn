@@ -3,7 +3,7 @@ import {
   InferAuthApiRequest,
 } from '@roxavn/module-user/server';
 
-import { getUserFilesApi } from '../../share';
+import { getUserFilesApi } from '../../base';
 import { UserFile } from '../entities';
 import { serverModule } from '../module';
 

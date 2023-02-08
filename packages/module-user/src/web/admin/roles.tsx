@@ -2,7 +2,7 @@ import { TextInput } from '@mantine/core';
 import { ApiTable, utils, webModule as coreWebModule } from '@roxavn/core/web';
 import { IconCrown } from '@tabler/icons';
 
-import { getModuleRolesApi } from '../../share';
+import { getModuleRolesApi } from '../../base';
 import { webModule } from '../module';
 
 webModule.adminPages.push({

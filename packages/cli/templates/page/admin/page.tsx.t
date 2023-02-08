@@ -5,7 +5,7 @@ import { TextInput } from '@mantine/core';
 import { ApiTable, webModule as coreWebModule, utils } from '@roxavn/core/web';
 import { IconUsers } from '@tabler/icons';
 
-import { getUsersApi } from '../../share';
+import { getUsersApi } from '../../base';
 import { webModule } from '../module';
 
 webModule.adminPages.push({

@@ -1,7 +1,7 @@
-import { type Role as RoleType } from '@roxavn/core/share';
+import { type Role as RoleType } from '@roxavn/core/base';
 import { TokenHasher, BaseService } from '@roxavn/core/server';
 import { PasswordIdentity, Role, User, UserRole } from '../server';
-import { Roles } from '../share/permissions';
+import { Roles } from '../base/permissions';
 
 export class CreateAdminUserHook extends BaseService {
   async handle() {

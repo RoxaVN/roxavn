@@ -6,7 +6,7 @@ import {
   InferApiResponse,
   predefinedRoleManager,
   UnauthorizedException,
-} from '@roxavn/core/share';
+} from '@roxavn/core/base';
 import { Raw } from 'typeorm';
 import { UserAccessToken, UserRole } from './entities';
 import { tokenService } from './services';

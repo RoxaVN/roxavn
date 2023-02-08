@@ -1,8 +1,8 @@
 import { ApiService } from '@roxavn/core/server';
-import { InferApiRequest } from '@roxavn/core/share';
+import { InferApiRequest } from '@roxavn/core/base';
 import { In } from 'typeorm';
 
-import { getUserRolesApi } from '../../share';
+import { getUserRolesApi } from '../../base';
 import { UserRole } from '../entities';
 import { serverModule } from '../module';
 

@@ -1,4 +1,4 @@
-import { addUserRoleApi } from '../../share';
+import { addUserRoleApi } from '../../base';
 import { UserRole } from '../entities';
 import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { serverModule } from '../module';

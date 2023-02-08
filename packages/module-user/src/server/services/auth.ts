@@ -3,9 +3,9 @@ import {
   BadRequestException,
   InferApiRequest,
   UnauthorizedException,
-} from '@roxavn/core/share';
+} from '@roxavn/core/base';
 
-import { loginApi, logoutApi, resetPasswordApi } from '../../share';
+import { loginApi, logoutApi, resetPasswordApi } from '../../base';
 import { Env } from '../config';
 import { PasswordIdentity, UserAccessToken } from '../entities';
 import { serverModule } from '../module';

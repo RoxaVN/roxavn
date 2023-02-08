@@ -31,7 +31,7 @@ import {
 } from '@roxavn/core/web';
 
 import { IsAuthenticated } from '../../components';
-import { getMyModuleRolesApi, WebRoutes } from '../../../share';
+import { getMyModuleRolesApi, WebRoutes } from '../../../base';
 
 const BASE = '/admin/app';
 

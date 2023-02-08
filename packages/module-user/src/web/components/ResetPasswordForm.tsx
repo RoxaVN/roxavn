@@ -1,8 +1,8 @@
 import { TextInput, PasswordInput, Title } from '@mantine/core';
-import { Api, InferApiRequest, InferApiResponse } from '@roxavn/core/share';
+import { Api, InferApiRequest, InferApiResponse } from '@roxavn/core/base';
 import { ApiFormGroup } from '@roxavn/core/web';
 
-import { resetPasswordApi } from '../../share';
+import { resetPasswordApi } from '../../base';
 import { webModule } from '../module';
 
 interface ResetPasswordFormProps {

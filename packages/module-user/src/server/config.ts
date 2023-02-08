@@ -1,4 +1,4 @@
-import { Max, Min, MinLength, validateByClass } from '@roxavn/core/share';
+import { Max, Min, MinLength, validateByClass } from '@roxavn/core/base';
 import { Type } from 'class-transformer';
 
 const A_MINUTE = 60 * 1000;

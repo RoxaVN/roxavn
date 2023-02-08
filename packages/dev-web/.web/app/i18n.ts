@@ -1,4 +1,4 @@
-import { baseModule } from '@roxavn/core/share';
+import { baseModule } from '@roxavn/core/base';
 
 export default {
   // This is the list of languages your application supports

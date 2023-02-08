@@ -1,4 +1,4 @@
 ---
-sh: "cat >> src/share/apis/index.ts"
+sh: "cat >> src/base/apis/index.ts"
 ---
 export * from './<%= h.changeCase.dot(api_name) %>';

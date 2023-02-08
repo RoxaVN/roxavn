@@ -1,6 +1,6 @@
 import { Card, Container } from '@mantine/core';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { WebRoutes } from '../../share';
+import { WebRoutes } from '../../base';
 import { LoginForm } from '../components';
 
 const LoginPage = (): JSX.Element => {

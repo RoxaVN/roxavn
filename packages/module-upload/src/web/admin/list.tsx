@@ -1,7 +1,7 @@
 import { ApiTable, webModule as coreWebModule, utils } from '@roxavn/core/web';
 import { IconUsers } from '@tabler/icons';
 
-import { getUserFilesApi } from '../../share';
+import { getUserFilesApi } from '../../base';
 import { webModule } from '../module';
 
 const Page = () => {

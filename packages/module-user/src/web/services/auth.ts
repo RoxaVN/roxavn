@@ -1,8 +1,8 @@
-import { InferApiResponse } from '@roxavn/core/share';
+import { InferApiResponse } from '@roxavn/core/base';
 import { apiFetcher } from '@roxavn/core/web';
 import isEmpty from 'lodash/isEmpty';
 import { Subject } from 'rxjs';
-import { getMyUserApi, logoutApi } from '../../share';
+import { getMyUserApi, logoutApi } from '../../base';
 
 type AuthData = InferApiResponse<typeof getMyUserApi>;
 

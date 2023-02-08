@@ -1,12 +1,12 @@
 ---
-to: src/share/roles.ts
+to: src/base/roles.ts
 ---
 import {
   constants,
   permissionManager,
   predefinedRoleManager,
   scopeManager,
-} from '@roxavn/core/share';
+} from '@roxavn/core/base';
 import { baseModule } from './module';
 
 export const Scopes = {
