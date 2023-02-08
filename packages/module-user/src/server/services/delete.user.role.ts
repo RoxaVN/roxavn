@@ -9,7 +9,7 @@ export class DeleteUserRoleApiService extends AuthApiService<
 > {
   async handle(request: InferAuthApiRequest<typeof deleteUserRoleApi>) {
     await this.dbSession.getRepository(UserRole).delete({
-      scopeId: request.scopeId,
+      scopeId: request.scopeId || '',
       ownerId: request.id,
       roleId: request.roleId,
     });

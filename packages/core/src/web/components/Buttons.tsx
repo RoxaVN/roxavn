@@ -92,7 +92,11 @@ export const ActionButton = ({
             ? onClick
             : () => {
                 if (modalProps) {
-                  openModal({ modalId: modalId, ...modalProps });
+                  openModal({
+                    modalId: modalId,
+                    closeOnClickOutside: false,
+                    ...modalProps,
+                  });
                 } else if (link) {
                   navigate(link.href);
                 }
