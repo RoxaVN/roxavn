@@ -55,11 +55,11 @@ export const ApiRolesGetter = <Request extends ApiRequest>({
   return data ? children : <Fragment />;
 };
 
-export const useCanAccessApi = <Request extends ApiRequest>(
-  api?: Api<Request>,
-  apiParams?: Request
+export const canAccessApi = <Request extends ApiRequest>(
+  roles: Array<RoleItem>,
+  api: Api<Request>,
+  apiParams?: Partial<Request>
 ) => {
-  const { roles } = useContext(RolesContext);
   const permission = api?.permission;
   return permission
     ? permission.allowedScopes.some(
@@ -72,6 +72,15 @@ export const useCanAccessApi = <Request extends ApiRequest>(
           ) > -1
       )
     : true;
+};
+
+export const useRoles = () => useContext(RolesContext).roles;
+
+export const useCanAccessApi = <Request extends ApiRequest>(
+  api?: Api<Request>,
+  apiParams?: Request
+) => {
+  return api ? canAccessApi(useRoles(), api, apiParams) : true;
 };
 
 export interface IfCanAccessApiProps<Request extends ApiRequest = ApiRequest> {

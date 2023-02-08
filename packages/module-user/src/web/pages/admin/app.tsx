@@ -28,6 +28,8 @@ import {
   WebModule,
   webModule as coreWebModule,
   ApiRolesGetter,
+  useRoles,
+  canAccessApi,
 } from '@roxavn/core/web';
 
 import { IsAuthenticated } from '../../components';
@@ -36,6 +38,7 @@ import { getMyModuleRolesApi, WebRoutes } from '../../../base';
 const BASE = '/admin/app';
 
 function AdminComponent() {
+  const roles = useRoles();
   const location = useLocation();
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
@@ -47,6 +50,12 @@ function AdminComponent() {
     _pageItems.map((pageItem, index) => {
       if (!pageItem.label) {
         return null;
+      }
+      if (pageItem.element) {
+        const childProps: any = pageItem.element.props;
+        if (!canAccessApi(roles, childProps.api, childProps.apiParams)) {
+          return null;
+        }
       }
       const props: any = {
         key: index + 1,

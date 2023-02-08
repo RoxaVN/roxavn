@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation, TFunction } from 'react-i18next';
-import { RouteObject, useOutletContext, useRoutes } from 'react-router-dom';
+import { useOutletContext, useRoutes } from 'react-router-dom';
 
 import { baseModule, BaseModule } from '../../base';
 
@@ -12,7 +12,7 @@ export interface PageItem {
     stroke?: number | string;
   }>;
   path?: string;
-  render?: () => React.ReactElement;
+  element?: React.ReactElement;
   children?: Array<PageItem>;
 }
 
@@ -28,18 +28,10 @@ export class WebModule extends BaseModule {
     return useTranslation(this.escapedName);
   }
 
-  private makePages(pages: Array<PageItem>): RouteObject[] {
-    return pages.map((p) => ({
-      path: p.path,
-      element: p.render && <p.render />,
-      children: p.children && this.makePages(p.children),
-    }));
-  }
-
   makeAdminPages() {
     return () => {
       const { setWebModule } = useOutletContext<any>();
-      const element = useRoutes(this.makePages(this.adminPages));
+      const element = useRoutes(this.adminPages);
 
       useEffect(() => {
         setWebModule(this);
