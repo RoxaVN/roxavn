@@ -60,7 +60,7 @@ export const ApiFilterButton = <
         <Popover.Dropdown>
           <ApiFormGroup
             apiParams={filterValue}
-            submitButton={
+            footer={
               <Group position="right">
                 <Button
                   variant="default"

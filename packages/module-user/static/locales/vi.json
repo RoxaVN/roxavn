@@ -16,6 +16,7 @@
   "myProfile": "Thông tin của tôi",
   "userList": "Danh sách tài khoản",
   "roles": "Chức vụ",
+  "deleteUserRole": "Xóa chức vụ {{role}} của người dùng",
   "roleName": "Tên chức vụ",
   "permissions": "Quyền",
   "userRoles": "Chức vụ người dùng",

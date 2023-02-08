@@ -9,13 +9,7 @@ import {
 import { randomId } from '@mantine/hooks';
 import { closeModal, openModal } from '@mantine/modals';
 import { PolymorphicComponentProps } from '@mantine/utils';
-import {
-  IconPlus,
-  IconSend,
-  IconCopy,
-  IconCheck,
-  IconSearch,
-} from '@tabler/icons';
+import { IconCopy, IconCheck } from '@tabler/icons';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,33 +20,6 @@ type ButtonMantineProps<C = 'button'> = PolymorphicComponentProps<
   C,
   ButtonProps
 >;
-
-export const AddButton = (props: ButtonMantineProps) => {
-  const { t } = webModule.useTranslation();
-  return (
-    <Button leftIcon={<IconPlus size={16} />} variant="outline" {...props}>
-      {t('add')}
-    </Button>
-  );
-};
-
-export const SubmitButton = (props: ButtonMantineProps) => {
-  const { t } = webModule.useTranslation();
-  return (
-    <Button type="submit" leftIcon={<IconSend size={16} />} {...props}>
-      {t('submit')}
-    </Button>
-  );
-};
-
-export const SearchButton = (props: ButtonMantineProps) => {
-  const { t } = webModule.useTranslation();
-  return (
-    <Button type="submit" leftIcon={<IconSearch size={16} />} {...props}>
-      {t('search')}
-    </Button>
-  );
-};
 
 export const CopyButton = ({ value }: { value: string }) => {
   const { t } = webModule.useTranslation();

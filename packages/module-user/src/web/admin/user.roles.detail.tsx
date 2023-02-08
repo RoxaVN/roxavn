@@ -3,11 +3,12 @@ import {
   webModule as coreWebModule,
   utils,
   ApiFormGroup,
+  ApiConfirmFormGroup,
 } from '@roxavn/core/web';
-import { IconPlus } from '@tabler/icons';
+import { IconPlus, IconTrash } from '@tabler/icons';
 import { useParams } from 'react-router-dom';
 
-import { getUserRolesApi, addUserRoleApi } from '../../base';
+import { getUserRolesApi, addUserRoleApi, deleteUserRoleApi } from '../../base';
 import { ModuleRoleInput } from '../components';
 import { webModule } from '../module';
 
@@ -52,6 +53,22 @@ webModule.adminPages.push({
             render: utils.Render.tags,
           },
         }}
+        cellActions={(item) => [
+          {
+            label: tCore('delete'),
+            icon: IconTrash,
+            modal: (closeModal) => ({
+              title: t('deleteUserRole', { role: item.name }),
+              children: (
+                <ApiConfirmFormGroup
+                  api={deleteUserRoleApi}
+                  onCancel={closeModal}
+                  apiParams={{ id: id, roleId: item.id }}
+                />
+              ),
+            }),
+          },
+        ]}
       />
     ) : (
       <div />

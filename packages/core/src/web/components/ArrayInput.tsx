@@ -1,10 +1,10 @@
-import { ActionIcon, Box, BoxProps, Flex, Input } from '@mantine/core';
+import { ActionIcon, Box, BoxProps, Button, Flex, Input } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { randomId, useListState } from '@mantine/hooks';
-import { IconTrash } from '@tabler/icons';
+import { IconPlus, IconTrash } from '@tabler/icons';
 import get from 'lodash/get';
 import React, { useEffect } from 'react';
-import { AddButton } from './Buttons';
+import { webModule } from '../services';
 
 export interface ArrayInputProps extends BoxProps {
   fields: Array<React.ReactElement> | React.ReactElement;
@@ -28,6 +28,7 @@ export const ArrayInput = ({
   max,
   ...props
 }: ArrayInputProps) => {
+  const { t } = webModule.useTranslation();
   const [ids, IdsHandler] = useListState<string>(
     Array.from(
       { length: (form && get(form.values, name)?.length) || 0 },
@@ -104,7 +105,13 @@ export const ArrayInput = ({
           </Flex>
         ))}
         {(!max || !value || max > value.length) && (
-          <AddButton onClick={() => add(formIns, 1)} />
+          <Button
+            leftIcon={<IconPlus size={16} />}
+            variant="outline"
+            onClick={() => add(formIns, 1)}
+          >
+            {t('add')}
+          </Button>
         )}
       </Box>
     );

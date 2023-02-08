@@ -17,6 +17,7 @@
   "userList": "User list",
   "roles": "Roles",
   "roleName": "Role name",
+  "deleteUserRole": "Delete user role {{role}}",
   "permissions": "Permissions",
   "userRoles": "User roles",
   "changeTheme": "Change theme",

@@ -1,5 +1,6 @@
 {
   "confirm": "Xác nhận",
+  "confirmMessage": "Bạn có chắc muốn thực hiện hành động này",
   "accept": "Đồng ý",
   "apply": "Áp dụng",
   "reject": "Từ chối",

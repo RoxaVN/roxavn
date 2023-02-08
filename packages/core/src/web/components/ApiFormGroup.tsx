@@ -1,10 +1,11 @@
-import { Flex, Group, Input } from '@mantine/core';
+import { Button, Flex, Group, Input } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
+import { IconSend, IconX } from '@tabler/icons';
 import React from 'react';
 
 import { ApiRequest, ApiResponse } from '../../base';
+import { webModule } from '../services';
 import { ApiForm, ApiFormProps } from './ApiForm';
-import { SubmitButton } from './Buttons';
 
 export interface FormGroupField<T> {
   name: keyof T;
@@ -13,7 +14,8 @@ export interface FormGroupField<T> {
 
 export interface FormGroupProps<T extends 'horizontal' | 'vertical', V> {
   layout?: T;
-  submitButton?: React.ReactElement;
+  header?: React.ReactElement;
+  footer?: React.ReactElement;
   form: UseFormReturnType<Partial<V>>;
   fields: T extends 'horizontal'
     ? Array<FormGroupField<V>>
@@ -23,9 +25,12 @@ export interface FormGroupProps<T extends 'horizontal' | 'vertical', V> {
 export function FormGroup<T extends 'horizontal' | 'vertical', V>({
   layout,
   form,
-  submitButton,
+  header,
+  footer,
   fields,
 }: FormGroupProps<T, V>) {
+  const { t } = webModule.useTranslation();
+
   const renderField = (name: keyof V, component: React.ReactElement) => {
     const props: any = form.getInputProps(name);
     props.mb = 'md';
@@ -47,15 +52,18 @@ export function FormGroup<T extends 'horizontal' | 'vertical', V>({
         gap="md"
         wrap="wrap"
       >
+        {header}
         {(fields as any).map(renderField)}
-        {submitButton ? (
-          submitButton
+        {footer ? (
+          footer
         ) : (
           <Input.Wrapper
             label={(fields[0] as any).props.label ? ' ' : undefined}
             description={(fields[0] as any).props.description ? ' ' : undefined}
           >
-            <Input component={SubmitButton} />
+            <Input component="button" type="submit">
+              <IconSend size={16} /> {t('submit')}
+            </Input>
           </Input.Wrapper>
         )}
       </Flex>
@@ -63,6 +71,7 @@ export function FormGroup<T extends 'horizontal' | 'vertical', V>({
   }
   return (
     <div>
+      {header}
       {fields.map((field) => {
         if (Array.isArray(field)) {
           return (
@@ -74,7 +83,13 @@ export function FormGroup<T extends 'horizontal' | 'vertical', V>({
           return renderField(field.name, field.input);
         }
       })}
-      {submitButton ? submitButton : <SubmitButton fullWidth />}
+      {footer ? (
+        footer
+      ) : (
+        <Button type="submit" leftIcon={<IconSend size={16} />} fullWidth>
+          {t('submit')}
+        </Button>
+      )}
     </div>
   );
 }
@@ -92,7 +107,8 @@ export function ApiFormGroup<
   T extends 'horizontal' | 'vertical'
 >({
   layout,
-  submitButton,
+  header,
+  footer,
   fields,
   ...props
 }: ApiFormGroupProps<Request, Response, T>) {
@@ -104,9 +120,61 @@ export function ApiFormGroup<
           form={form}
           layout={layout}
           fields={fields}
-          submitButton={submitButton}
+          header={header}
+          footer={footer}
         />
       )}
+    />
+  );
+}
+
+export interface ApiConfirmFormGroupProps<
+  Request extends ApiRequest,
+  Response extends ApiResponse,
+  T extends 'horizontal' | 'vertical'
+> extends Omit<
+    ApiFormGroupProps<Request, Response, T>,
+    'header' | 'footer' | 'fields'
+  > {
+  onCancel: () => void;
+  header?: React.ReactElement;
+  footer?: React.ReactElement;
+  fields?: ApiFormGroupProps<Request, Response, T>['fields'];
+}
+
+export function ApiConfirmFormGroup<
+  Request extends ApiRequest,
+  Response extends ApiResponse,
+  T extends 'horizontal' | 'vertical'
+>({
+  onCancel,
+  header,
+  footer,
+  fields,
+  ...props
+}: ApiConfirmFormGroupProps<Request, Response, T>) {
+  const { t } = webModule.useTranslation();
+  return (
+    <ApiFormGroup
+      {...props}
+      header={header || <p>{t('confirmMessage')}</p>}
+      fields={fields || []}
+      footer={
+        footer || (
+          <Group position="right">
+            <Button
+              leftIcon={<IconX size={16} />}
+              variant="default"
+              onClick={onCancel}
+            >
+              {t('cancel')}
+            </Button>
+            <Button type="submit" leftIcon={<IconSend size={16} />}>
+              {t('submit')}
+            </Button>
+          </Group>
+        )
+      }
     />
   );
 }

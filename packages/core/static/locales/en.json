@@ -1,5 +1,6 @@
 {
   "confirm": "Confirm",
+  "confirmMessage": "Are you sure you want to take this action?",
   "accept": "Yes",
   "apply": "Apply",
   "reject": "No",
