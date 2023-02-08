@@ -13,6 +13,6 @@ http.errorObserver.subscribe((e) => {
     return;
   }
   if (e.response) {
-    uiManager.errorDialog(new Error(`HTTP ${e.response.status} ${e.message}`));
+    uiManager.errorModal(new Error(`HTTP ${e.response.status} ${e.message}`));
   }
 });

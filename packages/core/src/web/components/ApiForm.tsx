@@ -14,7 +14,7 @@ export interface ApiFormProps<
     data: Response | null;
     error: any;
     loading: boolean;
-    fetcher: (params: Request) => void;
+    fetcher: (params: Partial<Request>) => void;
   }) => React.ReactNode;
   onBeforeSubmit?: (
     params: Partial<Request>
@@ -77,7 +77,7 @@ export function ApiForm<
               )
             );
           } else {
-            uiManager.errorDialog(error);
+            uiManager.errorModal(error);
           }
         }
       } finally {

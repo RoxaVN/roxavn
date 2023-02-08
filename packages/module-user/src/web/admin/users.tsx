@@ -30,18 +30,17 @@ webModule.adminPages.push({
       <ApiTable
         api={getUsersApi}
         header={t('userList')}
-        headerActions={(fetcherRef) => [
+        headerActions={[
           {
             label: tCore('add'),
             icon: IconPlus,
-            dialog: {
+            modal: {
               title: t('addUser'),
-              content: (
+              children: (
                 <ApiFormGroup
                   api={createUserApi}
                   apiParams={{ username: '' }}
                   onSuccess={(data, params) => {
-                    fetcherRef.fetch({ page: 1 });
                     const link = WebRoutes.ResetPassword.generate(
                       {},
                       {
@@ -49,7 +48,7 @@ webModule.adminPages.push({
                         token: data.resetPasswordToken,
                       }
                     );
-                    uiManager.alertDialog(
+                    uiManager.alertModal(
                       <div>
                         <p>
                           {t('sendResetPasswordLink', {

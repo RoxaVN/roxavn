@@ -21,17 +21,16 @@ webModule.adminPages.push({
       <ApiTable
         api={getUserRolesApi}
         apiParams={{ id }}
-        headerActions={({ fetch }) => [
+        headerActions={[
           {
             label: tCore('add'),
             icon: IconPlus,
-            dialog: {
+            modal: {
               title: t('addRole'),
-              content: (
+              children: (
                 <ApiFormGroup
                   api={addUserRoleApi}
                   apiParams={{ id }}
-                  onSuccess={() => fetch({ id })}
                   fields={[
                     {
                       name: 'roleId',

@@ -1,12 +1,16 @@
 import { Table, Pagination, Group, Stack, Flex, Text } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
+import { showNotification } from '@mantine/notifications';
+import { IconCheck } from '@tabler/icons';
 import React, { MutableRefObject } from 'react';
 
 import { Api, ApiRequest, Collection, PaginatedCollection } from '../../share';
+import { webModule } from '../services';
 import { ApiFilterButton } from './ApiFilter';
 import { ApiForm } from './ApiForm';
 import { FormGroupField } from './ApiFormGroup';
 import { ActionButton, ActionProps } from './Buttons';
+import { ModuleT } from './ModuleT';
 
 export type ApiTableColumns<T> = {
   [k in keyof Partial<T>]: {
@@ -17,9 +21,14 @@ export type ApiTableColumns<T> = {
 
 type ApiPaginationRequest = ApiRequest & { page?: number };
 
+type _ActionProps = Omit<ActionProps, 'modalMiddleware'> & {
+  autoHandleFormSuccess?: boolean;
+  refetchAfterSuccess?: boolean;
+};
+
 export type ApiFetcherRef<Request extends ApiPaginationRequest> = {
-  fetch: (params: Request) => void;
-  currentParams: Request;
+  fetch: (params: Partial<Request>) => void;
+  currentParams: Partial<Request>;
 };
 
 export interface ApiTableProps<
@@ -36,11 +45,13 @@ export interface ApiTableProps<
   filters?: Array<FormGroupField<Request>>;
   rowKey?: keyof ResponseItem;
   header?: React.ReactNode;
-  headerActions?: (fetcherRef: ApiFetcherRef<Request>) => Array<ActionProps>;
+  headerActions?:
+    | Array<_ActionProps>
+    | ((fetcherRef: ApiFetcherRef<Request>) => Array<_ActionProps>);
   cellActions?: (
     item: ResponseItem,
     fetcherRef: ApiFetcherRef<Request>
-  ) => Array<ActionProps>;
+  ) => Array<_ActionProps>;
 }
 
 export const ApiTable = <
@@ -74,6 +85,42 @@ export const ApiTable = <
         if (fetcherRef) {
           fetcherRef.current = ref;
         }
+        const parseAction = (
+          action: _ActionProps,
+          callback: () => void
+        ): ActionProps => {
+          if (action.autoHandleFormSuccess !== false) {
+            return {
+              ...action,
+              modalMiddleware: (closeModal, modalProps) => {
+                if (React.isValidElement(modalProps.children)) {
+                  const childProps = modalProps.children.props;
+                  modalProps.children = React.cloneElement(
+                    modalProps.children,
+                    {
+                      onSuccess: (...args: any) => {
+                        closeModal();
+                        showNotification({
+                          autoClose: 10000,
+                          title: modalProps.title,
+                          message: <ModuleT module={webModule} k="success" />,
+                          color: 'green',
+                          icon: <IconCheck />,
+                        });
+                        childProps.onSuccess?.apply(modalProps.children, args);
+                        if (action.refetchAfterSuccess !== false) {
+                          callback();
+                        }
+                      },
+                    } as any
+                  );
+                }
+              },
+            };
+          } else {
+            return action;
+          }
+        };
         return (
           <Stack>
             <Flex
@@ -91,8 +138,15 @@ export const ApiTable = <
                   />
                 )}
                 {headerActions &&
-                  headerActions(ref).map((c, index) => (
-                    <ActionButton key={index} variant="outline" {...c} />
+                  (typeof headerActions === 'function'
+                    ? headerActions(ref)
+                    : headerActions
+                  ).map((c, index) => (
+                    <ActionButton
+                      key={index}
+                      variant="outline"
+                      {...parseAction(c, () => fetcher(apiParams || {}))}
+                    />
                   ))}
               </Group>
             </Flex>
@@ -123,7 +177,7 @@ export const ApiTable = <
                               key={index}
                               compact
                               variant="subtle"
-                              {...c}
+                              {...parseAction(c, () => fetcher(params))}
                             />
                           ))}
                         </Group>

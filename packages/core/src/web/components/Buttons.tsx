@@ -4,7 +4,10 @@ import {
   Tooltip,
   ActionIcon,
   ButtonProps,
+  ModalProps,
 } from '@mantine/core';
+import { randomId } from '@mantine/hooks';
+import { closeModal, openModal } from '@mantine/modals';
 import { PolymorphicComponentProps } from '@mantine/utils';
 import {
   IconPlus,
@@ -13,10 +16,10 @@ import {
   IconCheck,
   IconSearch,
 } from '@tabler/icons';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Api } from '../../share';
-import { uiManager, webModule } from '../services';
+import { webModule } from '../services';
 import { IfCanAccessApi, IfCanAccessApiProps } from './ApiPermission';
 
 type ButtonMantineProps<C = 'button'> = PolymorphicComponentProps<
@@ -70,6 +73,8 @@ export const CopyButton = ({ value }: { value: string }) => {
   );
 };
 
+type _ModalProps = Omit<ModalProps, 'opened' | 'onClose'>;
+
 export interface ActionProps {
   label: React.ReactNode;
   icon?: React.ComponentType<{
@@ -78,27 +83,40 @@ export interface ActionProps {
   }>;
   onClick?: () => void;
   access?: Omit<IfCanAccessApiProps, 'children'>;
-  dialog?: {
-    title: React.ReactNode;
-    content: React.ReactElement<{ api?: Api }>;
-  };
+  modal?: _ModalProps | ((closeModal: () => void) => _ModalProps);
+  modalMiddleware?: (closeModal: () => void, modalProps: _ModalProps) => void;
   link?: { href: string };
 }
 
 export const ActionButton = ({
   label,
   icon,
-  dialog,
+  modal,
   link,
   access,
   onClick,
+  modalMiddleware,
   ...props
 }: ActionProps & ButtonMantineProps) => {
   const navigate = useNavigate();
+  const [modalId, modalProps] = useMemo(() => {
+    const id = randomId();
+    const closeFn = () => {
+      closeModal(id);
+    };
+    let _modalProps: _ModalProps | undefined;
+    if (modal) {
+      _modalProps = typeof modal === 'function' ? modal(closeFn) : modal;
+      if (modalMiddleware) {
+        modalMiddleware(closeFn, _modalProps);
+      }
+    }
+    return [id, _modalProps];
+  }, [modal]);
   const Icon = icon;
 
   return (
-    <IfCanAccessApi {...{ ...dialog?.content.props, ...access }}>
+    <IfCanAccessApi {...{ ...(modalProps?.children as any)?.props, ...access }}>
       <Button
         leftIcon={Icon && <Icon size={16} />}
         {...props}
@@ -106,8 +124,8 @@ export const ActionButton = ({
           onClick
             ? onClick
             : () => {
-                if (dialog) {
-                  uiManager.formDialog(dialog.title, dialog.content);
+                if (modalProps) {
+                  openModal({ modalId: modalId, ...modalProps });
                 } else if (link) {
                   navigate(link.href);
                 }
