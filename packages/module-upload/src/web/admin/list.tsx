@@ -1,4 +1,9 @@
-import { ApiTable, webModule as coreWebModule, utils } from '@roxavn/core/web';
+import {
+  ApiTable,
+  webModule as coreWebModule,
+  utils,
+  IfCanAccessApi,
+} from '@roxavn/core/web';
 import { IconUsers } from '@tabler/icons';
 
 import { getUserFilesApi } from '../../base';
@@ -29,5 +34,9 @@ webModule.adminPages.push({
   label: (t) => t('userFiles'),
   path: '/',
   icon: IconUsers,
-  render: Page,
+  element: (
+    <IfCanAccessApi api={getUserFilesApi}>
+      <Page />
+    </IfCanAccessApi>
+  ),
 });

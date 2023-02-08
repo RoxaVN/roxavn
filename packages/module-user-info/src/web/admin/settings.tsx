@@ -1,6 +1,7 @@
 import { MultiSelect } from '@mantine/core';
 import {
   ApiFormGroup,
+  IfCanAccessApi,
   ModuleT,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
@@ -33,7 +34,10 @@ const Page = () => {
             <ApiFormGroup
               api={setFieldsForUserToUpdateApi}
               fields={[
-                <MultiSelect data={fields} withinPortal name="fields" />,
+                {
+                  name: 'fields',
+                  input: <MultiSelect data={fields} withinPortal />,
+                },
               ]}
             />
           ),
@@ -44,7 +48,10 @@ const Page = () => {
             <ApiFormGroup
               api={setFieldsForAdminToUpdateApi}
               fields={[
-                <MultiSelect data={fields} withinPortal name="fields" />,
+                {
+                  name: 'fields',
+                  input: <MultiSelect data={fields} withinPortal />,
+                },
               ]}
             />
           ),
@@ -58,5 +65,9 @@ webModule.adminPages.push({
   label: <ModuleT module={coreWebModule} k="settings" />,
   icon: IconSettings,
   path: '/settings',
-  render: Page,
+  element: (
+    <IfCanAccessApi api={getSettingsApi}>
+      <Page />
+    </IfCanAccessApi>
+  ),
 });
