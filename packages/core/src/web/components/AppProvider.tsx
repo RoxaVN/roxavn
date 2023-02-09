@@ -11,7 +11,7 @@ import { RolesProvider } from './ApiPermission';
 import { RouterTransition } from './RouterTransition';
 
 export type AppProviderComponent = React.ComponentType<{
-  children: React.ReactNode;
+  children: React.ReactElement;
 }>;
 
 export const AppProviderConfigs: {
@@ -46,7 +46,7 @@ export const AppProviderConfigs: {
   rolesProvider: { component: RolesProvider },
 };
 
-export const AppProvider = ({ children }: { children: React.ReactNode }) => {
+export const AppProvider = ({ children }: { children: React.ReactElement }) => {
   let element = children;
   Object.values(AppProviderConfigs)
     .reverse()
