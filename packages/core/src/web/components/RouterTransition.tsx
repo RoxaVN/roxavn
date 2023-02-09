@@ -7,7 +7,13 @@ import {
 import { useEffect } from 'react';
 import { useTransition } from '@remix-run/react';
 
-export function RouterTransition(props: NavigationProgressProps) {
+export function RouterTransition({
+  children,
+  options,
+}: {
+  children: React.ReactNode;
+  options?: NavigationProgressProps;
+}) {
   const transition = useTransition();
 
   useEffect(() => {
@@ -19,5 +25,10 @@ export function RouterTransition(props: NavigationProgressProps) {
     }
   }, [transition.state]);
 
-  return <NavigationProgress autoReset={true} {...props} />;
+  return (
+    <>
+      <NavigationProgress autoReset={true} {...options} />
+      {children}
+    </>
+  );
 }
