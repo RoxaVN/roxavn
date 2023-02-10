@@ -1,6 +1,6 @@
 export interface Resource {
-  type: string;
-  hasId: boolean;
+  name: string;
+  idParam?: string;
 }
 
 export interface Permission {
@@ -17,7 +17,8 @@ export interface Role {
 const resourceEquals = (resourceA: Resource, resourceB: Resource): boolean => {
   return (
     resourceA === resourceB ||
-    (resourceA.type === resourceB.type && resourceA.hasId === resourceB.hasId)
+    (resourceA.name === resourceB.name &&
+      resourceA.idParam === resourceB.idParam)
   );
 };
 
@@ -40,14 +41,14 @@ class ResourceManager {
     return [...this.resources];
   }
 
-  public getResourceTypes(): string[] {
+  public getResourceNames(): string[] {
     return this.resources.map((resource) => {
-      return resource.type;
+      return resource.name;
     });
   }
 
   private validateInputResources(resources: Resource[]): void {
-    const types = new Set(resources.map((resource) => resource.type));
+    const types = new Set(resources.map((resource) => resource.name));
     const isValidTypes = types.size === resources.length;
 
     if (!isValidTypes) {
@@ -70,16 +71,16 @@ class PermissionManager {
     return this.permissions.includes(permission);
   }
 
-  public getPermissionsByResourceType(resourceType: string): Permission[] {
+  public getPermissionsByResourceName(resourceName: string): Permission[] {
     return this.permissions.filter((permission) => {
       return permission.allowedResources.some(
-        (resource) => resource.type === resourceType
+        (resource) => resource.name === resourceName
       );
     });
   }
 
-  public getPermissionValuesByResourceType(resourceType: string): string[] {
-    return this.getPermissionsByResourceType(resourceType).map((permission) => {
+  public getPermissionValuesByResourceName(resourceName: string): string[] {
+    return this.getPermissionsByResourceName(resourceName).map((permission) => {
       return permission.value;
     });
   }
@@ -116,9 +117,9 @@ class RoleManager {
     });
   }
 
-  public getRolesByResourceType(resourceType: string): Role[] {
+  public getRolesByResourceName(resourceName: string): Role[] {
     return this.roles.filter((role) => {
-      return role.resource.type === resourceType;
+      return role.resource.name === resourceName;
     });
   }
 

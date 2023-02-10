@@ -18,7 +18,7 @@ export class CreateAdminUserHook extends BaseService {
 
       const role = await this.dbSession.findOneBy(Role, {
         name: Roles.Admin.name,
-        resource: Roles.Admin.resource.type,
+        resource: Roles.Admin.resource.name,
       });
       if (role) {
         const adminRole = new UserRole();
@@ -37,13 +37,13 @@ export class SetAdminRoleHook extends BaseService {
       where: {
         role: {
           name: Roles.Admin.name,
-          resource: Roles.Admin.resource.type,
+          resource: Roles.Admin.resource.name,
         },
       },
     });
     const roleModel = await this.dbSession.getRepository(Role).findOneBy({
       name: role.name,
-      resource: role.resource.type,
+      resource: role.resource.name,
     });
     if (roleModel) {
       const adminRoles = users.map((user) => {
@@ -67,16 +67,16 @@ export class CreateRolesHook extends BaseService {
   async handle(roles: Record<string, RoleType>) {
     const roleRepository = this.dbSession.getRepository(Role);
     for (const role of Object.values(roles)) {
-      let mess = `[${role.resource.type}] `;
+      let mess = `[${role.resource.name}] `;
       let roleModel = await roleRepository.findOne({
-        where: { name: role.name, resource: role.resource.type },
+        where: { name: role.name, resource: role.resource.name },
       });
       if (!roleModel) {
         roleModel = new Role();
         roleModel.isPredefined = true;
         roleModel.name = role.name;
-        roleModel.hasId = role.resource.hasId;
-        roleModel.resource = role.resource.type;
+        roleModel.hasId = !!role.resource.idParam;
+        roleModel.resource = role.resource.name;
         mess += 'add role ';
       } else {
         mess += 'update role ';

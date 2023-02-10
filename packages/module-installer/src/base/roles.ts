@@ -8,8 +8,7 @@ import { baseModule } from './module';
 
 export const Resources = {
   Module: {
-    type: baseModule.name,
-    hasId: false,
+    name: baseModule.name,
   },
 };
 

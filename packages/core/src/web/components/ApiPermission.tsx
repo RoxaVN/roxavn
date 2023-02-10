@@ -66,9 +66,13 @@ export const canAccessApi = <Request extends ApiRequest>(
         (resource) =>
           roles.findIndex(
             (role) =>
-              role.resource === resource.type &&
+              role.resource === resource.name &&
               role.permissions.indexOf(permission.value) > -1 &&
-              (resource.hasId ? role.resourceId === apiParams?.id : true)
+              (resource.idParam
+                ? apiParams
+                  ? role.resourceId === apiParams[resource.idParam]
+                  : false
+                : true)
           ) > -1
       )
     : true;

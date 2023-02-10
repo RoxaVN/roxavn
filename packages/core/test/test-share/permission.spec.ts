@@ -67,9 +67,9 @@ describe('permission', () => {
       });
     });
 
-    describe('getResourceTypes', () => {
+    describe('getResourceNames', () => {
       it('should work', () => {
-        expect(resourceManager.getResourceTypes()).toEqual([
+        expect(resourceManager.getResourceNames()).toEqual([
           'module',
           'project',
         ]);
@@ -144,10 +144,10 @@ describe('permission', () => {
       });
     });
 
-    describe('getPermissionsByResourceType', () => {
+    describe('getPermissionsByResourceName', () => {
       it('should work', () => {
         expect(
-          permissionManager.getPermissionsByResourceType(Resources.Module.type)
+          permissionManager.getPermissionsByResourceName(Resources.Module.type)
         ).toEqual([
           Permissions.CreateProject,
           Permissions.DeleteProject,
@@ -155,19 +155,19 @@ describe('permission', () => {
         ]);
 
         expect(
-          permissionManager.getPermissionsByResourceType(Resources.Project.type)
+          permissionManager.getPermissionsByResourceName(Resources.Project.type)
         ).toEqual([Permissions.ReadProject]);
 
-        expect(permissionManager.getPermissionsByResourceType('other')).toEqual(
+        expect(permissionManager.getPermissionsByResourceName('other')).toEqual(
           []
         );
       });
     });
 
-    describe('getPermissionValuesByResourceType', () => {
+    describe('getPermissionValuesByResourceName', () => {
       it('should work', () => {
         expect(
-          permissionManager.getPermissionValuesByResourceType(
+          permissionManager.getPermissionValuesByResourceName(
             Resources.Module.type
           )
         ).toEqual([
@@ -177,13 +177,13 @@ describe('permission', () => {
         ]);
 
         expect(
-          permissionManager.getPermissionValuesByResourceType(
+          permissionManager.getPermissionValuesByResourceName(
             Resources.Project.type
           )
         ).toEqual([Permissions.ReadProject.value]);
 
         expect(
-          permissionManager.getPermissionValuesByResourceType('other')
+          permissionManager.getPermissionValuesByResourceName('other')
         ).toEqual([]);
       });
     });
@@ -249,18 +249,18 @@ describe('permission', () => {
       });
     });
 
-    describe('getRolesByResourceType', () => {
+    describe('getRolesByResourceName', () => {
       it('should work', () => {
         expect(
-          predefinedRoleManager.getRolesByResourceType(Resources.Module.type)
+          predefinedRoleManager.getRolesByResourceName(Resources.Module.type)
         ).toEqual([Roles.Admin]);
 
         expect(
-          predefinedRoleManager.getRolesByResourceType(Resources.Project.type)
+          predefinedRoleManager.getRolesByResourceName(Resources.Project.type)
         ).toEqual([Roles.Leader]);
 
         expect(
-          predefinedRoleManager.getRolesByResourceType('other-module')
+          predefinedRoleManager.getRolesByResourceName('other-module')
         ).toEqual([]);
       });
     });
