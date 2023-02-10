@@ -12,7 +12,7 @@ import { Type } from 'class-transformer';
 import { RoleResponse } from '../interfaces';
 
 import { baseModule } from '../module';
-import { Permissions } from '../permissions';
+import { Permissions } from '../roles';
 
 class GetModuleRolesRequest extends ExactProps<GetModuleRolesRequest> {
   @IsNumberString({}, { each: true })
@@ -20,7 +20,7 @@ class GetModuleRolesRequest extends ExactProps<GetModuleRolesRequest> {
   public readonly ids?: number[];
 
   @IsOptional()
-  public readonly scope?: string;
+  public readonly resource?: string;
 
   @Min(1)
   @Type(() => Number)

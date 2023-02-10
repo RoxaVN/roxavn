@@ -2,11 +2,11 @@ import {
   constants,
   permissionManager,
   predefinedRoleManager,
-  scopeManager,
+  resourceManager,
 } from '@roxavn/core/base';
 import { baseModule } from './module';
 
-export const Scopes = {
+export const Resources = {
   Module: {
     type: baseModule.name,
     hasId: false,
@@ -16,28 +16,28 @@ export const Scopes = {
 export const Permissions = {
   UpdateSetting: {
     value: 'update.setting',
-    allowedScopes: [Scopes.Module],
+    allowedResources: [Resources.Module],
   },
   ReadSettings: {
     value: 'read.setting',
-    allowedScopes: [Scopes.Module],
+    allowedResources: [Resources.Module],
   },
   ReadUsersInfo: {
     value: 'read.users.info',
-    allowedScopes: [Scopes.Module],
+    allowedResources: [Resources.Module],
   },
 };
 
 export const Roles = {
   Admin: {
     name: constants.Role.ADMIN,
-    scope: Scopes.Module,
+    resource: Resources.Module,
     permissions: Object.values(Permissions),
   },
 };
 
-if (!scopeManager.hasScope(Scopes.Module)) {
-  scopeManager.register(...Object.values(Scopes));
+if (!resourceManager.hasResource(Resources.Module)) {
+  resourceManager.register(...Object.values(Resources));
   permissionManager.register(...Object.values(Permissions));
   predefinedRoleManager.register(...Object.values(Roles));
 }

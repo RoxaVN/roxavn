@@ -15,7 +15,7 @@ import {
 import { Type } from 'class-transformer';
 import { UserResponse } from '../interfaces';
 import { baseModule } from '../module';
-import { Permissions } from '../permissions';
+import { Permissions } from '../roles';
 
 class GetUsersRequest extends ExactProps<GetUsersRequest> {
   @IsOptional()

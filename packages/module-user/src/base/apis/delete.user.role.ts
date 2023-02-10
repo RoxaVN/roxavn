@@ -11,7 +11,7 @@ import {
 import { Type } from 'class-transformer';
 
 import { baseModule } from '../module';
-import { Permissions } from '../permissions';
+import { Permissions } from '../roles';
 
 class DeleteUserRoleRequest extends ExactProps<DeleteUserRoleRequest> {
   @Min(1)
@@ -22,7 +22,7 @@ class DeleteUserRoleRequest extends ExactProps<DeleteUserRoleRequest> {
   public readonly roleId: number;
 
   @IsOptional()
-  public readonly scopeId?: string;
+  public readonly resourceId?: string;
 }
 
 export const deleteUserRoleApi: Api<

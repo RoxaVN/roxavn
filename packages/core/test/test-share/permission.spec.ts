@@ -1,10 +1,10 @@
 import {
   permissionManager,
   predefinedRoleManager,
-  scopeManager,
+  resourceManager,
 } from '../../src/base';
 
-const Scopes = {
+const Resources = {
   Module: {
     type: 'module',
     hasId: false,
@@ -18,72 +18,75 @@ const Scopes = {
 const Permissions = {
   CreateProject: {
     value: 'project.create',
-    allowedScopes: [Scopes.Module],
+    allowedResources: [Resources.Module],
   },
   DeleteProject: {
     value: 'project.delete',
-    allowedScopes: [Scopes.Module],
+    allowedResources: [Resources.Module],
   },
   ReadProject: {
     value: 'project.read',
-    allowedScopes: [Scopes.Module, Scopes.Project],
+    allowedResources: [Resources.Module, Resources.Project],
   },
 };
 
 const Roles = {
   Admin: {
     name: 'Admin',
-    scope: Scopes.Module,
+    resource: Resources.Module,
     permissions: Object.values(Permissions),
   },
   Leader: {
     name: 'Leader',
-    scope: Scopes.Project,
+    resource: Resources.Project,
     permissions: [Permissions.ReadProject],
   },
 };
 
-scopeManager.register(...Object.values(Scopes));
+resourceManager.register(...Object.values(Resources));
 permissionManager.register(...Object.values(Permissions));
 predefinedRoleManager.register(...Object.values(Roles));
 
 describe('permission', () => {
-  describe('scopeManager', () => {
+  describe('resourceManager', () => {
     describe('register', () => {
-      it('should throw an error when duplicate scope', () => {
+      it('should throw an error when duplicate resource', () => {
         expect(() =>
-          scopeManager.register({
+          resourceManager.register({
             type: 'module',
             hasId: true,
           })
-        ).toThrow('Duplicate scope type');
+        ).toThrow('Duplicate resource type');
 
         expect(() =>
-          scopeManager.register({
+          resourceManager.register({
             type: 'module',
             hasId: false,
           })
-        ).toThrow('Duplicate scope type');
+        ).toThrow('Duplicate resource type');
       });
     });
 
-    describe('getScopeTypes', () => {
+    describe('getResourceTypes', () => {
       it('should work', () => {
-        expect(scopeManager.getScopeTypes()).toEqual(['module', 'project']);
+        expect(resourceManager.getResourceTypes()).toEqual([
+          'module',
+          'project',
+        ]);
       });
     });
 
-    describe('hasScope', () => {
+    describe('hasResource', () => {
       it('should work', () => {
         expect(
-          scopeManager.hasScope({
+          resourceManager.hasResource({
             type: 'module',
             hasId: false,
           })
         ).toBeTruthy();
 
         expect(
-          scopeManager.hasScope({
+          resourceManager.hasResource({
             type: 'module',
             hasId: true,
           })
@@ -94,18 +97,18 @@ describe('permission', () => {
 
   describe('permissionManager', () => {
     describe('register', () => {
-      it('should throw an error when scope is not registered', () => {
+      it('should throw an error when resource is not registered', () => {
         expect(() =>
           permissionManager.register({
             value: 'project.create',
-            allowedScopes: [
+            allowedResources: [
               {
                 type: 'other-module',
                 hasId: false,
               },
             ],
           })
-        ).toThrow('Unregistered scope');
+        ).toThrow('Unregistered resource');
       });
     });
 
@@ -114,7 +117,7 @@ describe('permission', () => {
         expect(
           permissionManager.hasPermission({
             value: 'project.create',
-            allowedScopes: [
+            allowedResources: [
               {
                 type: 'other-module',
                 hasId: false,
@@ -126,7 +129,7 @@ describe('permission', () => {
         expect(
           permissionManager.hasPermission({
             value: 'other-project.create',
-            allowedScopes: [
+            allowedResources: [
               {
                 type: 'module',
                 hasId: false,
@@ -141,10 +144,10 @@ describe('permission', () => {
       });
     });
 
-    describe('getPermissionsByScopeType', () => {
+    describe('getPermissionsByResourceType', () => {
       it('should work', () => {
         expect(
-          permissionManager.getPermissionsByScopeType(Scopes.Module.type)
+          permissionManager.getPermissionsByResourceType(Resources.Module.type)
         ).toEqual([
           Permissions.CreateProject,
           Permissions.DeleteProject,
@@ -152,19 +155,21 @@ describe('permission', () => {
         ]);
 
         expect(
-          permissionManager.getPermissionsByScopeType(Scopes.Project.type)
+          permissionManager.getPermissionsByResourceType(Resources.Project.type)
         ).toEqual([Permissions.ReadProject]);
 
-        expect(permissionManager.getPermissionsByScopeType('other')).toEqual(
+        expect(permissionManager.getPermissionsByResourceType('other')).toEqual(
           []
         );
       });
     });
 
-    describe('getPermissionValuesByScopeType', () => {
+    describe('getPermissionValuesByResourceType', () => {
       it('should work', () => {
         expect(
-          permissionManager.getPermissionValuesByScopeType(Scopes.Module.type)
+          permissionManager.getPermissionValuesByResourceType(
+            Resources.Module.type
+          )
         ).toEqual([
           Permissions.CreateProject.value,
           Permissions.DeleteProject.value,
@@ -172,11 +177,13 @@ describe('permission', () => {
         ]);
 
         expect(
-          permissionManager.getPermissionValuesByScopeType(Scopes.Project.type)
+          permissionManager.getPermissionValuesByResourceType(
+            Resources.Project.type
+          )
         ).toEqual([Permissions.ReadProject.value]);
 
         expect(
-          permissionManager.getPermissionValuesByScopeType('other')
+          permissionManager.getPermissionValuesByResourceType('other')
         ).toEqual([]);
       });
     });
@@ -184,42 +191,42 @@ describe('permission', () => {
 
   describe('predefinedRoleManager', () => {
     describe('register', () => {
-      it('should throw an error when scope is not registered', () => {
+      it('should throw an error when resource is not registered', () => {
         expect(() =>
           predefinedRoleManager.register({
             name: 'Supporter',
-            scope: {
+            resource: {
               type: 'other-module',
               hasId: false,
             },
             permissions: [Permissions.CreateProject],
           })
-        ).toThrow('Unregistered scope');
+        ).toThrow('Unregistered resource');
       });
 
       it('should throw an error when permission is not registered', () => {
         expect(() =>
           predefinedRoleManager.register({
             name: 'Supporter',
-            scope: Scopes.Module,
+            resource: Resources.Module,
             permissions: [
               {
                 value: 'other.permission',
-                allowedScopes: [Scopes.Module],
+                allowedResources: [Resources.Module],
               },
             ],
           })
         ).toThrow('Unregistered permission');
       });
 
-      it('should throw an error when role permission scope is conflict', () => {
+      it('should throw an error when role permission resource is conflict', () => {
         expect(() =>
           predefinedRoleManager.register({
             name: 'Supporter',
-            scope: Scopes.Project,
+            resource: Resources.Project,
             permissions: [Permissions.CreateProject],
           })
-        ).toThrow('Conflict role permission scope');
+        ).toThrow('Conflict role permission resource');
       });
     });
 
@@ -236,24 +243,24 @@ describe('permission', () => {
         expect(
           predefinedRoleManager.getRolesByPermission({
             value: 'other',
-            allowedScopes: [Scopes.Module],
+            allowedResources: [Resources.Module],
           })
         ).toEqual([]);
       });
     });
 
-    describe('getRolesByScopeType', () => {
+    describe('getRolesByResourceType', () => {
       it('should work', () => {
         expect(
-          predefinedRoleManager.getRolesByScopeType(Scopes.Module.type)
+          predefinedRoleManager.getRolesByResourceType(Resources.Module.type)
         ).toEqual([Roles.Admin]);
 
         expect(
-          predefinedRoleManager.getRolesByScopeType(Scopes.Project.type)
+          predefinedRoleManager.getRolesByResourceType(Resources.Project.type)
         ).toEqual([Roles.Leader]);
 
         expect(
-          predefinedRoleManager.getRolesByScopeType('other-module')
+          predefinedRoleManager.getRolesByResourceType('other-module')
         ).toEqual([]);
       });
     });

@@ -11,8 +11,8 @@ export class AddUserRoleApiService extends AuthApiService<
     const userRole = new UserRole();
     userRole.ownerId = request.id;
     userRole.roleId = request.roleId;
-    if (request.scopeId) {
-      userRole.scopeId = request.scopeId;
+    if (request.resourceId) {
+      userRole.resourceId = request.resourceId;
     }
     await this.dbSession.save(userRole);
   }

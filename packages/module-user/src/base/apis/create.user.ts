@@ -9,7 +9,7 @@ import {
 } from '@roxavn/core/base';
 import { UserExistsException } from '../errors';
 import { baseModule } from '../module';
-import { Permissions } from '../permissions';
+import { Permissions } from '../roles';
 import { IsUsername } from '../validation';
 
 class CreateUserRequest extends ExactProps<CreateUserRequest> {

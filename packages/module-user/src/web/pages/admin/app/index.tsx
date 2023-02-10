@@ -24,20 +24,20 @@ export const Page = () => {
       ]}
     >
       {roles
-        .filter((item) => !item.scopeId)
+        .filter((item) => !item.resourceId)
         .map((item) => (
           <Card key={item.id}>
             <Card.Section>
-              <Link to={BaseModule.escapeName(item.scope)}>
+              <Link to={BaseModule.escapeName(item.resource)}>
                 <Image
-                  src={WebModule.resolveStaticPath(item.scope, '/icon.svg')}
+                  src={WebModule.resolveStaticPath(item.resource, '/icon.svg')}
                   height={160}
-                  alt={item.scope}
+                  alt={item.resource}
                 />
               </Link>
             </Card.Section>
             <Text weight={500} mt="md" align="center">
-              {t(item.scope + '.name')}
+              {t(item.resource + '.name')}
             </Text>
           </Card>
         ))}

@@ -12,7 +12,7 @@ import { Type } from 'class-transformer';
 
 import { RoleResponse } from '../interfaces';
 import { baseModule } from '../module';
-import { Permissions } from '../permissions';
+import { Permissions } from '../roles';
 
 class GetUserRolesRequest extends ExactProps<GetUserRolesRequest> {
   @Min(1)
@@ -21,10 +21,10 @@ class GetUserRolesRequest extends ExactProps<GetUserRolesRequest> {
 
   @IsArray()
   @IsOptional()
-  public readonly scopes?: string[];
+  public readonly resources?: string[];
 
   @IsOptional()
-  public readonly scopeId?: string;
+  public readonly resourceId?: string;
 }
 
 type GetUserRolesResponse = Collection<RoleResponse>;

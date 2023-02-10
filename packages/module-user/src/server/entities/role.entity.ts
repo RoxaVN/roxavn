@@ -10,13 +10,13 @@ import {
 import { UserRole } from './user-role.entity';
 
 @Entity()
-@Unique(['scope', 'name'])
+@Unique(['resource', 'name'])
 export class Role {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  scope: string;
+  resource: string;
 
   @Column()
   name: string;

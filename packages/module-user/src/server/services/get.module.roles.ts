@@ -17,7 +17,7 @@ export class GetModuleRolesApiService extends AuthApiService<
       .findAndCount({
         where: {
           id: request.ids && In(request.ids),
-          scope: request.scope && ILike(`%${request.scope}%`),
+          resource: request.resource && ILike(`%${request.resource}%`),
           hasId: false,
         },
         order: { id: 'desc' },

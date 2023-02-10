@@ -11,7 +11,7 @@ import {
 import { Type } from 'class-transformer';
 import { UserFile } from '../interfaces';
 import { baseModule } from '../module';
-import { Permissions } from '../permissions';
+import { Permissions } from '../roles';
 
 class GetUserFilesRequest extends ExactProps<GetUserFilesRequest> {
   @Min(1)

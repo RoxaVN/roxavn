@@ -1,7 +1,7 @@
 import { type Role as RoleType } from '@roxavn/core/base';
 import { TokenHasher, BaseService } from '@roxavn/core/server';
 import { PasswordIdentity, Role, User, UserRole } from '../server';
-import { Roles } from '../base/permissions';
+import { Roles } from '../base/roles';
 
 export class CreateAdminUserHook extends BaseService {
   async handle() {
@@ -18,7 +18,7 @@ export class CreateAdminUserHook extends BaseService {
 
       const role = await this.dbSession.findOneBy(Role, {
         name: Roles.Admin.name,
-        scope: Roles.Admin.scope.type,
+        resource: Roles.Admin.resource.type,
       });
       if (role) {
         const adminRole = new UserRole();
@@ -37,13 +37,13 @@ export class SetAdminRoleHook extends BaseService {
       where: {
         role: {
           name: Roles.Admin.name,
-          scope: Roles.Admin.scope.type,
+          resource: Roles.Admin.resource.type,
         },
       },
     });
     const roleModel = await this.dbSession.getRepository(Role).findOneBy({
       name: role.name,
-      scope: role.scope.type,
+      resource: role.resource.type,
     });
     if (roleModel) {
       const adminRoles = users.map((user) => {
@@ -67,16 +67,16 @@ export class CreateRolesHook extends BaseService {
   async handle(roles: Record<string, RoleType>) {
     const roleRepository = this.dbSession.getRepository(Role);
     for (const role of Object.values(roles)) {
-      let mess = `[${role.scope.type}] `;
+      let mess = `[${role.resource.type}] `;
       let roleModel = await roleRepository.findOne({
-        where: { name: role.name, scope: role.scope.type },
+        where: { name: role.name, resource: role.resource.type },
       });
       if (!roleModel) {
         roleModel = new Role();
         roleModel.isPredefined = true;
         roleModel.name = role.name;
-        roleModel.hasId = role.scope.hasId;
-        roleModel.scope = role.scope.type;
+        roleModel.hasId = role.resource.hasId;
+        roleModel.resource = role.resource.type;
         mess += 'add role ';
       } else {
         mess += 'update role ';

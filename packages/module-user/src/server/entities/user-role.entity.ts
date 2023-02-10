@@ -11,7 +11,7 @@ import { User } from './user.entity';
 @Entity()
 export class UserRole {
   @PrimaryColumn('character varying', { default: '' })
-  scopeId: string;
+  resourceId: string;
 
   @PrimaryColumn()
   ownerId: number;

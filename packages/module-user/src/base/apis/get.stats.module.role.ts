@@ -10,7 +10,7 @@ import {
 import { Type } from 'class-transformer';
 
 import { baseModule } from '../module';
-import { Permissions } from '../permissions';
+import { Permissions } from '../roles';
 
 class GetStatsModuleRoleRequest extends ExactProps<GetStatsModuleRoleRequest> {
   @Min(1)

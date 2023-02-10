@@ -12,7 +12,7 @@ export class GetMyModuleRolesApiService extends AuthApiService<
     const service = this.create(GetUserRolesApiService);
     const result = await service.handle({
       id: request.$user.id,
-      scopes: moduleManager.modules.map((m) => m.name),
+      resources: moduleManager.modules.map((m) => m.name),
     });
     return result;
   }

@@ -1,5 +1,5 @@
 export * from './apis';
-export * from './permissions';
+export * from './roles';
 export * from './routes';
 export * from './module';
 export * from './interfaces';
