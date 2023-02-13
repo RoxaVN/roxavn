@@ -5,9 +5,9 @@ class I18nServer {
     i18next.init({ resources: {} });
   }
 
-  addResources(resources: Record<string, any>, namespace: string) {
-    Object.keys(resources).map((lang) => {
-      i18next.addResourceBundle(lang, namespace, resources[lang]);
+  addScopes(scopes: Record<string, any>, namespace: string) {
+    Object.keys(scopes).map((lang) => {
+      i18next.addResourceBundle(lang, namespace, scopes[lang]);
     });
     return (key: string, options?: Record<string, unknown>) => {
       return i18next.t(namespace + '.' + key, options);

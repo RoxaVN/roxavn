@@ -1,58 +1,57 @@
-export interface Resource {
+export interface Scope {
   name: string;
   idParam?: string;
 }
 
 export interface Permission {
   value: string;
-  allowedResources: Resource[];
+  allowedScopes: Scope[];
 }
 
 export interface Role {
   name: string;
-  resource: Resource;
+  scope: Scope;
   permissions: Permission[];
 }
 
-const resourceEquals = (resourceA: Resource, resourceB: Resource): boolean => {
+const scopeEquals = (scopeA: Scope, scopeB: Scope): boolean => {
   return (
-    resourceA === resourceB ||
-    (resourceA.name === resourceB.name &&
-      resourceA.idParam === resourceB.idParam)
+    scopeA === scopeB ||
+    (scopeA.name === scopeB.name && scopeA.idParam === scopeB.idParam)
   );
 };
 
-class ResourceManager {
-  private resources: Resource[] = [];
+class ScopeManager {
+  private scopes: Scope[] = [];
 
-  public register(...resources: Resource[]): void {
-    const newResources = [...this.resources, ...resources];
-    this.validateInputResources(newResources);
-    this.resources = newResources;
+  public register(...scopes: Scope[]): void {
+    const newScopes = [...this.scopes, ...scopes];
+    this.validateInputScopes(newScopes);
+    this.scopes = newScopes;
   }
 
-  public hasResource(resource: Resource): boolean {
-    return this.resources.some((iterResource) => {
-      return resourceEquals(iterResource, resource);
+  public hasScope(scope: Scope): boolean {
+    return this.scopes.some((iterScope) => {
+      return scopeEquals(iterScope, scope);
     });
   }
 
-  public getResources() {
-    return [...this.resources];
+  public getScopes() {
+    return [...this.scopes];
   }
 
-  public getResourceNames(): string[] {
-    return this.resources.map((resource) => {
-      return resource.name;
+  public getScopeNames(): string[] {
+    return this.scopes.map((scope) => {
+      return scope.name;
     });
   }
 
-  private validateInputResources(resources: Resource[]): void {
-    const types = new Set(resources.map((resource) => resource.name));
-    const isValidTypes = types.size === resources.length;
+  private validateInputScopes(scopes: Scope[]): void {
+    const types = new Set(scopes.map((scope) => scope.name));
+    const isValidTypes = types.size === scopes.length;
 
     if (!isValidTypes) {
-      throw new Error('Duplicate resource type');
+      throw new Error('Duplicate scope type');
     }
   }
 }
@@ -60,7 +59,7 @@ class ResourceManager {
 class PermissionManager {
   private readonly permissions: Permission[] = [];
 
-  constructor(private readonly resourceManager: ResourceManager) {}
+  constructor(private readonly scopeManager: ScopeManager) {}
 
   public register(...permissions: Permission[]): void {
     this.validateInputPermissions(permissions);
@@ -71,28 +70,26 @@ class PermissionManager {
     return this.permissions.includes(permission);
   }
 
-  public getPermissionsByResourceName(resourceName: string): Permission[] {
+  public getPermissionsByScopeName(scopeName: string): Permission[] {
     return this.permissions.filter((permission) => {
-      return permission.allowedResources.some(
-        (resource) => resource.name === resourceName
-      );
+      return permission.allowedScopes.some((scope) => scope.name === scopeName);
     });
   }
 
-  public getPermissionValuesByResourceName(resourceName: string): string[] {
-    return this.getPermissionsByResourceName(resourceName).map((permission) => {
+  public getPermissionValuesByScopeName(scopeName: string): string[] {
+    return this.getPermissionsByScopeName(scopeName).map((permission) => {
       return permission.value;
     });
   }
 
   private validateInputPermissions(permissions: Permission[]): void {
     permissions.forEach((permission) => {
-      const isValidResources = permission.allowedResources.every((resource) => {
-        return this.resourceManager.hasResource(resource);
+      const isValidScopes = permission.allowedScopes.every((scope) => {
+        return this.scopeManager.hasScope(scope);
       });
 
-      if (!isValidResources) {
-        throw new Error('Unregistered resource');
+      if (!isValidScopes) {
+        throw new Error('Unregistered scope');
       }
     });
   }
@@ -102,7 +99,7 @@ class RoleManager {
   private readonly roles: Role[] = [];
 
   constructor(
-    private readonly resourceManager: ResourceManager,
+    private readonly scopeManager: ScopeManager,
     private readonly permissionManager: PermissionManager
   ) {}
 
@@ -117,17 +114,17 @@ class RoleManager {
     });
   }
 
-  public getRolesByResourceName(resourceName: string): Role[] {
+  public getRolesByScopeName(scopeName: string): Role[] {
     return this.roles.filter((role) => {
-      return role.resource.name === resourceName;
+      return role.scope.name === scopeName;
     });
   }
 
   private validateInputRoles(roles: Role[]): void {
     roles.forEach((role) => {
-      const isValidResource = this.resourceManager.hasResource(role.resource);
-      if (!isValidResource) {
-        throw new Error('Unregistered resource');
+      const isValidScope = this.scopeManager.hasScope(role.scope);
+      if (!isValidScope) {
+        throw new Error('Unregistered scope');
       }
 
       const isValidPermissions = role.permissions.every((permission) => {
@@ -137,23 +134,21 @@ class RoleManager {
         throw new Error('Unregistered permission');
       }
 
-      const isValidPermissionResources = role.permissions.every(
-        (permission) => {
-          return permission.allowedResources.some((resource) => {
-            return resourceEquals(resource, role.resource);
-          });
-        }
-      );
-      if (!isValidPermissionResources) {
-        throw new Error('Conflict role permission resource');
+      const isValidPermissionScopes = role.permissions.every((permission) => {
+        return permission.allowedScopes.some((scope) => {
+          return scopeEquals(scope, role.scope);
+        });
+      });
+      if (!isValidPermissionScopes) {
+        throw new Error('Conflict role permission scope');
       }
     });
   }
 }
 
-export const resourceManager = new ResourceManager();
-export const permissionManager = new PermissionManager(resourceManager);
+export const scopeManager = new ScopeManager();
+export const permissionManager = new PermissionManager(scopeManager);
 export const predefinedRoleManager = new RoleManager(
-  resourceManager,
+  scopeManager,
   permissionManager
 );

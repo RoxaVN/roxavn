@@ -64,11 +64,11 @@ ServerModule.apiMiddlerwares.push(
         const hasRole = await dbSession.getRepository(UserRole).count({
           where: predefinedRoles.map((predefinedRole) => ({
             ownerId: accessToken.ownerId,
-            resourceId: predefinedRole.resource.idParam
-              ? req.params[predefinedRole.resource.idParam]
+            scopeId: predefinedRole.scope.idParam
+              ? req.params[predefinedRole.scope.idParam]
               : '',
             role: {
-              resource: predefinedRole.resource.name,
+              scope: predefinedRole.scope.name,
               name: predefinedRole.name,
             },
           })),

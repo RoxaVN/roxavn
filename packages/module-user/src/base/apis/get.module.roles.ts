@@ -20,7 +20,7 @@ class GetModuleRolesRequest extends ExactProps<GetModuleRolesRequest> {
   public readonly ids?: number[];
 
   @IsOptional()
-  public readonly resource?: string;
+  public readonly scope?: string;
 
   @Min(1)
   @Type(() => Number)

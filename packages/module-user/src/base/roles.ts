@@ -2,11 +2,11 @@ import {
   constants,
   permissionManager,
   predefinedRoleManager,
-  resourceManager,
+  scopeManager,
 } from '@roxavn/core/base';
 import { baseModule } from './module';
 
-export const Resources = {
+export const Scopes = {
   Module: {
     name: baseModule.name,
   },
@@ -15,41 +15,41 @@ export const Resources = {
 export const Permissions = {
   CreateUser: {
     value: 'create.user',
-    allowedResources: [Resources.Module],
+    allowedScopes: [Scopes.Module],
   },
   ReadUser: {
     value: 'read.user',
-    allowedResources: [Resources.Module],
+    allowedScopes: [Scopes.Module],
   },
   ReadRole: {
     value: 'read.role',
-    allowedResources: [Resources.Module],
+    allowedScopes: [Scopes.Module],
   },
   ReadUserRoles: {
     value: 'read.user.roles',
-    allowedResources: [Resources.Module],
+    allowedScopes: [Scopes.Module],
   },
   UpdateUserRoles: {
     value: 'update.user.roles',
-    allowedResources: [Resources.Module],
+    allowedScopes: [Scopes.Module],
   },
 };
 
 export const Roles = {
   Admin: {
     name: constants.Role.ADMIN,
-    resource: Resources.Module,
+    scope: Scopes.Module,
     permissions: Object.values(Permissions),
   },
   Moderator: {
     name: constants.Role.MODERATOR,
-    resource: Resources.Module,
+    scope: Scopes.Module,
     permissions: [Permissions.ReadUser],
   },
 };
 
-if (!resourceManager.hasResource(Resources.Module)) {
-  resourceManager.register(...Object.values(Resources));
+if (!scopeManager.hasScope(Scopes.Module)) {
+  scopeManager.register(...Object.values(Scopes));
   permissionManager.register(...Object.values(Permissions));
   predefinedRoleManager.register(...Object.values(Roles));
 }

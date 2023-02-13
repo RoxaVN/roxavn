@@ -21,10 +21,10 @@ class GetUserRolesRequest extends ExactProps<GetUserRolesRequest> {
 
   @IsArray()
   @IsOptional()
-  public readonly resources?: string[];
+  public readonly scopes?: string[];
 
   @IsOptional()
-  public readonly resourceId?: string;
+  public readonly scopeId?: string;
 }
 
 type GetUserRolesResponse = Collection<RoleResponse>;

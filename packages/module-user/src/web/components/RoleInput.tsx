@@ -10,11 +10,11 @@ export const ModuleRoleInput = (props: Omit<SelectProps, 'data'>) => (
     convertData={(items) =>
       items.map((item) => ({
         value: item.id as any,
-        label: item.resource + ' ' + item.name,
+        label: item.scope + ' ' + item.name,
       }))
     }
     fetchOnFocus
-    searchKey="resource"
+    searchKey="scope"
     onSearchChangeProp="onSearchChange"
     component={Select}
     searchable

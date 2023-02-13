@@ -17,11 +17,9 @@ const Page = () => {
     <ApiTable
       api={getModuleRolesApi}
       header={t('roles')}
-      filters={[
-        { name: 'resource', input: <TextInput label={tCore('apps')} /> },
-      ]}
+      filters={[{ name: 'scope', input: <TextInput label={tCore('apps')} /> }]}
       columns={{
-        resource: { label: tCore('apps') },
+        scope: { label: tCore('apps') },
         name: { label: t('roleName') },
         permissions: {
           label: t('permissions'),

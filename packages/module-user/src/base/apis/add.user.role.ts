@@ -22,7 +22,7 @@ class AddUserRoleRequest extends ExactProps<AddUserRoleRequest> {
   public readonly roleId: number;
 
   @IsOptional()
-  public readonly resourceId?: string;
+  public readonly scopeId?: string;
 }
 
 export const addUserRoleApi: Api<

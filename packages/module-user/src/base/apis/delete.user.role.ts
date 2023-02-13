@@ -22,7 +22,7 @@ class DeleteUserRoleRequest extends ExactProps<DeleteUserRoleRequest> {
   public readonly roleId: number;
 
   @IsOptional()
-  public readonly resourceId?: string;
+  public readonly scopeId?: string;
 }
 
 export const deleteUserRoleApi: Api<

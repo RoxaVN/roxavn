@@ -7,7 +7,7 @@ export interface Empty {}
 
 export interface Id {
   /**
-   * An id of an resource.
+   * An id of an scope.
    */
   id: number;
 }

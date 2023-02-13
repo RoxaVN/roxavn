@@ -12,20 +12,20 @@ export class GetUserRolesApiService extends ApiService<typeof getUserRolesApi> {
     const items = await this.dbSession.getRepository(UserRole).find({
       relations: { role: true },
       select: {
-        resourceId: true,
+        scopeId: true,
         role: {
           id: true,
           name: true,
           permissions: true,
-          resource: true,
+          scope: true,
         },
       },
       where: {
         ownerId: request.id,
-        resourceId: request.resourceId,
-        role: request.resources?.length
+        scopeId: request.scopeId,
+        role: request.scopes?.length
           ? {
-              resource: In(request.resources),
+              scope: In(request.scopes),
             }
           : undefined,
       },

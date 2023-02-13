@@ -9,8 +9,8 @@ export const RolesContext = React.createContext<{
 }>({} as any);
 
 export interface RoleItem {
-  resource: string;
-  resourceId?: string;
+  scope: string;
+  scopeId?: string;
   permissions: string[];
   name: string;
   id: number;
@@ -43,7 +43,7 @@ export const ApiRolesGetter = <Request extends ApiRequest>({
       const newRoles = data.items.filter(
         (item) =>
           !roles.find(
-            (role) => role.id === item.id && role.resourceId === item.resourceId
+            (role) => role.id === item.id && role.scopeId === item.scopeId
           )
       );
       if (newRoles.length) {
@@ -62,15 +62,15 @@ export const canAccessApi = <Request extends ApiRequest>(
 ) => {
   const permission = api?.permission;
   return permission
-    ? permission.allowedResources.some(
-        (resource) =>
+    ? permission.allowedScopes.some(
+        (scope) =>
           roles.findIndex(
             (role) =>
-              role.resource === resource.name &&
+              role.scope === scope.name &&
               role.permissions.indexOf(permission.value) > -1 &&
-              (resource.idParam
+              (scope.idParam
                 ? apiParams
-                  ? role.resourceId === apiParams[resource.idParam]
+                  ? role.scopeId === apiParams[scope.idParam]
                   : false
                 : true)
           ) > -1
