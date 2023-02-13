@@ -1,5 +1,6 @@
 import { Api, ApiError, ApiRequest, ApiResponse } from './api';
 import { constants } from './constants';
+import { Scope } from './permission';
 
 export class BaseModule {
   private readonly _name: string;
@@ -21,6 +22,14 @@ export class BaseModule {
    */
   public get escapedName(): string {
     return this._escapedName;
+  }
+
+  /**
+   *
+   * @returns scope object of module
+   */
+  scope(): Scope {
+    return { name: this._escapedName };
   }
 
   /**

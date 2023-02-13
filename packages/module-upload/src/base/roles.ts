@@ -7,9 +7,7 @@ import {
 import { baseModule } from './module';
 
 export const Scopes = {
-  Module: {
-    name: baseModule.name,
-  },
+  Module: baseModule.scope(),
 };
 
 export const Permissions = {
