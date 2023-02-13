@@ -32,7 +32,6 @@
   "filter": "Filter",
   "operator": "Operator",
   "id": "Id",
-  "ownerId": "Owner id",
   "detail": "Detail",
 
   "Filter": {

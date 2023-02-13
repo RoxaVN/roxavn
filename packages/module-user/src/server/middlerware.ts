@@ -41,9 +41,9 @@ ServerModule.apiMiddlerwares.push(
       const accessToken = await dbSession
         .getRepository(UserAccessToken)
         .findOne({
-          select: ['ownerId', 'id'],
+          select: ['userId', 'id'],
           where: {
-            ownerId: parseInt(userId),
+            userId: parseInt(userId),
             token: signature,
             expiredDate: Raw((alias) => `${alias} > NOW()`),
           },
@@ -63,7 +63,7 @@ ServerModule.apiMiddlerwares.push(
 
         const hasRole = await dbSession.getRepository(UserRole).count({
           where: predefinedRoles.map((predefinedRole) => ({
-            ownerId: accessToken.ownerId,
+            userId: accessToken.userId,
             scopeId: predefinedRole.scope.idParam
               ? req.params[predefinedRole.scope.idParam]
               : '',
@@ -80,7 +80,7 @@ ServerModule.apiMiddlerwares.push(
       }
 
       Object.assign(resp.locals, {
-        $user: { id: accessToken.ownerId },
+        $user: { id: accessToken.userId },
         $accessToken: { id: accessToken.id },
       } as AuthenticatedData);
     }

@@ -15,9 +15,9 @@ const Page = () => {
   return (
     <ApiTable
       api={getUserFilesApi}
-      rowKey="ownerId"
+      rowKey="userId"
       columns={{
-        ownerId: { label: tCore('ownerId') },
+        userId: { label: tCore('userId') },
         maxFileSize: { label: t('maxFileSize') },
         currentStorageSize: { label: t('currentStorageSize') },
         maxStorageSize: { label: t('maxStorageSize') },

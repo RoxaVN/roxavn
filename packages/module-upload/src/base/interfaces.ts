@@ -1,6 +1,6 @@
 export interface UserFile {
-  ownerId: number;
-  owner: {
+  userId: number;
+  user: {
     username: string;
   };
   currentStorageSize: number;

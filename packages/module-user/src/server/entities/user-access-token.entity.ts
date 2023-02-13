@@ -20,10 +20,10 @@ export class UserAccessToken {
   identityId: number;
 
   @Column()
-  ownerId: number;
+  userId: number;
 
-  @ManyToOne(() => User, (owner) => owner.accessTokens)
-  owner: User;
+  @ManyToOne(() => User, (user) => user.accessTokens)
+  user: User;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;

@@ -14,9 +14,9 @@ const Page = () => {
   return (
     <ApiTable
       api={getStatsModuleRoleApi}
-      rowKey="ownerId"
+      rowKey="userId"
       columns={{
-        ownerId: { label: tCore('ownerId') },
+        userId: { label: tCore('userId') },
         rolesCount: { label: t('roles') },
       }}
       cellActions={(item) => [
@@ -24,7 +24,7 @@ const Page = () => {
           label: tCore('detail'),
           icon: IconEye,
           access: { api: getUserRolesApi },
-          link: { href: `${item.ownerId}` },
+          link: { href: `${item.userId}` },
         },
       ]}
     />

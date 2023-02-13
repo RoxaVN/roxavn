@@ -13,7 +13,7 @@ export class CreateAdminUserHook extends BaseService {
       const user = new User();
       user.username = 'admin';
       await this.dbSession.save(user);
-      identity.owner = user;
+      identity.user = user;
       await this.dbSession.save(identity);
 
       const role = await this.dbSession.findOneBy(Role, {
@@ -22,7 +22,7 @@ export class CreateAdminUserHook extends BaseService {
       });
       if (role) {
         const adminRole = new UserRole();
-        adminRole.owner = user;
+        adminRole.user = user;
         adminRole.role = role;
         await this.dbSession.save(adminRole);
       }
@@ -33,7 +33,7 @@ export class CreateAdminUserHook extends BaseService {
 export class SetAdminRoleHook extends BaseService {
   async handle(role: RoleType) {
     const users = await this.dbSession.getRepository(UserRole).find({
-      select: { ownerId: true },
+      select: { userId: true },
       where: {
         role: {
           name: Roles.Admin.name,
@@ -48,7 +48,7 @@ export class SetAdminRoleHook extends BaseService {
     if (roleModel) {
       const adminRoles = users.map((user) => {
         const adminRole = new UserRole();
-        adminRole.ownerId = user.ownerId;
+        adminRole.userId = user.userId;
         adminRole.roleId = roleModel.id;
         return adminRole;
       });

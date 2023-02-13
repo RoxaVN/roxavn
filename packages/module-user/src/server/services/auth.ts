@@ -18,8 +18,8 @@ export class LoginApiService extends ApiService<typeof loginApi> {
     const identity = await this.dbSession
       .getRepository(PasswordIdentity)
       .findOne({
-        select: ['id', 'ownerId', 'password'],
-        where: { owner: { username: request.username } },
+        select: ['id', 'userId', 'password'],
+        where: { user: { username: request.username } },
       });
 
     if (!identity) {
@@ -39,12 +39,12 @@ export class LoginApiService extends ApiService<typeof loginApi> {
       size: 21,
     });
     const expiredAt = new Date(Date.now() + Env.ACCESS_TOKEN_TIME_TO_LIVE);
-    const tokenPart = [expiredAt.getTime(), identity.ownerId, token].join('.');
+    const tokenPart = [expiredAt.getTime(), identity.userId, token].join('.');
     const signature = tokenService.signer.sign(tokenPart);
     const tokenFinal = [tokenPart, signature].join('.');
 
     const accessToken = new UserAccessToken();
-    accessToken.ownerId = identity.ownerId;
+    accessToken.userId = identity.userId;
     accessToken.identityId = identity.id;
     accessToken.token = signature;
     accessToken.expiredDate = expiredAt;
@@ -75,7 +75,7 @@ export class ResetPasswordApiService extends AuthApiService<
       .getRepository(PasswordIdentity)
       .findOne({
         select: ['id', 'metadata'],
-        where: { owner: { username: request.username } },
+        where: { user: { username: request.username } },
       });
 
     if (!identity) {

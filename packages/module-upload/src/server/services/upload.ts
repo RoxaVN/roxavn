@@ -17,13 +17,13 @@ serverModule.useRawApi(uploadFileApi, (_, { req, dbSession, resp }) => {
             'utf8'
           );
 
-          const ownerId = resp.locals.user.id;
+          const userId = resp.locals.user.id;
           let userFile = await dbSession
             .getRepository(UserFile)
-            .findOne({ where: { ownerId: ownerId } });
+            .findOne({ where: { userId: userId } });
           if (!userFile) {
             userFile = new UserFile();
-            userFile.ownerId = ownerId;
+            userFile.userId = userId;
           }
           userFile.currentStorageSize += result.size;
           if (
@@ -41,7 +41,7 @@ serverModule.useRawApi(uploadFileApi, (_, { req, dbSession, resp }) => {
           file.size = result.size;
           file.etag = result.eTag;
           file.name = fileName;
-          file.ownerId = ownerId;
+          file.userId = userId;
           file.mime = info.mimeType;
           await dbSession.save(file);
 

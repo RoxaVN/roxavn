@@ -18,14 +18,14 @@ export class GetUserFilesApiService extends AuthApiService<
     const [users, totalItems] = await this.dbSession
       .getRepository(UserFile)
       .findAndCount({
-        relations: { owner: true },
+        relations: { user: true },
         select: {
-          ownerId: true,
+          userId: true,
           currentStorageSize: true,
           maxStorageSize: true,
           maxFileSize: true,
           updatedDate: true,
-          owner: { username: true },
+          user: { username: true },
         },
         take: pageSize,
         skip: (page - 1) * pageSize,

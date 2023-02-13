@@ -80,7 +80,7 @@ export class CreateUserApiService extends AuthApiService<typeof createUserApi> {
     const user = new User();
     user.username = request.username;
     await this.dbSession.save(user);
-    identity.owner = user;
+    identity.user = user;
     await this.dbSession.save(identity);
 
     return {

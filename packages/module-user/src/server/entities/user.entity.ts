@@ -34,12 +34,12 @@ export class User {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: Date;
 
-  @OneToMany(() => UserIdentity, (identity) => identity.owner)
+  @OneToMany(() => UserIdentity, (identity) => identity.user)
   identities: UserIdentity[];
 
-  @OneToMany(() => UserAccessToken, (accessToken) => accessToken.owner)
+  @OneToMany(() => UserAccessToken, (accessToken) => accessToken.user)
   accessTokens: UserIdentity[];
 
-  @OneToMany(() => UserRole, (role) => role.owner)
+  @OneToMany(() => UserRole, (role) => role.user)
   roles: UserRole[];
 }

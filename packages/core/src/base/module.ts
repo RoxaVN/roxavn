@@ -29,7 +29,7 @@ export class BaseModule {
    * @returns scope object of module
    */
   scope(): Scope {
-    return { name: this._escapedName };
+    return { name: this.name };
   }
 
   /**

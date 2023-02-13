@@ -15,7 +15,7 @@ export class GetStatsModuleRoleApiService extends AuthApiService<
       (
         await this.dbSession
           .createQueryBuilder(UserRole, 'userRole')
-          .select('COUNT(DISTINCT("ownerId"))', 'count')
+          .select('COUNT(DISTINCT("userId"))', 'count')
           .where('userRole.scopeId = :scopeId', { scopeId: '' })
           .getRawOne()
       ).count
@@ -23,10 +23,10 @@ export class GetStatsModuleRoleApiService extends AuthApiService<
 
     const users: any = await this.dbSession
       .createQueryBuilder(UserRole, 'userRole')
-      .select('userRole.ownerId', 'ownerId')
-      .addSelect('COUNT(userRole.ownerId)', 'rolesCount')
+      .select('userRole.userId', 'userId')
+      .addSelect('COUNT(userRole.userId)', 'rolesCount')
       .where('userRole.scopeId = :scopeId', { scopeId: '' })
-      .groupBy('userRole.ownerId')
+      .groupBy('userRole.userId')
       .limit(pageSize)
       .offset((page - 1) * pageSize)
       .getRawMany();

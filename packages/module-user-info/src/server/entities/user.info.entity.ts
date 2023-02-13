@@ -15,9 +15,9 @@ export class UserInfo {
   @PrimaryColumn()
   id: number;
 
-  @ManyToOne(() => User, (owner) => owner.identities)
+  @ManyToOne(() => User, (user) => user.identities)
   @JoinColumn({ name: 'id' })
-  owner: User;
+  user: User;
 
   @Column({ type: 'timestamptz' })
   birthday?: Date;

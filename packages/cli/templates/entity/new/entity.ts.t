@@ -18,10 +18,10 @@ export class <%= h.changeCase.pascal(entity_name) %> {
   id: number;
 
   @Column()
-  ownerId: number;
+  userId: number;
 
-  @ManyToOne(() => User, (owner) => owner.identities)
-  owner: User;
+  @ManyToOne(() => User, (user) => user.identities)
+  user: User;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: any;

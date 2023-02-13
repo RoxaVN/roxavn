@@ -14,15 +14,15 @@ export class UserRole {
   scopeId: string;
 
   @PrimaryColumn()
-  ownerId: number;
+  userId: number;
 
-  @ManyToOne(() => User, (owner) => owner.roles)
-  owner: User;
+  @ManyToOne(() => User, (user) => user.roles)
+  user: User;
 
   @PrimaryColumn()
   roleId: number;
 
-  @ManyToOne(() => Role, (role) => role.owners)
+  @ManyToOne(() => Role, (role) => role.users)
   role: Role;
 
   @CreateDateColumn({ type: 'timestamptz' })
