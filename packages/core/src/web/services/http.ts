@@ -1,4 +1,5 @@
 import { Subject } from 'rxjs';
+import { urlUtils } from '../../base';
 
 export interface HttpException {
   message: string;
@@ -38,7 +39,8 @@ const http = {
   preSentObserver: new Subject<PreSentData>(),
 
   _bodyParams(path: string, method: string, data?: Record<string, any>) {
-    const params = { ...data };
+    const api = data ? urlUtils.generatePath(path, data) : { path, params: {} };
+    const { params } = api;
     const formData = new FormData();
     let hasFile = false;
     Object.keys(params).map((key) => {
@@ -57,7 +59,7 @@ const http = {
     }
 
     this.preSentObserver.next({ params, config });
-    return fetch(this.Host + path, config)
+    return fetch(this.Host + api.path, config)
       .then(checkStatus)
       .then((resp) => {
         this.successObserver.next(resp);
@@ -87,9 +89,10 @@ const http = {
     if (path && path[0] !== '/') {
       return path;
     }
+    const api = data ? urlUtils.generatePath(path, data) : { path, params: {} };
     const params = new URLSearchParams();
     if (data) {
-      Object.entries(data).map(([key, value]) => {
+      Object.entries(api.params).map(([key, value]) => {
         if (Array.isArray(value)) {
           value.map((v) => params.append(key, v));
         } else if (typeof value === 'boolean') {
@@ -101,7 +104,7 @@ const http = {
         }
       });
     }
-    return `${this.Host + path}?${params}`;
+    return `${this.Host + api.path}?${params}`;
   },
 };
 

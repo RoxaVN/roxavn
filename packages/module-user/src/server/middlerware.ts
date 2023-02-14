@@ -1,19 +1,60 @@
-import { BaseService, ServerModule } from '@roxavn/core/server';
+import { ServerModule, MiddlerwareContext } from '@roxavn/core/server';
 import {
   Api,
   ForbiddenException,
-  InferApiRequest,
-  InferApiResponse,
   predefinedRoleManager,
+  scopeManager,
   UnauthorizedException,
 } from '@roxavn/core/base';
 import { Raw } from 'typeorm';
 import { UserAccessToken, UserRole } from './entities';
 import { tokenService } from './services';
+import { Resources } from '../base';
+
+function checkOwner(api: Api, { req }: MiddlerwareContext, userId: number) {
+  if (api.resources.find((r) => r.name === scopeManager.OWNER.name)) {
+    if (api.resources.find((r) => r.name === Resources.User.name)) {
+      if (req.params[Resources.User.idParam] === userId.toString()) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+async function checkRole(
+  api: Api,
+  { dbSession, req }: MiddlerwareContext,
+  userId: number
+) {
+  if (api.permission) {
+    const predefinedRoles = await predefinedRoleManager.getRolesByPermission(
+      api.permission
+    );
+    if (predefinedRoles.length === 0) {
+      return false;
+    }
+
+    const hasRole = await dbSession.getRepository(UserRole).count({
+      where: predefinedRoles.map((predefinedRole) => ({
+        userId: userId,
+        scopeId: predefinedRole.scope.idParam
+          ? req.params[predefinedRole.scope.idParam]
+          : '',
+        role: {
+          scope: predefinedRole.scope.name,
+          name: predefinedRole.name,
+        },
+      })),
+    });
+    return !!hasRole;
+  }
+  return true;
+}
 
 ServerModule.apiMiddlerwares.push(
   async (api, { dbSession, resp, req }, next) => {
-    if (api.auth !== 'NOT_LOGGED') {
+    if (api.permission) {
       const authorizationHeader = req.get('authorization');
       if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
         return next(new UnauthorizedException());
@@ -36,14 +77,14 @@ ServerModule.apiMiddlerwares.push(
         return next(new UnauthorizedException());
       }
 
-      const userId = tokenPart.split('.')[1];
+      const userId = parseInt(tokenPart.split('.')[1]);
 
       const accessToken = await dbSession
         .getRepository(UserAccessToken)
         .findOne({
           select: ['userId', 'id'],
           where: {
-            userId: parseInt(userId),
+            userId: userId,
             token: signature,
             expiredDate: Raw((alias) => `${alias} > NOW()`),
           },
@@ -53,30 +94,11 @@ ServerModule.apiMiddlerwares.push(
         return next(new UnauthorizedException());
       }
 
-      const { permission } = api;
-      if (permission) {
-        const predefinedRoles =
-          await predefinedRoleManager.getRolesByPermission(permission);
-        if (predefinedRoles.length === 0) {
-          return next(new ForbiddenException());
-        }
-
-        const hasRole = await dbSession.getRepository(UserRole).count({
-          where: predefinedRoles.map((predefinedRole) => ({
-            userId: accessToken.userId,
-            scopeId: predefinedRole.scope.idParam
-              ? req.params[predefinedRole.scope.idParam]
-              : '',
-            role: {
-              scope: predefinedRole.scope.name,
-              name: predefinedRole.name,
-            },
-          })),
-        });
-
-        if (!hasRole) {
-          return next(new ForbiddenException());
-        }
+      const allow =
+        checkOwner(api, { dbSession, req, resp }, userId) ||
+        checkRole(api, { dbSession, req, resp }, userId);
+      if (!allow) {
+        return next(new ForbiddenException());
       }
 
       Object.assign(resp.locals, {
@@ -92,12 +114,3 @@ type AuthenticatedData = {
   $user: { id: number };
   $accessToken: { id: number };
 };
-
-export type InferAuthApiRequest<T> = T extends Api<infer U, any, any>
-  ? U & AuthenticatedData
-  : never;
-
-export abstract class AuthApiService<T extends Api> extends BaseService<
-  InferApiRequest<T> & AuthenticatedData,
-  InferApiResponse<T>
-> {}

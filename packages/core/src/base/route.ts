@@ -8,7 +8,7 @@ export class WebRoute<
   constructor(readonly path: string) {}
 
   generate(params: Params, query?: Query) {
-    const url = urlUtils.generatePath(this.path, params);
+    const url = urlUtils.generatePath(this.path, params).path;
     return query ? `${url}?${new URLSearchParams(query)}` : url;
   }
 }

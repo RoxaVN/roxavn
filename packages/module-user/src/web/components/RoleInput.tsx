@@ -1,12 +1,12 @@
 import { Select, SelectProps } from '@mantine/core';
 import { ApiInput } from '@roxavn/core/web';
 
-import { getModuleRolesApi } from '../../base';
+import { roleApi } from '../../base';
 
 export const ModuleRoleInput = (props: Omit<SelectProps, 'data'>) => (
   <ApiInput
     {...props}
-    api={getModuleRolesApi}
+    api={roleApi.moduleRoles}
     convertData={(items) =>
       items.map((item) => ({
         value: item.id as any,

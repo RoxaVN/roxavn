@@ -1,23 +1,18 @@
-import { NotFoundException } from '@roxavn/core/base';
+import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { And, ILike, LessThan, MoreThan } from 'typeorm';
 
-import {
-  getMyUserApi,
-  getUsersApi,
-  createUserApi,
-  UserExistsException,
-} from '../../base';
+import { userApi, UserExistsException } from '../../base';
 import { PasswordIdentity, User } from '../entities';
 import { serverModule } from '../module';
-import { AuthApiService, InferAuthApiRequest } from '../middlerware';
 import { tokenService } from './token';
 import { Env } from '../config';
+import { ApiService } from '@roxavn/core/server';
 
-@serverModule.useApi(getMyUserApi)
-export class GetMyUserApiService extends AuthApiService<typeof getMyUserApi> {
-  async handle(request: InferAuthApiRequest<typeof getMyUserApi>) {
+@serverModule.useApi(userApi.getOne)
+export class GetMyUserApiService extends ApiService<typeof userApi.getOne> {
+  async handle(request: InferApiRequest<typeof userApi.getOne>) {
     const user = await this.dbSession.getRepository(User).findOne({
-      where: { id: request.$user.id },
+      where: { id: request.userId },
     });
 
     if (!user) {
@@ -28,9 +23,9 @@ export class GetMyUserApiService extends AuthApiService<typeof getMyUserApi> {
   }
 }
 
-@serverModule.useApi(getUsersApi)
-export class GetUsersApiService extends AuthApiService<typeof getUsersApi> {
-  async handle(request: InferAuthApiRequest<typeof getUsersApi>) {
+@serverModule.useApi(userApi.getMany)
+export class GetUsersApiService extends ApiService<typeof userApi.getMany> {
+  async handle(request: InferApiRequest<typeof userApi.getMany>) {
     const page = request.page || 1;
     const pageSize = 10;
 
@@ -58,9 +53,9 @@ export class GetUsersApiService extends AuthApiService<typeof getUsersApi> {
   }
 }
 
-@serverModule.useApi(createUserApi)
-export class CreateUserApiService extends AuthApiService<typeof createUserApi> {
-  async handle(request: InferAuthApiRequest<typeof createUserApi>) {
+@serverModule.useApi(userApi.create)
+export class CreateUserApiService extends ApiService<typeof userApi.create> {
+  async handle(request: InferApiRequest<typeof userApi.create>) {
     const token = await tokenService.creator.create({
       alphabetType: 'LOWERCASE_ALPHA_NUM',
       size: 21,

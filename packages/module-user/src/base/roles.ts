@@ -10,6 +10,13 @@ export const Scopes = {
   Module: baseModule.scope(),
 };
 
+export const Resources = {
+  User: { name: 'users', idParam: 'userId' },
+  Role: { name: 'roles', idParam: 'roleId' },
+  AccessToken: { name: 'accessTokens', idParam: 'accessTokenId' },
+  PasswordIdentity: { name: 'passwordIdentity', idParam: 'passwordIdentityId' },
+};
+
 export const Permissions = {
   CreateUser: {
     value: 'create.user',
@@ -17,19 +24,38 @@ export const Permissions = {
   },
   ReadUser: {
     value: 'read.user',
+    allowedScopes: [Scopes.Module, scopeManager.OWNER],
+  },
+  ReadUsers: {
+    value: 'read.users',
     allowedScopes: [Scopes.Module],
   },
-  ReadRole: {
-    value: 'read.role',
+
+  ReadRoles: {
+    value: 'read.roles',
     allowedScopes: [Scopes.Module],
   },
+
   ReadUserRoles: {
     value: 'read.user.roles',
+    allowedScopes: [Scopes.Module, scopeManager.OWNER],
+  },
+  CreateUserRole: {
+    value: 'create.user.role',
     allowedScopes: [Scopes.Module],
   },
-  UpdateUserRoles: {
-    value: 'update.user.roles',
-    allowedScopes: [Scopes.Module],
+  DeleteUserRole: {
+    value: 'delete.user.role',
+    allowedScopes: [Scopes.Module, scopeManager.OWNER],
+  },
+
+  DeleteAccessToken: {
+    value: 'delete.access.token',
+    allowedScopes: [Scopes.Module, scopeManager.OWNER],
+  },
+  GetUserAccessTokens: {
+    value: 'get.user.access.tokens',
+    allowedScopes: [Scopes.Module, scopeManager.OWNER],
   },
 };
 
@@ -47,7 +73,7 @@ export const Roles = {
 };
 
 if (!scopeManager.hasScope(Scopes.Module)) {
-  scopeManager.register(...Object.values(Scopes));
+  scopeManager.register(...Object.values(Scopes), ...Object.values(Resources));
   permissionManager.register(...Object.values(Permissions));
   predefinedRoleManager.register(...Object.values(Roles));
 }

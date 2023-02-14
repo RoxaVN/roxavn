@@ -1,10 +1,12 @@
 import { http, uiManager } from '@roxavn/core/web';
-import { auth } from './services';
+import { authProvider } from './services';
 
 http.preSentObserver.subscribe(({ config }) => {
-  const token = auth.getToken();
-  if (token) {
-    Object.assign(config.headers, { Authorization: `Bearer ${token}` });
+  const data = authProvider.getTokenData();
+  if (data) {
+    Object.assign(config.headers, {
+      Authorization: `Bearer ${data.accessToken}`,
+    });
   }
 });
 http.errorObserver.subscribe((e) => {

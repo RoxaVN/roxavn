@@ -9,7 +9,7 @@ import {
 import { IconPlus, IconTrash } from '@tabler/icons';
 import { useParams } from 'react-router-dom';
 
-import { getUserRolesApi, addUserRoleApi, deleteUserRoleApi } from '../../base';
+import { userRoleApi } from '../../base';
 import { ModuleRoleInput } from '../components';
 import { webModule } from '../module';
 
@@ -19,8 +19,8 @@ const Page = () => {
   const tCore = coreWebModule.useTranslation().t;
   return id ? (
     <ApiTable
-      api={getUserRolesApi}
-      apiParams={{ id }}
+      api={userRoleApi.getAll}
+      apiParams={{ userId: id }}
       headerActions={[
         {
           label: tCore('add'),
@@ -29,8 +29,8 @@ const Page = () => {
             title: t('addRole'),
             children: (
               <ApiFormGroup
-                api={addUserRoleApi}
-                apiParams={{ id }}
+                api={userRoleApi.create}
+                apiParams={{ userId: id }}
                 fields={[
                   {
                     name: 'roleId',
@@ -60,9 +60,9 @@ const Page = () => {
             title: t('deleteUserRole', { role: item.name }),
             children: (
               <ApiConfirmFormGroup
-                api={deleteUserRoleApi}
+                api={userRoleApi.delete}
                 onCancel={closeModal}
-                apiParams={{ id: id, roleId: item.id }}
+                apiParams={{ userId: id, roleId: item.id }}
               />
             ),
           }),
@@ -77,7 +77,7 @@ const Page = () => {
 webModule.adminPages.push({
   path: '/user-roles/:id',
   element: (
-    <IfCanAccessApi api={getUserRolesApi}>
+    <IfCanAccessApi api={userRoleApi.getAll}>
       <Page />
     </IfCanAccessApi>
   ),

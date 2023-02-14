@@ -33,7 +33,7 @@ import {
 } from '@roxavn/core/web';
 
 import { IsAuthenticated } from '../../components';
-import { getMyModuleRolesApi, WebRoutes } from '../../../base';
+import { userRoleApi, WebRoutes } from '../../../base';
 
 const BASE = '/admin/app';
 
@@ -156,11 +156,11 @@ const AdminPage = () => (
         <Loader />
       </Group>
     }
-    userComponent={
-      <ApiRolesGetter api={getMyModuleRolesApi}>
+    userComponent={(user) => (
+      <ApiRolesGetter api={userRoleApi.getAll} apiParams={{ userId: user.id }}>
         <AdminComponent />
       </ApiRolesGetter>
-    }
+    )}
     guestComponent={<Navigate to={WebRoutes.Login.path} />}
   />
 );

@@ -7,7 +7,7 @@ import {
 } from '@roxavn/core/web';
 import { IconCrown } from '@tabler/icons';
 
-import { getModuleRolesApi } from '../../base';
+import { roleApi } from '../../base';
 import { webModule } from '../module';
 
 const Page = () => {
@@ -15,7 +15,7 @@ const Page = () => {
   const tCore = coreWebModule.useTranslation().t;
   return (
     <ApiTable
-      api={getModuleRolesApi}
+      api={roleApi.moduleRoles}
       header={t('roles')}
       filters={[{ name: 'scope', input: <TextInput label={tCore('apps')} /> }]}
       columns={{
@@ -35,7 +35,7 @@ webModule.adminPages.push({
   path: '/roles',
   icon: IconCrown,
   element: (
-    <IfCanAccessApi api={getModuleRolesApi}>
+    <IfCanAccessApi api={roleApi.moduleRoles}>
       <Page />
     </IfCanAccessApi>
   ),

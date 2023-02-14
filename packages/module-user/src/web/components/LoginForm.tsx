@@ -2,12 +2,12 @@ import { TextInput, PasswordInput, Title } from '@mantine/core';
 import { InferApiResponse } from '@roxavn/core/base';
 import { ApiFormGroup } from '@roxavn/core/web';
 
-import { loginApi } from '../../base';
-import { auth } from '../services';
+import { passwordIdentityApi } from '../../base';
+import { authProvider } from '../services';
 import { webModule } from '../module';
 
 interface LoginFormProps {
-  onSuccess?: (data: InferApiResponse<typeof loginApi>) => void;
+  onSuccess?: (data: InferApiResponse<typeof passwordIdentityApi.auth>) => void;
 }
 
 export const LoginForm = ({ onSuccess }: LoginFormProps): JSX.Element => {
@@ -18,9 +18,9 @@ export const LoginForm = ({ onSuccess }: LoginFormProps): JSX.Element => {
         {t('login')}
       </Title>
       <ApiFormGroup
-        api={loginApi}
+        api={passwordIdentityApi.auth}
         onSuccess={(data) => {
-          auth.setToken(data.accessToken);
+          authProvider.setTokenData(data);
           onSuccess && onSuccess(data);
         }}
         fields={[

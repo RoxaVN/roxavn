@@ -3,6 +3,10 @@ export interface Scope {
   idParam?: string;
 }
 
+export interface Resource extends Scope {
+  idParam: string;
+}
+
 export interface Permission {
   value: string;
   allowedScopes: Scope[];
@@ -22,7 +26,9 @@ const scopeEquals = (scopeA: Scope, scopeB: Scope): boolean => {
 };
 
 class ScopeManager {
-  private scopes: Scope[] = [];
+  OWNER = { name: 'owner' };
+
+  private scopes: Scope[] = [this.OWNER];
 
   public register(...scopes: Scope[]): void {
     const newScopes = [...this.scopes, ...scopes];

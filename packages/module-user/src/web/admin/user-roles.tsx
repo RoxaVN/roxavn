@@ -4,7 +4,7 @@ import {
   webModule as coreWebModule,
 } from '@roxavn/core/web';
 import { IconEye, IconShieldChevron } from '@tabler/icons';
-import { getStatsModuleRoleApi, getUserRolesApi } from '../../base';
+import { userRoleApi, roleApi } from '../../base';
 import { webModule } from '../module';
 
 const Page = () => {
@@ -13,7 +13,7 @@ const Page = () => {
 
   return (
     <ApiTable
-      api={getStatsModuleRoleApi}
+      api={roleApi.moduleStats}
       rowKey="userId"
       columns={{
         userId: { label: tCore('userId') },
@@ -23,7 +23,7 @@ const Page = () => {
         {
           label: tCore('detail'),
           icon: IconEye,
-          access: { api: getUserRolesApi },
+          access: { api: userRoleApi.getAll },
           link: { href: `${item.userId}` },
         },
       ]}
@@ -36,7 +36,7 @@ webModule.adminPages.push({
   path: '/user-roles',
   icon: IconShieldChevron,
   element: (
-    <IfCanAccessApi api={getStatsModuleRoleApi}>
+    <IfCanAccessApi api={roleApi.moduleStats}>
       <Page />
     </IfCanAccessApi>
   ),

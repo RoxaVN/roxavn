@@ -42,8 +42,12 @@ export class BaseModule {
   >(api: Api<Request, Response, Error>): Api<Request, Response, Error> {
     return {
       ...api,
-      path: '/' + constants.API_BASE_PATH + '/' + this._escapedName + api.path,
+      path: this.apiPath(api.path),
     };
+  }
+
+  apiPath(path: string) {
+    return '/' + constants.API_BASE_PATH + '/' + this._escapedName + path;
   }
 
   public static escapeName(name: string): string {

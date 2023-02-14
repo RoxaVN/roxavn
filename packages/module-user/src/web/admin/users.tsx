@@ -11,12 +11,7 @@ import {
 } from '@roxavn/core/web';
 import { IconEye, IconPlus, IconUsers } from '@tabler/icons';
 
-import {
-  createUserApi,
-  getUserRolesApi,
-  getUsersApi,
-  WebRoutes,
-} from '../../base';
+import { userApi, userRoleApi, WebRoutes } from '../../base';
 import { webModule } from '../module';
 
 const Page = () => {
@@ -25,7 +20,7 @@ const Page = () => {
 
   return (
     <ApiTable
-      api={getUsersApi}
+      api={userApi.getMany}
       header={t('userList')}
       headerActions={[
         {
@@ -35,7 +30,7 @@ const Page = () => {
             title: t('addUser'),
             children: (
               <ApiFormGroup
-                api={createUserApi}
+                api={userApi.create}
                 apiParams={{ username: '' }}
                 onSuccess={(data, params) => {
                   const link = WebRoutes.ResetPassword.generate(
@@ -99,7 +94,7 @@ const Page = () => {
         {
           label: t('roles'),
           icon: IconEye,
-          access: { api: getUserRolesApi },
+          access: { api: userRoleApi.getAll },
           link: { href: `user-roles/${item.id}` },
         },
       ]}
@@ -112,7 +107,7 @@ webModule.adminPages.push({
   path: '/',
   icon: IconUsers,
   element: (
-    <IfCanAccessApi api={getUsersApi}>
+    <IfCanAccessApi api={userApi.getMany}>
       <Page />
     </IfCanAccessApi>
   ),
