@@ -13,8 +13,11 @@ export const Scopes = {
 export const Resources = {
   User: { name: 'users', idParam: 'userId' },
   Role: { name: 'roles', idParam: 'roleId' },
-  AccessToken: { name: 'accessTokens', idParam: 'accessTokenId' },
-  PasswordIdentity: { name: 'passwordIdentity', idParam: 'passwordIdentityId' },
+  AccessToken: { name: 'access-tokens', idParam: 'accessTokenId' },
+  PasswordIdentity: {
+    name: 'password-identity',
+    idParam: 'passwordIdentityId',
+  },
 };
 
 export const Permissions = {
@@ -56,6 +59,11 @@ export const Permissions = {
   GetUserAccessTokens: {
     value: 'get.user.access.tokens',
     allowedScopes: [Scopes.Module, scopeManager.OWNER],
+  },
+
+  RecoveryPassword: {
+    value: 'recovery.password',
+    allowedScopes: [Scopes.Module],
   },
 };
 

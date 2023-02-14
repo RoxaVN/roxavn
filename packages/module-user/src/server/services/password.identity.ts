@@ -6,6 +6,7 @@ import {
 import { ApiService } from '@roxavn/core/server';
 
 import { passwordIdentityApi } from '../../base';
+import { Env } from '../config';
 import { PasswordIdentity } from '../entities';
 import { serverModule } from '../module';
 import { CreateAccessTokenService } from './access.token';
@@ -80,5 +81,32 @@ export class ResetPasswordApiService extends ApiService<
     this.dbSession.getRepository(PasswordIdentity).save(identity);
 
     return {};
+  }
+}
+
+@serverModule.useApi(passwordIdentityApi.recovery)
+export class RecoveryPasswordApiService extends ApiService<
+  typeof passwordIdentityApi.recovery
+> {
+  async handle(request: InferApiRequest<typeof passwordIdentityApi.recovery>) {
+    const token = await tokenService.creator.create({
+      alphabetType: 'LOWERCASE_ALPHA_NUM',
+      size: 21,
+    });
+    const hash = await tokenService.hasher.hash(token);
+    const expiredAt = Date.now() + Env.SHORT_TIME_TO_LIVE;
+
+    let identity = await this.dbSession
+      .getRepository(PasswordIdentity)
+      .findOne({ where: { userId: request.userId } });
+    if (!identity) {
+      identity = new PasswordIdentity();
+      identity.userId = request.userId;
+    }
+    identity.metadata = { token: { hash, expiredAt } };
+
+    await this.dbSession.save(identity);
+
+    return { token };
   }
 }

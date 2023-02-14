@@ -8,10 +8,16 @@ import {
   utils,
   DateRangePicker,
   IfCanAccessApi,
+  ApiConfirmFormGroup,
 } from '@roxavn/core/web';
-import { IconEye, IconPlus, IconUsers } from '@tabler/icons';
+import { IconEye, IconKey, IconPlus, IconUsers } from '@tabler/icons';
 
-import { userApi, userRoleApi, WebRoutes } from '../../base';
+import {
+  passwordIdentityApi,
+  userApi,
+  userRoleApi,
+  WebRoutes,
+} from '../../base';
 import { webModule } from '../module';
 
 const Page = () => {
@@ -31,32 +37,6 @@ const Page = () => {
             children: (
               <ApiFormGroup
                 api={userApi.create}
-                apiParams={{ username: '' }}
-                onSuccess={(data, params) => {
-                  const link = WebRoutes.ResetPassword.generate(
-                    {},
-                    {
-                      username: params.username,
-                      token: data.resetPasswordToken,
-                    }
-                  );
-                  uiManager.alertModal(
-                    <div>
-                      <p>
-                        {t('sendResetPasswordLink', {
-                          name: params.username,
-                        })}
-                      </p>
-                      <Prism
-                        language="markdown"
-                        copyLabel={tCore('copy')}
-                        copiedLabel={tCore('copied')}
-                      >
-                        {`${location.protocol}://${location.host}${link}`}
-                      </Prism>
-                    </div>
-                  );
-                }}
                 fields={[
                   {
                     name: 'username',
@@ -96,6 +76,45 @@ const Page = () => {
           icon: IconEye,
           access: { api: userRoleApi.getAll },
           link: { href: `user-roles/${item.id}` },
+        },
+        {
+          label: t('resetPassword'),
+          icon: IconKey,
+          modal: (onClose) => ({
+            title: t('resetuserPassword', { username: item.username }),
+            children: (
+              <ApiConfirmFormGroup
+                api={passwordIdentityApi.recovery}
+                apiParams={{ userId: item.id }}
+                onCancel={onClose}
+                onSuccess={(data) => {
+                  const link = WebRoutes.ResetPassword.generate(
+                    {},
+                    {
+                      username: item.username,
+                      token: data.token,
+                    }
+                  );
+                  uiManager.alertModal(
+                    <div>
+                      <p>
+                        {t('sendResetPasswordLink', {
+                          name: item.username,
+                        })}
+                      </p>
+                      <Prism
+                        language="markdown"
+                        copyLabel={tCore('copy')}
+                        copiedLabel={tCore('copied')}
+                      >
+                        {`${location.protocol}://${location.host}${link}`}
+                      </Prism>
+                    </div>
+                  );
+                }}
+              />
+            ),
+          }),
         },
       ]}
     />

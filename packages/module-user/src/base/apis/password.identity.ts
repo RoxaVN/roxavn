@@ -4,19 +4,26 @@ import {
   Empty,
   ExactProps,
   ForbiddenException,
+  IsNumber,
+  Min,
   MinLength,
   UnauthorizedException,
 } from '@roxavn/core/base';
 import { baseModule } from '../module';
-import { Resources } from '../roles';
+import { Permissions, Resources } from '../roles';
 
-const passwordIdentitySource = new ApiSource<{
+type IdentityResponse = {
   id: number;
   userId: number;
   createdDate: Date;
   updatedDate: Date;
   expiredDate: Date;
-}>([Resources.PasswordIdentity], baseModule);
+};
+
+const passwordIdentitySource = new ApiSource<IdentityResponse>(
+  [Resources.PasswordIdentity],
+  baseModule
+);
 
 class AuthRequest extends ExactProps<AuthRequest> {
   @MinLength(1)
@@ -37,6 +44,12 @@ class ResetPasswordRequest extends ExactProps<ResetPasswordRequest> {
   public readonly password!: string;
 }
 
+class RecoveryPasswordRequest extends ExactProps<RecoveryPasswordRequest> {
+  @Min(1)
+  @IsNumber()
+  public readonly userId: number;
+}
+
 export const passwordIdentityApi = {
   auth: passwordIdentitySource.custom<
     AuthRequest,
@@ -55,5 +68,15 @@ export const passwordIdentityApi = {
     method: 'POST',
     path: passwordIdentitySource.apiPath() + '/reset',
     validator: ResetPasswordRequest,
+  }),
+  recovery: passwordIdentitySource.custom<
+    RecoveryPasswordRequest,
+    { token: string },
+    BadRequestException | UnauthorizedException | ForbiddenException
+  >({
+    method: 'POST',
+    path: passwordIdentitySource.apiPath() + '/recovery',
+    validator: RecoveryPasswordRequest,
+    permission: Permissions.RecoveryPassword,
   }),
 };

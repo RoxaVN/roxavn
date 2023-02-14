@@ -35,7 +35,7 @@ export class CreateAccessTokenService extends BaseService {
     accessToken.identityId = request.identityid;
     accessToken.token = signature;
     accessToken.expiredDate = expiredAt;
-    this.dbSession.getRepository(UserAccessToken).save(accessToken);
+    await this.dbSession.getRepository(UserAccessToken).save(accessToken);
 
     return {
       id: accessToken.id,

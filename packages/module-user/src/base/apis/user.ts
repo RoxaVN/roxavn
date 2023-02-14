@@ -1,18 +1,14 @@
 import {
-  AlreadyExistsException,
   ApiSource,
   ArrayMaxSize,
   ArrayMinSize,
   ExactProps,
-  ForbiddenException,
-  Id,
   IsArray,
   IsDateString,
   IsOptional,
   MaxLength,
   Min,
   MinLength,
-  UnauthorizedException,
 } from '@roxavn/core/base';
 import { Type } from 'class-transformer';
 import { baseModule } from '../module';
@@ -67,13 +63,7 @@ export const userApi = {
     validator: GetUserRequest,
     permission: Permissions.ReadUser,
   }),
-  create: userSource.create<
-    CreateUserRequest,
-    Id & {
-      resetPasswordToken: string;
-    },
-    UnauthorizedException | ForbiddenException | AlreadyExistsException
-  >({
+  create: userSource.create({
     validator: CreateUserRequest,
     permission: Permissions.CreateUser,
   }),

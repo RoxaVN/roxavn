@@ -4,6 +4,7 @@
   "retypePassword": "Nhập lại mật khẩu",
   "wrongRetypePassword": "Nhập lại mật khẩu không chính xác",
   "resetPassword": "Đặt lại mật khẩu",
+  "resetuserPassword": "Đặt lại mật khẩu cho tài khoản {{username}}",
   "sendResetPasswordLink": "Vui lòng ấn nút sao chép rồi gửi liên kết này đến {{name}} để đặt lại mật khẩu",
   "name": "Tên",
   "addUser": "Thêm tài khoản",

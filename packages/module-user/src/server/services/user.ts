@@ -6,10 +6,8 @@ import {
 import { And, ILike, LessThan, MoreThan } from 'typeorm';
 
 import { userApi } from '../../base';
-import { PasswordIdentity, User } from '../entities';
+import { User } from '../entities';
 import { serverModule } from '../module';
-import { tokenService } from './token';
-import { Env } from '../config';
 import { ApiService } from '@roxavn/core/server';
 
 @serverModule.useApi(userApi.getOne)
@@ -60,31 +58,16 @@ export class GetUsersApiService extends ApiService<typeof userApi.getMany> {
 @serverModule.useApi(userApi.create)
 export class CreateUserApiService extends ApiService<typeof userApi.create> {
   async handle(request: InferApiRequest<typeof userApi.create>) {
-    const token = await tokenService.creator.create({
-      alphabetType: 'LOWERCASE_ALPHA_NUM',
-      size: 21,
-    });
-    const hash = await tokenService.hasher.hash(token);
-    const expiredAt = Date.now() + Env.SHORT_TIME_TO_LIVE;
-
-    const exists = await this.dbSession
-      .getRepository(User)
-      .count({ where: { username: request.username } });
-    if (exists) {
+    const user = new User();
+    user.username = request.username;
+    try {
+      await this.dbSession.save(user);
+    } catch (e) {
       throw new AlreadyExistsException();
     }
 
-    const identity = new PasswordIdentity();
-    identity.metadata = { token: { hash, expiredAt } };
-    const user = new User();
-    user.username = request.username;
-    await this.dbSession.save(user);
-    identity.user = user;
-    await this.dbSession.save(identity);
-
     return {
       id: user.id,
-      resetPasswordToken: token,
     };
   }
 }
