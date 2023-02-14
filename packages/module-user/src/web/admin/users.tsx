@@ -88,13 +88,10 @@ const Page = () => {
                 apiParams={{ userId: item.id }}
                 onCancel={onClose}
                 onSuccess={(data) => {
-                  const link = WebRoutes.ResetPassword.generate(
-                    {},
-                    {
-                      username: item.username,
-                      token: data.token,
-                    }
-                  );
+                  const link = WebRoutes.ResetPassword.generate({
+                    username: item.username,
+                    token: data.token,
+                  });
                   uiManager.alertModal(
                     <div>
                       <p>

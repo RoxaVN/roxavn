@@ -149,21 +149,30 @@ function AdminComponent() {
   );
 }
 
-const AdminPage = () => (
-  <IsAuthenticated
-    loadingComponent={
-      <Group position="center" align="center" sx={{ height: '100vh' }}>
-        <Loader />
-      </Group>
-    }
-    userComponent={(user) => (
-      <ApiRolesGetter api={userRoleApi.getAll} apiParams={{ userId: user.id }}>
-        <AdminComponent />
-      </ApiRolesGetter>
-    )}
-    guestComponent={<Navigate to={WebRoutes.Login.path} />}
-  />
-);
+const AdminPage = () => {
+  const location = useLocation();
+
+  return (
+    <IsAuthenticated
+      loadingComponent={
+        <Group position="center" align="center" sx={{ height: '100vh' }}>
+          <Loader />
+        </Group>
+      }
+      userComponent={(user) => (
+        <ApiRolesGetter
+          api={userRoleApi.getAll}
+          apiParams={{ userId: user.id }}
+        >
+          <AdminComponent />
+        </ApiRolesGetter>
+      )}
+      guestComponent={
+        <Navigate to={WebRoutes.Login.generate({ ref: location.pathname })} />
+      }
+    />
+  );
+};
 
 export const meta: MetaFunction = () => ({
   title: 'Web Erp',
