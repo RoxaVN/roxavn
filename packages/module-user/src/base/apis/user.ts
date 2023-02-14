@@ -1,4 +1,5 @@
 import {
+  AlreadyExistsException,
   ApiSource,
   ArrayMaxSize,
   ArrayMinSize,
@@ -14,7 +15,6 @@ import {
   UnauthorizedException,
 } from '@roxavn/core/base';
 import { Type } from 'class-transformer';
-import { UserExistsException } from '../errors';
 import { baseModule } from '../module';
 import { Permissions, Resources } from '../roles';
 import { IsUsername } from '../validation';
@@ -72,7 +72,7 @@ export const userApi = {
     Id & {
       resetPasswordToken: string;
     },
-    UnauthorizedException | ForbiddenException | UserExistsException
+    UnauthorizedException | ForbiddenException | AlreadyExistsException
   >({
     validator: CreateUserRequest,
     permission: Permissions.CreateUser,

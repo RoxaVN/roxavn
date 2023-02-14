@@ -52,6 +52,7 @@
     "UnauthorizedException": "Lỗi xác thực",
     "ForbiddenException": "Lỗi không có quyền truy cập",
     "NotFoundException": "Lỗi không tìm thấy dữ liệu",
+    "AlreadyExistsException": "Lỗi đã tồn tại",
     "ServerException": "Lỗi máy chủ"
   },
 

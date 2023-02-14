@@ -52,6 +52,7 @@
     "UnauthorizedException": "Unauthorized exception",
     "ForbiddenException": "Forbidden exception",
     "NotFoundException": "Not found exception",
+    "AlreadyExistsException": "Already exists exception",
     "ServerException": "Server exception"
   },
   "Validation": {

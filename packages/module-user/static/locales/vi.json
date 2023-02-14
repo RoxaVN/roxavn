@@ -25,9 +25,6 @@
     "name": "Tài khoản",
     "description": "Quản lý tài khoản hệ thống"
   },
-  "Error": {
-    "UserExistsException": "Người dùng đã tồn tại"
-  },
   "Validation": {
     "IsUsername": "Chỉ gồm chữ cái thường, số và dấu chấm. Phải bắt đầu với chữ cái"
   }

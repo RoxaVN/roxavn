@@ -1,7 +1,11 @@
-import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
+import {
+  InferApiRequest,
+  NotFoundException,
+  AlreadyExistsException,
+} from '@roxavn/core/base';
 import { And, ILike, LessThan, MoreThan } from 'typeorm';
 
-import { userApi, UserExistsException } from '../../base';
+import { userApi } from '../../base';
 import { PasswordIdentity, User } from '../entities';
 import { serverModule } from '../module';
 import { tokenService } from './token';
@@ -67,7 +71,7 @@ export class CreateUserApiService extends ApiService<typeof userApi.create> {
       .getRepository(User)
       .count({ where: { username: request.username } });
     if (exists) {
-      throw new UserExistsException();
+      throw new AlreadyExistsException();
     }
 
     const identity = new PasswordIdentity();
