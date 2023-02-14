@@ -8,9 +8,7 @@ import { tokenService } from './token';
 import { Env } from '../config';
 
 @serverModule.useApi(accessTokenApi.delete)
-export class DeleteAccessTokenApiService extends ApiService<
-  typeof accessTokenApi.delete
-> {
+export class DeleteAccessTokenApiService extends ApiService {
   async handle(request: InferApiRequest<typeof accessTokenApi.delete>) {
     await this.dbSession
       .getRepository(UserAccessToken)

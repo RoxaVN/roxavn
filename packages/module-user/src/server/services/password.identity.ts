@@ -13,9 +13,7 @@ import { CreateAccessTokenService } from './access.token';
 import { tokenService } from './token';
 
 @serverModule.useApi(passwordIdentityApi.auth)
-export class PasswordAuthApiService extends ApiService<
-  typeof passwordIdentityApi.auth
-> {
+export class PasswordAuthApiService extends ApiService {
   async handle(request: InferApiRequest<typeof passwordIdentityApi.auth>) {
     const identity = await this.dbSession
       .getRepository(PasswordIdentity)
@@ -46,9 +44,7 @@ export class PasswordAuthApiService extends ApiService<
 }
 
 @serverModule.useApi(passwordIdentityApi.reset)
-export class ResetPasswordApiService extends ApiService<
-  typeof passwordIdentityApi.reset
-> {
+export class ResetPasswordApiService extends ApiService {
   async handle(request: InferApiRequest<typeof passwordIdentityApi.reset>) {
     const identity = await this.dbSession
       .getRepository(PasswordIdentity)
@@ -85,9 +81,7 @@ export class ResetPasswordApiService extends ApiService<
 }
 
 @serverModule.useApi(passwordIdentityApi.recovery)
-export class RecoveryPasswordApiService extends ApiService<
-  typeof passwordIdentityApi.recovery
-> {
+export class RecoveryPasswordApiService extends ApiService {
   async handle(request: InferApiRequest<typeof passwordIdentityApi.recovery>) {
     const token = await tokenService.creator.create({
       alphabetType: 'LOWERCASE_ALPHA_NUM',

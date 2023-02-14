@@ -7,9 +7,7 @@ import { Role, UserRole } from '../entities';
 import { serverModule } from '../module';
 
 @serverModule.useApi(roleApi.moduleRoles)
-export class GetModuleRolesApiService extends ApiService<
-  typeof roleApi.moduleRoles
-> {
+export class GetModuleRolesApiService extends ApiService {
   async handle(request: InferApiRequest<typeof roleApi.moduleRoles>) {
     const page = request.page || 1;
     const pageSize = 10;
@@ -35,9 +33,7 @@ export class GetModuleRolesApiService extends ApiService<
 }
 
 @serverModule.useApi(roleApi.moduleStats)
-export class GetModuleRoleStatsApiService extends ApiService<
-  typeof roleApi.moduleStats
-> {
+export class GetModuleRoleStatsApiService extends ApiService {
   async handle(request: InferApiRequest<typeof roleApi.moduleStats>) {
     const page = request.page || 1;
     const pageSize = 10;

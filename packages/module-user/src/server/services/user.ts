@@ -11,7 +11,7 @@ import { serverModule } from '../module';
 import { ApiService } from '@roxavn/core/server';
 
 @serverModule.useApi(userApi.getOne)
-export class GetMyUserApiService extends ApiService<typeof userApi.getOne> {
+export class GetMyUserApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userApi.getOne>) {
     const user = await this.dbSession.getRepository(User).findOne({
       where: { id: request.userId },
@@ -26,7 +26,7 @@ export class GetMyUserApiService extends ApiService<typeof userApi.getOne> {
 }
 
 @serverModule.useApi(userApi.getMany)
-export class GetUsersApiService extends ApiService<typeof userApi.getMany> {
+export class GetUsersApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userApi.getMany>) {
     const page = request.page || 1;
     const pageSize = 10;
@@ -56,7 +56,7 @@ export class GetUsersApiService extends ApiService<typeof userApi.getMany> {
 }
 
 @serverModule.useApi(userApi.create)
-export class CreateUserApiService extends ApiService<typeof userApi.create> {
+export class CreateUserApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userApi.create>) {
     const user = new User();
     user.username = request.username;

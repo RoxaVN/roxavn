@@ -7,9 +7,7 @@ import { UserRole } from '../entities';
 import { serverModule } from '../module';
 
 @serverModule.useApi(userRoleApi.create)
-export class CreateUserRoleApiService extends ApiService<
-  typeof userRoleApi.create
-> {
+export class CreateUserRoleApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userRoleApi.create>) {
     const userRole = new UserRole();
     userRole.userId = request.userId;
@@ -22,9 +20,7 @@ export class CreateUserRoleApiService extends ApiService<
 }
 
 @serverModule.useApi(userRoleApi.delete)
-export class DeleteUserRoleApiService extends ApiService<
-  typeof userRoleApi.delete
-> {
+export class DeleteUserRoleApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userRoleApi.delete>) {
     await this.dbSession.getRepository(UserRole).delete({
       scopeId: request.scopeId || '',
@@ -35,9 +31,7 @@ export class DeleteUserRoleApiService extends ApiService<
 }
 
 @serverModule.useApi(userRoleApi.getAll)
-export class GetUserRolesApiService extends ApiService<
-  typeof userRoleApi.getAll
-> {
+export class GetUserRolesApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userRoleApi.getAll>) {
     const items = await this.dbSession.getRepository(UserRole).find({
       relations: { role: true },

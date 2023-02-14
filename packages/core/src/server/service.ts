@@ -11,7 +11,7 @@ export abstract class BaseService<Request = any, Response = any> {
   }
 }
 
-export abstract class ApiService<T extends Api> extends BaseService<
+export abstract class ApiService<T extends Api = Api> extends BaseService<
   InferApiRequest<T>,
   InferApiResponse<T>
 > {}
