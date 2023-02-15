@@ -67,6 +67,7 @@ export class ServerModule extends BaseModule {
       ),
       async function (req: Request, resp: Response, next: NextFunction) {
         const queryRunner: QueryRunner = resp.locals.$queryRunner;
+        let error;
         try {
           const result = await handler(resp.locals as Req, {
             req,
@@ -78,9 +79,12 @@ export class ServerModule extends BaseModule {
         } catch (e) {
           console.error(e);
           await queryRunner.rollbackTransaction();
-          next(e);
+          error = e;
         } finally {
           await queryRunner.release();
+        }
+        if (error) {
+          next(error);
         }
       }
     );
