@@ -52,61 +52,58 @@ async function checkRole(
   return true;
 }
 
-ServerModule.apiMiddlerwares.push(
-  async (api, { dbSession, resp, req }, next) => {
-    if (api.permission) {
-      const authorizationHeader = req.get('authorization');
-      if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-        return next(new UnauthorizedException());
-      }
-
-      const token = authorizationHeader.slice(7);
-      if (!token) {
-        return next(new UnauthorizedException());
-      }
-
-      const signatureIndex = token.lastIndexOf('.');
-      if (signatureIndex < 0) {
-        return next(new UnauthorizedException());
-      }
-
-      const signature = token.slice(signatureIndex + 1);
-      const tokenPart = token.slice(0, signatureIndex);
-      const isValid = await tokenService.signer.verify(tokenPart, signature);
-      if (!isValid) {
-        return next(new UnauthorizedException());
-      }
-
-      const userId = parseInt(tokenPart.split('.')[1]);
-
-      const accessToken = await dbSession.getRepository(AccessToken).findOne({
-        select: ['userId', 'id'],
-        where: {
-          userId: userId,
-          token: signature,
-          expiredDate: Raw((alias) => `${alias} > NOW()`),
-        },
-      });
-
-      if (!accessToken) {
-        return next(new UnauthorizedException());
-      }
-
-      const allow =
-        checkOwner(api, { dbSession, req, resp }, userId) ||
-        checkRole(api, { dbSession, req, resp }, userId);
-      if (!allow) {
-        return next(new ForbiddenException());
-      }
-
-      Object.assign(resp.locals, {
-        $user: { id: accessToken.userId },
-        $accessToken: { id: accessToken.id },
-      } as AuthenticatedData);
+ServerModule.apiMiddlerwares.push(async (api, { dbSession, resp, req }) => {
+  if (api.permission) {
+    const authorizationHeader = req.get('authorization');
+    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+      throw new UnauthorizedException();
     }
-    next();
+
+    const token = authorizationHeader.slice(7);
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+
+    const signatureIndex = token.lastIndexOf('.');
+    if (signatureIndex < 0) {
+      throw new UnauthorizedException();
+    }
+
+    const signature = token.slice(signatureIndex + 1);
+    const tokenPart = token.slice(0, signatureIndex);
+    const isValid = await tokenService.signer.verify(tokenPart, signature);
+    if (!isValid) {
+      throw new UnauthorizedException();
+    }
+
+    const userId = parseInt(tokenPart.split('.')[1]);
+
+    const accessToken = await dbSession.getRepository(AccessToken).findOne({
+      select: ['userId', 'id'],
+      where: {
+        userId: userId,
+        token: signature,
+        expiredDate: Raw((alias) => `${alias} > NOW()`),
+      },
+    });
+
+    if (!accessToken) {
+      throw new UnauthorizedException();
+    }
+
+    const allow =
+      checkOwner(api, { dbSession, req, resp }, userId) ||
+      checkRole(api, { dbSession, req, resp }, userId);
+    if (!allow) {
+      throw new ForbiddenException();
+    }
+
+    Object.assign(resp.locals, {
+      $user: { id: accessToken.userId },
+      $accessToken: { id: accessToken.id },
+    } as AuthenticatedData);
   }
-);
+});
 
 type AuthenticatedData = {
   $user: { id: number };

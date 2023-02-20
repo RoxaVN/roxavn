@@ -24,9 +24,8 @@ export type MiddlerwareContext = {
 
 export type ApiMiddlerware = (
   api: Api,
-  context: MiddlerwareContext,
-  next: NextFunction
-) => Promise<void> | void;
+  context: MiddlerwareContext
+) => Promise<void>;
 
 export type ErrorMiddlerware = (
   error: any,
@@ -50,21 +49,21 @@ export class ServerModule extends BaseModule {
         await queryRunner.connect();
         await queryRunner.startTransaction();
         resp.locals.$queryRunner = queryRunner;
+
+        for (const middleware of ServerModule.apiMiddlerwares) {
+          try {
+            await middleware(api, {
+              req,
+              resp,
+              dbSession: resp.locals.$queryRunner.manager,
+            });
+          } catch (e) {
+            console.error(e);
+            return next(e);
+          }
+        }
         next();
       },
-      ...ServerModule.apiMiddlerwares.map(
-        (middleware) =>
-          function (req: Request, resp: Response, next: NextFunction) {
-            middleware(
-              api,
-              { req, resp, dbSession: resp.locals.$queryRunner.manager },
-              next
-            )?.catch((e) => {
-              console.error(e);
-              next(e);
-            });
-          }
-      ),
       async function (req: Request, resp: Response, next: NextFunction) {
         const queryRunner: QueryRunner = resp.locals.$queryRunner;
         let error;
@@ -123,7 +122,7 @@ ServerModule.errorMiddlerwares.push(async (error, { resp }, next) => {
     .json({ code: error.code, error: error.toJson() } as FullApiResponse);
 });
 
-ServerModule.apiMiddlerwares.push((api, { req, resp }, next) => {
+ServerModule.apiMiddlerwares.push(async (api, { req, resp }) => {
   if (api.validator) {
     const rawData = Object.assign(
       {},
@@ -142,12 +141,11 @@ ServerModule.apiMiddlerwares.push((api, { req, resp }, next) => {
           i18n[error.property] = Object.values(error.contexts)[0];
         }
       });
-      return next(new ValidationException(i18n));
+      throw new ValidationException(i18n);
     }
 
     Object.assign(resp.locals, parsedData);
   }
-  next();
 });
 
 export const serverModule = ServerModule.fromBase(baseModule);
