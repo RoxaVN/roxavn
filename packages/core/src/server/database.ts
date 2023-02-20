@@ -2,13 +2,14 @@ import fs from 'fs';
 import path from 'path';
 
 import { DataSource } from 'typeorm';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { constants } from '../base';
 import { moduleManager } from './module.manager';
 
 class DatabaseManager {
   dataSource!: DataSource;
 
-  async createSource() {
+  async createSource(options?: Partial<PostgresConnectionOptions>) {
     const isDev = process.env.NODE_ENV === constants.ENV_DEVELOPMENT;
     const modules = moduleManager.modules.map((m) => m.name);
     const modelPaths: string[] = [];
@@ -33,6 +34,7 @@ class DatabaseManager {
       entities: modelPaths,
       logging: isDev ? true : false,
       synchronize: isDev ? true : false,
+      ...options,
     });
     await this.dataSource.initialize();
   }

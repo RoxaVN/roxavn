@@ -16,7 +16,7 @@ class HookService {
     // must build to update lastest entities
     buildService.compile({});
 
-    await databaseManager.createSource();
+    await databaseManager.createSource({ synchronize: true });
     if (module) {
       runModuleHook(module, mode);
     } else {
