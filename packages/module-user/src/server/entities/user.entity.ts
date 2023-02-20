@@ -7,8 +7,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserAccessToken } from './user-access-token.entity';
-import { UserIdentity } from './user-identity.entity';
+import { AccessToken } from './access-token.entity';
+import { Identity } from './identity.entity';
 import { UserRole } from './user-role.entity';
 
 @Entity()
@@ -34,11 +34,11 @@ export class User {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: Date;
 
-  @OneToMany(() => UserIdentity, (identity) => identity.user)
-  identities: UserIdentity[];
+  @OneToMany(() => Identity, (identity) => identity.user)
+  identities: Identity[];
 
-  @OneToMany(() => UserAccessToken, (accessToken) => accessToken.user)
-  accessTokens: UserIdentity[];
+  @OneToMany(() => AccessToken, (accessToken) => accessToken.user)
+  accessTokens: Identity[];
 
   @OneToMany(() => UserRole, (role) => role.user)
   roles: UserRole[];

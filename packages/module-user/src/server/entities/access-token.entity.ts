@@ -1,39 +1,36 @@
 import {
-  ChildEntity,
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-  TableInheritance,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
-@TableInheritance({ column: { type: 'varchar', name: 'type' } })
-export class UserIdentity {
+export class AccessToken {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
+  token: string;
+
+  @Column()
+  identityId: number;
+
+  @Column()
   userId: number;
 
-  @ManyToOne(() => User, (user) => user.identities)
+  @ManyToOne(() => User, (user) => user.accessTokens)
   user: User;
-
-  @Column({ type: 'jsonb', nullable: true })
-  metadata?: any;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: Date;
-}
 
-@ChildEntity()
-export class PasswordIdentity extends UserIdentity {
-  @Column()
-  password: string;
+  @Column({ type: 'timestamptz' })
+  expiredDate: Date;
 }

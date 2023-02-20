@@ -56,8 +56,8 @@ export const Permissions = {
     value: 'delete.access.token',
     allowedScopes: [Scopes.Module, scopeManager.OWNER],
   },
-  GetUserAccessTokens: {
-    value: 'get.user.access.tokens',
+  GetAccessTokens: {
+    value: 'get.access.tokens',
     allowedScopes: [Scopes.Module, scopeManager.OWNER],
   },
 

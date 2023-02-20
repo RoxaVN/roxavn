@@ -7,8 +7,8 @@ import {
   UnauthorizedException,
 } from '@roxavn/core/base';
 import { Raw } from 'typeorm';
-import { UserAccessToken, UserRole } from './entities';
-import { tokenService } from './services';
+import { AccessToken, UserRole } from './entities';
+import { tokenService } from './services/token';
 import { Resources } from '../base';
 
 function checkOwner(api: Api, { req }: MiddlerwareContext, userId: number) {
@@ -79,16 +79,14 @@ ServerModule.apiMiddlerwares.push(
 
       const userId = parseInt(tokenPart.split('.')[1]);
 
-      const accessToken = await dbSession
-        .getRepository(UserAccessToken)
-        .findOne({
-          select: ['userId', 'id'],
-          where: {
-            userId: userId,
-            token: signature,
-            expiredDate: Raw((alias) => `${alias} > NOW()`),
-          },
-        });
+      const accessToken = await dbSession.getRepository(AccessToken).findOne({
+        select: ['userId', 'id'],
+        where: {
+          userId: userId,
+          token: signature,
+          expiredDate: Raw((alias) => `${alias} > NOW()`),
+        },
+      });
 
       if (!accessToken) {
         return next(new UnauthorizedException());
