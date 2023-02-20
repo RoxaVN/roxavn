@@ -8,6 +8,7 @@ import { baseModule } from './module';
 
 export const Scopes = {
   Module: baseModule.scope(),
+  Owner: { name: 'owner' },
 };
 
 export const Resources = {
@@ -27,7 +28,7 @@ export const Permissions = {
   },
   ReadUser: {
     value: 'read.user',
-    allowedScopes: [Scopes.Module, scopeManager.OWNER],
+    allowedScopes: [Scopes.Module, Scopes.Owner],
   },
   ReadUsers: {
     value: 'read.users',
@@ -41,7 +42,7 @@ export const Permissions = {
 
   ReadUserRoles: {
     value: 'read.user.roles',
-    allowedScopes: [Scopes.Module, scopeManager.OWNER],
+    allowedScopes: [Scopes.Module, Scopes.Owner],
   },
   CreateUserRole: {
     value: 'create.user.role',
@@ -49,16 +50,16 @@ export const Permissions = {
   },
   DeleteUserRole: {
     value: 'delete.user.role',
-    allowedScopes: [Scopes.Module, scopeManager.OWNER],
+    allowedScopes: [Scopes.Module, Scopes.Owner],
   },
 
   DeleteAccessToken: {
     value: 'delete.access.token',
-    allowedScopes: [Scopes.Module, scopeManager.OWNER],
+    allowedScopes: [Scopes.Module, Scopes.Owner],
   },
   GetAccessTokens: {
     value: 'get.access.tokens',
-    allowedScopes: [Scopes.Module, scopeManager.OWNER],
+    allowedScopes: [Scopes.Module, Scopes.Owner],
   },
 
   RecoveryPassword: {

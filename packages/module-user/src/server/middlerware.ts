@@ -1,58 +1,22 @@
-import { ServerModule, MiddlerwareContext } from '@roxavn/core/server';
+import { ServerModule } from '@roxavn/core/server';
 import {
-  Api,
   ForbiddenException,
-  predefinedRoleManager,
-  scopeManager,
+  NotFoundException,
+  Resource,
   UnauthorizedException,
 } from '@roxavn/core/base';
-import { Raw } from 'typeorm';
+import { Raw, ArrayContains } from 'typeorm';
 import { AccessToken, UserRole } from './entities';
 import { tokenService } from './services/token';
-import { Resources } from '../base';
+import { constants, Resources, Scopes } from '../base';
 
-function checkOwner(api: Api, { req }: MiddlerwareContext, userId: number) {
-  if (api.resources.find((r) => r.name === scopeManager.OWNER.name)) {
-    if (api.resources.find((r) => r.name === Resources.User.name)) {
-      if (req.params[Resources.User.idParam] === userId.toString()) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
+type AuthenticatedData = {
+  $user: { id: number };
+  $accessToken: { id: number };
+};
 
-async function checkRole(
-  api: Api,
-  { dbSession, req }: MiddlerwareContext,
-  userId: number
-) {
-  if (api.permission) {
-    const predefinedRoles = await predefinedRoleManager.getRolesByPermission(
-      api.permission
-    );
-    if (predefinedRoles.length === 0) {
-      return false;
-    }
-
-    const hasRole = await dbSession.getRepository(UserRole).count({
-      where: predefinedRoles.map((predefinedRole) => ({
-        userId: userId,
-        scopeId: predefinedRole.scope.idParam
-          ? req.params[predefinedRole.scope.idParam]
-          : '',
-        role: {
-          scope: predefinedRole.scope.name,
-          name: predefinedRole.name,
-        },
-      })),
-    });
-    return !!hasRole;
-  }
-  return true;
-}
-
-ServerModule.apiMiddlerwares.push(async (api, { dbSession, resp, req }) => {
+// authenticate access token
+ServerModule.apiMiddlewares.push(async (api, { dbSession, resp, req }) => {
   if (api.permission) {
     const authorizationHeader = req.get('authorization');
     if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
@@ -91,13 +55,6 @@ ServerModule.apiMiddlerwares.push(async (api, { dbSession, resp, req }) => {
       throw new UnauthorizedException();
     }
 
-    const allow =
-      checkOwner(api, { dbSession, req, resp }, userId) ||
-      checkRole(api, { dbSession, req, resp }, userId);
-    if (!allow) {
-      throw new ForbiddenException();
-    }
-
     Object.assign(resp.locals, {
       $user: { id: accessToken.userId },
       $accessToken: { id: accessToken.id },
@@ -105,7 +62,95 @@ ServerModule.apiMiddlerwares.push(async (api, { dbSession, resp, req }) => {
   }
 });
 
-type AuthenticatedData = {
-  $user: { id: number };
-  $accessToken: { id: number };
-};
+// check permission user
+ServerModule.apiMiddlewares.push(async (api, { dbSession, resp, req }) => {
+  if (api.permission) {
+    const user: AuthenticatedData['$user'] = resp.locals.$user;
+    const scopeHeader = req.get(constants.AUTH_SCOPE_HTTP_HEADER);
+    if (scopeHeader === constants.ADMIN_AUTH_SCOPE) {
+      const allow = await dbSession.getRepository(UserRole).count({
+        where: {
+          userId: user.id,
+          role: {
+            hasId: false,
+            permissions: ArrayContains([api.permission.value]),
+          },
+        },
+      });
+      if (!allow) {
+        throw new ForbiddenException();
+      }
+    } else {
+      const hasOwner = !!api.permission.allowedScopes.find(
+        (r) => r.name === Scopes.Owner.name
+      );
+      if (hasOwner) {
+        if (parseInt(resp.locals[Resources.User.idParam]) === user.id) {
+          return;
+        }
+      }
+      const lastResource = api.resources[api.resources.length - 1];
+      const allowResources: Resource[] = api.permission.allowedScopes.filter(
+        (s) => s.idParam
+      ) as any;
+      const scopeIds: string[] = allowResources
+        .map((r) => resp.locals[r.idParam])
+        .filter((i) => i);
+      if (allowResources.length === 1) {
+        if (scopeIds.length === 1) {
+          const allow = await dbSession.getRepository(UserRole).count({
+            where: {
+              userId: user.id,
+              scopeId: scopeIds[0],
+              role: {
+                hasId: true,
+                scope: allowResources[0].name,
+                permissions: ArrayContains([api.permission.value]),
+              },
+            },
+          });
+          if (!allow) {
+            throw new ForbiddenException();
+          }
+        } else {
+          const resourceTable = lastResource.idParam.replace('Id', '');
+          const resource = await dbSession
+            .createQueryBuilder()
+            .select(resourceTable)
+            .from(resourceTable, resourceTable)
+            .where(`${resourceTable}.id = :id`, {
+              id: resp.locals[lastResource.idParam],
+            })
+            .getOne();
+          if (resource) {
+            if (hasOwner && resource.userId === user.id) {
+              return;
+            }
+            const allow = await dbSession.getRepository(UserRole).count({
+              where: {
+                userId: user.id,
+                scopeId: resource[allowResources[0].idParam],
+                role: {
+                  hasId: true,
+                  scope: allowResources[0].name,
+                  permissions: ArrayContains([api.permission.value]),
+                },
+              },
+            });
+            if (!allow) {
+              throw new ForbiddenException();
+            }
+          } else {
+            throw new NotFoundException();
+          }
+        }
+      } else {
+        throw Error(
+          `Too many resources [${allowResources
+            .map((r) => r.name)
+            .join(', ')}] for api ${api.path}`
+        );
+      }
+    }
+  }
+});

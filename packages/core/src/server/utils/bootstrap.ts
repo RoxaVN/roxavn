@@ -7,7 +7,7 @@ import { registerApiRoutes } from './register';
 export async function bootstrap(app: Express) {
   registerApiRoutes();
   app.use('/', ServerModule.apiRouter);
-  for (const handler of ServerModule.errorMiddlerwares) {
+  for (const handler of ServerModule.errorMiddlewares) {
     app.use((error: any, req: Request, resp: Response, next: NextFunction) =>
       handler(
         error,

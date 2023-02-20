@@ -16,31 +16,31 @@ import {
 import { databaseManager } from './database';
 import { ApiService } from './service';
 
-export type MiddlerwareContext = {
+export type MiddlewareContext = {
   req: Request;
   resp: Response;
   dbSession: EntityManager;
 };
 
-export type ApiMiddlerware = (
+export type ApiMiddleware = (
   api: Api,
-  context: MiddlerwareContext
+  context: MiddlewareContext
 ) => Promise<void>;
 
-export type ErrorMiddlerware = (
+export type ErrorMiddleware = (
   error: any,
-  context: MiddlerwareContext,
+  context: MiddlewareContext,
   next: NextFunction
 ) => Promise<void> | void;
 
 export class ServerModule extends BaseModule {
   static apiRouter = Router();
-  static apiMiddlerwares = [] as Array<ApiMiddlerware>;
-  static errorMiddlerwares = [] as Array<ErrorMiddlerware>;
+  static apiMiddlewares = [] as Array<ApiMiddleware>;
+  static errorMiddlewares = [] as Array<ErrorMiddleware>;
 
   useRawApi<Req extends ApiRequest, Resp extends ApiResponse>(
     api: Api<Req, Resp>,
-    handler: (req: Req, context: MiddlerwareContext) => Promise<Resp> | Resp
+    handler: (req: Req, context: MiddlewareContext) => Promise<Resp> | Resp
   ) {
     ServerModule.apiRouter[api.method.toLowerCase()](
       api.path,
@@ -50,7 +50,7 @@ export class ServerModule extends BaseModule {
         await queryRunner.startTransaction();
         resp.locals.$queryRunner = queryRunner;
 
-        for (const middleware of ServerModule.apiMiddlerwares) {
+        for (const middleware of ServerModule.apiMiddlewares) {
           try {
             await middleware(api, {
               req,
@@ -108,7 +108,7 @@ export class ServerModule extends BaseModule {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-ServerModule.errorMiddlerwares.push(async (error, { resp }, next) => {
+ServerModule.errorMiddlewares.push(async (error, { resp }, next) => {
   if (!error.code || !error.toJson) {
     error = new ServerException();
   }
@@ -122,7 +122,7 @@ ServerModule.errorMiddlerwares.push(async (error, { resp }, next) => {
     .json({ code: error.code, error: error.toJson() } as FullApiResponse);
 });
 
-ServerModule.apiMiddlerwares.push(async (api, { req, resp }) => {
+ServerModule.apiMiddlewares.push(async (api, { req, resp }) => {
   if (api.validator) {
     const rawData = Object.assign(
       {},

@@ -26,9 +26,7 @@ const scopeEquals = (scopeA: Scope, scopeB: Scope): boolean => {
 };
 
 class ScopeManager {
-  OWNER = { name: 'owner' };
-
-  private scopes: Scope[] = [this.OWNER];
+  private scopes: Scope[] = [];
 
   public register(...scopes: Scope[]): void {
     const newScopes = [...this.scopes, ...scopes];
