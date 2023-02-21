@@ -13,11 +13,17 @@ export class UpdateSettingService extends BaseService<
   Empty
 > {
   async handle(request: UpdateSettingRequest) {
-    const setting = new Setting();
-    setting.module = request.module;
-    setting.name = request.name;
-    setting.metadata = request.metadata;
-    await this.dbSession.getRepository(Setting).save(setting);
+    await this.dbSession
+      .createQueryBuilder()
+      .insert()
+      .into(Setting)
+      .values({
+        module: request.module,
+        name: request.name,
+        metadata: request.metadata,
+      })
+      .orUpdate(['metadata'], ['module', 'name'])
+      .execute();
     return {};
   }
 }

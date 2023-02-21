@@ -11,9 +11,11 @@ export interface GetModuleSettingRequest {
   name?: string;
 }
 
-export type GetModuleSettingResponse = Collection<{
+export interface SettingResponse {
   module: string;
   name: string;
   metadata: any;
   updatedDate: Date;
-}>;
+}
+
+export type GetModuleSettingResponse = Collection<SettingResponse>;

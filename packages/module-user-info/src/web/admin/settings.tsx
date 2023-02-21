@@ -8,15 +8,10 @@ import {
 import { ModuleSettings } from '@roxavn/module-utils/web';
 import { IconSettings } from '@tabler/icons';
 
-import {
-  getSettingsApi,
-  setFieldsForAdminToUpdateApi,
-  setFieldsForUserToUpdateApi,
-  settingConstant,
-} from '../../base';
+import { settingApi, constants } from '../../base';
 import { webModule } from '../module';
 
-const fields = settingConstant.userInfoFields.map((v) => ({
+const fields = constants.USER_INFO_FIELDS.map((v) => ({
   value: v,
   label: v,
 }));
@@ -26,13 +21,13 @@ const Page = () => {
 
   return (
     <ModuleSettings
-      getListApi={getSettingsApi}
+      getListApi={settingApi.getAll}
       forms={{
-        [settingConstant.fieldsForUserToUpdate]: {
+        [constants.FIELDS_FOR_USER_TO_UPDATE]: {
           title: t('fieldsForUserToUpdateTitle'),
           form: (
             <ApiFormGroup
-              api={setFieldsForUserToUpdateApi}
+              api={settingApi.setFieldsForUserToUpdate}
               fields={[
                 {
                   name: 'fields',
@@ -42,11 +37,11 @@ const Page = () => {
             />
           ),
         },
-        [settingConstant.fieldsForAdminToUpdate]: {
+        [constants.FIELDS_FOR_ADMIN_TO_UPDATE]: {
           title: t('fieldsForAdminToUpdateTitle'),
           form: (
             <ApiFormGroup
-              api={setFieldsForAdminToUpdateApi}
+              api={settingApi.setFieldsForAdminToUpdate}
               fields={[
                 {
                   name: 'fields',
@@ -66,7 +61,7 @@ webModule.adminPages.push({
   icon: IconSettings,
   path: '/settings',
   element: (
-    <IfCanAccessApi api={getSettingsApi}>
+    <IfCanAccessApi api={settingApi.getAll}>
       <Page />
     </IfCanAccessApi>
   ),

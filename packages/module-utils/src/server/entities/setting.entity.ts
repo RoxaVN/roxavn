@@ -1,11 +1,21 @@
-import { Column, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
+@Index(['module', 'name'], { unique: true })
 export class Setting {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   module: string;
 
-  @PrimaryColumn()
+  @Column()
   name: string;
 
   @Column({ type: 'jsonb' })
