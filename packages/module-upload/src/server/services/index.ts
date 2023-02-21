@@ -1,2 +1,2 @@
-export * from './upload';
-export * from './user.file';
+export * from './file';
+export * from './file.storage';

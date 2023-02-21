@@ -1,4 +1,3 @@
-import { Api, ApiError, ApiRequest, ApiResponse } from './api';
 import { constants } from './constants';
 import { Scope } from './permission';
 
@@ -30,20 +29,6 @@ export class BaseModule {
    */
   scope(): Scope {
     return { name: this.name };
-  }
-
-  /**
-   * Make api with full path
-   */
-  public api<
-    Request extends ApiRequest,
-    Response extends ApiResponse,
-    Error extends ApiError
-  >(api: Api<Request, Response, Error>): Api<Request, Response, Error> {
-    return {
-      ...api,
-      path: this.apiPath(api.path),
-    };
   }
 
   apiPath(path: string) {

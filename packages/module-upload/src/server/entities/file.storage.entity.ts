@@ -2,27 +2,35 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { User } from '@roxavn/module-user/server';
+import { File } from './file.entity';
 
 @Entity()
-export class UserFile {
-  @PrimaryColumn()
+export class FileStorage {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   userId: number;
 
   @OneToOne(() => User)
   @JoinColumn()
   user: User;
 
-  @Column({ default: 0 })
-  currentStorageSize: number = 0;
+  @OneToMany(() => File, (file) => file.fileStorage)
+  files: File[];
 
   @Column({ default: 0 })
-  maxStorageSize: number = 0;
+  currentSize: number = 0;
+
+  @Column({ default: 0 })
+  maxSize: number = 0;
 
   @Column({ default: 0 })
   maxFileSize: number = 0;

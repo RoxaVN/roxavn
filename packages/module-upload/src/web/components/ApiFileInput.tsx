@@ -5,11 +5,11 @@ import { ApiForm, uiManager } from '@roxavn/core/web';
 import { IconUpload, IconFileCheck } from '@tabler/icons';
 import { Fragment } from 'react';
 
-import { uploadFileApi } from '../../base';
+import { fileApi } from '../../base';
 import { webModule } from '../module';
 import { useApiFileInputStyles } from './ApiFileInput.styles';
 
-type UploadedFile = InferApiResponse<typeof uploadFileApi>;
+type UploadedFile = InferApiResponse<typeof fileApi.upload>;
 
 const renderLabel = (fileName: string) => {
   const parts = fileName.split('.');
@@ -54,7 +54,7 @@ const UploadItem = ({ value, onChange }: UploaditemProps) => {
   return (
     <div className={classes.container}>
       <ApiForm
-        api={uploadFileApi}
+        api={fileApi.upload}
         apiParams={{ file: value }}
         onSuccess={onChange}
         fetchOnMount
@@ -163,7 +163,7 @@ export const ApiFileInput = <Multiple extends boolean = false>({
           ? files.filter((f) => !data.find((d) => d.local?.name === f.name))
           : [files];
         if (maxFiles && newFiles.length + data.length > maxFiles) {
-          uiManager.errorDialog(
+          uiManager.errorModal(
             new Error(t('Validation.MaxFiles', { count: maxFiles }))
           );
         } else {

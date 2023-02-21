@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { User } from '@roxavn/module-user/server';
+import { FileStorage } from './file.storage.entity';
 
 @Entity()
 export class File {
@@ -31,6 +32,12 @@ export class File {
 
   @ManyToOne(() => User, (user) => user.identities)
   user: User;
+
+  @Column()
+  fileStorageId: number;
+
+  @ManyToOne(() => FileStorage, (fileStorage) => fileStorage.files)
+  fileStorage: FileStorage;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: any;

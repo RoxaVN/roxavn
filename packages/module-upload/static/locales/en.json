@@ -1,6 +1,6 @@
 {
   "reupload": "Reupload",
-  "userFiles": "User files",
+  "fileStorages": "File storages",
   "maxFileSize": "Max file size",
   "currentStorageSize": "Current storage size",
   "maxStorageSize": "Max storage size",

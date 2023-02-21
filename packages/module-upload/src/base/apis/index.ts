@@ -1,2 +1,2 @@
-export * from './upload';
-export * from './get.user_files';
+export * from './file';
+export * from './file.storage';

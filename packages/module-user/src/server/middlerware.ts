@@ -1,6 +1,9 @@
-import { ServerModule } from '@roxavn/core/server';
+import { BaseService, ServerModule } from '@roxavn/core/server';
 import {
+  Api,
   ForbiddenException,
+  InferApiRequest,
+  InferApiResponse,
   NotFoundException,
   Resource,
   UnauthorizedException,
@@ -14,6 +17,15 @@ type AuthenticatedData = {
   $user: { id: number };
   $accessToken: { id: number };
 };
+
+export type InferAuthApiRequest<T> = T extends Api<infer U, any, any>
+  ? U & AuthenticatedData
+  : never;
+
+export abstract class AuthApiService<T extends Api = Api> extends BaseService<
+  InferApiRequest<T> & AuthenticatedData,
+  InferApiResponse<T>
+> {}
 
 // authenticate access token
 ServerModule.apiMiddlewares.push(async (api, { dbSession, resp, req }) => {

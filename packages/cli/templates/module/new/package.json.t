@@ -47,7 +47,7 @@ to: package.json
       "web": [
         "dist/esm/web/index.d.ts"
       ],
-      "share": [
+      "base": [
         "dist/esm/base/index.d.ts"
       ],
       "server": [

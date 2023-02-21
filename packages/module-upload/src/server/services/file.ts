@@ -1,13 +1,13 @@
 import { InferApiResponse, ServerException } from '@roxavn/core/base';
 import busboy from 'busboy';
 
-import { ExceedsStorageLimitException, uploadFileApi } from '../../base';
-import { File, UserFile } from '../entities';
+import { ExceedsStorageLimitException, fileApi } from '../../base';
+import { File, FileStorage } from '../entities';
 import { serverModule } from '../module';
 import { seaweedClient } from './seaweed';
 
-serverModule.useRawApi(uploadFileApi, (_, { req, dbSession, resp }) => {
-  return new Promise<InferApiResponse<typeof uploadFileApi>>(
+serverModule.useRawApi(fileApi.upload, (_, { req, dbSession, resp }) => {
+  return new Promise<InferApiResponse<typeof fileApi.upload>>(
     (resolve, reject) => {
       const bb = busboy({ headers: req.headers });
       bb.on('file', async (name, fileStream, info) => {
@@ -18,23 +18,18 @@ serverModule.useRawApi(uploadFileApi, (_, { req, dbSession, resp }) => {
           );
 
           const userId = resp.locals.user.id;
-          let userFile = await dbSession
-            .getRepository(UserFile)
+          let storage = await dbSession
+            .getRepository(FileStorage)
             .findOne({ where: { userId: userId } });
-          if (!userFile) {
-            userFile = new UserFile();
-            userFile.userId = userId;
+          if (!storage) {
+            storage = new FileStorage();
+            storage.userId = userId;
           }
-          userFile.currentStorageSize += result.size;
-          if (
-            userFile.maxStorageSize &&
-            userFile.currentStorageSize > userFile.maxStorageSize
-          ) {
-            return reject(
-              new ExceedsStorageLimitException(userFile.maxStorageSize)
-            );
+          storage.currentSize += result.size;
+          if (storage.maxSize && storage.currentSize > storage.maxSize) {
+            return reject(new ExceedsStorageLimitException(storage.maxSize));
           }
-          await dbSession.save(userFile);
+          await dbSession.save(storage);
 
           const file = new File();
           file.id = result.fid;
@@ -43,6 +38,7 @@ serverModule.useRawApi(uploadFileApi, (_, { req, dbSession, resp }) => {
           file.name = fileName;
           file.userId = userId;
           file.mime = info.mimeType;
+          file.fileStorageId = storage.id;
           await dbSession.save(file);
 
           resolve({

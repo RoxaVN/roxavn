@@ -3,7 +3,7 @@ import { IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { ApiForm } from '@roxavn/core/web';
 import { useEffect, useState } from 'react';
 
-import { uploadFileApi } from '../../base';
+import { fileApi } from '../../base';
 import { webModule } from '../module';
 import {
   ApiFileInput,
@@ -46,7 +46,7 @@ const UploadImageItem = ({ value, onChange }: UploaditemProps) => {
       style={image ? { backgroundImage: `url('${image}')` } : {}}
     >
       <ApiForm
-        api={uploadFileApi}
+        api={fileApi.upload}
         apiParams={{ file: value }}
         onSuccess={onChange}
         fetchOnMount
