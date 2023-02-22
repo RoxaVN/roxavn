@@ -13,6 +13,10 @@ export const Scopes = {
   Module: baseModule.scope(),
 };
 
+export const Resources = {
+  User: { name: 'users', idParam: 'userId' },
+};
+
 export const Permissions = {
   ReadUser: {
     value: 'read.user',
@@ -29,7 +33,7 @@ export const Roles = {
 };
 
 if (!scopeManager.hasScope(Scopes.Module)) {
-  scopeManager.register(...Object.values(Scopes));
+  scopeManager.register(...Object.values(Scopes), ...Object.values(Resources));
   permissionManager.register(...Object.values(Permissions));
   predefinedRoleManager.register(...Object.values(Roles));
 }
