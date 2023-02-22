@@ -1,7 +1,7 @@
 module.exports = [
   {
     type: 'input',
-    name: 'api_name',
-    message: "What's your api name (in PascalCase)?",
+    name: 'api_source_name',
+    message: "What's your api source name (in camelCase)?",
   },
 ];

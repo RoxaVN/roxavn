@@ -1,17 +1,15 @@
 ---
-to: src/server/services/<%= h.changeCase.dot(api_name) %>.ts
+to: src/server/services/<%= h.changeCase.dot(api_source_name) %>.ts
 ---
-import {
-  AuthApiService,
-  InferAuthApiRequest,
-} from '@roxavn/module-user/server';
+import { InferApiRequest } from '@roxavn/core/base';
+import { ApiService } from '@roxavn/core/server';
 
-import { <%= h.changeCase.camel(api_name) %>Api } from '../../base';
+import { <%= h.changeCase.camel(api_source_name) %>Api } from '../../base';
 import { serverModule } from '../module';
 
-@serverModule.useApi(<%= h.changeCase.camel(api_name) %>Api)
-export class <%= api_name %>ApiService extends AuthApiService<typeof <%= h.changeCase.camel(api_name) %>Api> {
-  async handle(request: InferAuthApiRequest<typeof <%= h.changeCase.camel(api_name) %>Api>) {
+@serverModule.useApi(<%= h.changeCase.camel(api_source_name) %>Api.getOne)
+export class <%= api_source_name %>ApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof <%= h.changeCase.camel(api_source_name) %>Api.getOne>) {
     
   }
 }

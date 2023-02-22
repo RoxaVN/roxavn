@@ -1,5 +1,9 @@
-import { ApiSource, ExactProps, MinLength } from '@roxavn/core/base';
-import { NotFoundError } from 'rxjs';
+import {
+  ApiSource,
+  ExactProps,
+  MinLength,
+  NotFoundException,
+} from '@roxavn/core/base';
 
 import { SettingResponse } from '../interfaces';
 import { baseModule } from '../module';
@@ -19,7 +23,11 @@ class GetPublicSettingRequest extends ExactProps<GetPublicSettingRequest> {
 }
 
 export const settingApi = {
-  getPublic: settingSource.custom<GetPublicSettingRequest, any, NotFoundError>({
+  getPublic: settingSource.custom<
+    GetPublicSettingRequest,
+    any,
+    NotFoundException
+  >({
     method: 'GET',
     path: settingSource.apiPath() + '/public',
     validator: GetPublicSettingRequest,
