@@ -1,0 +1,109 @@
+import { BaseService, ServerModule } from '@roxavn/core/server';
+import {
+  Api,
+  ForbiddenException,
+  InferApiRequest,
+  InferApiResponse,
+  Resource,
+  UnauthorizedException,
+} from '@roxavn/core/base';
+import { Raw } from 'typeorm';
+import { AccessToken } from './entities';
+import { tokenService } from './services/token';
+import { AuthenticatedData, authorizeMiddlewares } from './auth';
+
+export type InferAuthApiRequest<T> = T extends Api<infer U, any, any>
+  ? U & AuthenticatedData
+  : never;
+
+export abstract class AuthApiService<T extends Api = Api> extends BaseService<
+  InferApiRequest<T> & AuthenticatedData,
+  InferApiResponse<T>
+> {}
+
+// authenticate access token
+ServerModule.apiMiddlewares.push(async (api, { dbSession, resp, req }) => {
+  if (api.permission) {
+    const authorizationHeader = req.get('authorization');
+    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+      throw new UnauthorizedException();
+    }
+
+    const token = authorizationHeader.slice(7);
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+
+    const signatureIndex = token.lastIndexOf('.');
+    if (signatureIndex < 0) {
+      throw new UnauthorizedException();
+    }
+
+    const signature = token.slice(signatureIndex + 1);
+    const tokenPart = token.slice(0, signatureIndex);
+    const isValid = await tokenService.signer.verify(tokenPart, signature);
+    if (!isValid) {
+      throw new UnauthorizedException();
+    }
+
+    const userId = tokenPart.split('.')[1];
+
+    const accessToken = await dbSession.getRepository(AccessToken).findOne({
+      select: ['userId', 'id'],
+      where: {
+        userId: userId,
+        token: signature,
+        expiredDate: Raw((alias) => `${alias} > NOW()`),
+      },
+    });
+
+    if (!accessToken) {
+      throw new UnauthorizedException();
+    }
+
+    Object.assign(resp.locals, {
+      $user: { id: accessToken.userId },
+      $accessToken: { id: accessToken.id },
+      $getResource: async () => {
+        if ('$resource' in resp.locals) {
+          return resp.locals.$resource;
+        }
+        let resource: Resource | undefined;
+        let result = null;
+        for (const r of api.resources.reverse()) {
+          if (resp.locals[r.idParam]) {
+            resource = r;
+            break;
+          }
+        }
+        if (resource) {
+          const resourceTable = resource.idParam.replace('Id', '');
+          result = await dbSession
+            .createQueryBuilder()
+            .select(resourceTable)
+            .from(resourceTable, resourceTable)
+            .where(`${resourceTable}.id = :id`, {
+              id: resp.locals[resource.idParam],
+            })
+            .getOne();
+        }
+        resp.locals.$resource = result;
+        return result;
+      },
+    } as AuthenticatedData);
+  }
+});
+
+// check permission user
+ServerModule.apiMiddlewares.push(async (api, context) => {
+  if (api.permission) {
+    for (const middleware of authorizeMiddlewares) {
+      if (middleware.apiMatcher.exec(api.path)) {
+        if (await middleware.handler(api as any, context)) {
+          return;
+        }
+      }
+    }
+    throw new ForbiddenException();
+  }
+});
