@@ -3,7 +3,7 @@ import {
   NotFoundException,
   AlreadyExistsException,
 } from '@roxavn/core/base';
-import { And, ILike, LessThan, MoreThan } from 'typeorm';
+import { And, ILike, In, LessThan, MoreThan } from 'typeorm';
 
 import { userApi } from '../../base';
 import { User } from '../entities';
@@ -35,6 +35,7 @@ export class GetUsersApiService extends ApiService {
       .getRepository(User)
       .findAndCount({
         where: {
+          id: request.ids && In(request.ids),
           username: request.username && ILike(request.username + '%'),
           createdDate:
             request.createdDate &&

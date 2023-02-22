@@ -6,6 +6,8 @@ import {
   IsOptional,
   Min,
   PaginatedCollection,
+  TransformArray,
+  TransformNumber,
   UnauthorizedException,
 } from '@roxavn/core/base';
 import { Type } from 'class-transformer';
@@ -23,6 +25,7 @@ const roleSource = new ApiSource<RoleResponse>([Resources.Role], baseModule);
 
 class GetModuleRolesRequest extends ExactProps<GetModuleRolesRequest> {
   @IsNumberString({}, { each: true })
+  @TransformArray()
   @IsOptional()
   public readonly ids?: number[];
 
@@ -30,7 +33,7 @@ class GetModuleRolesRequest extends ExactProps<GetModuleRolesRequest> {
   public readonly scope?: string;
 
   @Min(1)
-  @Type(() => Number)
+  @TransformNumber()
   @IsOptional()
   public readonly page = 1;
 }

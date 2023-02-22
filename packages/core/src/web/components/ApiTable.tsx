@@ -5,7 +5,7 @@ import { IconCheck } from '@tabler/icons';
 import React, { MutableRefObject } from 'react';
 
 import { Api, ApiRequest, Collection, PaginatedCollection } from '../../base';
-import { webModule } from '../services';
+import { Reference, webModule } from '../services';
 import { ApiFilterButton } from './ApiFilter';
 import { ApiForm } from './ApiForm';
 import { FormGroupField } from './ApiFormGroup';
@@ -15,6 +15,7 @@ import { ModuleT } from './ModuleT';
 export type ApiTableColumns<T> = {
   [k in keyof Partial<T>]: {
     label: React.ReactNode;
+    reference?: Reference;
     render?: (value: T[k], item: T) => React.ReactNode;
   };
 };
@@ -71,12 +72,26 @@ export const ApiTable = <
   const [params, setParams] = useSetState<Request>(
     apiParams || ({ page: 1 } as Request)
   );
+  const references: Record<string, ReturnType<Reference['use']>> = {};
+  for (const k in columns) {
+    const reference = columns[k].reference;
+    if (reference) {
+      references[k] = reference.use();
+    }
+  }
 
   return (
     <ApiForm
       api={api}
       apiParams={params}
       fetchOnMount
+      onSuccess={(data) => {
+        for (const k in references) {
+          references[k].setParams({
+            ids: data.items.map((item) => item[k]),
+          } as any);
+        }
+      }}
       dataRender={({ data, fetcher }) => {
         const ref = {
           fetch: fetcher,
@@ -164,7 +179,9 @@ export const ApiTable = <
                   <tr key={item[(rowKey || 'id') as any]}>
                     {Object.entries(columns).map(([key, column]) => (
                       <td key={key}>
-                        {column.render
+                        {column.reference
+                          ? references[key].renderItem(item[key])
+                          : column.render
                           ? column.render(item[key], item)
                           : item[key]}
                       </td>

@@ -2,9 +2,11 @@ import {
   ApiSource,
   ExactProps,
   IsArray,
-  IsNumber,
   IsOptional,
+  Min,
   MinLength,
+  TransformArray,
+  TransformNumber,
 } from '@roxavn/core/base';
 import { baseModule } from '../module';
 import { Permissions, Resources } from '../roles';
@@ -19,7 +21,8 @@ class CreateUserRoleRequest extends ExactProps<CreateUserRoleRequest> {
   @MinLength(1)
   public readonly userId: string;
 
-  @IsNumber()
+  @Min(1)
+  @TransformNumber()
   public readonly roleId: number;
 
   @IsOptional()
@@ -33,6 +36,7 @@ class GetUserRolesRequest extends ExactProps<GetUserRolesRequest> {
   public readonly userId: string;
 
   @IsArray()
+  @TransformArray()
   @IsOptional()
   public readonly scopes?: string[];
 

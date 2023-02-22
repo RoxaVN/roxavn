@@ -12,15 +12,19 @@ import { useParams } from 'react-router-dom';
 import { userRoleApi } from '../../base';
 import { ModuleRoleInput } from '../components';
 import { webModule } from '../module';
+import { userReference } from '../references';
 
 const Page = () => {
   const id = useParams().id as any;
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
+  const { renderItem } = userReference.use({ ids: id });
+
   return id ? (
     <ApiTable
       api={userRoleApi.getAll}
       apiParams={{ userId: id }}
+      header={renderItem(id)}
       headerActions={[
         {
           label: tCore('add'),

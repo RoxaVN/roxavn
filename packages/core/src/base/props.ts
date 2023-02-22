@@ -11,3 +11,5 @@ export class PartialProps<T> {
     }
   }
 }
+
+export type SuggestString<T> = T | (string & Record<never, never>);

@@ -9,8 +9,9 @@ import {
   MaxLength,
   Min,
   MinLength,
+  TransformArray,
+  TransformNumber,
 } from '@roxavn/core/base';
-import { Type } from 'class-transformer';
 import { baseModule } from '../module';
 import { Permissions, Resources } from '../roles';
 import { IsUsername } from '../validation';
@@ -28,6 +29,11 @@ class GetUsersRequest extends ExactProps<GetUsersRequest> {
   @IsOptional()
   public readonly username?: string;
 
+  @MinLength(1, { each: true })
+  @IsOptional()
+  @TransformArray()
+  public readonly ids?: string[];
+
   @IsArray()
   @ArrayMinSize(2)
   @ArrayMaxSize(2)
@@ -36,7 +42,7 @@ class GetUsersRequest extends ExactProps<GetUsersRequest> {
   public readonly createdDate?: Date[];
 
   @Min(1)
-  @Type(() => Number)
+  @TransformNumber()
   @IsOptional()
   public readonly page = 1;
 }
