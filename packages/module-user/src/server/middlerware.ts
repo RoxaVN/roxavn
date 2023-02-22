@@ -14,8 +14,8 @@ import { tokenService } from './services/token';
 import { constants, Resources, Scopes } from '../base';
 
 type AuthenticatedData = {
-  $user: { id: number };
-  $accessToken: { id: number };
+  $user: { id: string };
+  $accessToken: { id: string };
 };
 
 export type InferAuthApiRequest<T> = T extends Api<infer U, any, any>
@@ -52,7 +52,7 @@ ServerModule.apiMiddlewares.push(async (api, { dbSession, resp, req }) => {
       throw new UnauthorizedException();
     }
 
-    const userId = parseInt(tokenPart.split('.')[1]);
+    const userId = tokenPart.split('.')[1];
 
     const accessToken = await dbSession.getRepository(AccessToken).findOne({
       select: ['userId', 'id'],
@@ -102,7 +102,7 @@ ServerModule.apiMiddlewares.push(async (api, { dbSession, resp, req }) => {
         (r) => r.name === Scopes.Owner.name
       );
       if (hasOwner) {
-        if (parseInt(resp.locals[Resources.User.idParam]) === user.id) {
+        if (resp.locals[Resources.User.idParam] === user.id) {
           return;
         }
       }

@@ -13,8 +13,8 @@ export class UserRole {
   @PrimaryColumn('character varying', { default: '' })
   scopeId: string;
 
-  @PrimaryColumn()
-  userId: number;
+  @PrimaryColumn('uuid')
+  userId: string;
 
   @ManyToOne(() => User, (user) => user.roles)
   user: User;

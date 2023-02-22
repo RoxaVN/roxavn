@@ -4,9 +4,8 @@ import {
   IsArray,
   IsNumber,
   IsOptional,
-  Min,
+  MinLength,
 } from '@roxavn/core/base';
-import { Type } from 'class-transformer';
 import { baseModule } from '../module';
 import { Permissions, Resources } from '../roles';
 import { RoleResponse } from './role';
@@ -17,9 +16,8 @@ const userRoleSource = new ApiSource<RoleResponse>(
 );
 
 class CreateUserRoleRequest extends ExactProps<CreateUserRoleRequest> {
-  @Min(1)
-  @Type(() => Number)
-  public readonly userId: number;
+  @MinLength(1)
+  public readonly userId: string;
 
   @IsNumber()
   public readonly roleId: number;
@@ -31,9 +29,8 @@ class CreateUserRoleRequest extends ExactProps<CreateUserRoleRequest> {
 class DeleteUserRoleRequest extends CreateUserRoleRequest {}
 
 class GetUserRolesRequest extends ExactProps<GetUserRolesRequest> {
-  @Min(1)
-  @Type(() => Number)
-  public readonly userId: number;
+  @MinLength(1)
+  public readonly userId: string;
 
   @IsArray()
   @IsOptional()

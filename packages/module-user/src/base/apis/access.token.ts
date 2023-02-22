@@ -1,19 +1,18 @@
-import { ApiSource, ExactProps, IsNumberString, Min } from '@roxavn/core/base';
+import { ApiSource, ExactProps, MinLength } from '@roxavn/core/base';
 import { baseModule } from '../module';
 import { Permissions, Resources } from '../roles';
 
 const accessTokenSource = new ApiSource<{
-  id: number;
-  userId: number;
+  id: string;
+  userId: string;
   createdDate: Date;
   updatedDate: Date;
   expiredDate: Date;
 }>([Resources.AccessToken], baseModule);
 
 class DeleteAccessTokenRequest extends ExactProps<DeleteAccessTokenRequest> {
-  @Min(1)
-  @IsNumberString()
-  public readonly accessTokenId: number;
+  @MinLength(1)
+  public readonly accessTokenId: string;
 }
 
 export const accessTokenApi = {

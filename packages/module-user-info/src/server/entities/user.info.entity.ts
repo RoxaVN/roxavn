@@ -12,8 +12,8 @@ import { User } from '@roxavn/module-user/server';
 
 @Entity()
 export class UserInfo {
-  @PrimaryColumn()
-  id: number;
+  @PrimaryColumn('uuid')
+  id: string;
 
   @OneToOne(() => User)
   @JoinColumn({ name: 'id' })

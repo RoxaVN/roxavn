@@ -16,7 +16,7 @@ const Page = () => {
       api={roleApi.moduleStats}
       rowKey="userId"
       columns={{
-        userId: { label: tCore('userId') },
+        userId: { label: tCore('id') },
         rolesCount: { label: t('roles') },
       }}
       cellActions={(item) => [

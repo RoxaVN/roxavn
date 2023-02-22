@@ -16,7 +16,7 @@ import { Permissions, Resources } from '../roles';
 import { IsUsername } from '../validation';
 
 const userSource = new ApiSource<{
-  id: number;
+  id: string;
   username: string;
   email?: string;
   phone?: string;
@@ -42,9 +42,8 @@ class GetUsersRequest extends ExactProps<GetUsersRequest> {
 }
 
 class GetUserRequest extends ExactProps<GetUserRequest> {
-  @Min(1)
-  @Type(() => Number)
-  public readonly userId: number;
+  @MinLength(1)
+  public readonly userId: string;
 }
 
 class CreateUserRequest extends ExactProps<CreateUserRequest> {

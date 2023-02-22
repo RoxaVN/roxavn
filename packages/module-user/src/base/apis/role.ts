@@ -43,7 +43,7 @@ class GetModuleRolStatseRequest extends ExactProps<GetModuleRolStatseRequest> {
 }
 
 type GetModuleRoleStatsResponse = PaginatedCollection<{
-  userId: number;
+  userId: string;
   rolesCount: number;
 }>;
 

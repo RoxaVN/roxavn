@@ -14,7 +14,7 @@ import { ModuleRoleInput } from '../components';
 import { webModule } from '../module';
 
 const Page = () => {
-  const id = parseInt(useParams().id as any);
+  const id = useParams().id as any;
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
   return id ? (

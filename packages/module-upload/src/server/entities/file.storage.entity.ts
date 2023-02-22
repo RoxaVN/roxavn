@@ -16,8 +16,8 @@ export class FileStorage {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  userId: number;
+  @Column('uuid')
+  userId: string;
 
   @OneToOne(() => User)
   @JoinColumn()

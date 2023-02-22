@@ -84,7 +84,7 @@ export class ApiSource<T extends ApiResponse> {
 
   create<
     Req extends ApiRequest = ApiRequest,
-    Res extends ApiResponse = { id: number },
+    Res extends ApiResponse = { id: string },
     Error extends ApiError =
       | NotFoundException
       | ForbiddenException

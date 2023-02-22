@@ -27,8 +27,8 @@ export class File {
   @Column()
   mime: string;
 
-  @Column()
-  userId: number;
+  @Column('uuid')
+  userId: string;
 
   @ManyToOne(() => User, (user) => user.identities)
   user: User;

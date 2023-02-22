@@ -10,17 +10,17 @@ import { User } from './user.entity';
 
 @Entity()
 export class AccessToken {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   token: string;
 
-  @Column()
-  identityId: number;
+  @Column('uuid')
+  identityId: string;
 
-  @Column()
-  userId: number;
+  @Column('uuid')
+  userId: string;
 
   @ManyToOne(() => User, (user) => user.accessTokens)
   user: User;

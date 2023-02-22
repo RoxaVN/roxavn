@@ -13,11 +13,11 @@ import { User } from './user.entity';
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export class Identity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column()
-  userId: number;
+  @Column('uuid')
+  userId: string;
 
   @ManyToOne(() => User, (user) => user.identities)
   user: User;

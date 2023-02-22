@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { userApi, accessTokenApi } from '../../base';
 
 export type AuthData = InferApiResponse<typeof userApi.getOne>;
-type TokenData = { id: number; accessToken: string; userId: number };
+type TokenData = { id: string; accessToken: string; userId: string };
 
 export class AuthProvider {
   _tokenData?: TokenData;

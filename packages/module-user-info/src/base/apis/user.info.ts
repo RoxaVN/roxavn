@@ -1,11 +1,17 @@
-import { ApiSource, ExactProps, IsOptional, Min } from '@roxavn/core/base';
+import {
+  ApiSource,
+  ExactProps,
+  IsOptional,
+  Min,
+  MinLength,
+} from '@roxavn/core/base';
 import { Type } from 'class-transformer';
 
 import { baseModule } from '../module';
 import { Permissions, Resources } from '../roles';
 
 const userInfoSource = new ApiSource<{
-  id: number;
+  id: string;
   birthday?: Date;
   firstName?: string;
   lastName?: string;
@@ -25,9 +31,8 @@ class GetUsersInfoRequest extends ExactProps<GetUsersInfoRequest> {
 }
 
 class GetUserInfoRequest extends ExactProps<GetUserInfoRequest> {
-  @Min(1)
-  @Type(() => Number)
-  public readonly userInfoId: number;
+  @MinLength(1)
+  public readonly userInfoId: string;
 }
 
 export const userInfoApi = {

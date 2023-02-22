@@ -4,8 +4,6 @@ import {
   Empty,
   ExactProps,
   ForbiddenException,
-  IsNumber,
-  Min,
   MinLength,
   UnauthorizedException,
 } from '@roxavn/core/base';
@@ -13,8 +11,8 @@ import { baseModule } from '../module';
 import { Permissions, Resources } from '../roles';
 
 type IdentityResponse = {
-  id: number;
-  userId: number;
+  id: string;
+  userId: string;
   createdDate: Date;
   updatedDate: Date;
   expiredDate: Date;
@@ -45,15 +43,14 @@ class ResetPasswordRequest extends ExactProps<ResetPasswordRequest> {
 }
 
 class RecoveryPasswordRequest extends ExactProps<RecoveryPasswordRequest> {
-  @Min(1)
-  @IsNumber()
-  public readonly userId: number;
+  @MinLength(1)
+  public readonly userId: string;
 }
 
 export const passwordIdentityApi = {
   auth: passwordIdentitySource.custom<
     AuthRequest,
-    { id: number; userId: number; accessToken: string },
+    { id: string; userId: string; accessToken: string },
     UnauthorizedException
   >({
     method: 'POST',

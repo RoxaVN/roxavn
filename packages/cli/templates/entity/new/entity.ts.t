@@ -18,7 +18,7 @@ export class <%= h.changeCase.pascal(entity_name) %> {
   id: number;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @ManyToOne(() => User, (user) => user.identities)
   user: User;

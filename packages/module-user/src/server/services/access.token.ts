@@ -18,7 +18,7 @@ export class DeleteAccessTokenApiService extends ApiService {
 }
 
 export class CreateAccessTokenService extends BaseService {
-  async handle(request: { userId: number; identityid: number }) {
+  async handle(request: { userId: string; identityid: string }) {
     const token = await tokenService.creator.create({
       alphabetType: 'ALPHA_NUM',
       size: 21,

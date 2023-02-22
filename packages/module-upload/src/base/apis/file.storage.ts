@@ -10,7 +10,7 @@ import { baseModule } from '../module';
 import { Permissions, Resources } from '../roles';
 
 const fileStoageSource = new ApiSource<{
-  userId: number;
+  userId: string;
   currentSize: number;
   maxSize: number;
   maxFileSize: number;
