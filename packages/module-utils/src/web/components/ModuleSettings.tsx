@@ -5,10 +5,10 @@ import { ApiForm, webModule as coreWebModule } from '@roxavn/core/web';
 import { IconCheck } from '@tabler/icons';
 import React from 'react';
 
-import { GetModuleSettingResponse } from '../../base';
+import { GetModuleSettingsResponse } from '../../base';
 
 export interface ModuleSettingsProps {
-  getListApi: Api<any, GetModuleSettingResponse>;
+  getListApi: Api<any, GetModuleSettingsResponse>;
   forms: {
     [name: string]: {
       title: React.ReactNode;

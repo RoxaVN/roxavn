@@ -8,7 +8,7 @@ import {
   Resource,
   UnauthorizedException,
 } from '@roxavn/core/base';
-import { Raw, ArrayContains } from 'typeorm';
+import { Raw, ArrayContains, In } from 'typeorm';
 import { AccessToken, UserRole } from './entities';
 import { tokenService } from './services/token';
 import { constants, Resources, Scopes } from '../base';
@@ -85,6 +85,11 @@ ServerModule.apiMiddlewares.push(async (api, { dbSession, resp, req }) => {
           userId: user.id,
           role: {
             hasId: false,
+            scope: In(
+              api.permission.allowedScopes
+                .filter((s) => !s.idParam)
+                .map((s) => s.name)
+            ),
             permissions: ArrayContains([api.permission.value]),
           },
         },

@@ -3,10 +3,11 @@ import { Collection } from '@roxavn/core/base';
 export interface UpdateSettingRequest {
   module: string;
   name: string;
+  type: 'public' | 'private';
   metadata: any;
 }
 
-export interface GetModuleSettingRequest {
+export interface GetModuleSettingsRequest {
   module: string;
   name?: string;
 }
@@ -18,4 +19,4 @@ export interface SettingResponse {
   updatedDate: Date;
 }
 
-export type GetModuleSettingResponse = Collection<SettingResponse>;
+export type GetModuleSettingsResponse = Collection<SettingResponse>;

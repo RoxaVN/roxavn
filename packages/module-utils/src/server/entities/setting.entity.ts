@@ -6,6 +6,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { UpdateSettingRequest } from '../../base';
+
 @Entity()
 @Index(['module', 'name'], { unique: true })
 export class Setting {
@@ -17,6 +19,9 @@ export class Setting {
 
   @Column()
   name: string;
+
+  @Column({ type: 'varchar' })
+  type: UpdateSettingRequest['type'];
 
   @Column({ type: 'jsonb' })
   metadata: any;
