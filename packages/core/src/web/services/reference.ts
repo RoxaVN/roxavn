@@ -3,11 +3,9 @@ import { Api, ApiRequest, Collection, SuggestString } from '../../base';
 import { useApi } from './api.fetcher';
 
 export class Reference {
-  constructor(
-    private api: Api,
-    private render: (item: any) => React.ReactNode,
-    private key = 'id'
-  ) {}
+  private api?: Api;
+  private render?: (item: any) => React.ReactNode;
+  private key = 'id';
 
   update<T>(
     api: Api<ApiRequest, Collection<T>>,
@@ -17,6 +15,7 @@ export class Reference {
     this.api = api;
     this.render = render;
     this.key = key;
+    return this;
   }
 
   use(apiParams?: Record<SuggestString<'ids'>, any>) {
@@ -27,7 +26,7 @@ export class Reference {
       setParams,
       renderItem: (key: any): React.ReactNode => {
         const item = data?.items.find((item: any) => item[this.key] === key);
-        return loading ? null : item ? this.render(item) : null;
+        return loading ? null : item && this.render ? this.render(item) : null;
       },
     };
   }
