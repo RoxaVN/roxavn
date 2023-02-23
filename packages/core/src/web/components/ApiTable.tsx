@@ -5,6 +5,7 @@ import { IconCheck } from '@tabler/icons';
 import React, { MutableRefObject } from 'react';
 
 import { Api, ApiRequest, Collection, PaginatedCollection } from '../../base';
+import { useLocationSearch } from '../hooks';
 import { Reference, webModule } from '../services';
 import { ApiFilterButton } from './ApiFilter';
 import { ApiForm } from './ApiForm';
@@ -41,6 +42,7 @@ export interface ApiTableProps<
     PaginatedCollection<ResponseItem> | Collection<ResponseItem>
   >;
   apiParams?: Request;
+  key?: string;
   fetcherRef?: MutableRefObject<ApiFetcherRef<Request> | undefined>;
   columns: ApiTableColumns<ResponseItem>;
   filters?: Array<FormGroupField<Request>>;
@@ -68,9 +70,11 @@ export const ApiTable = <
   headerActions,
   cellActions,
   fetcherRef,
+  key,
 }: ApiTableProps<Request, ResponseItem>) => {
+  const search = useLocationSearch(key);
   const [params, setParams] = useSetState<Request>(
-    apiParams || ({ page: 1 } as Request)
+    (search.params || apiParams || { page: 1 }) as Request
   );
   const references: Record<string, ReturnType<Reference['use']>> = {};
   for (const k in columns) {
@@ -79,6 +83,7 @@ export const ApiTable = <
       references[k] = reference.use();
     }
   }
+  search.setOnChange(params);
 
   return (
     <ApiForm
@@ -147,7 +152,7 @@ export const ApiTable = <
               <Group>
                 {filters && (
                   <ApiFilterButton
-                    api={api}
+                    apiParams={params}
                     fields={filters}
                     onApply={(p) => setParams(p)}
                   />

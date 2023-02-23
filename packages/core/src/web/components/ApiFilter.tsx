@@ -1,29 +1,27 @@
 import { Button, Group, Popover, Indicator } from '@mantine/core';
 import { IconCheck, IconFilter, IconX } from '@tabler/icons';
 import { useState } from 'react';
-import { Api, ApiRequest, ApiResponse } from '../../base';
+import { ApiRequest } from '../../base';
+
 import { webModule } from '../services';
 import { ApiFormGroup, FormGroupField } from './ApiFormGroup';
 
-export interface ApiFilterButtonProps<
-  Request extends ApiRequest,
-  Response extends ApiResponse
-> {
-  api: Api<Request, Response>;
+export interface ApiFilterButtonProps<Request extends ApiRequest> {
+  apiParams?: Partial<Request>;
   fields: Array<FormGroupField<Request>>;
   onApply?: (params: Partial<Request>) => void;
 }
 
-export const ApiFilterButton = <
-  Request extends ApiRequest,
-  Response extends ApiResponse
->({
+export const ApiFilterButton = <Request extends ApiRequest>({
+  apiParams,
   fields,
   onApply,
-}: ApiFilterButtonProps<Request, Response>) => {
+}: ApiFilterButtonProps<Request>) => {
   const { t } = webModule.useTranslation();
   const [opened, setOpened] = useState(false);
-  const [filterValue, setFilterValue] = useState<Partial<Request>>({});
+  const [filterValue, setFilterValue] = useState<Partial<Request>>(
+    apiParams || {}
+  );
 
   return (
     <Group align="flex-end">
