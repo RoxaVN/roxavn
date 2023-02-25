@@ -1,22 +1,9 @@
 import { ApiService } from '@roxavn/core/server';
 import { InferApiRequest } from '@roxavn/core/base';
-import {
-  GetModuleSettingsService,
-  UpdateSettingService,
-} from '@roxavn/module-utils/server';
+import { UpdateSettingService } from '@roxavn/module-utils/server';
 
 import { settingApi, constants } from '../../base';
 import { serverModule } from '../module';
-
-@serverModule.useApi(settingApi.getAll)
-export class GetSettingsApiService extends ApiService {
-  handle(request: InferApiRequest<typeof settingApi.getAll>) {
-    return this.create(GetModuleSettingsService).handle({
-      ...request,
-      module: serverModule.name,
-    });
-  }
-}
 
 @serverModule.useApi(settingApi.setFieldsForUserToUpdate)
 export class SetFieldsForUserToUpdateApiService extends ApiService {

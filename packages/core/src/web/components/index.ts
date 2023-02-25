@@ -10,3 +10,4 @@ export * from './ApiPermission';
 export * from './ModuleT';
 export * from './ApiInput';
 export * from './AppProvider';
+export * from './TasksProgress';

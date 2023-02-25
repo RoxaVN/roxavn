@@ -33,7 +33,9 @@ authorizeMiddlewares.push({
             scope: In(
               api.permission.allowedScopes
                 .filter((s) => !s.idParam)
-                .map((s) => s.name)
+                .map((s) =>
+                  s.dynamicName ? s.dynamicName(resp.locals) : s.name
+                )
             ),
             permissions: ArrayContains([api.permission.value]),
           },

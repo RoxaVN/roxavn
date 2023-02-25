@@ -1,6 +1,7 @@
 export interface Scope {
   name: string;
   idParam?: string;
+  dynamicName?: (request: Record<string, any>) => string;
 }
 
 export interface Resource extends Scope {

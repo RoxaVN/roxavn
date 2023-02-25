@@ -1,14 +1,15 @@
 import { Text, Card, SimpleGrid } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { Api } from '@roxavn/core/base';
+import { InferApiRequest } from '@roxavn/core/base';
 import { ApiForm, webModule as coreWebModule } from '@roxavn/core/web';
 import { IconCheck } from '@tabler/icons';
 import React from 'react';
 
-import { GetModuleSettingsResponse } from '../../base';
+import { settingApi } from '../../base';
 
 export interface ModuleSettingsProps {
-  getListApi: Api<any, GetModuleSettingsResponse>;
+  api: typeof settingApi.getAll;
+  apiParams: InferApiRequest<typeof settingApi.getAll>;
   forms: {
     [name: string]: {
       title: React.ReactNode;
@@ -18,12 +19,17 @@ export interface ModuleSettingsProps {
   };
 }
 
-export const ModuleSettings = ({ getListApi, forms }: ModuleSettingsProps) => {
+export const ModuleSettings = ({
+  api,
+  apiParams,
+  forms,
+}: ModuleSettingsProps) => {
   const tCore = coreWebModule.useTranslation().t;
   return (
     <ApiForm
       fetchOnMount
-      api={getListApi}
+      api={api}
+      apiParams={apiParams}
       dataRender={({ data }) =>
         data && (
           <SimpleGrid

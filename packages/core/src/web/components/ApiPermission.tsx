@@ -66,8 +66,11 @@ export const canAccessApi = <Request extends ApiRequest>(
         (scope) =>
           roles.findIndex(
             (role) =>
-              role.scope === scope.name &&
               role.permissions.indexOf(permission.value) > -1 &&
+              role.scope ===
+                (scope.dynamicName
+                  ? scope.dynamicName(apiParams || {})
+                  : scope.name) &&
               (scope.idParam
                 ? apiParams
                   ? role.scopeId === apiParams[scope.idParam]

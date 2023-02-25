@@ -1,18 +1,14 @@
-import { Empty, InferApiResponse, NotFoundException } from '@roxavn/core/base';
+import { Empty, InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { ApiService, BaseService } from '@roxavn/core/server';
 
-import {
-  UpdateSettingRequest,
-  GetModuleSettingsRequest,
-  GetModuleSettingsResponse,
-} from '../../base';
+import { UpdateSettingRequest } from '../../base';
 import { Setting } from '../entities';
 import { serverModule } from '../module';
 import { settingApi } from '../../base/apis';
 
 @serverModule.useApi(settingApi.getPublic)
 export class GetPublicSettingService extends ApiService {
-  async handle(request: InferApiResponse<typeof settingApi.getPublic>) {
+  async handle(request: InferApiRequest<typeof settingApi.getPublic>) {
     const result = await this.dbSession.getRepository(Setting).findOne({
       select: ['metadata'],
       where: { module: request.module, name: request.name, type: 'public' },
@@ -21,6 +17,16 @@ export class GetPublicSettingService extends ApiService {
       return result.metadata;
     }
     throw new NotFoundException();
+  }
+}
+
+@serverModule.useApi(settingApi.getAll)
+export class GetModuleSettingsService extends ApiService {
+  async handle(request: InferApiRequest<typeof settingApi.getAll>) {
+    const items = await this.dbSession.getRepository(Setting).find({
+      where: { module: request.module },
+    });
+    return { items };
   }
 }
 
@@ -42,17 +48,5 @@ export class UpdateSettingService extends BaseService<
       .orUpdate(['metadata', 'type'], ['module', 'name'])
       .execute();
     return {};
-  }
-}
-
-export class GetModuleSettingsService extends BaseService<
-  GetModuleSettingsRequest,
-  GetModuleSettingsResponse
-> {
-  async handle(request: GetModuleSettingsRequest) {
-    const items = await this.dbSession.getRepository(Setting).find({
-      where: { module: request.module, name: request.name },
-    });
-    return { items };
   }
 }

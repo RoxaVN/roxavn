@@ -80,7 +80,7 @@ class BuildService {
     console.log('Build commonjs');
     this.compileWithConfig(cjsConfig);
 
-    console.log('Build esm module');
+    console.log('Build es module');
     const esmConfig = { ...cjsConfig };
     Object.assign(esmConfig.compilerOptions, {
       outDir: 'dist/esm',

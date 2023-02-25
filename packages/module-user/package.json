@@ -18,6 +18,7 @@
     "@mantine/prism": "*",
     "@remix-run/react": "*",
     "@roxavn/core": "*",
+    "@roxavn/module-utils": "*",
     "@tabler/icons": "*",
     "react": "*",
     "react-router-dom": "*",

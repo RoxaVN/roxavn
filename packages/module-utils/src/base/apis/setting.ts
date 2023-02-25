@@ -7,7 +7,7 @@ import {
 
 import { SettingResponse } from '../interfaces';
 import { baseModule } from '../module';
-import { Resources } from '../roles';
+import { Permissions, Resources } from '../roles';
 
 const settingSource = new ApiSource<SettingResponse>(
   [Resources.Setting],
@@ -22,6 +22,11 @@ class GetPublicSettingRequest extends ExactProps<GetPublicSettingRequest> {
   public readonly name!: string;
 }
 
+class GetModuleSettingsRequest extends ExactProps<GetModuleSettingsRequest> {
+  @MinLength(1)
+  public readonly module!: string;
+}
+
 export const settingApi = {
   getPublic: settingSource.custom<
     GetPublicSettingRequest,
@@ -31,5 +36,9 @@ export const settingApi = {
     method: 'GET',
     path: settingSource.apiPath() + '/public',
     validator: GetPublicSettingRequest,
+  }),
+  getAll: settingSource.getAll({
+    validator: GetModuleSettingsRequest,
+    permission: Permissions.ReadSettings,
   }),
 };

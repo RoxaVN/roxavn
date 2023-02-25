@@ -1,4 +1,4 @@
-import { ApiSource, ExactProps, IsIn, IsOptional } from '@roxavn/core/base';
+import { ApiSource, ExactProps, IsIn } from '@roxavn/core/base';
 import {
   Resources as UtilsResources,
   SettingResponse,
@@ -18,11 +18,6 @@ class SetFieldsToUpdateRequest extends ExactProps<SetFieldsToUpdateRequest> {
   public readonly fields: string[];
 }
 
-class GetSettingsRequest extends ExactProps<GetSettingsRequest> {
-  @IsOptional()
-  public readonly name?: string;
-}
-
 export const settingApi = {
   setFieldsForAdminToUpdate: settingSource.custom({
     method: 'POST',
@@ -35,9 +30,5 @@ export const settingApi = {
     path: settingSource.apiPath() + '/fields-for-user-to-update',
     validator: SetFieldsToUpdateRequest,
     permission: Permissions.UpdateSetting,
-  }),
-  getAll: settingSource.getAll({
-    validator: GetSettingsRequest,
-    permission: Permissions.ReadSettings,
   }),
 };

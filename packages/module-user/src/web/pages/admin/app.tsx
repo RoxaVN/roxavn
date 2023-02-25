@@ -31,6 +31,7 @@ import {
   useRoles,
   canAccessApi,
   http,
+  TasksProgress,
 } from '@roxavn/core/web';
 
 import { IsAuthenticated } from '../../components';
@@ -175,7 +176,11 @@ const AdminPage = () => {
           api={userRoleApi.getAll}
           apiParams={{ userId: user.id }}
         >
-          <AdminComponent />
+          <TasksProgress
+            tasks={[{ handler: WebModule.settingsPageRenderRegister }]}
+          >
+            <AdminComponent />
+          </TasksProgress>
         </ApiRolesGetter>
       )}
       guestComponent={
