@@ -1,8 +1,5 @@
----
-to: package.json
----
 {
-  "name": "<%= module_name %>",
+  "name": "@roxavn/plugin-firebase-auth",
   "version": "0.1.0",
   "scripts": {
     "build": "roxavn build",
@@ -15,8 +12,7 @@ to: package.json
     "@roxavn/dev-web": "^0.1.0",
     "typescript": "^4.3.5"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@mantine/core": "*",
     "@roxavn/core": "*",
