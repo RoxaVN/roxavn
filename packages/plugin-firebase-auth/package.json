@@ -17,6 +17,7 @@
     "@mantine/core": "*",
     "@roxavn/core": "*",
     "@roxavn/module-user": "*",
+    "@roxavn/module-utils": "*",
     "@tabler/icons": "*",
     "react": "*",
     "react-router-dom": "*",

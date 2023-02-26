@@ -13,6 +13,12 @@ export const Resources = {
 };
 
 export const Permissions = {
+  // predefine permission for plugins use
+  UpdateSetting: {
+    value: 'update.setting',
+    allowedScopes: [Scopes.Module],
+  },
+
   ReadUser: {
     value: 'read.user',
     allowedScopes: [Scopes.Module],
