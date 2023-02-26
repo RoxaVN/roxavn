@@ -30,6 +30,10 @@
       "require": "./dist/cjs/web/index.js",
       "import": "./dist/esm/web/index.js"
     },
+    "./web/init": {
+      "require": "./dist/cjs/web/init.js",
+      "import": "./dist/esm/web/init.js"
+    },
     "./base": {
       "require": "./dist/cjs/base/index.js",
       "import": "./dist/esm/base/index.js"
