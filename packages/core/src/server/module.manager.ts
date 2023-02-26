@@ -16,16 +16,29 @@ class ModuleManager {
   init() {
     if (!this._modules) {
       const currentModule = getPackageJson();
+      const visited: Array<string> = [];
+      const modules: Array<ModuleInfo> = [];
+
+      const visit = (packageInfo: any) => {
+        Object.keys({
+          ...packageInfo.dependencies,
+          ...packageInfo.peerDependencies,
+        }).map((m) => {
+          if (!visited.includes(m)) {
+            const pkgInfo = getPackageJson(m);
+            visited.push(m);
+            if ('roxavn' in pkgInfo) {
+              visit(pkgInfo);
+            }
+          }
+        });
+        if ('roxavn' in packageInfo) {
+          modules.push(packageInfo);
+        }
+      };
+      visit(currentModule);
+
       this._currentModule = currentModule;
-      const modules = Object.keys({
-        ...currentModule.dependencies,
-        ...currentModule.peerDependencies,
-      })
-        .map((module) => getPackageJson(module))
-        .filter((m) => 'roxavn' in m);
-      if ('roxavn' in currentModule) {
-        modules.push(currentModule);
-      }
       this._modules = modules;
     }
   }
