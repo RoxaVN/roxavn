@@ -18,6 +18,7 @@ export const Page = () => {
     <SimpleGrid
       cols={6}
       breakpoints={[
+        { maxWidth: 1280, cols: 5, spacing: 'lg' },
         { maxWidth: 980, cols: 4, spacing: 'md' },
         { maxWidth: 755, cols: 3, spacing: 'sm' },
         { maxWidth: 600, cols: 2, spacing: 'sm' },
