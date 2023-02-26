@@ -1,9 +1,4 @@
-import {
-  constants,
-  permissionManager,
-  predefinedRoleManager,
-  scopeManager,
-} from '@roxavn/core/base';
+import { constants } from '@roxavn/core/base';
 import { baseModule } from './module';
 
 export const Scopes = {
@@ -80,9 +75,3 @@ export const Roles = {
     permissions: [Permissions.ReadUser],
   },
 };
-
-if (!scopeManager.hasScope(Scopes.Module)) {
-  scopeManager.register(...Object.values(Scopes), ...Object.values(Resources));
-  permissionManager.register(...Object.values(Permissions));
-  predefinedRoleManager.register(...Object.values(Roles));
-}

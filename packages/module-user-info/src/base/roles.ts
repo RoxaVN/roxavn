@@ -1,10 +1,6 @@
-import {
-  constants,
-  permissionManager,
-  predefinedRoleManager,
-  scopeManager,
-} from '@roxavn/core/base';
+import { constants } from '@roxavn/core/base';
 import { Scopes as UserScopes } from '@roxavn/module-user/base';
+import { Permissions as UtilsPermissions } from '@roxavn/module-utils/base';
 
 import { baseModule } from './module';
 
@@ -21,10 +17,8 @@ export const Permissions = {
     value: 'update.setting',
     allowedScopes: [Scopes.Module],
   },
-  ReadSettings: {
-    value: 'read.settings',
-    allowedScopes: [Scopes.Module],
-  },
+  ReadSettings: UtilsPermissions.ReadSettings,
+
   ReadUsersInfo: {
     value: 'read.users.info',
     allowedScopes: [Scopes.Module],
@@ -42,9 +36,3 @@ export const Roles = {
     permissions: Object.values(Permissions),
   },
 };
-
-if (!scopeManager.hasScope(Scopes.Module)) {
-  scopeManager.register(...Object.values(Scopes), ...Object.values(Resources));
-  permissionManager.register(...Object.values(Permissions));
-  predefinedRoleManager.register(...Object.values(Roles));
-}
