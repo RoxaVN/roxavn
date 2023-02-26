@@ -22,6 +22,10 @@ export const Permissions = {
     value: 'update.setting',
     allowedScopes: [Scopes.Module],
   },
+  ReadSettings: {
+    value: 'read.settings',
+    allowedScopes: [Scopes.Module],
+  },
 
   CreateUser: {
     value: 'create.user',

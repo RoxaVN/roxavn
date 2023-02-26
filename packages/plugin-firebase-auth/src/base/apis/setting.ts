@@ -1,9 +1,4 @@
-import {
-  ApiSource,
-  ExactProps,
-  MinLength,
-  TransformJson,
-} from '@roxavn/core/base';
+import { ApiSource, ExactProps, MinLength } from '@roxavn/core/base';
 import { Permissions } from '@roxavn/module-user/base';
 import {
   Resources as UtilsResources,
@@ -18,8 +13,8 @@ const settingSource = new ApiSource<SettingResponse>(
 );
 
 class UpdateFirbaseServerSettingRequest extends ExactProps<UpdateFirbaseServerSettingRequest> {
-  @TransformJson()
-  public readonly serviceAccount: any;
+  @MinLength(1)
+  public readonly serviceAccount: string;
 }
 
 class UpdateFirbaseClientSettingRequest extends ExactProps<UpdateFirbaseClientSettingRequest> {

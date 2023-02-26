@@ -15,7 +15,7 @@
     "forceConsistentCasingInFileNames": true,
     "strictPropertyInitialization": false,
     "emitDecoratorMetadata": true,
-    "module": "ESNext",
+    "module": "CommonJS",
     "baseUrl": ".",
 
     // Remix takes care of building everything in `remix build`.

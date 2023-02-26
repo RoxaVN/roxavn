@@ -1,4 +1,4 @@
-import { Textarea, TextInput } from '@mantine/core';
+import { JsonInput, TextInput } from '@mantine/core';
 import { ApiFormGroup, ModuleT } from '@roxavn/core/web';
 import { webModule as userWebModule } from '@roxavn/module-user/web';
 
@@ -13,7 +13,13 @@ userWebModule.adminSettings[constants.FIREBASE_SERVER_SETTING] = {
       fields={[
         {
           name: 'serviceAccount',
-          input: <Textarea placeholder="Content of serviceAccountKey.json" />,
+          input: (
+            <JsonInput
+              autosize
+              maxRows={10}
+              placeholder="Content of serviceAccountKey.json"
+            />
+          ),
         },
       ]}
     />
