@@ -5,7 +5,7 @@ import { IconCheck } from '@tabler/icons';
 import React, { MutableRefObject } from 'react';
 
 import { Api, ApiRequest, Collection, PaginatedCollection } from '../../base';
-import { useLocationSearch } from '../hooks';
+import { useLocationHash } from '../hooks';
 import { Reference, webModule } from '../services';
 import { ApiFilterButton } from './ApiFilter';
 import { ApiForm } from './ApiForm';
@@ -72,10 +72,11 @@ export const ApiTable = <
   fetcherRef,
   key,
 }: ApiTableProps<Request, ResponseItem>) => {
-  const search = useLocationSearch(key);
-  const [params, setParams] = useSetState<Request>(
-    (search.params || apiParams || { page: 1 }) as Request
-  );
+  const hash = useLocationHash('/table/' + (key || ''));
+  const [params, setParams] = useSetState<Request>({
+    ...hash.params,
+    ...apiParams,
+  } as Request);
   const references: Record<string, ReturnType<Reference['use']>> = {};
   for (const k in columns) {
     const reference = columns[k].reference;
@@ -83,7 +84,7 @@ export const ApiTable = <
       references[k] = reference.use();
     }
   }
-  search.setOnChange(params);
+  hash.setOnChange(params);
 
   return (
     <ApiForm
