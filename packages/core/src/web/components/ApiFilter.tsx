@@ -22,6 +22,16 @@ export const ApiFilterButton = <Request extends ApiRequest>({
   const [filterValue, setFilterValue] = useState<Partial<Request>>(
     apiParams || {}
   );
+  const names = fields.map((f) => f.name);
+  const changeCount = Object.entries(filterValue).filter(([k, v]) => {
+    if (names.includes(k)) {
+      if (Array.isArray(v)) {
+        return v.length && v.every((i) => i);
+      }
+      return !!v;
+    }
+    return false;
+  }).length;
 
   return (
     <Group align="flex-end">
@@ -36,11 +46,7 @@ export const ApiFilterButton = <Request extends ApiRequest>({
       >
         <Popover.Target>
           <Indicator
-            label={
-              Object.values(filterValue).filter((v) =>
-                Array.isArray(v) ? v.length && v.every((i) => i) : !!v
-              ).length
-            }
+            label={changeCount}
             showZero={false}
             dot={false}
             inline
