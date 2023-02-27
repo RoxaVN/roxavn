@@ -8,7 +8,7 @@ import {
   UnauthorizedException,
 } from '@roxavn/core/base';
 import { baseModule } from '../module';
-import { Permissions, Resources } from '../roles';
+import { permissions, scopes } from '../access';
 
 type IdentityResponse = {
   id: string;
@@ -19,7 +19,7 @@ type IdentityResponse = {
 };
 
 const passwordIdentitySource = new ApiSource<IdentityResponse>(
-  [Resources.PasswordIdentity],
+  [scopes.PasswordIdentity],
   baseModule
 );
 
@@ -74,6 +74,6 @@ export const passwordIdentityApi = {
     method: 'POST',
     path: passwordIdentitySource.apiPath() + '/recovery',
     validator: RecoveryPasswordRequest,
-    permission: Permissions.RecoveryPassword,
+    permission: permissions.RecoveryPassword,
   }),
 };

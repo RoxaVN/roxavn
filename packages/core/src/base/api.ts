@@ -1,5 +1,5 @@
 import { ErrorResponse } from './errors';
-import { Permission, Resource } from './permission';
+import { Permission, Resource } from './access';
 import { ExactProps } from './props';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

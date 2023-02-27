@@ -1,7 +1,7 @@
 import { type Role as RoleType } from '@roxavn/core/base';
 import { TokenHasher, BaseService } from '@roxavn/core/server';
 import { PasswordIdentity, Role, User, UserRole } from '../server';
-import { Roles } from '../base/roles';
+import { roles } from '../base/access';
 
 export class CreateAdminUserHook extends BaseService {
   async handle() {
@@ -17,8 +17,8 @@ export class CreateAdminUserHook extends BaseService {
       await this.dbSession.save(identity);
 
       const role = await this.dbSession.findOneBy(Role, {
-        name: Roles.Admin.name,
-        scope: Roles.Admin.scope.name,
+        name: roles.Admin.name,
+        scope: roles.Admin.scope.name,
       });
       if (role) {
         const adminRole = new UserRole();
@@ -36,8 +36,8 @@ export class SetAdminRoleHook extends BaseService {
       select: { userId: true },
       where: {
         role: {
-          name: Roles.Admin.name,
-          scope: Roles.Admin.scope.name,
+          name: roles.Admin.name,
+          scope: roles.Admin.scope.name,
         },
       },
     });
@@ -46,7 +46,7 @@ export class SetAdminRoleHook extends BaseService {
       scope: role.scope.name,
     });
     if (roleModel) {
-      const adminRoles = users.map((user) => {
+      const adminroles = users.map((user) => {
         const adminRole = new UserRole();
         adminRole.userId = user.userId;
         adminRole.roleId = roleModel.id;
@@ -56,7 +56,7 @@ export class SetAdminRoleHook extends BaseService {
         .createQueryBuilder()
         .insert()
         .into(UserRole)
-        .values(adminRoles)
+        .values(adminroles)
         .orIgnore()
         .execute();
     }
@@ -82,7 +82,7 @@ export class CreateRolesHook extends BaseService {
         mess += 'update role ';
       }
       mess += role.name;
-      roleModel.permissions = role.permissions.map((p) => p.value);
+      roleModel.permissions = role.permissions.map((p) => p.name);
       await roleRepository.save(roleModel);
       console.log(mess);
     }

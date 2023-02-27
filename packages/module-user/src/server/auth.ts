@@ -1,7 +1,12 @@
-import { Api, ForbiddenException, Permission } from '@roxavn/core/base';
+import {
+  accessManager,
+  Api,
+  ForbiddenException,
+  Permission,
+} from '@roxavn/core/base';
 import { MiddlewareContext } from '@roxavn/core/server';
 import { ArrayContains, In } from 'typeorm';
-import { constants, Resources, Scopes } from '../base';
+import { constants, scopes } from '../base';
 import { UserRole } from './entities';
 
 export type AuthenticatedData = {
@@ -37,7 +42,7 @@ authorizeMiddlewares.push({
                   s.dynamicName ? s.dynamicName(resp.locals) : s.name
                 )
             ),
-            permissions: ArrayContains([api.permission.value]),
+            permissions: ArrayContains([api.permission.name]),
           },
         },
       });
@@ -56,14 +61,14 @@ authorizeMiddlewares.push({
   handler: async (api, { resp }) => {
     const data: AuthenticatedData = resp.locals as any;
     const hasOwner = !!api.permission.allowedScopes.find(
-      (r) => r.name === Scopes.Owner.name
+      (r) => r.name === accessManager.scopes.Owner.name
     );
     if (hasOwner) {
-      if (resp.locals[Resources.User.idParam] === data.$user.id) {
+      if (resp.locals[scopes.User.idParam] === data.$user.id) {
         return true;
       }
       const resource = await data.$getResource();
-      if (resource && resource[Resources.User.idParam] === data.$user.id) {
+      if (resource && resource[scopes.User.idParam] === data.$user.id) {
         return true;
       }
     }
@@ -93,7 +98,7 @@ authorizeMiddlewares.push({
         role: {
           hasId: true,
           scope: scope.name,
-          permissions: ArrayContains([api.permission.value]),
+          permissions: ArrayContains([api.permission.name]),
         },
       })),
     });

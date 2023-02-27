@@ -9,11 +9,11 @@ import {
   TransformNumber,
 } from '@roxavn/core/base';
 import { baseModule } from '../module';
-import { Permissions, Resources } from '../roles';
+import { permissions, scopes } from '../access';
 import { RoleResponse } from './role';
 
 const userRoleSource = new ApiSource<RoleResponse>(
-  [Resources.User, Resources.Role],
+  [scopes.User, scopes.Role],
   baseModule
 );
 
@@ -47,14 +47,14 @@ class GetUserRolesRequest extends ExactProps<GetUserRolesRequest> {
 export const userRoleApi = {
   create: userRoleSource.createRelation({
     validator: CreateUserRoleRequest,
-    permission: Permissions.CreateUserRole,
+    permission: permissions.CreateUserRole,
   }),
   delete: userRoleSource.delete({
     validator: DeleteUserRoleRequest,
-    permission: Permissions.DeleteUserRole,
+    permission: permissions.DeleteUserRole,
   }),
   getAll: userRoleSource.getAll({
     validator: GetUserRolesRequest,
-    permission: Permissions.ReadUserRoles,
+    permission: permissions.ReadUserRoles,
   }),
 };

@@ -1,6 +1,6 @@
 import { ApiSource, Empty, UnauthorizedException } from '@roxavn/core/base';
 import { baseModule } from '../module';
-import { Permissions, Resources } from '../roles';
+import { permissions, scopes } from '../access';
 
 interface FileResponse {
   id: string;
@@ -9,12 +9,12 @@ interface FileResponse {
   url: string;
 }
 
-const fileSource = new ApiSource<FileResponse>([Resources.File], baseModule);
+const fileSource = new ApiSource<FileResponse>([scopes.File], baseModule);
 
 export const fileApi = {
   upload: fileSource.custom<Empty, FileResponse, UnauthorizedException>({
     path: fileSource.apiPath() + '/upload',
     method: 'POST',
-    permission: Permissions.UploadFile,
+    permission: permissions.UploadFile,
   }),
 };

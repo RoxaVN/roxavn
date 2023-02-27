@@ -3,7 +3,7 @@ export * from './api.source';
 export * from './constants';
 export * from './errors';
 export * from './module';
-export * from './permission';
+export * from './access';
 export * from './props';
 export * from './url';
 export * from './route';

@@ -1,16 +1,17 @@
 import {
+  accessManager,
   ApiSource,
   ExactProps,
   MinLength,
   NotFoundException,
 } from '@roxavn/core/base';
+import { permissions } from '../access';
 
 import { SettingResponse } from '../interfaces';
 import { baseModule } from '../module';
-import { Permissions, Resources } from '../roles';
 
 const settingSource = new ApiSource<SettingResponse>(
-  [Resources.Setting],
+  [accessManager.scopes.Setting],
   baseModule
 );
 
@@ -39,6 +40,6 @@ export const settingApi = {
   }),
   getAll: settingSource.getAll({
     validator: GetModuleSettingsRequest,
-    permission: Permissions.ReadSettings,
+    permission: permissions.ReadSettings,
   }),
 };

@@ -1,4 +1,4 @@
 export * from './module';
-export * from './roles';
+export * from './access';
 export * from './apis';
 export * from './constants';

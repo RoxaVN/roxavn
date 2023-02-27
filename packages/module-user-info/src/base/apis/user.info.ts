@@ -8,7 +8,7 @@ import {
 import { Type } from 'class-transformer';
 
 import { baseModule } from '../module';
-import { Permissions, Resources } from '../roles';
+import { permissions, scopes } from '../access';
 
 const userInfoSource = new ApiSource<{
   id: string;
@@ -21,7 +21,7 @@ const userInfoSource = new ApiSource<{
   metadata?: any;
   createdDate: Date;
   updatedDate: Date;
-}>([Resources.UserInfo], baseModule);
+}>([scopes.UserInfo], baseModule);
 
 class GetUsersInfoRequest extends ExactProps<GetUsersInfoRequest> {
   @Min(1)
@@ -38,10 +38,10 @@ class GetUserInfoRequest extends ExactProps<GetUserInfoRequest> {
 export const userInfoApi = {
   getMany: userInfoSource.getMany({
     validator: GetUsersInfoRequest,
-    permission: Permissions.ReadUsersInfo,
+    permission: permissions.ReadUsersInfo,
   }),
   getOne: userInfoSource.getOne({
     validator: GetUserInfoRequest,
-    permission: Permissions.ReadUserInfo,
+    permission: permissions.ReadUserInfo,
   }),
 };

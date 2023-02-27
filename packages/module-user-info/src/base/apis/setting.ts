@@ -1,15 +1,12 @@
-import { ApiSource, ExactProps, IsIn } from '@roxavn/core/base';
-import {
-  Resources as UtilsResources,
-  SettingResponse,
-} from '@roxavn/module-utils/base';
+import { accessManager, ApiSource, ExactProps, IsIn } from '@roxavn/core/base';
+import { SettingResponse } from '@roxavn/module-utils/base';
 
 import { constants } from '../constants';
 import { baseModule } from '../module';
-import { Permissions } from '../roles';
+import { permissions } from '../access';
 
 const settingSource = new ApiSource<SettingResponse>(
-  [UtilsResources.Setting],
+  [accessManager.scopes.Setting],
   baseModule
 );
 
@@ -23,12 +20,12 @@ export const settingApi = {
     method: 'POST',
     path: settingSource.apiPath() + '/fields-for-admin-to-update',
     validator: SetFieldsToUpdateRequest,
-    permission: Permissions.UpdateSetting,
+    permission: permissions.UpdateSetting,
   }),
   setFieldsForUserToUpdate: settingSource.custom({
     method: 'POST',
     path: settingSource.apiPath() + '/fields-for-user-to-update',
     validator: SetFieldsToUpdateRequest,
-    permission: Permissions.UpdateSetting,
+    permission: permissions.UpdateSetting,
   }),
 };

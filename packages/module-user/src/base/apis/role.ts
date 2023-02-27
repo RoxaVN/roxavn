@@ -12,7 +12,7 @@ import {
 } from '@roxavn/core/base';
 import { Type } from 'class-transformer';
 import { baseModule } from '../module';
-import { Permissions, Resources } from '../roles';
+import { permissions, scopes } from '../access';
 
 export interface RoleResponse {
   id: number;
@@ -21,7 +21,7 @@ export interface RoleResponse {
   scope: string;
 }
 
-const roleSource = new ApiSource<RoleResponse>([Resources.Role], baseModule);
+const roleSource = new ApiSource<RoleResponse>([scopes.Role], baseModule);
 
 class GetModuleRolesRequest extends ExactProps<GetModuleRolesRequest> {
   @IsNumberString({}, { each: true })
@@ -58,7 +58,7 @@ export const roleApi = {
   >({
     path: roleSource.apiPath() + '/module',
     method: 'GET',
-    permission: Permissions.ReadRoles,
+    permission: permissions.ReadRoles,
     validator: GetModuleRolesRequest,
   }),
   moduleStats: roleSource.custom<
@@ -68,7 +68,7 @@ export const roleApi = {
   >({
     path: roleSource.apiPath() + '/module/stats',
     method: 'GET',
-    permission: Permissions.ReadUserRoles,
+    permission: permissions.ReadUserRoles,
     validator: GetModuleRolStatseRequest,
   }),
 };

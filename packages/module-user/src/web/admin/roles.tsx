@@ -6,6 +6,7 @@ import {
   webModule as coreWebModule,
 } from '@roxavn/core/web';
 import { IconCrown } from '@tabler/icons';
+import kebabCase from 'lodash/kebabCase';
 
 import { roleApi } from '../../base';
 import { webModule } from '../module';
@@ -23,7 +24,8 @@ const Page = () => {
         name: { label: t('roleName') },
         permissions: {
           label: t('permissions'),
-          render: utils.Render.tags,
+          render: (permissions) =>
+            utils.Render.tags(permissions.map(kebabCase)),
         },
       }}
     />

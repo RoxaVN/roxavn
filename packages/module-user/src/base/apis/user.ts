@@ -13,7 +13,7 @@ import {
   TransformNumber,
 } from '@roxavn/core/base';
 import { baseModule } from '../module';
-import { Permissions, Resources } from '../roles';
+import { permissions, scopes } from '../access';
 import { IsUsername } from '../validation';
 
 const userSource = new ApiSource<{
@@ -23,7 +23,7 @@ const userSource = new ApiSource<{
   phone?: string;
   createdDate: Date;
   updatedDate: Date;
-}>([Resources.User], baseModule);
+}>([scopes.User], baseModule);
 
 class GetUsersRequest extends ExactProps<GetUsersRequest> {
   @IsOptional()
@@ -62,14 +62,14 @@ class CreateUserRequest extends ExactProps<CreateUserRequest> {
 export const userApi = {
   getMany: userSource.getMany({
     validator: GetUsersRequest,
-    permission: Permissions.ReadUsers,
+    permission: permissions.ReadUsers,
   }),
   getOne: userSource.getOne({
     validator: GetUserRequest,
-    permission: Permissions.ReadUser,
+    permission: permissions.ReadUser,
   }),
   create: userSource.create({
     validator: CreateUserRequest,
-    permission: Permissions.CreateUser,
+    permission: permissions.CreateUser,
   }),
 };

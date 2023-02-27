@@ -7,7 +7,7 @@ import {
 } from '@roxavn/core/base';
 
 import { baseModule } from '../module';
-import { Permissions, Resources } from '../roles';
+import { permissions, scopes } from '../access';
 
 const fileStoageSource = new ApiSource<{
   userId: string;
@@ -15,7 +15,7 @@ const fileStoageSource = new ApiSource<{
   maxSize: number;
   maxFileSize: number;
   updatedDate: Date;
-}>([Resources.FileStorage], baseModule);
+}>([scopes.FileStorage], baseModule);
 
 class GetFileStoragesRequest extends ExactProps<GetFileStoragesRequest> {
   @Min(1)
@@ -27,6 +27,6 @@ class GetFileStoragesRequest extends ExactProps<GetFileStoragesRequest> {
 export const fileStoageApi = {
   getMany: fileStoageSource.getMany({
     validator: GetFileStoragesRequest,
-    permission: Permissions.ReadFIleStorages,
+    permission: permissions.ReadFIleStorages,
   }),
 };

@@ -29,7 +29,7 @@ export class ApiSource<T extends ApiResponse> {
   apiPath(options?: { includeId?: boolean }) {
     let result = this.module.apiPath('');
     this.resources.forEach((r, index) => {
-      result += '/' + r.name;
+      result += '/' + r.pluralName;
       if (index !== this.resources.length - 1 || options?.includeId) {
         result += '/:' + r.idParam;
       }

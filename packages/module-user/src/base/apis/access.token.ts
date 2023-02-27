@@ -1,6 +1,6 @@
 import { ApiSource, ExactProps, MinLength } from '@roxavn/core/base';
 import { baseModule } from '../module';
-import { Permissions, Resources } from '../roles';
+import { permissions, scopes } from '../access';
 
 const accessTokenSource = new ApiSource<{
   id: string;
@@ -8,7 +8,7 @@ const accessTokenSource = new ApiSource<{
   createdDate: Date;
   updatedDate: Date;
   expiredDate: Date;
-}>([Resources.AccessToken], baseModule);
+}>([scopes.AccessToken], baseModule);
 
 class DeleteAccessTokenRequest extends ExactProps<DeleteAccessTokenRequest> {
   @MinLength(1)
@@ -18,6 +18,6 @@ class DeleteAccessTokenRequest extends ExactProps<DeleteAccessTokenRequest> {
 export const accessTokenApi = {
   delete: accessTokenSource.delete({
     validator: DeleteAccessTokenRequest,
-    permission: Permissions.DeleteAccessToken,
+    permission: permissions.DeleteAccessToken,
   }),
 };
