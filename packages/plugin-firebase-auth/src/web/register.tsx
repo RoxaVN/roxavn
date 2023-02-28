@@ -1,5 +1,5 @@
 import { JsonInput, TextInput } from '@mantine/core';
-import { ApiFormGroup, ModuleT } from '@roxavn/core/web';
+import { ApiFormGroup, ArrayInput, ModuleT } from '@roxavn/core/web';
 import { webModule as userWebModule } from '@roxavn/module-user/web';
 
 import { constants, settingApi } from '../base';
@@ -12,12 +12,17 @@ userWebModule.adminSettings[constants.FIREBASE_SERVER_SETTING] = {
       api={settingApi.updateFirbaseServerSetting}
       fields={[
         {
-          name: 'serviceAccount',
+          name: 'serviceAccounts',
           input: (
-            <JsonInput
-              autosize
-              maxRows={10}
-              placeholder="Content of serviceAccountKey.json"
+            <ArrayInput
+              fields={
+                <JsonInput
+                  autosize
+                  minRows={4}
+                  maxRows={10}
+                  placeholder="Content of serviceAccountKey.json"
+                />
+              }
             />
           ),
         },
@@ -32,6 +37,10 @@ userWebModule.adminSettings[constants.FIREBASE_CLIENT_SETTING] = {
     <ApiFormGroup
       api={settingApi.updateFirbaseClientSetting}
       fields={[
+        {
+          name: 'projectId',
+          input: <TextInput placeholder="Project id" />,
+        },
         {
           name: 'apiKey',
           input: <TextInput placeholder="Api key" />,

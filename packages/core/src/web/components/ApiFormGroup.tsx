@@ -39,6 +39,7 @@ export function FormGroup<T extends 'horizontal' | 'vertical', V>({
     if (component.props.fields) {
       // auto add form for ArrayInput
       props.form = form;
+      props.name = name;
     }
     return React.cloneElement(component, props);
   };

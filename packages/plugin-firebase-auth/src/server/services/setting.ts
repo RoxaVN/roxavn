@@ -14,7 +14,7 @@ export class UpdateFirbaseServerSettingApiService extends ApiService {
     return this.create(UpdateSettingService).handle({
       module: userServerModule.name,
       name: constants.FIREBASE_SERVER_SETTING,
-      metadata: { serviceAccount: request.serviceAccount },
+      metadata: { serviceAccounts: request.serviceAccounts },
       type: 'private',
     });
   }
@@ -28,7 +28,11 @@ export class UpdateFirbaseClientSettingApiService extends ApiService {
     return this.create(UpdateSettingService).handle({
       module: userServerModule.name,
       name: constants.FIREBASE_CLIENT_SETTING,
-      metadata: { apiKey: request.apiKey, authDomain: request.authDomain },
+      metadata: {
+        apiKey: request.apiKey,
+        authDomain: request.authDomain,
+        projectId: request.projectId,
+      },
       type: 'public',
     });
   }

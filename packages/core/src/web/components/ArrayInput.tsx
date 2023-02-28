@@ -8,7 +8,7 @@ import { webModule } from '../services';
 
 export interface ArrayInputProps extends BoxProps {
   fields: Array<React.ReactElement> | React.ReactElement;
-  name: string;
+  name?: string;
   form?: UseFormReturnType<any>;
   label?: React.ReactNode;
   description?: React.ReactNode;
@@ -22,7 +22,7 @@ export const ArrayInput = ({
   description,
   required,
   form,
-  name,
+  name = '',
   fields,
   min,
   max,
