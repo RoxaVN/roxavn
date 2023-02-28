@@ -12,14 +12,12 @@ import { serverModule } from '../module';
 import { CreateAccessTokenService } from './access.token';
 import { tokenService } from './token';
 
-const PasswordIdentity = 'Password';
-
 @serverModule.useApi(passwordIdentityApi.auth)
 export class PasswordAuthApiService extends ApiService {
   async handle(request: InferApiRequest<typeof passwordIdentityApi.auth>) {
     const identity = await this.dbSession.getRepository(Identity).findOne({
       select: ['id', 'userId', 'metadata'],
-      where: { user: { username: request.username }, type: PasswordIdentity },
+      where: { user: { username: request.username }, type: Identity.PASSWORD },
     });
 
     if (!identity) {
@@ -51,7 +49,7 @@ export class ResetPasswordApiService extends ApiService {
   async handle(request: InferApiRequest<typeof passwordIdentityApi.reset>) {
     const identity = await this.dbSession.getRepository(Identity).findOne({
       select: ['id', 'metadata'],
-      where: { user: { username: request.username }, type: PasswordIdentity },
+      where: { user: { username: request.username }, type: Identity.PASSWORD },
     });
 
     if (!identity) {
@@ -90,17 +88,18 @@ export class RecoveryPasswordApiService extends ApiService {
     const hash = await tokenService.hasher.hash(token);
     const expiredAt = Date.now() + Env.SHORT_TIME_TO_LIVE;
 
-    let identity = await this.dbSession
-      .getRepository(Identity)
-      .findOne({ where: { userId: request.userId, type: PasswordIdentity } });
-    if (!identity) {
-      identity = new Identity();
-      identity.userId = request.userId;
-      identity.type = PasswordIdentity;
-    }
-    identity.metadata = { token: { hash, expiredAt } };
-
-    await this.dbSession.save(identity);
+    await this.dbSession
+      .createQueryBuilder()
+      .insert()
+      .into(Identity)
+      .values({
+        id: request.userId,
+        userId: request.userId,
+        type: Identity.PASSWORD,
+        metadata: { token: { hash, expiredAt } } as any,
+      })
+      .orUpdate(['metadata'], ['id'])
+      .execute();
 
     return { token };
   }

@@ -4,14 +4,18 @@ import {
   Entity,
   Index,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  OneToMany,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { AccessToken } from './access-token.entity';
 import { User } from './user.entity';
 
 @Entity()
 export class Identity {
-  @PrimaryGeneratedColumn('uuid')
+  static PASSWORD = 'Password';
+
+  @PrimaryColumn('varchar')
   id: string;
 
   @Column()
@@ -30,6 +34,9 @@ export class Identity {
 
   @ManyToOne(() => User, (user) => user.identities)
   user: User;
+
+  @OneToMany(() => AccessToken, (accessToken) => accessToken.identity)
+  accessTokens: Identity[];
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: any;

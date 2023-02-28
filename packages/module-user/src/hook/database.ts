@@ -1,19 +1,23 @@
 import { type Role as RoleType } from '@roxavn/core/base';
 import { TokenHasher, BaseService } from '@roxavn/core/server';
-import { PasswordIdentity, Role, User, UserRole } from '../server';
+import { Identity, Role, User, UserRole } from '../server';
 import { roles } from '../base/access';
 
 export class CreateAdminUserHook extends BaseService {
   async handle() {
     const count = await this.dbSession.getRepository(User).count();
     if (count < 1) {
-      const identity = new PasswordIdentity();
+      const identity = new Identity();
       const tokenHasher = new TokenHasher();
-      identity.password = await tokenHasher.hash('admin');
+      identity.metadata = {
+        password: await tokenHasher.hash('admin'),
+      };
       const user = new User();
       user.username = 'admin';
       await this.dbSession.save(user);
       identity.user = user;
+      identity.id = user.id;
+      identity.type = Identity.PASSWORD;
       await this.dbSession.save(identity);
 
       const role = await this.dbSession.findOneBy(Role, {

@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Identity } from './identity.entity';
 import { User } from './user.entity';
 
 @Entity()
@@ -18,6 +19,9 @@ export class AccessToken {
 
   @Column('uuid')
   identityId: string;
+
+  @ManyToOne(() => Identity, (identity) => identity.accessTokens)
+  identity: Identity;
 
   @Column('uuid')
   userId: string;
