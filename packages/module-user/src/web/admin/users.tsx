@@ -89,6 +89,7 @@ const Page = () => {
                 onCancel={onClose}
                 onSuccess={(data) => {
                   const link = WebRoutes.ResetPassword.generate({
+                    userId: item.id,
                     username: item.username,
                     token: data.token,
                   });

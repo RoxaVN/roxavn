@@ -13,13 +13,8 @@ import { User } from './user.entity';
 
 @Entity()
 export class Identity {
-  static PASSWORD = 'Password';
-
   @PrimaryColumn('varchar')
   id: string;
-
-  @Column()
-  type: string;
 
   @Index({ unique: true })
   @Column({ nullable: true })

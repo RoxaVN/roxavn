@@ -17,7 +17,7 @@ export class PasswordAuthApiService extends ApiService {
   async handle(request: InferApiRequest<typeof passwordIdentityApi.auth>) {
     const identity = await this.dbSession.getRepository(Identity).findOne({
       select: ['id', 'userId', 'metadata'],
-      where: { user: { username: request.username }, type: Identity.PASSWORD },
+      where: { user: { username: request.username } },
     });
 
     if (!identity) {
@@ -35,12 +35,11 @@ export class PasswordAuthApiService extends ApiService {
       throw new UnauthorizedException();
     }
 
-    const tokenResult = await this.create(CreateAccessTokenService).handle({
+    return await this.create(CreateAccessTokenService).handle({
       userId: identity.userId,
       identityid: identity.id,
+      identityType: 'password',
     });
-
-    return { ...tokenResult, userId: identity.userId };
   }
 }
 
@@ -49,7 +48,7 @@ export class ResetPasswordApiService extends ApiService {
   async handle(request: InferApiRequest<typeof passwordIdentityApi.reset>) {
     const identity = await this.dbSession.getRepository(Identity).findOne({
       select: ['id', 'metadata'],
-      where: { user: { username: request.username }, type: Identity.PASSWORD },
+      where: { id: request.userId },
     });
 
     if (!identity) {
@@ -95,7 +94,6 @@ export class RecoveryPasswordApiService extends ApiService {
       .values({
         id: request.userId,
         userId: request.userId,
-        type: Identity.PASSWORD,
         metadata: { token: { hash, expiredAt } } as any,
       })
       .orUpdate(['metadata'], ['id'])

@@ -3,7 +3,7 @@ import { Empty, WebRoute } from '@roxavn/core/base';
 export const WebRoutes = {
   ResetPassword: new WebRoute<
     Empty,
-    { username: string; token: string; ref?: string }
+    { username: string; userId: string; token: string; ref?: string }
   >('/reset-password'),
   Login: new WebRoute<Empty, { ref?: string }>('/login'),
   Me: new WebRoute('/me'),

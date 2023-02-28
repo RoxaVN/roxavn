@@ -7,6 +7,7 @@ import { webModule } from '../module';
 
 interface ResetPasswordFormProps {
   username: string;
+  userId: string;
   token: string;
   onSuccess?: (
     data: InferApiResponse<typeof passwordIdentityApi.reset>
@@ -14,6 +15,7 @@ interface ResetPasswordFormProps {
 }
 
 export const ResetPasswordForm = ({
+  userId,
   username,
   token,
   onSuccess,
@@ -29,10 +31,11 @@ export const ResetPasswordForm = ({
           passwordIdentityApi.reset as Api<
             InferApiRequest<typeof passwordIdentityApi.reset> & {
               retypePassword: string;
+              username: string;
             }
           >
         }
-        apiParams={{ username, token }}
+        apiParams={{ userId, token, username }}
         onSuccess={(data) => onSuccess && onSuccess(data)}
         onBeforeSubmit={(params) => {
           if (params.password !== params.retypePassword) {

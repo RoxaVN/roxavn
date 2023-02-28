@@ -17,7 +17,6 @@ export class CreateAdminUserHook extends BaseService {
       await this.dbSession.save(user);
       identity.user = user;
       identity.id = user.id;
-      identity.type = Identity.PASSWORD;
       await this.dbSession.save(identity);
 
       const role = await this.dbSession.findOneBy(Role, {

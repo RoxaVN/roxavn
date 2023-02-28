@@ -15,6 +15,9 @@ export class AccessToken {
   id: string;
 
   @Column()
+  identityType: string;
+
+  @Column()
   token: string;
 
   @Column('uuid')
@@ -28,6 +31,9 @@ export class AccessToken {
 
   @ManyToOne(() => User, (user) => user.accessTokens)
   user: User;
+
+  @Column({ type: 'jsonb', nullable: true })
+  metadata?: any;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;

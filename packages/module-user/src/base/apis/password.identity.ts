@@ -33,7 +33,7 @@ class AuthRequest extends ExactProps<AuthRequest> {
 
 class ResetPasswordRequest extends ExactProps<ResetPasswordRequest> {
   @MinLength(1)
-  public readonly username!: string;
+  public readonly userId!: string;
 
   @MinLength(1)
   public readonly token!: string;

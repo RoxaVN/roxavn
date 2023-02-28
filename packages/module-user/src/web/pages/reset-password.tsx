@@ -11,6 +11,7 @@ const ResetPasswordPage = (): JSX.Element => {
     <Container size={400} py={50}>
       <Card withBorder>
         <ResetPasswordForm
+          userId={params.get('userId') || ''}
           username={params.get('username') || ''}
           token={params.get('token') || ''}
           onSuccess={() => navigate(WebRoutes.Login.path)}

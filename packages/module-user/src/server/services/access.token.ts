@@ -18,7 +18,11 @@ export class DeleteAccessTokenApiService extends ApiService {
 }
 
 export class CreateAccessTokenService extends BaseService {
-  async handle(request: { userId: string; identityid: string }) {
+  async handle(request: {
+    userId: string;
+    identityid: string;
+    identityType: string;
+  }) {
     const token = await tokenService.creator.create({
       alphabetType: 'ALPHA_NUM',
       size: 21,
@@ -31,12 +35,14 @@ export class CreateAccessTokenService extends BaseService {
     const accessToken = new AccessToken();
     accessToken.userId = request.userId;
     accessToken.identityId = request.identityid;
+    accessToken.identityType = request.identityType;
     accessToken.token = signature;
     accessToken.expiredDate = expiredAt;
     await this.dbSession.getRepository(AccessToken).save(accessToken);
 
     return {
       id: accessToken.id,
+      userId: request.userId,
       accessToken: tokenFinal,
     };
   }
