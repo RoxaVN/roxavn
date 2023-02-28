@@ -1,20 +1,29 @@
 import {
-  ChildEntity,
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   ManyToOne,
   PrimaryGeneratedColumn,
-  TableInheritance,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
-@TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export class Identity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column()
+  type: string;
+
+  @Index({ unique: true })
+  @Column({ nullable: true })
+  email?: string;
+
+  @Index({ unique: true })
+  @Column({ nullable: true })
+  phone?: string;
 
   @Column('uuid')
   userId: string;
@@ -30,10 +39,4 @@ export class Identity {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: Date;
-}
-
-@ChildEntity()
-export class PasswordIdentity extends Identity {
-  @Column()
-  password: string;
 }

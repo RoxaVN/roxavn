@@ -17,14 +17,6 @@ export class User {
   id: string;
 
   @Index({ unique: true })
-  @Column({ nullable: true })
-  email?: string;
-
-  @Index({ unique: true })
-  @Column({ nullable: true })
-  phone?: string;
-
-  @Index({ unique: true })
   @Column()
   username: string;
 

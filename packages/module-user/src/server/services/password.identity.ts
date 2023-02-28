@@ -7,28 +7,31 @@ import { ApiService } from '@roxavn/core/server';
 
 import { passwordIdentityApi } from '../../base';
 import { Env } from '../config';
-import { PasswordIdentity } from '../entities';
+import { Identity } from '../entities';
 import { serverModule } from '../module';
 import { CreateAccessTokenService } from './access.token';
 import { tokenService } from './token';
 
+const PasswordIdentity = 'Password';
+
 @serverModule.useApi(passwordIdentityApi.auth)
 export class PasswordAuthApiService extends ApiService {
   async handle(request: InferApiRequest<typeof passwordIdentityApi.auth>) {
-    const identity = await this.dbSession
-      .getRepository(PasswordIdentity)
-      .findOne({
-        select: ['id', 'userId', 'password'],
-        where: { user: { username: request.username } },
-      });
+    const identity = await this.dbSession.getRepository(Identity).findOne({
+      select: ['id', 'userId', 'metadata'],
+      where: { user: { username: request.username }, type: PasswordIdentity },
+    });
 
     if (!identity) {
       throw new UnauthorizedException();
     }
 
     const isValid =
-      identity.password &&
-      (await tokenService.hasher.verify(request.password, identity.password));
+      identity.metadata &&
+      (await tokenService.hasher.verify(
+        request.password,
+        identity.metadata.password
+      ));
 
     if (!isValid) {
       throw new UnauthorizedException();
@@ -46,12 +49,10 @@ export class PasswordAuthApiService extends ApiService {
 @serverModule.useApi(passwordIdentityApi.reset)
 export class ResetPasswordApiService extends ApiService {
   async handle(request: InferApiRequest<typeof passwordIdentityApi.reset>) {
-    const identity = await this.dbSession
-      .getRepository(PasswordIdentity)
-      .findOne({
-        select: ['id', 'metadata'],
-        where: { user: { username: request.username } },
-      });
+    const identity = await this.dbSession.getRepository(Identity).findOne({
+      select: ['id', 'metadata'],
+      where: { user: { username: request.username }, type: PasswordIdentity },
+    });
 
     if (!identity) {
       throw new BadRequestException();
@@ -72,9 +73,8 @@ export class ResetPasswordApiService extends ApiService {
 
     const passwordHash = await tokenService.hasher.hash(request.password);
 
-    identity.password = passwordHash;
-    identity.metadata = null;
-    this.dbSession.getRepository(PasswordIdentity).save(identity);
+    identity.metadata = { password: passwordHash };
+    this.dbSession.getRepository(Identity).save(identity);
 
     return {};
   }
@@ -91,11 +91,12 @@ export class RecoveryPasswordApiService extends ApiService {
     const expiredAt = Date.now() + Env.SHORT_TIME_TO_LIVE;
 
     let identity = await this.dbSession
-      .getRepository(PasswordIdentity)
-      .findOne({ where: { userId: request.userId } });
+      .getRepository(Identity)
+      .findOne({ where: { userId: request.userId, type: PasswordIdentity } });
     if (!identity) {
-      identity = new PasswordIdentity();
+      identity = new Identity();
       identity.userId = request.userId;
+      identity.type = PasswordIdentity;
     }
     identity.metadata = { token: { hash, expiredAt } };
 
