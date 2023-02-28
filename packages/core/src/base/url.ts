@@ -17,6 +17,37 @@ const urlUtils = {
       params: retParams,
     };
   },
+  generateQueryStr(data: Record<string, any>) {
+    const params = new URLSearchParams();
+    Object.entries(data).map(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.map((v) => params.append(key, v));
+      } else if (typeof value === 'boolean') {
+        params.append(key, value ? '1' : '0');
+      } else if (value === '' || value === null || value === undefined) {
+        return;
+      } else {
+        params.append(key, value);
+      }
+    });
+    return params.toString();
+  },
+  parseQueryStr(queryStr: string) {
+    const params = new URLSearchParams(queryStr);
+    const result = {};
+    for (const [k, v] of params) {
+      if (k in result) {
+        if (Array.isArray(result[k])) {
+          result[k].push(v);
+        } else {
+          result[k] = [result[k], v];
+        }
+      } else {
+        result[k] = v;
+      }
+    }
+    return result;
+  },
 };
 
 export { urlUtils };

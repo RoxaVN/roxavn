@@ -90,21 +90,8 @@ const http = {
       return path;
     }
     const api = data ? urlUtils.generatePath(path, data) : { path, params: {} };
-    const params = new URLSearchParams();
-    if (data) {
-      Object.entries(api.params).map(([key, value]) => {
-        if (Array.isArray(value)) {
-          value.map((v) => params.append(key, v));
-        } else if (typeof value === 'boolean') {
-          params.append(key, value ? '1' : '0');
-        } else if (value === '' || value === null || value === undefined) {
-          return;
-        } else {
-          params.append(key, value);
-        }
-      });
-    }
-    return `${this.Host + api.path}?${params}`;
+
+    return `${this.Host + api.path}?${urlUtils.generateQueryStr(api.params)}`;
   },
 };
 
