@@ -10,4 +10,5 @@ export interface SettingResponse {
   name: string;
   metadata: any;
   updatedDate: Date;
+  type: 'public' | 'private';
 }

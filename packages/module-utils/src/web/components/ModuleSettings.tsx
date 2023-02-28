@@ -39,29 +39,40 @@ export const ModuleSettings = ({
               { maxWidth: 'sm', cols: 1, spacing: 'sm' },
             ]}
           >
-            {Object.entries(forms).map(([name, item]) => (
-              <Card withBorder key={name}>
-                <Text weight={500} mb="xs">
-                  {item.title}
-                </Text>
-                <Text size="sm" color="dimmed">
-                  {item.description}
-                </Text>
-                {React.cloneElement(item.form, {
-                  apiParams: data.items.find((i) => i.name === name)?.metadata,
-                  onSuccess: (...args: any) => {
-                    showNotification({
-                      autoClose: 10000,
-                      title: item.title,
-                      message: tCore('success'),
-                      color: 'green',
-                      icon: <IconCheck />,
-                    });
-                    item.form.props.onSuccess?.apply(item.form, args);
-                  },
-                })}
-              </Card>
-            ))}
+            {Object.entries(forms).map(([name, item]) => {
+              const itemValue = data.items.find((i) => i.name === name);
+              return (
+                <Card
+                  withBorder
+                  key={name}
+                  sx={
+                    itemValue?.type === 'public'
+                      ? { borderTopColor: 'green', borderTopWidth: 3 }
+                      : {}
+                  }
+                >
+                  <Text weight={500} mb="xs">
+                    {item.title}
+                  </Text>
+                  <Text size="sm" color="dimmed">
+                    {item.description}
+                  </Text>
+                  {React.cloneElement(item.form, {
+                    apiParams: itemValue?.metadata,
+                    onSuccess: (...args: any) => {
+                      showNotification({
+                        autoClose: 10000,
+                        title: item.title,
+                        message: tCore('success'),
+                        color: 'green',
+                        icon: <IconCheck />,
+                      });
+                      item.form.props.onSuccess?.apply(item.form, args);
+                    },
+                  })}
+                </Card>
+              );
+            })}
           </SimpleGrid>
         )
       }
