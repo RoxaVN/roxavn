@@ -1,6 +1,5 @@
 {
   "firebaseServerSetting": "Cài đặt Firebase cho server",
-  "firebaseClientSetting": "Cài đặt Firebase cho client",
   "Meta": {
     "name": "Firebase auth plugin",
     "description": "Firebase auth plugin"

@@ -1,4 +1,4 @@
-import { JsonInput, TextInput } from '@mantine/core';
+import { JsonInput } from '@mantine/core';
 import { ApiFormGroup, ArrayInput, ModuleT } from '@roxavn/core/web';
 import { webModule as userWebModule } from '@roxavn/module-user/web';
 
@@ -25,29 +25,6 @@ userWebModule.adminSettings[constants.FIREBASE_SERVER_SETTING] = {
               }
             />
           ),
-        },
-      ]}
-    />
-  ),
-};
-
-userWebModule.adminSettings[constants.FIREBASE_CLIENT_SETTING] = {
-  title: <ModuleT module={webModule} k="firebaseClientSetting" />,
-  form: (
-    <ApiFormGroup
-      api={settingApi.updateFirbaseClientSetting}
-      fields={[
-        {
-          name: 'projectId',
-          input: <TextInput placeholder="Project id" />,
-        },
-        {
-          name: 'apiKey',
-          input: <TextInput placeholder="Api key" />,
-        },
-        {
-          name: 'authDomain',
-          input: <TextInput placeholder="Auth domain" />,
         },
       ]}
     />

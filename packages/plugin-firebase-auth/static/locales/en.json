@@ -1,6 +1,5 @@
 {
   "firebaseServerSetting": "Firebase server setting",
-  "firebaseClientSetting": "Firebase client setting",
   "Meta": {
     "name": "Firebase auth plugin",
     "description": "Firebase auth plugin"

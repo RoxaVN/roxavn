@@ -19,21 +19,3 @@ export class UpdateFirbaseServerSettingApiService extends ApiService {
     });
   }
 }
-
-@serverModule.useApi(settingApi.updateFirbaseClientSetting)
-export class UpdateFirbaseClientSettingApiService extends ApiService {
-  async handle(
-    request: InferApiRequest<typeof settingApi.updateFirbaseClientSetting>
-  ) {
-    return this.create(UpdateSettingService).handle({
-      module: userServerModule.name,
-      name: constants.FIREBASE_CLIENT_SETTING,
-      metadata: {
-        apiKey: request.apiKey,
-        authDomain: request.authDomain,
-        projectId: request.projectId,
-      },
-      type: 'public',
-    });
-  }
-}
