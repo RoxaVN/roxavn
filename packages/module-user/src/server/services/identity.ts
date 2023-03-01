@@ -1,32 +1,32 @@
 import { BaseService } from '@roxavn/core/server';
 import { Identity } from '../entities';
 import { CreateAccessTokenService } from './access.token';
+import { tokenService } from './token';
 import { CreateUserApiService } from './user';
 
 export class IdentityService extends BaseService {
   async handle(request: {
-    id: string;
+    subject: string;
     type: string;
-    email?: string;
-    phone?: string;
+    authenticator: string;
   }) {
     let identity = await this.dbSession.getRepository(Identity).findOne({
       select: ['id', 'userId'],
-      where: request.email
-        ? { email: request.email }
-        : request.phone
-        ? { phone: request.phone }
-        : { id: request.id },
+      where: { subject: request.subject, type: request.type },
     });
 
     if (!identity) {
+      // random username
+      const username = await tokenService.creator.create({
+        alphabetType: 'LOWERCASE_ALPHA_NUM',
+        size: 16,
+      });
       const user = await this.create(CreateUserApiService).handle({
-        username: request.id,
+        username: username,
       });
       identity = new Identity();
-      identity.id = request.id;
-      identity.email = request.email;
-      identity.phone = request.phone;
+      identity.type = request.type;
+      identity.subject = request.subject;
       identity.userId = user.id;
       await this.dbSession.save(identity);
     }
@@ -34,7 +34,7 @@ export class IdentityService extends BaseService {
     return this.create(CreateAccessTokenService).handle({
       identityid: identity.id,
       userId: identity.userId,
-      identityType: request.type,
+      authenticator: request.type,
     });
   }
 }

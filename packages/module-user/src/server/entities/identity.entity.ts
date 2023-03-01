@@ -2,27 +2,26 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   ManyToOne,
   OneToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { AccessToken } from './access-token.entity';
 import { User } from './user.entity';
 
 @Entity()
+@Unique(['subject', 'type'])
 export class Identity {
-  @PrimaryColumn('varchar')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Index({ unique: true })
-  @Column({ nullable: true })
-  email?: string;
+  @Column()
+  subject: string;
 
-  @Index({ unique: true })
-  @Column({ nullable: true })
-  phone?: string;
+  @Column()
+  type: string;
 
   @Column('uuid')
   userId: string;

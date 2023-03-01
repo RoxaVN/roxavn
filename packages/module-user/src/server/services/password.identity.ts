@@ -5,7 +5,7 @@ import {
 } from '@roxavn/core/base';
 import { ApiService } from '@roxavn/core/server';
 
-import { passwordIdentityApi } from '../../base';
+import { constants, passwordIdentityApi } from '../../base';
 import { Env } from '../config';
 import { Identity } from '../entities';
 import { serverModule } from '../module';
@@ -17,7 +17,10 @@ export class PasswordAuthApiService extends ApiService {
   async handle(request: InferApiRequest<typeof passwordIdentityApi.auth>) {
     const identity = await this.dbSession.getRepository(Identity).findOne({
       select: ['id', 'userId', 'metadata'],
-      where: { user: { username: request.username } },
+      where: {
+        user: { username: request.username },
+        type: constants.identityTypes.PASSWORD,
+      },
     });
 
     if (!identity) {
@@ -38,7 +41,7 @@ export class PasswordAuthApiService extends ApiService {
     return await this.create(CreateAccessTokenService).handle({
       userId: identity.userId,
       identityid: identity.id,
-      identityType: 'password',
+      authenticator: constants.identityTypes.PASSWORD,
     });
   }
 }
@@ -48,7 +51,10 @@ export class ResetPasswordApiService extends ApiService {
   async handle(request: InferApiRequest<typeof passwordIdentityApi.reset>) {
     const identity = await this.dbSession.getRepository(Identity).findOne({
       select: ['id', 'metadata'],
-      where: { id: request.userId },
+      where: {
+        subject: request.userId,
+        type: constants.identityTypes.PASSWORD,
+      },
     });
 
     if (!identity) {
@@ -92,7 +98,8 @@ export class RecoveryPasswordApiService extends ApiService {
       .insert()
       .into(Identity)
       .values({
-        id: request.userId,
+        subject: request.userId,
+        type: constants.identityTypes.PASSWORD,
         userId: request.userId,
         metadata: { token: { hash, expiredAt } } as any,
       })

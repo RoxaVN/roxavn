@@ -21,7 +21,7 @@ export class CreateAccessTokenService extends BaseService {
   async handle(request: {
     userId: string;
     identityid: string;
-    identityType: string;
+    authenticator: string;
   }) {
     const token = await tokenService.creator.create({
       alphabetType: 'ALPHA_NUM',
@@ -35,7 +35,7 @@ export class CreateAccessTokenService extends BaseService {
     const accessToken = new AccessToken();
     accessToken.userId = request.userId;
     accessToken.identityId = request.identityid;
-    accessToken.identityType = request.identityType;
+    accessToken.authenticator = request.authenticator;
     accessToken.token = signature;
     accessToken.expiredDate = expiredAt;
     await this.dbSession.getRepository(AccessToken).save(accessToken);

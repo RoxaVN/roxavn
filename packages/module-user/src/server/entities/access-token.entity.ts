@@ -15,7 +15,7 @@ export class AccessToken {
   id: string;
 
   @Column()
-  identityType: string;
+  authenticator: string;
 
   @Column()
   token: string;
