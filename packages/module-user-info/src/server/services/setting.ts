@@ -16,17 +16,3 @@ export class SetFieldsForUserToUpdateApiService extends ApiService {
     });
   }
 }
-
-@serverModule.useApi(settingApi.setFieldsForAdminToUpdate)
-export class SetFieldsForAdminToUpdateApiService extends ApiService {
-  handle(
-    request: InferApiRequest<typeof settingApi.setFieldsForAdminToUpdate>
-  ) {
-    return this.create(UpdateSettingService).handle({
-      module: serverModule.name,
-      name: constants.FIELDS_FOR_ADMIN_TO_UPDATE,
-      metadata: { fields: request.fields },
-      type: 'private',
-    });
-  }
-}

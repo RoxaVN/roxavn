@@ -16,14 +16,8 @@ class SetFieldsToUpdateRequest extends ExactProps<SetFieldsToUpdateRequest> {
 }
 
 export const settingApi = {
-  setFieldsForAdminToUpdate: settingSource.custom({
-    method: 'POST',
-    path: settingSource.apiPath() + '/fields-for-admin-to-update',
-    validator: SetFieldsToUpdateRequest,
-    permission: permissions.UpdateSetting,
-  }),
   setFieldsForUserToUpdate: settingSource.custom({
-    method: 'POST',
+    method: 'PUT',
     path: settingSource.apiPath() + '/fields-for-user-to-update',
     validator: SetFieldsToUpdateRequest,
     permission: permissions.UpdateSetting,

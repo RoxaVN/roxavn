@@ -23,17 +23,3 @@ webModule.adminSettings[constants.FIELDS_FOR_USER_TO_UPDATE] = {
     />
   ),
 };
-webModule.adminSettings[constants.FIELDS_FOR_ADMIN_TO_UPDATE] = {
-  title: <ModuleT module={webModule} k="fieldsForAdminToUpdateTitle" />,
-  form: (
-    <ApiFormGroup
-      api={settingApi.setFieldsForAdminToUpdate}
-      fields={[
-        {
-          name: 'fields',
-          input: <MultiSelect data={fields} withinPortal />,
-        },
-      ]}
-    />
-  ),
-};

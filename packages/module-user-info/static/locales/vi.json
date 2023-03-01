@@ -1,6 +1,5 @@
 {
   "fieldsForUserToUpdateTitle": "Các trường cho người dùng cập nhật",
-  "fieldsForAdminToUpdateTitle": "Các trường cho admin cập nhật",
   "Meta": {
     "name": "Thông tin người dùng",
     "description": "Thông tin người dùng"
