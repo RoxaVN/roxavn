@@ -19,10 +19,7 @@ export class VerifyTokenApiService extends ApiService {
       name: constants.FIREBASE_SERVER_SETTING,
     });
     if (settings && Array.isArray(settings.serviceAccounts)) {
-      const serviceAccounts = settings.serviceAccounts.map((s: any) =>
-        JSON.parse(s)
-      );
-      const projectSetting = serviceAccounts.find(
+      const projectSetting = settings.serviceAccounts.find(
         (s: any) => s.project_id === request.projectId
       );
       if (projectSetting) {

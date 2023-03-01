@@ -4,7 +4,7 @@ import {
   ArrayMinSize,
   ExactProps,
   IsArray,
-  MinLength,
+  IsNotEmptyObject,
 } from '@roxavn/core/base';
 import { permissions } from '@roxavn/module-user/base';
 import { SettingResponse } from '@roxavn/module-utils/base';
@@ -19,8 +19,8 @@ const settingSource = new ApiSource<SettingResponse>(
 class UpdateFirbaseServerSettingRequest extends ExactProps<UpdateFirbaseServerSettingRequest> {
   @IsArray()
   @ArrayMinSize(1)
-  @MinLength(1, { each: true })
-  public readonly serviceAccounts: string[];
+  @IsNotEmptyObject({}, { each: true })
+  public readonly serviceAccounts: Array<Record<string, any>>;
 }
 
 export const settingApi = {

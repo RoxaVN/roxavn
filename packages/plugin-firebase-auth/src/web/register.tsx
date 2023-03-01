@@ -1,5 +1,9 @@
-import { JsonInput } from '@mantine/core';
-import { ApiFormGroup, ArrayInput, ModuleT } from '@roxavn/core/web';
+import {
+  ApiFormGroup,
+  ArrayInput,
+  ModuleT,
+  ObjectInput,
+} from '@roxavn/core/web';
 import { webModule as userWebModule } from '@roxavn/module-user/web';
 
 import { constants, settingApi } from '../base';
@@ -16,7 +20,7 @@ userWebModule.adminSettings[constants.FIREBASE_SERVER_SETTING] = {
           input: (
             <ArrayInput
               fields={
-                <JsonInput
+                <ObjectInput
                   autosize
                   minRows={4}
                   maxRows={10}

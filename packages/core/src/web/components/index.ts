@@ -11,3 +11,4 @@ export * from './ModuleT';
 export * from './ApiInput';
 export * from './AppProvider';
 export * from './TasksProgress';
+export * from './ObjectInput';
