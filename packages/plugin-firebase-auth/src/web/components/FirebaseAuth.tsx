@@ -49,6 +49,7 @@ export const FirebaseAuth = ({
 
     // Render the firebaseUi Widget.
     firebaseUiWidget.start(elementRef.current, uiConfig);
+    firebaseUiWidget.disableAutoSignIn();
 
     return () => {
       unregisterAuthObserver();

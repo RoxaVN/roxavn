@@ -1,0 +1,35 @@
+import {
+  ApiSource,
+  BadRequestException,
+  ExactProps,
+  MinLength,
+} from '@roxavn/core/base';
+import { scopes } from '@roxavn/module-user/base';
+
+import { baseModule } from '../module';
+
+const identitySource = new ApiSource([scopes.Identity], baseModule);
+
+class VerityTokenRequest extends ExactProps<VerityTokenRequest> {
+  @MinLength(1)
+  public readonly token!: string;
+
+  @MinLength(1)
+  public readonly projectId!: string;
+}
+
+export const identityApi = {
+  verifyToken: identitySource.custom<
+    VerityTokenRequest,
+    {
+      id: string;
+      userId: string;
+      accessToken: string;
+    },
+    BadRequestException
+  >({
+    method: 'POST',
+    path: identitySource.apiPath() + '/verifyToken',
+    validator: VerityTokenRequest,
+  }),
+};

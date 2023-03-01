@@ -30,6 +30,18 @@ export class GetModuleSettingsService extends ApiService {
   }
 }
 
+export class GetSettingService extends BaseService {
+  async handle(request: { module: string; name: string }) {
+    const result = await this.dbSession.getRepository(Setting).findOne({
+      where: {
+        name: request.name,
+        module: request.module,
+      },
+    });
+    return result?.metadata;
+  }
+}
+
 export class UpdateSettingService extends BaseService<
   UpdateSettingRequest,
   Empty

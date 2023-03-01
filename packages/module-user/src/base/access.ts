@@ -5,6 +5,7 @@ export const scopes = accessManager.makeScopes(baseModule, {
   User: { name: 'user' },
   Role: { name: 'role' },
   AccessToken: { name: 'accessToken' },
+  Identity: { name: 'identity' },
   PasswordIdentity: { name: 'passwordIdentity' },
 });
 

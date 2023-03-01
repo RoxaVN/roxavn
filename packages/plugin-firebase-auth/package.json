@@ -13,6 +13,7 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
+    "firebase-admin": "^11.5.0",
     "firebaseui": "^6.0.2"
   },
   "peerDependencies": {

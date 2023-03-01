@@ -34,7 +34,7 @@ export class IdentityService extends BaseService {
     return this.create(CreateAccessTokenService).handle({
       identityid: identity.id,
       userId: identity.userId,
-      authenticator: request.type,
+      authenticator: request.authenticator,
     });
   }
 }

@@ -4,10 +4,10 @@ to: src/base/apis/<%= h.changeCase.dot(api_source_name) %>.ts
 import { ApiSource, ExactProps, MinLength } from '@roxavn/core/base';
 
 import { baseModule } from '../module';
-import { Resources } from '../roles';
+import { scopes } from '../roles';
 
 const <%= api_source_name %>Source = new ApiSource<{}>(
-  [Resources.<%= h.changeCase.pascal(api_source_name) %>],
+  [scopes.<%= h.changeCase.pascal(api_source_name) %>],
   baseModule
 );
 
