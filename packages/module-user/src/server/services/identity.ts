@@ -17,10 +17,15 @@ export class IdentityService extends BaseService {
 
     if (!identity) {
       // random username
-      const username = await tokenService.creator.create({
-        alphabetType: 'LOWERCASE_ALPHA_NUM',
-        size: 16,
-      });
+      const username =
+        (await tokenService.creator.create({
+          alphabetType: 'LOWERCASE_ALPHA',
+          size: 1,
+        })) +
+        (await tokenService.creator.create({
+          alphabetType: 'LOWERCASE_ALPHA_NUM',
+          size: 15,
+        }));
       const user = await this.create(CreateUserApiService).handle({
         username: username,
       });
