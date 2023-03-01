@@ -1,3 +1,6 @@
+### Test page
+
+```tsx
 import firebase from 'firebase/compat/app';
 import { ApiFirebaseAuth } from '../components';
 
@@ -25,3 +28,4 @@ const Page = () => {
 };
 
 export default Page;
+```
