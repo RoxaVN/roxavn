@@ -29,6 +29,6 @@ services:
       - 9325:9325
     volumes:
       - ./docker-data/seaweed:/data
-    command: 'volume -mserver="seaweed_master:9333" -ip.bind=0.0.0.0 -port=28080 -publicUrl="localhost:28080"  -metricsPort=9325'
+    command: 'volume -mserver="seaweed_master:9333" -ip.bind=0.0.0.0 -port=28080 -publicUrl="http://localhost:28080" -metricsPort=9325'
     depends_on:
       - seaweed_master

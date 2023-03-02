@@ -1,6 +1,6 @@
+import { urlUtils } from '@roxavn/core/base';
 import FormData from 'form-data';
 import http from 'http';
-import qs from 'querystring';
 import { Readable } from 'stream';
 
 import { Env } from '../config';
@@ -35,6 +35,27 @@ export class SeaweedClient {
   private _urlWithSchema = (url: string): string =>
     url.startsWith('http') ? url : `http://${url}`;
 
+  lookup(params: { volumeId: number | string }): Promise<{
+    locations: Array<{ publicUrl: string; url: string }>;
+  }> {
+    return new Promise((resolve, reject) => {
+      http
+        .request(
+          new URL(
+            'dir/lookup?' + urlUtils.generateQueryStr(params),
+            this.baseUrl
+          ),
+          (resp) => {
+            this._resolveResponse(resp, resolve, reject);
+          }
+        )
+        .on('error', function (err) {
+          return reject(err);
+        })
+        .end();
+    });
+  }
+
   assign(params?: any): Promise<{
     count: number;
     fid: string;
@@ -45,7 +66,10 @@ export class SeaweedClient {
     return new Promise((resolve, reject) => {
       http
         .request(
-          new URL('dir/assign?' + qs.stringify(params), this.baseUrl),
+          new URL(
+            'dir/assign?' + urlUtils.generateQueryStr(params),
+            this.baseUrl
+          ),
           (resp) => {
             this._resolveResponse(resp, resolve, reject);
           }

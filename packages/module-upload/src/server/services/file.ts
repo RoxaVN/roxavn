@@ -1,10 +1,12 @@
 import { InferApiResponse, ServerException } from '@roxavn/core/base';
+import { BaseService } from '@roxavn/core/server';
 import busboy from 'busboy';
+import sample from 'lodash/sample';
 
 import { ExceedsStorageLimitException, fileApi } from '../../base';
 import { File, FileStorage } from '../entities';
 import { serverModule } from '../module';
-import { seaweedClient } from './seaweed';
+import { SeaweedClient, seaweedClient } from './seaweed';
 
 serverModule.useRawApi(fileApi.upload, (_, { req, dbSession, resp }) => {
   return new Promise<InferApiResponse<typeof fileApi.upload>>(
@@ -56,4 +58,57 @@ serverModule.useRawApi(fileApi.upload, (_, { req, dbSession, resp }) => {
   );
 });
 
-export {};
+const cacheVolume: Record<
+  string,
+  Awaited<ReturnType<SeaweedClient['lookup']>>['locations']
+> = {};
+
+export class GetFileUrlService extends BaseService {
+  async handle(request: { fileId: string }) {
+    const parts = request.fileId.split(',');
+    let volumneLocations = cacheVolume[parts[0]];
+    if (!volumneLocations) {
+      const lookupResult = await seaweedClient.lookup({ volumeId: parts[0] });
+      volumneLocations = lookupResult.locations;
+      cacheVolume[parts[0]] = volumneLocations;
+    }
+    const publicUrl: string = (sample(volumneLocations) as any).publicUrl;
+    return publicUrl + (publicUrl.endsWith('/') ? '' : '/') + request.fileId;
+  }
+}
+
+export class UpdateUrlFOrItemService extends BaseService {
+  async handle<T extends Record<string, any>>(request: {
+    item: T;
+    key: keyof T;
+  }): Promise<T> {
+    const result = { ...request.item };
+    const fileId: any = result[request.key];
+    const service = this.create(GetFileUrlService);
+    if (Array.isArray(fileId)) {
+      result[request.key] = (await Promise.all(
+        fileId.map((f) => service.handle({ fileId: f }))
+      )) as any;
+    } else {
+      result[request.key] = (await service.handle({ fileId: fileId })) as any;
+    }
+    return result;
+  }
+}
+
+export class UpdateUrlFOrItemsService extends BaseService {
+  async handle<T extends Record<string, any>>(request: {
+    items: T[];
+    key: keyof T;
+  }): Promise<T[]> {
+    const service = this.create(UpdateUrlFOrItemService);
+    const result = [...request.items];
+    for (let i = 0; i < result.length; i += 1) {
+      result[i] = (await service.handle({
+        item: result[i],
+        key: request.key as any,
+      })) as any;
+    }
+    return result;
+  }
+}
