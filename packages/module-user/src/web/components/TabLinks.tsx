@@ -1,8 +1,6 @@
 import { Tabs } from '@mantine/core';
-import { PageItem, WebModule } from '@roxavn/core/web';
+import { PageItem, usePageLinks, WebModule } from '@roxavn/core/web';
 import { useNavigate } from 'react-router-dom';
-
-import { usePageLinks } from './MenuLinks';
 
 export interface TabLinksProps {
   pageItems: PageItem[];
