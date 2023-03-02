@@ -11,7 +11,7 @@
   "author": "",
   "roxavn": {},
   "devDependencies": {
-    "@types/bcrypt": "^5.0.0",
+    "@types/bcryptjs": "^2.4.2",
     "@types/express": "^4.17.14",
     "@types/jest": "^27.5.2",
     "@types/lodash": "^4.14.189",
@@ -32,7 +32,7 @@
     "@mantine/nprogress": "^5.10.3",
     "@remix-run/dev": "^1.7.6",
     "@tabler/icons": "^1.117.0",
-    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "dayjs": "^1.11.7",
