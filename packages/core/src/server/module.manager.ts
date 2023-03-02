@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import { getPackageJson } from './utils';
 
 interface ModuleInfo {
@@ -51,6 +53,26 @@ class ModuleManager {
   get currentModule() {
     this.init();
     return this._currentModule as ModuleInfo;
+  }
+
+  getModulesHaveMePages() {
+    return this.modules
+      .filter((m) => {
+        try {
+          const modulePath =
+            m.name === this.currentModule.name
+              ? './src/web/index.ts'
+              : require.resolve(m.name + '/web');
+          const pagesPath = path.join(
+            path.dirname(modulePath),
+            'pages/me/{moduleName}'
+          );
+          return fs.existsSync(pagesPath);
+        } catch (e) {
+          return false;
+        }
+      })
+      .map((m) => m.name);
   }
 }
 

@@ -7,7 +7,7 @@ import { baseModule, BaseModule } from '../../base';
 
 export interface PageItem {
   label?: React.ReactNode | { (t: TFunction): React.ReactNode };
-  description?: React.ReactNode;
+  description?: React.ReactNode | { (t: TFunction): React.ReactNode };
   icon?: React.ComponentType<{
     size?: number | string;
     stroke?: number | string;
@@ -29,6 +29,8 @@ export class WebModule extends BaseModule {
   readonly adminPluginRegisters: Array<() => Promise<any>> = [];
   readonly adminSettings: AdminSettings = {};
   readonly adminPages: Array<PageItem> = [];
+
+  readonly mePluginRegisters: Array<() => Promise<any>> = [];
   readonly mePages: Array<PageItem> = [];
 
   resolveStaticPath(path: string) {
@@ -60,8 +62,30 @@ export class WebModule extends BaseModule {
             path: '/settings',
             element: WebModule.settingsPageRender(this),
           });
-          setPages([...this.adminPages]);
         }
+        setPages([...this.adminPages]);
+        setWebModule(this);
+      };
+
+      useEffect(() => {
+        load();
+      }, []);
+
+      return element;
+    };
+  }
+
+  makeMePages() {
+    return () => {
+      const [pages, setPages] = useState(this.mePages);
+      const { setWebModule } = useOutletContext<any>();
+      const element = useRoutes(pages);
+
+      const load = async () => {
+        for (const register of this.mePluginRegisters) {
+          await register();
+        }
+        setPages([...this.mePages]);
         setWebModule(this);
       };
 

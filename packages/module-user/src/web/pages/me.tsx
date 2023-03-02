@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
 import {
   AppShell,
   Navbar,
@@ -9,13 +7,32 @@ import {
   MediaQuery,
   Burger,
   useMantineTheme,
+  Loader,
+  Group,
+  NavLink,
+  Avatar,
 } from '@mantine/core';
-import { IsAuthenticated } from '../components';
+import { json } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
+import { constants } from '@roxavn/core/base';
+import { moduleManager } from '@roxavn/core/server';
+import { WebModule } from '@roxavn/core/web';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link, Navigate, Outlet } from 'react-router-dom';
+
 import { WebRoutes } from '../../base';
+import { IsAuthenticated, TabLinks } from '../components';
+
+const BASE = '/me';
 
 function MeComponent() {
+  const { t } = useTranslation(constants.META_I18N_NAMESPACE);
+  const data = useLoaderData<typeof loader>();
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  const [webModule, setWebModule] = useState<WebModule>();
+
   return (
     <AppShell
       styles={{
@@ -34,7 +51,19 @@ function MeComponent() {
           hidden={!opened}
           width={{ sm: 200, lg: 300 }}
         >
-          <Text>Application navbar</Text>
+          {data.modules.map((moduleName) => (
+            <NavLink
+              label={t(moduleName + '.name')}
+              icon={
+                <Avatar
+                  radius="sm"
+                  src={WebModule.resolveStaticPath(moduleName, '/icon.svg')}
+                />
+              }
+              component={Link}
+              to={WebModule.escapeName(moduleName)}
+            />
+          ))}
         </Navbar>
       }
       footer={
@@ -62,16 +91,33 @@ function MeComponent() {
         </Header>
       }
     >
-      <Outlet />
+      {webModule && (
+        <TabLinks
+          pageItems={webModule.adminPages}
+          module={webModule}
+          basePath={BASE}
+        />
+      )}
+      <Outlet context={{ setWebModule }} />
     </AppShell>
   );
 }
 
 const MePage = () => (
   <IsAuthenticated
+    loadingComponent={
+      <Group position="center" align="center" sx={{ height: '100vh' }}>
+        <Loader />
+      </Group>
+    }
     userComponent={<MeComponent />}
     guestComponent={<Navigate to={WebRoutes.Login.path} />}
   />
 );
+export async function loader() {
+  return json({
+    modules: moduleManager.getModulesHaveMePages(),
+  });
+}
 
 export default MePage;
