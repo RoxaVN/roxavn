@@ -1,4 +1,4 @@
-import { matchPath, Path, resolvePath } from 'react-router-dom';
+import { matchPath, Path, resolvePath, useLocation } from 'react-router-dom';
 
 import { canAccessApi, useRoles } from '../components';
 import { PageItem, WebModule } from '../services';
@@ -19,6 +19,7 @@ export const usePageLinks = (
   basePath: string
 ): Array<PageLink> => {
   const { t } = module.useTranslation();
+  const location = useLocation();
   const roles = useRoles();
 
   const parseItems = (items: PageItem[]) => {

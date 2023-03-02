@@ -11,6 +11,7 @@ import {
   Group,
   NavLink,
   Avatar,
+  Box,
 } from '@mantine/core';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
@@ -53,6 +54,7 @@ function MeComponent() {
         >
           {data.modules.map((moduleName) => (
             <NavLink
+              key={moduleName}
               label={t(moduleName + '.name')}
               icon={
                 <Avatar
@@ -60,6 +62,9 @@ function MeComponent() {
                   src={WebModule.resolveStaticPath(moduleName, '/icon.svg')}
                 />
               }
+              active={location.pathname.startsWith(
+                BASE + '/' + WebModule.escapeName(moduleName)
+              )}
               component={Link}
               to={WebModule.escapeName(moduleName)}
             />
@@ -92,11 +97,13 @@ function MeComponent() {
       }
     >
       {webModule && (
-        <TabLinks
-          pageItems={webModule.adminPages}
-          module={webModule}
-          basePath={BASE}
-        />
+        <Box mb="md">
+          <TabLinks
+            pageItems={webModule.mePages}
+            module={webModule}
+            basePath={BASE}
+          />
+        </Box>
       )}
       <Outlet context={{ setWebModule }} />
     </AppShell>
