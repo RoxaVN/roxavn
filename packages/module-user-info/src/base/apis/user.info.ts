@@ -1,6 +1,8 @@
 import {
   ApiSource,
   ExactProps,
+  IsDateString,
+  IsIn,
   IsOptional,
   Min,
   MinLength,
@@ -9,6 +11,7 @@ import { Type } from 'class-transformer';
 
 import { baseModule } from '../module';
 import { permissions, scopes } from '../access';
+import { constants } from '../constants';
 
 const userInfoSource = new ApiSource<{
   id: string;
@@ -32,7 +35,34 @@ class GetUsersInfoRequest extends ExactProps<GetUsersInfoRequest> {
 
 class GetUserInfoRequest extends ExactProps<GetUserInfoRequest> {
   @MinLength(1)
-  public readonly userInfoId: string;
+  public readonly userId: string;
+}
+
+class UpdateUserInfoRequest extends ExactProps<UpdateUserInfoRequest> {
+  @MinLength(1)
+  public readonly userId: string;
+
+  @MinLength(1)
+  public readonly firstName: string;
+
+  @MinLength(1)
+  @IsOptional()
+  public readonly middleName?: string;
+
+  @MinLength(1)
+  @IsOptional()
+  public readonly lastName?: string;
+
+  @MinLength(1)
+  public readonly avatar: string;
+
+  @IsDateString()
+  @IsOptional()
+  public readonly birthday?: string;
+
+  @IsIn(Object.values(constants.Genders))
+  @IsOptional()
+  public readonly gender?: string;
 }
 
 export const userInfoApi = {
@@ -43,5 +73,9 @@ export const userInfoApi = {
   getOne: userInfoSource.getOne({
     validator: GetUserInfoRequest,
     permission: permissions.ReadUserInfo,
+  }),
+  update: userInfoSource.update({
+    validator: UpdateUserInfoRequest,
+    permission: permissions.UpdateUserInfo,
   }),
 };

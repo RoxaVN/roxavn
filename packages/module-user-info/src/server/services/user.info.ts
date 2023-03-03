@@ -30,11 +30,36 @@ export class GetUsersInfoApiService extends ApiService {
 export class GetUserInfoApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userInfoApi.getOne>) {
     const user = await this.dbSession.getRepository(UserInfo).findOne({
-      where: { id: request.userInfoId },
+      where: { id: request.userId },
     });
     if (!user) {
       throw new NotFoundException();
     }
     return user;
+  }
+}
+
+@serverModule.useApi(userInfoApi.update)
+export class UpdateUserInfoApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof userInfoApi.update>) {
+    await this.dbSession
+      .createQueryBuilder()
+      .insert()
+      .into(UserInfo)
+      .values({
+        id: request.userId,
+        firstName: request.firstName,
+        middleName: request.middleName,
+        lastName: request.lastName,
+        gender: request.gender,
+        birthday: request.birthday,
+        avatar: request.avatar,
+      })
+      .orUpdate(
+        ['firstName', 'lastName', 'middleName', 'gender', 'birthday', 'avatar'],
+        ['id']
+      )
+      .execute();
+    return {};
   }
 }

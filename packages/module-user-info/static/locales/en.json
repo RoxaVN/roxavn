@@ -1,4 +1,12 @@
 {
+  "userInfo": "User info",
+  "firstName": "First name",
+  "lastName": "Last name",
+  "middleName": "Middle name",
+  "birthday": "Birthday",
+  "gender": "Gender",
+  "male": "Male",
+  "female": "Female",
   "fieldsForUserToUpdateTitle": "Fields for user to update",
   "Meta": {
     "name": "User info",

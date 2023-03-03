@@ -8,4 +8,8 @@ export const constants = {
     'gender',
     'avatar',
   ],
+  Genders: {
+    MALE: 'male',
+    FEMALE: 'female',
+  },
 };
