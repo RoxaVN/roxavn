@@ -12,3 +12,5 @@ export * from './ApiInput';
 export * from './AppProvider';
 export * from './TasksProgress';
 export * from './ObjectInput';
+export * from './MenuLinks';
+export * from './TabLinks';

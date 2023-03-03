@@ -20,9 +20,10 @@ import {
   ApiRolesGetter,
   http,
   TasksProgress,
+  MenuLinks,
 } from '@roxavn/core/web';
 
-import { IsAuthenticated, MenuLinks } from '../../components';
+import { IsAuthenticated } from '../../components';
 import { constants, userRoleApi, WebRoutes } from '../../../base';
 
 const BASE = '/admin/app';

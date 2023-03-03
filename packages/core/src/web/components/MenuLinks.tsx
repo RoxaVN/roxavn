@@ -1,8 +1,10 @@
 import { NavLink } from '@mantine/core';
-import { PageItem, WebModule, usePageLinks, PageLink } from '@roxavn/core/web';
 import { IconChevronRight } from '@tabler/icons';
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+
+import { PageLink, usePageLinks } from '../hooks';
+import { PageItem, WebModule } from '../services';
 
 export interface MenuLinksProps {
   pageItems: PageItem[];
