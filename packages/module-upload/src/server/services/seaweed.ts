@@ -56,7 +56,7 @@ export class SeaweedClient {
     });
   }
 
-  assign(params?: any): Promise<{
+  assign(params?: Record<string, any>): Promise<{
     count: number;
     fid: string;
     publicUrl: string;
@@ -67,7 +67,7 @@ export class SeaweedClient {
       http
         .request(
           new URL(
-            'dir/assign?' + urlUtils.generateQueryStr(params),
+            'dir/assign?' + urlUtils.generateQueryStr(params || {}),
             this.baseUrl
           ),
           (resp) => {

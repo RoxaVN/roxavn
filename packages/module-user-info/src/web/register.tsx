@@ -32,6 +32,7 @@ const Page = () => {
             name: 'gender',
             input: (
               <Select
+                clearable
                 label={t('gender')}
                 data={Object.values(constants.Genders).map((gender) => ({
                   value: gender,

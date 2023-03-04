@@ -23,6 +23,17 @@ export const authorizeMiddlewares: Array<{
   ) => Promise<boolean>;
 }> = [];
 
+// check is auth user
+authorizeMiddlewares.push({
+  apiMatcher: /./,
+  handler: async (api) => {
+    const hasScope = !!api.permission.allowedScopes.find(
+      (r) => r.name === accessManager.scopes.AuthUser.name
+    );
+    return hasScope;
+  },
+});
+
 // check in admin pages
 authorizeMiddlewares.push({
   apiMatcher: /./,
@@ -90,6 +101,10 @@ authorizeMiddlewares.push({
           (resp.locals[s.idParam] || (resource && resource[s.idParam])),
       }))
       .filter((s) => s.id);
+
+    if (scopes.length < 1) {
+      return false;
+    }
 
     const allow = await dbSession.getRepository(UserRole).count({
       where: scopes.map((scope) => ({

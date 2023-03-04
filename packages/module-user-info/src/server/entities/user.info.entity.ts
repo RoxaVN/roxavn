@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 
 import { User } from '@roxavn/module-user/server';
+import { FileInfo } from '@roxavn/module-upload/base';
 
 @Entity()
 export class UserInfo {
@@ -19,23 +20,23 @@ export class UserInfo {
   @JoinColumn({ name: 'id' })
   user: User;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'timestamptz', nullable: true })
   birthday?: Date;
 
-  @Column()
+  @Column({ nullable: true })
   firstName?: string;
 
-  @Column()
+  @Column({ nullable: true })
   lastName?: string;
 
-  @Column()
+  @Column({ nullable: true })
   middleName?: string;
 
-  @Column()
+  @Column({ nullable: true })
   gender?: string;
 
-  @Column()
-  avatar?: string;
+  @Column({ type: 'jsonb', nullable: true })
+  avatar?: FileInfo;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: any;

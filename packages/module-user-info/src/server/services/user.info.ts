@@ -1,5 +1,6 @@
 import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { ApiService } from '@roxavn/core/server';
+import { GetFileApiService } from '@roxavn/module-upload/server';
 
 import { userInfoApi } from '../../base';
 import { UserInfo } from '../entities';
@@ -42,6 +43,11 @@ export class GetUserInfoApiService extends ApiService {
 @serverModule.useApi(userInfoApi.update)
 export class UpdateUserInfoApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userInfoApi.update>) {
+    const avatar =
+      request.avatar &&
+      (await this.create(GetFileApiService).handle({
+        fileId: request.avatar.id,
+      }));
     await this.dbSession
       .createQueryBuilder()
       .insert()
@@ -53,7 +59,7 @@ export class UpdateUserInfoApiService extends ApiService {
         lastName: request.lastName,
         gender: request.gender,
         birthday: request.birthday,
-        avatar: request.avatar,
+        avatar: avatar,
       })
       .orUpdate(
         ['firstName', 'lastName', 'middleName', 'gender', 'birthday', 'avatar'],

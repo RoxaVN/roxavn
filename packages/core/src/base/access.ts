@@ -29,6 +29,7 @@ type Permissions = { [key: string]: Partial<Permission> };
 
 class AccessManager {
   scopes = {
+    AuthUser: { name: 'authUser' },
     Owner: { name: 'owner' },
     DynamicModule: {
       name: 'dynamicModule',

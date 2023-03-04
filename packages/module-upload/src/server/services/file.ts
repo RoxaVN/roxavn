@@ -1,5 +1,10 @@
-import { InferApiResponse, ServerException } from '@roxavn/core/base';
-import { BaseService } from '@roxavn/core/server';
+import {
+  InferApiRequest,
+  InferApiResponse,
+  NotFoundException,
+  ServerException,
+} from '@roxavn/core/base';
+import { ApiService, BaseService } from '@roxavn/core/server';
 import busboy from 'busboy';
 import sample from 'lodash/sample';
 
@@ -19,7 +24,7 @@ serverModule.useRawApi(fileApi.upload, (_, { req, dbSession, resp }) => {
             'utf8'
           );
 
-          const userId = resp.locals.user.id;
+          const userId = resp.locals.$user.id;
           let storage = await dbSession
             .getRepository(FileStorage)
             .findOne({ where: { userId: userId } });
@@ -50,6 +55,7 @@ serverModule.useRawApi(fileApi.upload, (_, { req, dbSession, resp }) => {
             name: fileName,
           });
         } catch (e) {
+          console.log(e);
           reject(new ServerException());
         }
       });
@@ -57,6 +63,27 @@ serverModule.useRawApi(fileApi.upload, (_, { req, dbSession, resp }) => {
     }
   );
 });
+
+@serverModule.useApi(fileApi.getOne)
+export class GetFileApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof fileApi.getOne>) {
+    const result = await this.dbSession.getRepository(File).findOne({
+      where: { id: request.fileId },
+    });
+    if (result) {
+      const url = await this.create(GetFileUrlService).handle({
+        fileId: result.id,
+      });
+      return {
+        id: result.id,
+        name: result.name,
+        mime: result.mime,
+        url: url,
+      };
+    }
+    throw new NotFoundException();
+  }
+}
 
 const cacheVolume: Record<
   string,

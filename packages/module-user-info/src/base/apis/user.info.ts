@@ -3,15 +3,17 @@ import {
   ExactProps,
   IsDateString,
   IsIn,
+  IsNotEmptyObject,
   IsOptional,
   Min,
   MinLength,
 } from '@roxavn/core/base';
+import { FileInfo } from '@roxavn/module-upload/base';
 import { Type } from 'class-transformer';
 
-import { baseModule } from '../module';
 import { permissions, scopes } from '../access';
 import { constants } from '../constants';
+import { baseModule } from '../module';
 
 const userInfoSource = new ApiSource<{
   id: string;
@@ -20,7 +22,7 @@ const userInfoSource = new ApiSource<{
   lastName?: string;
   middleName?: string;
   gender?: string;
-  avatar?: string;
+  avatar?: FileInfo;
   metadata?: any;
   createdDate: Date;
   updatedDate: Date;
@@ -53,8 +55,9 @@ class UpdateUserInfoRequest extends ExactProps<UpdateUserInfoRequest> {
   @IsOptional()
   public readonly lastName?: string;
 
-  @MinLength(1)
-  public readonly avatar: string;
+  @IsNotEmptyObject()
+  @IsOptional()
+  public readonly avatar?: FileInfo;
 
   @IsDateString()
   @IsOptional()

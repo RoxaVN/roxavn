@@ -12,6 +12,12 @@ export const permissions = accessManager.makePermissions(scopes, {
     allowedScopes: [accessManager.scopes.Owner],
   },
   UploadFile: {
+    allowedScopes: [accessManager.scopes.AuthUser],
+  },
+  ReadFile: {
+    allowedScopes: [accessManager.scopes.Owner],
+  },
+  ReadFiles: {
     allowedScopes: [accessManager.scopes.Owner],
   },
 });
