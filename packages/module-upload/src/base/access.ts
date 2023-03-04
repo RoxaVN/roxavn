@@ -3,7 +3,7 @@ import { accessManager } from '@roxavn/core/base';
 import { baseModule } from './module';
 
 export const scopes = accessManager.makeScopes(baseModule, {
-  File: { name: 'files' },
+  File: { name: 'file' },
   FileStorage: { name: 'fileStorage' },
 });
 

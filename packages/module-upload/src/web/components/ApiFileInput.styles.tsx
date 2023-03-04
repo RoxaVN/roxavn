@@ -9,6 +9,10 @@ export const useApiFileInputStyles = createStyles((theme) => ({
     border: `1px dashed ${theme.fn.variant({ variant: 'default' }).border}`,
   },
 
+  error: {
+    border: '1px dashed red',
+  },
+
   uploadButton: {
     width: 100,
     height: 100,

@@ -1,10 +1,9 @@
-import { CloseButton, Button } from '@mantine/core';
+import { CloseButton, LoadingOverlay, Tooltip } from '@mantine/core';
 import { IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import { ApiForm } from '@roxavn/core/web';
+import { ApiError, useApi } from '@roxavn/core/web';
 import { useEffect, useState } from 'react';
 
 import { fileApi } from '../../base';
-import { webModule } from '../module';
 import {
   ApiFileInput,
   ApiFileInputProps,
@@ -28,8 +27,8 @@ const UploadedImageitem = ({ value, onRemove }: UploadeditemProps) => {
 };
 
 const UploadImageItem = ({ value, onChange }: UploaditemProps) => {
-  const { t } = webModule.useTranslation();
   const [image, setImage] = useState<string>();
+  const { data, error, loading } = useApi(fileApi.upload, { file: value });
   const { classes } = useApiFileInputStyles();
 
   useEffect(() => {
@@ -40,40 +39,30 @@ const UploadImageItem = ({ value, onChange }: UploaditemProps) => {
     };
   }, [value]);
 
-  return (
+  useEffect(() => {
+    if (data) {
+      onChange && onChange(data);
+    }
+  }, [data]);
+
+  const result = (
     <div
-      className={classes.container}
+      className={classes.container + (error ? ' ' + classes.error : '')}
       style={image ? { backgroundImage: `url('${image}')` } : {}}
     >
-      <ApiForm
-        api={fileApi.upload}
-        apiParams={{ file: value }}
-        onSuccess={onChange}
-        fetchOnMount
-        dataRender={({ error, fetcher }) => (
-          <>
-            <CloseButton
-              onClick={() => onChange && onChange(null)}
-              className={classes.closeButton}
-            />
-            <div className={classes.content}>
-              {error && (
-                <Button
-                  variant="subtle"
-                  color="red"
-                  size="sm"
-                  fullWidth
-                  onClick={() => fetcher({})}
-                >
-                  {t('reupload')}
-                </Button>
-              )}
-            </div>
-          </>
-        )}
+      <LoadingOverlay visible={loading} />
+      <CloseButton
+        onClick={() => onChange && onChange(null)}
+        className={classes.closeButton}
       />
+      <div className={classes.content}></div>
     </div>
   );
+
+  if (error) {
+    return <Tooltip label={<ApiError error={error} />}>{result}</Tooltip>;
+  }
+  return result;
 };
 
 export const ApiImageUploader = <Multiple extends boolean = false>(

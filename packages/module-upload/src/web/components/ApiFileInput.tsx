@@ -1,9 +1,17 @@
-import { FileButton, Button, CloseButton, Text, Group } from '@mantine/core';
+import {
+  FileButton,
+  Button,
+  CloseButton,
+  Text,
+  Group,
+  LoadingOverlay,
+  Tooltip,
+} from '@mantine/core';
 import { useListState } from '@mantine/hooks';
 import { InferApiResponse } from '@roxavn/core/base';
-import { ApiForm, uiManager } from '@roxavn/core/web';
+import { ApiError, uiManager, useApi } from '@roxavn/core/web';
 import { IconUpload, IconFileCheck } from '@tabler/icons';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 
 import { fileApi } from '../../base';
 import { webModule } from '../module';
@@ -48,43 +56,33 @@ export interface UploaditemProps {
 }
 
 const UploadItem = ({ value, onChange }: UploaditemProps) => {
-  const { t } = webModule.useTranslation();
+  const { data, error, loading } = useApi(fileApi.upload, { file: value });
   const { classes } = useApiFileInputStyles();
 
-  return (
-    <div className={classes.container}>
-      <ApiForm
-        api={fileApi.upload}
-        apiParams={{ file: value }}
-        onSuccess={onChange}
-        fetchOnMount
-        dataRender={({ error, fetcher }) => (
-          <>
-            <CloseButton
-              onClick={() => onChange && onChange(null)}
-              className={classes.closeButton}
-            />
-            <div className={classes.content}>
-              {error && (
-                <Button
-                  variant="subtle"
-                  color="red"
-                  size="sm"
-                  fullWidth
-                  onClick={() => fetcher({})}
-                >
-                  {t('reupload')}
-                </Button>
-              )}
-            </div>
-            <Text align="center" size="sm">
-              {renderLabel(value.name)}
-            </Text>
-          </>
-        )}
+  useEffect(() => {
+    if (data) {
+      onChange && onChange(data);
+    }
+  }, [data]);
+
+  const result = (
+    <div className={classes.container + (error ? ' ' + classes.error : '')}>
+      <LoadingOverlay visible={loading} />
+      <CloseButton
+        onClick={() => onChange && onChange(null)}
+        className={classes.closeButton}
       />
+      <div className={classes.content}></div>
+      <Text align="center" size="sm">
+        {renderLabel(value.name)}
+      </Text>
     </div>
   );
+
+  if (error) {
+    return <Tooltip label={<ApiError error={error} />}>{result}</Tooltip>;
+  }
+  return result;
 };
 
 export type ApiFileInputProps<Multiple extends boolean = false> = {
