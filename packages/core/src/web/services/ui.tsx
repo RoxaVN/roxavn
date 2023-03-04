@@ -4,6 +4,7 @@ import React from 'react';
 import { Translation } from 'react-i18next';
 
 import { ErrorResponse } from '../../base';
+import { ApiError } from '../components';
 import { webModule } from './module';
 
 const uiManager = {
@@ -35,13 +36,7 @@ const uiManager = {
       ),
       children: (
         <Text size="sm">
-          {'message' in error ? (
-            error.message
-          ) : (
-            <Translation ns={error.i18n.default.ns}>
-              {(t) => t(error.i18n.default.key, error.i18n.default.params)}
-            </Translation>
-          )}
+          <ApiError error={error} />
         </Text>
       ),
       labels: {
