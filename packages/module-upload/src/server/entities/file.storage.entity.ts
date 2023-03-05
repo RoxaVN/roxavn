@@ -1,14 +1,12 @@
 import {
   Column,
   Entity,
-  JoinColumn,
+  Index,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-import { User } from '@roxavn/module-user/server';
 import { File } from './file.entity';
 
 @Entity()
@@ -16,12 +14,9 @@ export class FileStorage {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index()
   @Column('uuid')
   userId: string;
-
-  @OneToOne(() => User)
-  @JoinColumn()
-  user: User;
 
   @OneToMany(() => File, (file) => file.fileStorage)
   files: File[];

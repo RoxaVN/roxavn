@@ -2,12 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   ManyToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-import { User } from '@roxavn/module-user/server';
 import { FileStorage } from './file.storage.entity';
 
 @Entity()
@@ -27,11 +27,9 @@ export class File {
   @Column()
   mime: string;
 
+  @Index()
   @Column('uuid')
   userId: string;
-
-  @ManyToOne(() => User, (user) => user.identities)
-  user: User;
 
   @Column()
   fileStorageId: number;

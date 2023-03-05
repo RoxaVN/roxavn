@@ -21,7 +21,6 @@
     "@mantine/dropzone": "*",
     "@mantine/core": "*",
     "@roxavn/core": "*",
-    "@roxavn/module-user": "*",
     "@tabler/icons": "*",
     "react": "*",
     "react-router-dom": "*",
