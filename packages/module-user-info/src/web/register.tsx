@@ -1,23 +1,25 @@
 import { Select, TextInput } from '@mantine/core';
-import { ApiFormGroup, DatePicker, ModuleT } from '@roxavn/core/web';
-import { ApiImageUploader } from '@roxavn/module-upload/web';
 import {
-  authProvider,
-  webModule as userWebModule,
-} from '@roxavn/module-user/web';
+  ApiFormGroup,
+  DatePicker,
+  ModuleT,
+  useAuthUser,
+} from '@roxavn/core/web';
+import { ApiImageUploader } from '@roxavn/module-upload/web';
+import { webModule as userWebModule } from '@roxavn/module-user/web';
 
 import { constants, userInfoApi } from '../base';
 import { webModule } from './module';
 
 const Page = () => {
-  const user = authProvider.getUser();
+  const user = useAuthUser();
   const { t } = webModule.useTranslation();
 
   return (
     <ApiFormGroup
       api={userInfoApi.update}
       apiParams={{
-        userId: user.id,
+        userId: user?.id,
       }}
       fields={[
         { name: 'avatar', input: <ApiImageUploader /> },
