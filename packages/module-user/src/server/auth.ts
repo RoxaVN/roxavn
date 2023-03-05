@@ -4,16 +4,10 @@ import {
   ForbiddenException,
   Permission,
 } from '@roxavn/core/base';
-import { MiddlewareContext } from '@roxavn/core/server';
+import { AuthenticatedData, MiddlewareContext } from '@roxavn/core/server';
 import { ArrayContains, In } from 'typeorm';
 import { constants, scopes } from '../base';
 import { UserRole } from './entities';
-
-export type AuthenticatedData = {
-  $user: { id: string };
-  $accessToken: { id: string };
-  $getResource: () => Promise<Record<string, any> | null>;
-};
 
 export const authorizeMiddlewares: Array<{
   apiMatcher: RegExp;

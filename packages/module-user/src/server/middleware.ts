@@ -1,25 +1,13 @@
-import { BaseService, ServerModule } from '@roxavn/core/server';
+import { AuthenticatedData, ServerModule } from '@roxavn/core/server';
 import {
-  Api,
   ForbiddenException,
-  InferApiRequest,
-  InferApiResponse,
   Resource,
   UnauthorizedException,
 } from '@roxavn/core/base';
 import { Raw } from 'typeorm';
 import { AccessToken } from './entities';
 import { tokenService } from './services/token';
-import { AuthenticatedData, authorizeMiddlewares } from './auth';
-
-export type InferAuthApiRequest<T> = T extends Api<infer U, any, any>
-  ? U & AuthenticatedData
-  : never;
-
-export abstract class AuthApiService<T extends Api = Api> extends BaseService<
-  InferApiRequest<T> & AuthenticatedData,
-  InferApiResponse<T>
-> {}
+import { authorizeMiddlewares } from './auth';
 
 // authenticate access token
 ServerModule.apiMiddlewares.push(async (api, { dbSession, resp, req }) => {
@@ -77,7 +65,7 @@ ServerModule.apiMiddlewares.push(async (api, { dbSession, resp, req }) => {
           }
         }
         if (resource) {
-          const resourceTable = resource.idParam.replace('Id', '');
+          const resourceTable = resource.name;
           result = await dbSession
             .createQueryBuilder()
             .select(resourceTable)
