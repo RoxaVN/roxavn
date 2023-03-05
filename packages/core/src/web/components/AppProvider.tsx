@@ -7,6 +7,7 @@ import {
 import { NavigationProgressProps } from '@mantine/nprogress';
 import React from 'react';
 import { Empty } from '../../base';
+import { AuthProvider } from '../hooks/auth';
 import { RolesProvider } from './ApiPermission';
 import { RouterTransition } from './RouterTransition';
 
@@ -35,6 +36,10 @@ export const AppProviderConfigs: {
     options?: Empty;
     component: AppProviderComponent;
   };
+  authProvider: {
+    options?: Empty;
+    component: AppProviderComponent;
+  };
 } = {
   mantineProvider: {
     component: MantineProvider,
@@ -44,6 +49,7 @@ export const AppProviderConfigs: {
   modalsProvider: { component: ModalsProvider },
   notificationsProvider: { component: NotificationsProvider },
   rolesProvider: { component: RolesProvider },
+  authProvider: { component: AuthProvider },
 };
 
 export const AppProvider = ({ children }: { children: React.ReactElement }) => {

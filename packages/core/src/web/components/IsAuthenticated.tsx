@@ -1,10 +1,10 @@
 import { Loader } from '@mantine/core';
 import { useState, useEffect } from 'react';
-import { AuthData, authProvider } from '../services';
+import { authService } from '../services';
 
 export interface IsAuthenticatedProps {
   guestComponent: JSX.Element;
-  userComponent: JSX.Element | ((user: AuthData) => JSX.Element);
+  userComponent: JSX.Element | ((user: Record<string, any>) => JSX.Element);
   loadingComponent?: JSX.Element;
 }
 
@@ -14,17 +14,17 @@ export const IsAuthenticated = ({
   loadingComponent,
 }: IsAuthenticatedProps): JSX.Element => {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<AuthData>();
+  const [user, setUser] = useState<Record<string, any>>();
 
   useEffect(() => {
-    if (authProvider.isAuthenticated()) {
-      setUser(authProvider.getUser());
+    if (authService.isAuthenticated()) {
+      setUser(authService.getUser());
       setLoading(false);
     } else {
-      const token = authProvider.getTokenData();
+      const token = authService.getTokenData();
       if (token) {
         const timeout = setTimeout(() => {
-          authProvider
+          authService
             .authenticate(token)
             .then((user) => {
               setUser(user);

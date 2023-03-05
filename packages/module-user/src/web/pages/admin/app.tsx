@@ -21,9 +21,9 @@ import {
   http,
   TasksProgress,
   MenuLinks,
+  IsAuthenticated,
 } from '@roxavn/core/web';
 
-import { IsAuthenticated } from '../../components';
 import { constants, userRoleApi, WebRoutes } from '../../../base';
 
 const BASE = '/admin/app';

@@ -15,3 +15,4 @@ export * from './ObjectInput';
 export * from './MenuLinks';
 export * from './TabLinks';
 export * from './ApiError';
+export * from './IsAuthenticated';

@@ -17,13 +17,12 @@ import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { constants } from '@roxavn/core/base';
 import { moduleManager } from '@roxavn/core/server';
-import { TabLinks, WebModule } from '@roxavn/core/web';
+import { IsAuthenticated, TabLinks, WebModule } from '@roxavn/core/web';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Navigate, Outlet } from 'react-router-dom';
 
 import { WebRoutes } from '../../base';
-import { IsAuthenticated } from '../components';
 
 const BASE = '/me';
 

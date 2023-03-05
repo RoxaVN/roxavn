@@ -1,9 +1,8 @@
 import { TextInput, PasswordInput, Title } from '@mantine/core';
 import { InferApiResponse } from '@roxavn/core/base';
-import { ApiFormGroup } from '@roxavn/core/web';
+import { ApiFormGroup, authService } from '@roxavn/core/web';
 
 import { passwordIdentityApi } from '../../base';
-import { authProvider } from '../services';
 import { webModule } from '../module';
 
 interface LoginFormProps {
@@ -20,7 +19,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps): JSX.Element => {
       <ApiFormGroup
         api={passwordIdentityApi.auth}
         onSuccess={(data) => {
-          authProvider.setTokenData(data);
+          authService.setTokenData(data);
           onSuccess && onSuccess(data);
         }}
         fields={[

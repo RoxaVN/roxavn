@@ -1,8 +1,11 @@
-import { http, uiManager } from '@roxavn/core/web';
-import { authProvider } from './services';
+import { authService, http, uiManager } from '@roxavn/core/web';
+import { accessTokenApi, userApi } from '../base';
+
+authService.authenticateApi = userApi.getOne;
+authService.logoutApi = accessTokenApi.delete;
 
 http.preSentObserver.subscribe(({ config }) => {
-  const data = authProvider.getTokenData();
+  const data = authService.getTokenData();
   if (data) {
     Object.assign(config.headers, {
       Authorization: `Bearer ${data.accessToken}`,
