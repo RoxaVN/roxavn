@@ -5,23 +5,19 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
+  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-
-import { User } from '@roxavn/module-user/server';
 
 @Entity()
 export class <%= h.changeCase.pascal(entity_name) %> {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Index()
+  @Column('uuid')
   userId: string;
-
-  @ManyToOne(() => User, (user) => user.identities)
-  user: User;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: any;
