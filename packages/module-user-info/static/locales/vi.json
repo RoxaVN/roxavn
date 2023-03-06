@@ -7,6 +7,7 @@
   "gender": "Giới tính",
   "male": "Nam",
   "female": "Nữ",
+  "avatar": "Ảnh đại diện",
   "fieldsForUserToUpdateTitle": "Các trường cho người dùng cập nhật",
   "Meta": {
     "name": "Thông tin người dùng",

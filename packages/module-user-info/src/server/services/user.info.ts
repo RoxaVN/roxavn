@@ -1,6 +1,7 @@
 import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { ApiService } from '@roxavn/core/server';
 import { GetFileApiService } from '@roxavn/module-upload/server';
+import { In } from 'typeorm';
 
 import { userInfoApi } from '../../base';
 import { UserInfo } from '../entities';
@@ -15,7 +16,9 @@ export class GetUsersInfoApiService extends ApiService {
     const [users, totalItems] = await this.dbSession
       .getRepository(UserInfo)
       .findAndCount({
-        order: { id: 'desc' },
+        where: {
+          id: request.ids && In(request.ids),
+        },
         take: pageSize,
         skip: (page - 1) * pageSize,
       });

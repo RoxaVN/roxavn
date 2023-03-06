@@ -7,6 +7,7 @@ import {
   IsOptional,
   Min,
   MinLength,
+  TransformArray,
 } from '@roxavn/core/base';
 import { FileInfo } from '@roxavn/module-upload/base';
 import { Type } from 'class-transformer';
@@ -29,6 +30,11 @@ const userInfoSource = new ApiSource<{
 }>([scopes.UserInfo], baseModule);
 
 class GetUsersInfoRequest extends ExactProps<GetUsersInfoRequest> {
+  @MinLength(1, { each: true })
+  @IsOptional()
+  @TransformArray()
+  public readonly ids?: string[];
+
   @Min(1)
   @Type(() => Number)
   @IsOptional()

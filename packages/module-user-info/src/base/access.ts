@@ -7,7 +7,7 @@ export const scopes = accessManager.makeScopes(baseModule, {
 });
 
 export const permissions = accessManager.makePermissions(scopes, {
-  ReadUsersInfo: {},
+  ReadUsersInfo: { allowedScopes: [accessManager.scopes.AuthUser] },
   ReadUserInfo: { allowedScopes: [accessManager.scopes.Owner] },
   UpdateUserInfo: { allowedScopes: [accessManager.scopes.Owner] },
 });

@@ -7,6 +7,7 @@
   "gender": "Gender",
   "male": "Male",
   "female": "Female",
+  "avatar": "Avatar",
   "fieldsForUserToUpdateTitle": "Fields for user to update",
   "Meta": {
     "name": "User info",
