@@ -11,7 +11,7 @@ const Page = () => {
   return <div>{t('test')}</div>;
 };
 
-webModule.adminPages.push({
+webModule.mePages.push({
   label: (t) => t('test'),
   path: '/test',
   icon: IconUsers,
