@@ -16,6 +16,7 @@ export const TabLinks = ({ pageItems, module, basePath }: TabLinksProps) => {
 
   return (
     <Tabs
+      defaultValue={_pageLinks.find((p) => p.isActive)?.key}
       onTabChange={(value) => {
         const pageLink = _pageLinks.find((p) => p.key === value);
         if (pageLink && pageLink.path) {
