@@ -9,12 +9,11 @@ import {
   Outlet,
 } from '@remix-run/react';
 import { AppProvider } from '@roxavn/core/web';
-import { useChangeLanguage } from 'remix-i18next';
 import { useTranslation } from 'react-i18next';
 import i18next from './i18next.server';
 import { createEmotionCache } from '@mantine/core';
 import { StylesPlaceholder } from '@mantine/remix';
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'reflect-metadata';
 
 import './init.client';
@@ -31,6 +30,13 @@ export const meta: MetaFunction = () => ({
   charset: 'utf-8',
   viewport: 'width=device-width,initial-scale=1',
 });
+
+function useChangeLanguage(locale: string) {
+  let { i18n } = useTranslation();
+  useEffect(() => {
+    i18n.changeLanguage(locale);
+  }, [locale, i18n]);
+}
 
 export default function Root() {
   // Get the locale from the loader

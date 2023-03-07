@@ -47,8 +47,7 @@ export const ApiFilterButton = <Request extends ApiRequest>({
         <Popover.Target>
           <Indicator
             label={changeCount}
-            showZero={false}
-            dot={false}
+            disabled={changeCount < 1}
             inline
             size={16}
           >

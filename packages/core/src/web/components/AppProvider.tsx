@@ -1,15 +1,24 @@
 import { MantineProvider, MantineProviderProps } from '@mantine/core';
 import { ModalsProvider, ModalsProviderProps } from '@mantine/modals';
-import {
-  NotificationsProvider,
-  NotificationProviderProps,
-} from '@mantine/notifications';
+import { Notifications, NotificationsProps } from '@mantine/notifications';
 import { NavigationProgressProps } from '@mantine/nprogress';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Empty } from '../../base';
 import { AuthProvider } from '../hooks/auth';
 import { RolesProvider } from './ApiPermission';
 import { RouterTransition } from './RouterTransition';
+
+const NotificationsProvider = ({
+  children,
+  ...props
+}: NotificationsProps & {
+  children: React.ReactElement;
+}) => (
+  <Fragment>
+    <Notifications {...props} />
+    {children}
+  </Fragment>
+);
 
 export type AppProviderComponent = React.ComponentType<{
   children: React.ReactElement;
@@ -29,7 +38,7 @@ export const AppProviderConfigs: {
     component: AppProviderComponent;
   };
   notificationsProvider: {
-    options?: Omit<NotificationProviderProps, 'children'>;
+    options?: Omit<NotificationsProps, 'children'>;
     component: AppProviderComponent;
   };
   rolesProvider: {
@@ -54,13 +63,11 @@ export const AppProviderConfigs: {
 
 export const AppProvider = ({ children }: { children: React.ReactElement }) => {
   let element = children;
-  Object.values(AppProviderConfigs)
-    .reverse()
-    .forEach((item) => {
-      element = React.createElement(item.component, {
-        ...item.options,
-        children: element,
-      });
+  Object.values(AppProviderConfigs).forEach((item) => {
+    element = React.createElement(item.component, {
+      ...item.options,
+      children: element,
     });
+  });
   return element;
 };

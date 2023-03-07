@@ -214,7 +214,7 @@ export const ApiTable = <
               <Group position="center">
                 <Pagination
                   mb="md"
-                  page={data.pagination.page}
+                  value={data.pagination.page}
                   onChange={(page) => setParams({ page } as Partial<Request>)}
                   total={Math.ceil(
                     data.pagination.totalItems / data.pagination.pageSize
