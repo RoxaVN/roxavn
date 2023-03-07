@@ -1,4 +1,5 @@
 import { TextInput } from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
 import { Prism } from '@mantine/prism';
 import {
   ApiFormGroup,
@@ -6,7 +7,6 @@ import {
   uiManager,
   webModule as coreWebModule,
   utils,
-  DateRangePicker,
   IfCanAccessApi,
   ApiConfirmFormGroup,
 } from '@roxavn/core/web';
@@ -55,7 +55,7 @@ const Page = () => {
         },
         {
           name: 'createdDate',
-          input: <DateRangePicker label={tCore('createdDate')} />,
+          input: <DatePickerInput type="range" label={tCore('createdDate')} />,
         },
       ]}
       columns={{
@@ -100,11 +100,7 @@ const Page = () => {
                           name: item.username,
                         })}
                       </p>
-                      <Prism
-                        language="markdown"
-                        copyLabel={tCore('copy')}
-                        copiedLabel={tCore('copied')}
-                      >
+                      <Prism language="markdown">
                         {`${location.protocol}://${location.host}${link}`}
                       </Prism>
                     </div>

@@ -8,7 +8,7 @@ export const ApiError = ({ error }: { error: any }): React.ReactElement => {
   } else if ('i18n' in error) {
     const data = error.i18n.default;
     const { t } = useTranslation([data.ns]);
-    message = t(data.key, data.params);
+    message = t(data.key, data.params) as any;
   } else {
     message = JSON.stringify(error);
   }

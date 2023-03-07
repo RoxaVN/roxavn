@@ -1,13 +1,13 @@
 import {
   ApiSource,
   ExactProps,
-  IsDateString,
   IsIn,
   IsNotEmptyObject,
   IsOptional,
   Min,
   MinLength,
   TransformArray,
+  TransformDate,
 } from '@roxavn/core/base';
 import { FileInfo } from '@roxavn/module-upload/base';
 import { Type } from 'class-transformer';
@@ -65,9 +65,9 @@ class UpdateUserInfoRequest extends ExactProps<UpdateUserInfoRequest> {
   @IsOptional()
   public readonly avatar?: FileInfo;
 
-  @IsDateString()
   @IsOptional()
-  public readonly birthday?: string;
+  @TransformDate()
+  public readonly birthday?: Date;
 
   @IsIn(Object.values(constants.Genders))
   @IsOptional()

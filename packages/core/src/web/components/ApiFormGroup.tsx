@@ -35,7 +35,15 @@ export function FormGroup<T extends 'horizontal' | 'vertical', V>({
     const props: any = form.getInputProps(name);
     props.mb = 'md';
     props.key = name;
-    props.value = props.value === undefined ? '' : props.value;
+    if (
+      [
+        '@mantine/core/PasswordInput',
+        '@mantine/core/Textarea',
+        '@mantine/core/TextInput',
+      ].includes((component.type as any).displayName)
+    ) {
+      props.value = props.value || '';
+    }
     if (component.props.fields) {
       // auto add form for ArrayInput
       props.form = form;

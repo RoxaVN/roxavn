@@ -6,3 +6,5 @@ export const TransformArray = () =>
 export const TransformJson = () => Transform(({ value }) => JSON.parse(value));
 
 export const TransformNumber = () => Type(() => Number);
+
+export const TransformDate = () => Type(() => Date);

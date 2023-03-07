@@ -1,6 +1,7 @@
 import { IconSettings } from '@tabler/icons';
+import { TFunction } from 'i18next';
 import { useEffect, useState } from 'react';
-import { useTranslation, TFunction } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useOutletContext, useRoutes } from 'react-router-dom';
 
 import { baseModule, BaseModule } from '../../base';

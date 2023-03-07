@@ -1,4 +1,12 @@
 const urlUtils = {
+  parseValue: (k: any, v: any) => {
+    if (typeof v === 'string') {
+      const d = new Date(v);
+      return isNaN(d.getDate()) ? v : d;
+    }
+    return v;
+  },
+
   generatePath(urlPattern: string, params: Record<string, any>) {
     const retParams = { ...params };
     const parts = urlPattern.split('/');
@@ -19,15 +27,24 @@ const urlUtils = {
   },
   generateQueryStr(data: Record<string, any>) {
     const params = new URLSearchParams();
+
+    const appendValue = (k: string, v: any) => {
+      let val = v;
+      if (v instanceof Date) {
+        val = v.toISOString();
+      } else if (typeof v === 'boolean') {
+        val = v ? '1' : '0';
+      }
+      if (val) {
+        params.append(k, val);
+      }
+    };
+
     Object.entries(data).map(([key, value]) => {
       if (Array.isArray(value)) {
-        value.map((v) => params.append(key, v));
-      } else if (typeof value === 'boolean') {
-        params.append(key, value ? '1' : '0');
-      } else if (value === '' || value === null || value === undefined) {
-        return;
+        value.map((v) => appendValue(key, v));
       } else {
-        params.append(key, value);
+        appendValue(key, value);
       }
     });
     return params.toString();
@@ -35,15 +52,16 @@ const urlUtils = {
   parseQueryStr(queryStr: string) {
     const params = new URLSearchParams(queryStr);
     const result = {};
+
     for (const [k, v] of params) {
       if (k in result) {
         if (Array.isArray(result[k])) {
-          result[k].push(v);
+          result[k].push(urlUtils.parseValue(k, v));
         } else {
-          result[k] = [result[k], v];
+          result[k] = [result[k], urlUtils.parseValue(k, v)];
         }
       } else {
-        result[k] = v;
+        result[k] = urlUtils.parseValue(k, v);
       }
     }
     return result;

@@ -10,7 +10,7 @@ class I18nServer {
       i18next.addResourceBundle(lang, namespace, scopes[lang]);
     });
     return (key: string, options?: Record<string, unknown>) => {
-      return i18next.t(namespace + '.' + key, options);
+      return i18next.t(namespace + '.' + key, options || {});
     };
   }
 }
