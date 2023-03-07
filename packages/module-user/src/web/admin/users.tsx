@@ -60,7 +60,6 @@ const Page = () => {
       ]}
       columns={{
         username: { label: t('username') },
-        email: { label: t('email') },
         createdDate: {
           label: tCore('createdDate'),
           render: utils.Render.datetime,

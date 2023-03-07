@@ -4,6 +4,7 @@ import {
   Resource,
   UnauthorizedException,
 } from '@roxavn/core/base';
+import snakeCase from 'lodash/snakeCase';
 import { Raw } from 'typeorm';
 import { AccessToken } from './entities';
 import { tokenService } from './services/token';
@@ -65,7 +66,7 @@ ServerModule.apiMiddlewares.push(async (api, { dbSession, resp, req }) => {
           }
         }
         if (resource) {
-          const resourceTable = resource.name;
+          const resourceTable = snakeCase(resource.name);
           result = await dbSession
             .createQueryBuilder()
             .select(resourceTable)

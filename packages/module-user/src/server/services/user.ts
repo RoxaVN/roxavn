@@ -35,7 +35,6 @@ export class GetUsersApiService extends ApiService {
       .getRepository(User)
       .findAndCount({
         where: {
-          id: request.ids && In(request.ids),
           username: request.username && ILike(request.username + '%'),
           createdDate:
             request.createdDate &&
@@ -52,6 +51,21 @@ export class GetUsersApiService extends ApiService {
     return {
       items: users,
       pagination: { page, pageSize, totalItems },
+    };
+  }
+}
+
+@serverModule.useApi(userApi.search)
+export class SearchUsersApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof userApi.search>) {
+    const users = await this.dbSession.getRepository(User).find({
+      select: ['id', 'username'],
+      where: {
+        id: request.ids && In(request.ids),
+      },
+    });
+    return {
+      items: users,
     };
   }
 }

@@ -1,7 +1,9 @@
 import {
+  ApiError,
   ApiSource,
   ArrayMaxSize,
   ArrayMinSize,
+  Collection,
   ExactProps,
   IsArray,
   IsDateString,
@@ -16,23 +18,26 @@ import { baseModule } from '../module';
 import { permissions, scopes } from '../access';
 import { IsUsername } from '../validation';
 
-const userSource = new ApiSource<{
+interface UserResponse {
   id: string;
   username: string;
-  email?: string;
-  phone?: string;
   createdDate: Date;
   updatedDate: Date;
-}>([scopes.User], baseModule);
+}
+
+const userSource = new ApiSource<UserResponse>([scopes.User], baseModule);
+
+class SearchUsersRequest extends ExactProps<SearchUsersRequest> {
+  @MinLength(1, { each: true })
+  @ArrayMaxSize(20)
+  @IsOptional()
+  @TransformArray()
+  public readonly ids?: string[];
+}
 
 class GetUsersRequest extends ExactProps<GetUsersRequest> {
   @IsOptional()
   public readonly username?: string;
-
-  @MinLength(1, { each: true })
-  @IsOptional()
-  @TransformArray()
-  public readonly ids?: string[];
 
   @IsArray()
   @ArrayMinSize(2)
@@ -60,6 +65,15 @@ class CreateUserRequest extends ExactProps<CreateUserRequest> {
 }
 
 export const userApi = {
+  search: userSource.custom<
+    SearchUsersRequest,
+    Collection<{ id: string; username: string }>,
+    ApiError
+  >({
+    method: 'GET',
+    path: userSource.apiPath() + '/public/search',
+    validator: SearchUsersRequest,
+  }),
   getMany: userSource.getMany({
     validator: GetUsersRequest,
     permission: permissions.ReadUsers,
