@@ -1,5 +1,4 @@
-import { BadRequestException, InferApiRequest } from '@roxavn/core/base';
-import { ApiService } from '@roxavn/core/server';
+import { BadRequestException } from '@roxavn/core/base';
 import { constants as userConstants } from '@roxavn/module-user/base';
 import {
   IdentityService,
@@ -11,53 +10,56 @@ import firebaseAdmin from 'firebase-admin';
 import { constants, identityApi } from '../../base';
 import { serverModule } from '../module';
 
-@serverModule.useApi(identityApi.verifyToken)
-export class VerifyTokenApiService extends ApiService {
-  async handle(request: InferApiRequest<typeof identityApi.verifyToken>) {
-    const settings = await this.create(GetSettingService).handle({
+serverModule.useRawApi(identityApi.verifyToken, async (request, context) => {
+  const settings = await serverModule
+    .createService(GetSettingService, context)
+    .handle({
       module: userServerModule.name,
       name: constants.FIREBASE_SERVER_SETTING,
     });
-    if (settings && Array.isArray(settings.serviceAccounts)) {
-      const projectSetting = settings.serviceAccounts.find(
-        (s: any) => s.project_id === request.projectId
+  if (settings && Array.isArray(settings.serviceAccounts)) {
+    const projectSetting = settings.serviceAccounts.find(
+      (s: any) => s.project_id === request.projectId
+    );
+    if (projectSetting) {
+      const existsApp = firebaseAdmin.apps.find(
+        (a) => a?.name === request.projectId
       );
-      if (projectSetting) {
-        const existsApp = firebaseAdmin.apps.find(
-          (a) => a?.name === request.projectId
-        );
-        const app = existsApp
-          ? existsApp
-          : firebaseAdmin.initializeApp(
-              {
-                credential: firebaseAdmin.credential.cert(projectSetting),
-              },
-              request.projectId
-            );
-        const user = await firebaseAdmin.auth(app).verifyIdToken(request.token);
-        let data: { subject: string; type: string; authenticator: string };
-        if (user.email_verified && user.email) {
-          data = {
-            subject: user.email,
-            type: userConstants.identityTypes.EMAIL,
-            authenticator: 'firebase',
-          };
-        } else if (user.phone_number) {
-          data = {
-            subject: user.phone_number,
-            type: userConstants.identityTypes.PHONE,
-            authenticator: 'firebase',
-          };
-        } else {
-          data = {
-            subject: user.uid,
-            type: 'firebase uid',
-            authenticator: 'firebase',
-          };
-        }
-        return await this.create(IdentityService).handle(data);
+      const app = existsApp
+        ? existsApp
+        : firebaseAdmin.initializeApp(
+            {
+              credential: firebaseAdmin.credential.cert(projectSetting),
+            },
+            request.projectId
+          );
+      const user = await firebaseAdmin.auth(app).verifyIdToken(request.token);
+      const data = {
+        authenticator: 'firebase',
+        ipAddress: context.req.ip,
+        userAgent: context.req.headers['user-agent'],
+      };
+      const service = serverModule.createService(IdentityService, context);
+      if (user.email_verified && user.email) {
+        service.handle({
+          ...data,
+          subject: user.email,
+          type: userConstants.identityTypes.EMAIL,
+        });
+      } else if (user.phone_number) {
+        service.handle({
+          ...data,
+          subject: user.phone_number,
+          type: userConstants.identityTypes.PHONE,
+        });
+      } else {
+        service.handle({
+          ...data,
+          subject: user.uid,
+          type: 'firebase uid',
+        });
       }
     }
-    throw new BadRequestException();
   }
-}
+  throw new BadRequestException();
+});

@@ -9,6 +9,8 @@ export class IdentityService extends BaseService {
     subject: string;
     type: string;
     authenticator: string;
+    userAgent?: string;
+    ipAddress: string;
   }) {
     let identity = await this.dbSession.getRepository(Identity).findOne({
       select: ['id', 'userId'],
@@ -40,6 +42,8 @@ export class IdentityService extends BaseService {
       identityid: identity.id,
       userId: identity.userId,
       authenticator: request.authenticator,
+      ipAddress: request.ipAddress,
+      userAgent: request.userAgent,
     });
   }
 }

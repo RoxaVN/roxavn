@@ -95,11 +95,17 @@ export class ServerModule extends BaseModule {
     return (
       serviceClass: new (...args: any[]) => ApiService<Api<Req, Resp>>
     ) => {
-      this.useRawApi(api, async (req, { dbSession }) => {
-        const service = new serviceClass(dbSession);
-        return service.handle(req);
+      this.useRawApi(api, async (req, context) => {
+        return this.createService(serviceClass, context).handle(req);
       });
     };
+  }
+
+  createService<Req extends ApiRequest, Resp extends ApiResponse>(
+    serviceClass: new (...args: any[]) => ApiService<Api<Req, Resp>>,
+    context: MiddlewareContext
+  ) {
+    return new serviceClass(context.dbSession);
   }
 
   static fromBase(base: BaseModule) {

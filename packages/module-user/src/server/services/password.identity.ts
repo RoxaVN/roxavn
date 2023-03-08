@@ -12,39 +12,40 @@ import { serverModule } from '../module';
 import { CreateAccessTokenService } from './access.token';
 import { tokenService } from './token';
 
-@serverModule.useApi(passwordIdentityApi.auth)
-export class PasswordAuthApiService extends ApiService {
-  async handle(request: InferApiRequest<typeof passwordIdentityApi.auth>) {
-    const identity = await this.dbSession.getRepository(Identity).findOne({
-      select: ['id', 'userId', 'metadata'],
-      where: {
-        user: { username: request.username },
-        type: constants.identityTypes.PASSWORD,
-      },
-    });
+serverModule.useRawApi(passwordIdentityApi.auth, async (request, context) => {
+  const identity = await context.dbSession.getRepository(Identity).findOne({
+    select: ['id', 'userId', 'metadata'],
+    where: {
+      user: { username: request.username },
+      type: constants.identityTypes.PASSWORD,
+    },
+  });
 
-    if (!identity) {
-      throw new UnauthorizedException();
-    }
+  if (!identity) {
+    throw new UnauthorizedException();
+  }
 
-    const isValid =
-      identity.metadata &&
-      (await tokenService.hasher.verify(
-        request.password,
-        identity.metadata.password
-      ));
+  const isValid =
+    identity.metadata &&
+    (await tokenService.hasher.verify(
+      request.password,
+      identity.metadata.password
+    ));
 
-    if (!isValid) {
-      throw new UnauthorizedException();
-    }
+  if (!isValid) {
+    throw new UnauthorizedException();
+  }
 
-    return await this.create(CreateAccessTokenService).handle({
+  return await serverModule
+    .createService(CreateAccessTokenService, context)
+    .handle({
       userId: identity.userId,
       identityid: identity.id,
       authenticator: constants.identityTypes.PASSWORD,
+      ipAddress: context.req.ip,
+      userAgent: context.req.headers['user-agent'],
     });
-  }
-}
+});
 
 @serverModule.useApi(passwordIdentityApi.reset)
 export class ResetPasswordApiService extends ApiService {

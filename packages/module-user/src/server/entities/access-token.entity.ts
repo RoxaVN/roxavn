@@ -20,6 +20,12 @@ export class AccessToken {
   @Column()
   token: string;
 
+  @Column()
+  ipAddress: string;
+
+  @Column({ nullable: true })
+  userAgent?: string;
+
   @Column('uuid')
   identityId: string;
 
