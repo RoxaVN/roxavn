@@ -1,5 +1,5 @@
 import { InferApiRequest } from '@roxavn/core/base';
-import { ApiService } from '@roxavn/core/server';
+import { ApiService, moduleManager } from '@roxavn/core/server';
 import { In } from 'typeorm';
 
 import { userRoleApi } from '../../base';
@@ -46,7 +46,7 @@ export class GetUserRolesApiService extends ApiService {
       },
       where: {
         userId: request.userId,
-        scopeId: request.scopeId,
+        scopeId: request.scopeId || '',
         role: request.scopes?.length
           ? {
               scope: In(request.scopes),
@@ -55,5 +55,15 @@ export class GetUserRolesApiService extends ApiService {
       },
     });
     return { items: items.map((i) => i.role) };
+  }
+}
+
+@serverModule.useApi(userRoleApi.modules)
+export class GetUserRoleModulesApiService extends ApiService {
+  handle(request: InferApiRequest<typeof userRoleApi.modules>) {
+    return this.create(GetUserRolesApiService).handle({
+      userId: request.userId,
+      scopes: moduleManager.modules.map((m) => m.name),
+    });
   }
 }

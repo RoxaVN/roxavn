@@ -122,7 +122,7 @@ const AdminPage = () => {
       }
       userComponent={(user) => (
         <ApiRolesGetter
-          api={userRoleApi.getAll}
+          api={userRoleApi.modules}
           apiParams={{ userId: user.id }}
         >
           <TasksProgress

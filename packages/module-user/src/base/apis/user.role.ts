@@ -1,5 +1,7 @@
 import {
   ApiSource,
+  BadRequestException,
+  Collection,
   ExactProps,
   IsArray,
   IsOptional,
@@ -44,6 +46,11 @@ class GetUserRolesRequest extends ExactProps<GetUserRolesRequest> {
   public readonly scopeId?: string;
 }
 
+class GetUserRoleModulesRequest extends ExactProps<GetUserRoleModulesRequest> {
+  @MinLength(1)
+  public readonly userId: string;
+}
+
 export const userRoleApi = {
   create: userRoleSource.createRelation({
     validator: CreateUserRoleRequest,
@@ -55,6 +62,16 @@ export const userRoleApi = {
   }),
   getAll: userRoleSource.getAll({
     validator: GetUserRolesRequest,
+    permission: permissions.ReadUserRoles,
+  }),
+  modules: userRoleSource.custom<
+    GetUserRoleModulesRequest,
+    Collection<RoleResponse>,
+    BadRequestException
+  >({
+    method: 'GET',
+    path: userRoleSource.apiPath() + '/modules',
+    validator: GetUserRoleModulesRequest,
     permission: permissions.ReadUserRoles,
   }),
 };
