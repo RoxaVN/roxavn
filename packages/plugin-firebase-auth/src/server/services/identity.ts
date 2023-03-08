@@ -41,19 +41,19 @@ serverModule.useRawApi(identityApi.verifyToken, async (request, context) => {
       };
       const service = serverModule.createService(IdentityService, context);
       if (user.email_verified && user.email) {
-        service.handle({
+        return service.handle({
           ...data,
           subject: user.email,
           type: userConstants.identityTypes.EMAIL,
         });
       } else if (user.phone_number) {
-        service.handle({
+        return service.handle({
           ...data,
           subject: user.phone_number,
           type: userConstants.identityTypes.PHONE,
         });
       } else {
-        service.handle({
+        return service.handle({
           ...data,
           subject: user.uid,
           type: 'firebase uid',

@@ -1,7 +1,6 @@
 import { Box, LoadingOverlay } from '@mantine/core';
 import { InferApiResponse } from '@roxavn/core/base';
-import { useApi } from '@roxavn/core/web';
-import { authProvider } from '@roxavn/module-user/web';
+import { authService, useApi } from '@roxavn/core/web';
 import firebase from 'firebase/compat/app';
 import { Fragment, useEffect, useState } from 'react';
 import { identityApi } from '../../base';
@@ -47,7 +46,7 @@ export const ApiFirebaseAuth = ({
 
   useEffect(() => {
     if (data) {
-      authProvider.setTokenData(data);
+      authService.setTokenData(data);
       app?.signOut();
       onSuccess && onSuccess(data);
     }

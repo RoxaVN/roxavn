@@ -1,6 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const useStylesheet = (url: string) => {
+  const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
     const head = document.head;
     if (
@@ -13,8 +15,14 @@ export const useStylesheet = (url: string) => {
       link.type = 'text/css';
       link.rel = 'stylesheet';
       link.href = url;
+      link.addEventListener('load', () => setLoaded(true));
 
       head.appendChild(link);
+    } else {
+      // already add
+      setLoaded(true);
     }
   }, [url]);
+
+  return loaded;
 };

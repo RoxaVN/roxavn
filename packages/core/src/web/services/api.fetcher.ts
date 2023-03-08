@@ -49,11 +49,12 @@ export const useApi = <
   options?: UseApiOptions
 ) => {
   const [data, setData] = useState<Response | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>();
 
   useEffect(() => {
     if (api) {
+      setLoading(true);
       const timeout = setTimeout(() => {
         const key = api.path + '?' + JSON.stringify(apiParams);
         if (options?.cache && cache[key]) {

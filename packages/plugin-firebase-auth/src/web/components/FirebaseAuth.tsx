@@ -26,7 +26,7 @@ export const FirebaseAuth = ({
 }: FirebaseAuthProps) => {
   const [userSignedIn, setUserSignedIn] = useState(false);
   const elementRef = useRef<any>(null);
-  useStylesheet(
+  const loadedStylesheet = useStylesheet(
     'https://www.gstatic.com/firebasejs/ui/6.0.2/firebase-ui-auth.css'
   );
 
@@ -58,8 +58,8 @@ export const FirebaseAuth = ({
   };
 
   useEffect(() => {
-    load();
-  }, [uiConfig]);
+    loadedStylesheet && load();
+  }, [uiConfig, loadedStylesheet]);
 
   return <div className={className} ref={elementRef} />;
 };
