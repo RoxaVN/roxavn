@@ -25,6 +25,7 @@ import {
 } from '@roxavn/core/web';
 
 import { constants, userRoleApi, WebRoutes } from '../../../base';
+import { UserMenu } from '../../components';
 
 const BASE = '/admin/app';
 
@@ -77,10 +78,8 @@ function AdminComponent() {
         </Footer>
       }
       header={
-        <Header height={{ base: 50, md: 70 }} p="md">
-          <div
-            style={{ display: 'flex', alignItems: 'center', height: '100%' }}
-          >
+        <Header height={{ base: 60 }} p="md">
+          <Group position="apart" align="center">
             <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
               <Burger
                 opened={opened}
@@ -90,16 +89,19 @@ function AdminComponent() {
                 mr="xl"
               />
             </MediaQuery>
+            <MediaQuery smallerThan="lg" styles={{ display: 'none' }}>
+              <Button
+                component={Link}
+                to={BASE}
+                variant="subtle"
+                leftIcon={<IconApps size={20} />}
+              >
+                {tCore('apps')}
+              </Button>
+            </MediaQuery>
 
-            <Button
-              component={Link}
-              to={BASE}
-              variant="subtle"
-              leftIcon={<IconApps size={20} />}
-            >
-              {tCore('apps')}
-            </Button>
-          </div>
+            <UserMenu />
+          </Group>
         </Header>
       }
     >
