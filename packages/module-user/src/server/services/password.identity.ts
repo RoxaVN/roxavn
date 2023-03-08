@@ -104,7 +104,7 @@ export class RecoveryPasswordApiService extends ApiService {
         userId: request.userId,
         metadata: { token: { hash, expiredAt } } as any,
       })
-      .orUpdate(['metadata'], ['id'])
+      .orUpdate(['metadata'], ['subject', 'type'])
       .execute();
 
     return { token };

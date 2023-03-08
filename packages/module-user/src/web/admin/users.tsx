@@ -99,9 +99,11 @@ const Page = () => {
                           name: item.username,
                         })}
                       </p>
-                      <Prism language="markdown">
-                        {`${location.protocol}://${location.host}${link}`}
-                      </Prism>
+                      <div style={{ maxWidth: '400px' }}>
+                        <Prism language="markdown">
+                          {`${location.protocol}://${location.host}${link}`}
+                        </Prism>
+                      </div>
                     </div>
                   );
                 }}
