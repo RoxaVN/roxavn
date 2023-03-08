@@ -1,10 +1,19 @@
-import { ApiSource, ExactProps, MinLength } from '@roxavn/core/base';
+import {
+  ApiSource,
+  ExactProps,
+  IsOptional,
+  Min,
+  MinLength,
+  TransformNumber,
+} from '@roxavn/core/base';
 import { baseModule } from '../module';
 import { permissions, scopes } from '../access';
 
 const accessTokenSource = new ApiSource<{
   id: string;
   userId: string;
+  ipAddress: string;
+  userAgent?: string;
   createdDate: Date;
   updatedDate: Date;
   expiredDate: Date;
@@ -15,9 +24,23 @@ class DeleteAccessTokenRequest extends ExactProps<DeleteAccessTokenRequest> {
   public readonly accessTokenId: string;
 }
 
+class GetAccessTokensRequest extends ExactProps<GetAccessTokensRequest> {
+  @MinLength(1)
+  @IsOptional()
+  public readonly userId?: string;
+
+  @Min(1)
+  @TransformNumber()
+  @IsOptional()
+  public readonly page = 1;
+}
+
 export const accessTokenApi = {
   delete: accessTokenSource.delete({
     validator: DeleteAccessTokenRequest,
     permission: permissions.DeleteAccessToken,
+  }),
+  getMany: accessTokenSource.getMany({
+    validator: GetAccessTokensRequest,
   }),
 };

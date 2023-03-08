@@ -1,6 +1,6 @@
 const urlUtils = {
   parseValue: (k: any, v: any) => {
-    if (typeof v === 'string') {
+    if (typeof v === 'string' && v.length > 9) {
       const d = new Date(v);
       return isNaN(d.getDate()) ? v : d;
     }

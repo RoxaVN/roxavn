@@ -43,7 +43,6 @@ export class GetUsersApiService extends ApiService {
               LessThan(request.createdDate[1])
             ),
         },
-        order: { id: 'desc' },
         take: pageSize,
         skip: (page - 1) * pageSize,
       });

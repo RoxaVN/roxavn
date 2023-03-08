@@ -11,6 +11,7 @@
   "addRole": "Thêm chức vụ",
   "login": "Đăng nhập",
   "logout": "Đăng xuất",
+  "logoutConfirm": "Bạn có chắc muốn đăng xuất?",
   "email": "Email",
   "role": "Chức vụ",
   "setRoleOf": "Thiết lập quyền cho {{name}}",
@@ -21,7 +22,7 @@
   "roleName": "Tên chức vụ",
   "permissions": "Quyền",
   "userRoles": "Chức vụ người dùng",
-  "changeTheme": "Thay đổi chủ đề",
+  "sessions": "Phiên đăng nhập",
   "Meta": {
     "name": "Tài khoản",
     "description": "Quản lý tài khoản hệ thống"

@@ -11,6 +11,7 @@
   "addRole": "Add role",
   "login": "Login",
   "logout": "Logout",
+  "logoutConfirm": "Are you sure to logout?",
   "email": "Email",
   "role": "Role",
   "setRoleOf": "Set role of {{name}}",
@@ -21,7 +22,7 @@
   "deleteUserRole": "Delete user role {{role}}",
   "permissions": "Permissions",
   "userRoles": "User roles",
-  "changeTheme": "Change theme",
+  "sessions": "Sessions",
   "Meta": {
     "name": "User",
     "description": "System account management"

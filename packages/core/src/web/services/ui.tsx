@@ -1,5 +1,6 @@
 import { Text } from '@mantine/core';
-import { openConfirmModal } from '@mantine/modals';
+import { randomId } from '@mantine/hooks';
+import { openConfirmModal, openModal, closeModal } from '@mantine/modals';
 import React from 'react';
 import { Translation } from 'react-i18next';
 
@@ -8,6 +9,28 @@ import { ApiError } from '../components';
 import { webModule } from './module';
 
 const uiManager = {
+  modal({
+    title,
+    children,
+  }: {
+    title?: React.ReactNode;
+    children: React.ReactNode | ((closeModal: () => void) => React.ReactNode);
+  }) {
+    const modalId = randomId();
+    openModal({
+      closeOnClickOutside: false,
+      modalId: modalId,
+      title: title || (
+        <Translation ns={webModule.escapedName}>
+          {(t) => t('notification')}
+        </Translation>
+      ),
+      children:
+        typeof children === 'function'
+          ? children(() => closeModal(modalId))
+          : children,
+    });
+  },
   alertModal(message: React.ReactNode, title?: React.ReactNode) {
     openConfirmModal({
       title: title || (
@@ -24,7 +47,7 @@ const uiManager = {
         ),
         cancel: '',
       },
-      cancelProps: { hidden: true },
+      cancelProps: { style: { display: 'none' } },
     });
   },
   errorModal(error: ErrorResponse | Error, title?: React.ReactNode) {
@@ -48,7 +71,7 @@ const uiManager = {
         cancel: '',
       },
       confirmProps: { color: 'red' },
-      cancelProps: { hidden: true },
+      cancelProps: { style: { display: 'none' } },
     });
   },
 };

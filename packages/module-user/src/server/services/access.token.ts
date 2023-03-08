@@ -7,6 +7,29 @@ import { serverModule } from '../module';
 import { tokenService } from './token';
 import { Env } from '../config';
 
+@serverModule.useApi(accessTokenApi.getMany)
+export class GetAccessTokensApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof accessTokenApi.getMany>) {
+    const page = request.page || 1;
+    const pageSize = 10;
+
+    const [users, totalItems] = await this.dbSession
+      .getRepository(AccessToken)
+      .findAndCount({
+        where: {
+          userId: request.userId,
+        },
+        take: pageSize,
+        skip: (page - 1) * pageSize,
+      });
+
+    return {
+      items: users,
+      pagination: { page, pageSize, totalItems },
+    };
+  }
+}
+
 @serverModule.useApi(accessTokenApi.delete)
 export class DeleteAccessTokenApiService extends ApiService {
   async handle(request: InferApiRequest<typeof accessTokenApi.delete>) {

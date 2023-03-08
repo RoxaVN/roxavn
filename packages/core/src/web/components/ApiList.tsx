@@ -5,6 +5,7 @@ import { Fragment } from 'react';
 import { Api, ApiRequest, Collection, PaginatedCollection } from '../../base';
 import { useLocationHash } from '../hooks';
 import { ApiForm } from './ApiForm';
+import { ApiFetcherRef } from './ApiTable';
 
 export interface ApiListProps<
   Request extends ApiRequest,
@@ -17,7 +18,10 @@ export interface ApiListProps<
   apiParams?: Partial<Request>;
   key?: string;
   itemKey?: keyof ResponseItem;
-  itemRender: (item: ResponseItem) => React.ReactElement;
+  itemRender: (
+    item: ResponseItem,
+    fetcherRef: ApiFetcherRef<Request>
+  ) => React.ReactElement;
   containerRender?: (children: React.ReactElement[]) => React.ReactElement;
 }
 
@@ -44,10 +48,16 @@ export const ApiList = <
       fetchOnMount
       api={api}
       apiParams={params}
-      dataRender={({ data }) => {
+      dataRender={({ data, fetcher }) => {
+        const ref = {
+          fetch: fetcher,
+          currentParams: params,
+        };
         if (data) {
           const children = data.items.map((item) => (
-            <Fragment key={item[itemKey || 'id']}>{itemRender(item)}</Fragment>
+            <Fragment key={item[itemKey || 'id']}>
+              {itemRender(item, ref)}
+            </Fragment>
           ));
           return (
             <div>
