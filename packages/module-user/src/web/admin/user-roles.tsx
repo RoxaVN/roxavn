@@ -15,7 +15,7 @@ const Page = () => {
   return (
     <ApiTable
       api={roleApi.moduleStats}
-      rowKey="userId"
+      itemKey="userId"
       columns={{
         userId: { label: tCore('id'), reference: userReference },
         rolesCount: { label: t('roles') },

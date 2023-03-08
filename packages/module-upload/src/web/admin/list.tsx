@@ -15,7 +15,7 @@ const Page = () => {
   return (
     <ApiTable
       api={fileStoageApi.getMany}
-      rowKey="userId"
+      itemKey="userId"
       columns={{
         userId: { label: tCore('userId') },
         maxFileSize: { label: t('maxFileSize') },

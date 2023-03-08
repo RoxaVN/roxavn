@@ -46,7 +46,7 @@ export interface ApiTableProps<
   fetcherRef?: MutableRefObject<ApiFetcherRef<Request> | undefined>;
   columns: ApiTableColumns<ResponseItem>;
   filters?: Array<FormGroupField<Request>>;
-  rowKey?: keyof ResponseItem;
+  itemKey?: keyof ResponseItem;
   header?: React.ReactNode;
   headerActions?:
     | Array<_ActionProps>
@@ -65,7 +65,7 @@ export const ApiTable = <
   apiParams,
   columns,
   filters,
-  rowKey,
+  itemKey,
   header,
   headerActions,
   cellActions,
@@ -182,7 +182,7 @@ export const ApiTable = <
               </thead>
               <tbody>
                 {data?.items.map((item) => (
-                  <tr key={item[(rowKey || 'id') as any]}>
+                  <tr key={item[itemKey || 'id']}>
                     {Object.entries(columns).map(([key, column]) => (
                       <td key={key}>
                         {column.reference
