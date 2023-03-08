@@ -9,7 +9,10 @@ import { userReference } from '../references';
 export const UserMenu = () => {
   const { t } = webModule.useTranslation();
   const authUser = useAuthUser();
-  const { renderItem } = userReference.use({ ids: [authUser?.id] });
+  const { renderItem } = userReference.use(
+    { ids: [authUser?.id] },
+    { cache: true }
+  );
 
   return authUser ? (
     <Menu width={200} trigger="hover">

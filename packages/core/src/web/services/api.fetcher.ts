@@ -34,33 +34,47 @@ export const apiFetcher = {
     http._bodyParams(path, 'DELETE', data),
 };
 
+const cache: Record<string, any> = {};
+
+export interface UseApiOptions {
+  cache?: boolean;
+}
+
 export const useApi = <
   Request extends ApiRequest,
   Response extends ApiResponse
 >(
   api?: Api<Request, Response>,
-  apiParams?: Request
+  apiParams?: Request,
+  options?: UseApiOptions
 ) => {
   const [data, setData] = useState<Response | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>();
 
   useEffect(() => {
     if (api) {
-      const timeout = setTimeout(
-        () =>
+      const timeout = setTimeout(() => {
+        const key = api.path + '?' + JSON.stringify(apiParams);
+        if (options?.cache && cache[key]) {
+          setLoading(false);
+          setData(cache[key]);
+        } else {
           apiFetcher
             .fetch(api, apiParams)
-            .then((resp) => {
+            .then((data) => {
               setLoading(false);
-              setData(resp);
+              setData(data);
+              if (options?.cache) {
+                cache[key] = data;
+              }
             })
             .catch((error) => {
               setLoading(false);
               setError(error);
-            }),
-        100
-      );
+            });
+        }
+      }, 100);
       return () => clearTimeout(timeout);
     }
     return;

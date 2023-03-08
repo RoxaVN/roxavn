@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Api, ApiRequest, Collection, SuggestString } from '../../base';
-import { useApi } from './api.fetcher';
+import { useApi, UseApiOptions } from './api.fetcher';
 
 export class Reference {
   private api?: Api;
@@ -18,9 +18,13 @@ export class Reference {
     return this;
   }
 
-  use(apiParams?: Record<SuggestString<'ids'>, any>) {
+  use(apiParams?: Record<SuggestString<'ids'>, any>, options?: UseApiOptions) {
     const [params, setParams] = useState(apiParams);
-    const { data, loading } = useApi(params ? this.api : undefined, params);
+    const { data, loading } = useApi(
+      params ? this.api : undefined,
+      params,
+      options
+    );
 
     return {
       setParams,
