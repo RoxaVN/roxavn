@@ -4,12 +4,12 @@ import {
   ModuleT,
   ObjectInput,
 } from '@roxavn/core/web';
-import { webModule as userWebModule } from '@roxavn/module-user/web';
+import { webModule as utilsWebModule } from '@roxavn/module-utils/web';
 
 import { constants, settingApi } from '../base';
 import { webModule } from './module';
 
-userWebModule.adminSettings[constants.FIREBASE_SERVER_SETTING] = {
+utilsWebModule.adminSettings[constants.FIREBASE_SERVER_SETTING] = {
   title: <ModuleT module={webModule} k="firebaseServerSetting" />,
   form: (
     <ApiFormGroup

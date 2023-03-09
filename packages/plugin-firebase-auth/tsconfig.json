@@ -1,5 +1,11 @@
 {
-  "include": [".web/remix.env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    ".web/remix.env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "../plugin-firebase/src/web/register.tsx",
+    "../plugin-firebase/src/web/init.ts"
+  ],
   "exclude": ["dist"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2019"],
