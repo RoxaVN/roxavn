@@ -15,8 +15,7 @@ to: package.json
     "@roxavn/dev-web": "^0.1.0",
     "typescript": "^4.3.5"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@mantine/core": "*",
     "@roxavn/core": "*",
