@@ -1,4 +1,5 @@
 {
+  "firebaseServerSetting": "Cài đặt Firebase cho server",
   "Meta": {
     "name": "Firebase plugin",
     "description": "Firebase plugin"

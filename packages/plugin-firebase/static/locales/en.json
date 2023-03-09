@@ -1,4 +1,5 @@
 {
+  "firebaseServerSetting": "Firebase server setting",
   "Meta": {
     "name": "Firebase plugin",
     "description": "Firebase plugin"
