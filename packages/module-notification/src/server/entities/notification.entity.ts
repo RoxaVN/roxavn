@@ -1,23 +1,29 @@
----
-to: src/server/entities/<%= h.changeCase.dot(entity_name) %>.entity.ts
----
 import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  Unique,
 } from 'typeorm';
 
 @Entity()
-export class <%= h.changeCase.pascal(entity_name) %> {
+@Unique(['resource', 'resourceId', 'action', 'module'])
+export class Notification {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Index()
-  @Column('uuid')
-  userId: string;
+  @Column()
+  resource: string;
+
+  @Column()
+  resourceId: string;
+
+  @Column()
+  action: string;
+
+  @Column()
+  module: string;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: any;
