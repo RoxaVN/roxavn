@@ -8,7 +8,7 @@ import { buildService } from './build';
 import { devService } from './dev';
 
 class HookService {
-  async run(mode: string, module?: string) {
+  async run(mode: string, module?: string, options?: { plugin: string }) {
     devService.initEnv();
     Object.assign(process.env, {
       NODE_ENV: constants.ENV_PRODUCTION,
@@ -17,6 +17,12 @@ class HookService {
     buildService.compile({});
 
     await databaseManager.createSource({ synchronize: true });
+
+    if (options?.plugin) {
+      // load plugin
+      require(options.plugin);
+    }
+
     if (module) {
       runModuleHook(module, mode);
     } else {

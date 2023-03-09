@@ -33,7 +33,10 @@ program
 program
   .command('hook <mode> [module]')
   .description('Run hook script, or all if no module supplied')
-  .action((mode: string, module: string) => hookService.run(mode, module));
+  .option('-p, --plugin <type>', 'plugin service', '@roxavn/module-user/hook')
+  .action((mode: string, module: string, options) =>
+    hookService.run(mode, module, options)
+  );
 
 program
   .command('build')

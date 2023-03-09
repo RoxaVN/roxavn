@@ -1,2 +1,7 @@
+import { hookManager } from '@roxavn/core/server';
+import { CreateRolesHook, SetAdminRoleHook } from './database';
+
 export * from './install';
-export { CreateRolesHook, SetAdminRoleHook } from './database';
+
+hookManager.createRoleService = CreateRolesHook;
+hookManager.setAdminRoleService = SetAdminRoleHook;

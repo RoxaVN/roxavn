@@ -162,7 +162,10 @@ export const ApiFileInput = <Multiple extends boolean = false>({
           : [files];
         if (maxFiles && newFiles.length + data.length > maxFiles) {
           uiManager.errorModal(
-            new Error(t('Validation.MaxFiles', { count: maxFiles }))
+            new Error(
+              t('Validation.MaxFiles', { count: maxFiles }) ||
+                'Validation.MaxFiles'
+            )
           );
         } else {
           dataHandler.append(
