@@ -1,3 +1,3 @@
 import { BaseModule } from '@roxavn/core/base';
 
-export const baseModule = new BaseModule('module-utils');
+export const baseModule = new BaseModule('@roxavn/module-utils');

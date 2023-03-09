@@ -1,3 +1,4 @@
 export * from './module';
 export * from './interfaces';
 export * from './apis';
+export * from './access';
