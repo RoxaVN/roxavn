@@ -7,7 +7,7 @@ import {
 import { GetSettingService } from '@roxavn/module-utils/server';
 import firebaseAdmin from 'firebase-admin';
 
-import { constants, identityApi } from '../../base';
+import { identityApi } from '../../base';
 import { serverModule } from '../module';
 
 serverModule.useRawApi(identityApi.verifyToken, async (request, context) => {
@@ -15,7 +15,7 @@ serverModule.useRawApi(identityApi.verifyToken, async (request, context) => {
     .createService(GetSettingService, context)
     .handle({
       module: userServerModule.name,
-      name: constants.FIREBASE_SERVER_SETTING,
+      name: 'constants.FIREBASE_SERVER_SETTING',
     });
   if (settings && Array.isArray(settings.serviceAccounts)) {
     const projectSetting = settings.serviceAccounts.find(

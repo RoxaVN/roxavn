@@ -6,8 +6,7 @@ import {
   IsArray,
   IsNotEmptyObject,
 } from '@roxavn/core/base';
-import { permissions } from '@roxavn/module-user/base';
-import { SettingResponse } from '@roxavn/module-utils/base';
+import { SettingResponse, permissions } from '@roxavn/module-utils/base';
 
 import { baseModule } from '../module';
 

@@ -1,7 +1,9 @@
 import { InferApiRequest } from '@roxavn/core/base';
 import { ApiService } from '@roxavn/core/server';
-import { serverModule as userServerModule } from '@roxavn/module-user/server';
-import { UpdateSettingService } from '@roxavn/module-utils/server';
+import {
+  UpdateSettingService,
+  serverModule as utilsServerModule,
+} from '@roxavn/module-utils/server';
 
 import { constants, settingApi } from '../../base';
 import { serverModule } from '../module';
@@ -12,7 +14,7 @@ export class UpdateFirbaseServerSettingApiService extends ApiService {
     request: InferApiRequest<typeof settingApi.updateFirbaseServerSetting>
   ) {
     return this.create(UpdateSettingService).handle({
-      module: userServerModule.name,
+      module: utilsServerModule.name,
       name: constants.FIREBASE_SERVER_SETTING,
       metadata: { serviceAccounts: request.serviceAccounts },
       type: 'private',
