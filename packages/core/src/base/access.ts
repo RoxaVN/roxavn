@@ -40,6 +40,11 @@ class AccessManager {
       idParam: 'settingId',
       pluralName: 'settings',
     } as Resource,
+    User: {
+      name: 'user',
+      idParam: 'userId',
+      pluralName: 'users',
+    } as Resource,
   };
 
   makeScopes<R extends Resources>(module: BaseModule, resources: R) {
