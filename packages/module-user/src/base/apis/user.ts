@@ -1,4 +1,5 @@
 import {
+  accessManager,
   ApiError,
   ApiSource,
   ArrayMaxSize,
@@ -15,7 +16,7 @@ import {
   TransformNumber,
 } from '@roxavn/core/base';
 import { baseModule } from '../module';
-import { permissions, scopes } from '../access';
+import { permissions } from '../access';
 import { IsUsername } from '../validation';
 
 interface UserResponse {
@@ -25,7 +26,10 @@ interface UserResponse {
   updatedDate: Date;
 }
 
-const userSource = new ApiSource<UserResponse>([scopes.User], baseModule);
+const userSource = new ApiSource<UserResponse>(
+  [accessManager.scopes.User],
+  baseModule
+);
 
 class SearchUsersRequest extends ExactProps<SearchUsersRequest> {
   @MinLength(1, { each: true })

@@ -6,7 +6,7 @@ import {
 } from '@roxavn/core/base';
 import { AuthenticatedData, MiddlewareContext } from '@roxavn/core/server';
 import { ArrayContains, In } from 'typeorm';
-import { constants, scopes } from '../base';
+import { constants } from '../base';
 import { UserRole } from './entities';
 
 export const authorizeMiddlewares: Array<{
@@ -69,11 +69,14 @@ authorizeMiddlewares.push({
       (r) => r.name === accessManager.scopes.Owner.name
     );
     if (hasOwner) {
-      if (resp.locals[scopes.User.idParam] === data.$user.id) {
+      if (resp.locals[accessManager.scopes.User.idParam] === data.$user.id) {
         return true;
       }
       const resource = await data.$getResource();
-      if (resource && resource[scopes.User.idParam] === data.$user.id) {
+      if (
+        resource &&
+        resource[accessManager.scopes.User.idParam] === data.$user.id
+      ) {
         return true;
       }
     }

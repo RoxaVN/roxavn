@@ -1,4 +1,5 @@
 import {
+  accessManager,
   ApiSource,
   BadRequestException,
   Collection,
@@ -15,7 +16,7 @@ import { permissions, scopes } from '../access';
 import { RoleResponse } from './role';
 
 const userRoleSource = new ApiSource<RoleResponse>(
-  [scopes.User, scopes.Role],
+  [accessManager.scopes.User, scopes.Role],
   baseModule
 );
 
