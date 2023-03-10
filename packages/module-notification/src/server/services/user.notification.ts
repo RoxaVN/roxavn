@@ -31,3 +31,18 @@ export class GetUserNotificationsApiService extends ApiService {
     };
   }
 }
+
+@serverModule.useApi(userNotificationApi.update)
+export class UpdateUserNotificationApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof userNotificationApi.update>) {
+    await this.dbSession.update(
+      UserNotification,
+      {
+        userId: request.userId,
+        notificationId: request.notificationId,
+      },
+      { readDate: request.isRead ? new Date() : undefined }
+    );
+    return {};
+  }
+}

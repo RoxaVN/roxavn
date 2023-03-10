@@ -33,9 +33,27 @@ class GetUserNotificationsRequest extends ExactProps<GetUserNotificationsRequest
   public readonly page = 1;
 }
 
+class UpdateUserNotificationsRequest extends ExactProps<UpdateUserNotificationsRequest> {
+  @MinLength(1)
+  public readonly userId!: string;
+
+  @MinLength(1)
+  public readonly notificationId!: string;
+
+  @Min(1)
+  @TransformNumber()
+  @IsOptional()
+  public readonly isRead?: number;
+}
+
 export const userNotificationApi = {
   getMany: userNotificationSource.getMany({
     validator: GetUserNotificationsRequest,
     permission: permissions.ReadUserNotifications,
+  }),
+
+  update: userNotificationSource.update({
+    validator: UpdateUserNotificationsRequest,
+    permission: permissions.UpdateUserNotification,
   }),
 };
