@@ -1,5 +1,6 @@
 import { InferApiRequest } from '@roxavn/core/base';
 import { ApiService } from '@roxavn/core/server';
+import { IsNull } from 'typeorm';
 
 import { userNotificationApi } from '../../base';
 import { UserNotification } from '../entities';
@@ -44,5 +45,20 @@ export class UpdateUserNotificationApiService extends ApiService {
       { readDate: request.isRead ? new Date() : undefined }
     );
     return {};
+  }
+}
+
+@serverModule.useApi(userNotificationApi.countUnread)
+export class CountUnreadUserNotificationApiService extends ApiService {
+  async handle(
+    request: InferApiRequest<typeof userNotificationApi.countUnread>
+  ) {
+    const count = await this.dbSession.getRepository(UserNotification).count({
+      where: {
+        userId: request.userId,
+        readDate: IsNull(),
+      },
+    });
+    return { count };
   }
 }

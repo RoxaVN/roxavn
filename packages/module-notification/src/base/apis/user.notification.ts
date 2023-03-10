@@ -6,6 +6,7 @@ import {
   Min,
   MinLength,
   TransformNumber,
+  UnauthorizedException,
 } from '@roxavn/core/base';
 
 import { baseModule } from '../module';
@@ -33,6 +34,11 @@ class GetUserNotificationsRequest extends ExactProps<GetUserNotificationsRequest
   public readonly page = 1;
 }
 
+class CountUnreadUserNotificationsRequest extends ExactProps<CountUnreadUserNotificationsRequest> {
+  @MinLength(1)
+  public readonly userId!: string;
+}
+
 class UpdateUserNotificationsRequest extends ExactProps<UpdateUserNotificationsRequest> {
   @MinLength(1)
   public readonly userId!: string;
@@ -47,11 +53,20 @@ class UpdateUserNotificationsRequest extends ExactProps<UpdateUserNotificationsR
 }
 
 export const userNotificationApi = {
+  countUnread: userNotificationSource.custom<
+    CountUnreadUserNotificationsRequest,
+    { count: number },
+    UnauthorizedException
+  >({
+    path: userNotificationSource.apiPath() + '/unread/count',
+    method: 'GET',
+    validator: CountUnreadUserNotificationsRequest,
+    permission: permissions.ReadUserNotifications,
+  }),
   getMany: userNotificationSource.getMany({
     validator: GetUserNotificationsRequest,
     permission: permissions.ReadUserNotifications,
   }),
-
   update: userNotificationSource.update({
     validator: UpdateUserNotificationsRequest,
     permission: permissions.UpdateUserNotification,
