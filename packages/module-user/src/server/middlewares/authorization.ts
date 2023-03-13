@@ -1,35 +1,11 @@
-import {
-  accessManager,
-  Api,
-  ForbiddenException,
-  Permission,
-} from '@roxavn/core/base';
-import { AuthenticatedData, MiddlewareContext } from '@roxavn/core/server';
+import { ForbiddenException } from '@roxavn/core/base';
+import { AuthenticatedData, authorizationManager } from '@roxavn/core/server';
 import { ArrayContains, In } from 'typeorm';
-import { constants } from '../base';
-import { UserRole } from './entities';
-
-export const authorizeMiddlewares: Array<{
-  apiMatcher: RegExp;
-  handler: (
-    api: Api & { permission: Permission },
-    context: MiddlewareContext
-  ) => Promise<boolean>;
-}> = [];
-
-// check is auth user
-authorizeMiddlewares.push({
-  apiMatcher: /./,
-  handler: async (api) => {
-    const hasScope = !!api.permission.allowedScopes.find(
-      (r) => r.name === accessManager.scopes.AuthUser.name
-    );
-    return hasScope;
-  },
-});
+import { constants } from '../../base';
+import { UserRole } from '../entities';
 
 // check in admin pages
-authorizeMiddlewares.push({
+authorizationManager.middlewares.push({
   apiMatcher: /./,
   handler: async (api, { dbSession, resp, req }) => {
     const user: AuthenticatedData['$user'] = resp.locals.$user;
@@ -60,32 +36,8 @@ authorizeMiddlewares.push({
   },
 });
 
-// check is owner
-authorizeMiddlewares.push({
-  apiMatcher: /./,
-  handler: async (api, { resp }) => {
-    const data: AuthenticatedData = resp.locals as any;
-    const hasOwner = !!api.permission.allowedScopes.find(
-      (r) => r.name === accessManager.scopes.Owner.name
-    );
-    if (hasOwner) {
-      if (resp.locals[accessManager.scopes.User.idParam] === data.$user.id) {
-        return true;
-      }
-      const resource = await data.$getResource();
-      if (
-        resource &&
-        resource[accessManager.scopes.User.idParam] === data.$user.id
-      ) {
-        return true;
-      }
-    }
-    return false;
-  },
-});
-
 // check in resource scope
-authorizeMiddlewares.push({
+authorizationManager.middlewares.push({
   apiMatcher: /./,
   handler: async (api, { dbSession, resp }) => {
     const data: AuthenticatedData = resp.locals as any;

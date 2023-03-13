@@ -1,17 +1,15 @@
 import { AuthenticatedData, ServerModule } from '@roxavn/core/server';
-import {
-  ForbiddenException,
-  Resource,
-  UnauthorizedException,
-} from '@roxavn/core/base';
+import { Resource, UnauthorizedException } from '@roxavn/core/base';
 import snakeCase from 'lodash/snakeCase';
 import { Raw } from 'typeorm';
-import { AccessToken } from './entities';
-import { tokenService } from './services/token';
-import { authorizeMiddlewares } from './auth';
+import { AccessToken } from '../entities';
+import { tokenService } from '../services';
 
 // authenticate access token
-ServerModule.apiMiddlewares.push(async (api, { dbSession, resp, req }) => {
+ServerModule.authenticatorMiddleware = async (
+  api,
+  { dbSession, resp, req }
+) => {
   if (api.permission) {
     const authorizationHeader = req.get('authorization');
     if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
@@ -81,18 +79,4 @@ ServerModule.apiMiddlewares.push(async (api, { dbSession, resp, req }) => {
       },
     } as AuthenticatedData);
   }
-});
-
-// check permission user
-ServerModule.apiMiddlewares.push(async (api, context) => {
-  if (api.permission) {
-    for (const middleware of authorizeMiddlewares) {
-      if (middleware.apiMatcher.exec(api.path)) {
-        if (await middleware.handler(api as any, context)) {
-          return;
-        }
-      }
-    }
-    throw new ForbiddenException();
-  }
-});
+};

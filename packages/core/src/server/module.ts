@@ -1,42 +1,34 @@
-import { plainToInstance } from 'class-transformer';
-import { validateSync } from 'class-validator';
 import { Request, Response, Router, NextFunction } from 'express';
-import { EntityManager, QueryRunner } from 'typeorm';
+import { QueryRunner } from 'typeorm';
 import {
   Api,
   ApiRequest,
   ApiResponse,
   baseModule,
   BaseModule,
-  ErrorResponse,
   FullApiResponse,
-  ServerException,
-  ValidationException,
 } from '../base';
 import { databaseManager } from './database';
+import {
+  ApiMiddleware,
+  authorizationMiddleware,
+  ErrorMiddleware,
+  MiddlewareContext,
+  serverErrorMiddleware,
+  validatorMiddleware,
+} from './middlewares';
 import { ApiService } from './service';
-
-export type MiddlewareContext = {
-  req: Request;
-  resp: Response;
-  dbSession: EntityManager;
-};
-
-export type ApiMiddleware = (
-  api: Api,
-  context: MiddlewareContext
-) => Promise<void>;
-
-export type ErrorMiddleware = (
-  error: any,
-  context: MiddlewareContext,
-  next: NextFunction
-) => Promise<void> | void;
 
 export class ServerModule extends BaseModule {
   static apiRouter = Router();
   static apiMiddlewares = [] as Array<ApiMiddleware>;
-  static errorMiddlewares = [] as Array<ErrorMiddleware>;
+  static validatorMiddleware = validatorMiddleware;
+  static authorizationMiddleware = authorizationMiddleware;
+  static authenticatorMiddleware: ApiMiddleware = () => {
+    throw new Error('authenticatorMiddleware not implemented');
+  };
+
+  static errorMiddlewares = [serverErrorMiddleware] as Array<ErrorMiddleware>;
 
   useRawApi<Req extends ApiRequest, Resp extends ApiResponse>(
     api: Api<Req, Resp>,
@@ -50,7 +42,13 @@ export class ServerModule extends BaseModule {
         await queryRunner.startTransaction();
         resp.locals.$queryRunner = queryRunner;
 
-        for (const middleware of ServerModule.apiMiddlewares) {
+        let error;
+        for (const middleware of [
+          ServerModule.validatorMiddleware,
+          ServerModule.authenticatorMiddleware,
+          ServerModule.authorizationMiddleware,
+          ...ServerModule.apiMiddlewares,
+        ]) {
           try {
             await middleware(api, {
               req,
@@ -59,10 +57,12 @@ export class ServerModule extends BaseModule {
             });
           } catch (e) {
             console.error(e);
-            return next(e);
+            await queryRunner.rollbackTransaction();
+            await queryRunner.release();
+            error = e;
           }
         }
-        next();
+        next(error);
       },
       async function (req: Request, resp: Response, next: NextFunction) {
         const queryRunner: QueryRunner = resp.locals.$queryRunner;
@@ -112,46 +112,5 @@ export class ServerModule extends BaseModule {
     return new ServerModule(base.name);
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-ServerModule.errorMiddlewares.push(async (error, { resp }, next) => {
-  if (!error.code || !error.toJson) {
-    error = new ServerException();
-  }
-  const queryRunner: QueryRunner = resp.locals.$queryRunner;
-  if (!queryRunner.isReleased) {
-    await queryRunner.rollbackTransaction();
-    await queryRunner.release();
-  }
-  resp
-    .status(error.code)
-    .json({ code: error.code, error: error.toJson() } as FullApiResponse);
-});
-
-ServerModule.apiMiddlewares.push(async (api, { req, resp }) => {
-  if (api.validator) {
-    const rawData = Object.assign(
-      {},
-      req.params || {},
-      api.method === 'GET' ? req.query : req.body
-    );
-    const parsedData = plainToInstance(api.validator, rawData);
-
-    const errors = validateSync(parsedData, {
-      stopAtFirstError: true,
-    });
-    if (errors.length) {
-      const i18n: ErrorResponse['i18n'] = {};
-      errors.forEach((error) => {
-        if (error.contexts) {
-          i18n[error.property] = Object.values(error.contexts)[0];
-        }
-      });
-      throw new ValidationException(i18n);
-    }
-
-    Object.assign(resp.locals, parsedData);
-  }
-});
 
 export const serverModule = ServerModule.fromBase(baseModule);
