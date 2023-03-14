@@ -14,14 +14,13 @@ export const permissions = accessManager.makePermissions(scopes, {
   ReadUser: {
     allowedScopes: [accessManager.scopes.Owner],
   },
-  ReadRoles: {},
   ReadUserRoles: {
     allowedScopes: [accessManager.scopes.Owner],
   },
-  CreateUserRole: {},
-  DeleteUserRole: {
-    allowedScopes: [accessManager.scopes.Owner],
-  },
+  CreateUserRole: accessManager.permissions.CreateUserRole,
+  DeleteUserRole: accessManager.permissions.DeleteUserRole,
+  ReadRoleUsers: accessManager.permissions.ReadRoleUsers,
+  ReadRoles: accessManager.permissions.ReadRoles,
 
   DeleteAccessToken: {
     allowedScopes: [accessManager.scopes.Owner],

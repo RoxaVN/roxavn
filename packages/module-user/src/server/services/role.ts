@@ -6,9 +6,9 @@ import { roleApi } from '../../base';
 import { Role, UserRole } from '../entities';
 import { serverModule } from '../module';
 
-@serverModule.useApi(roleApi.moduleRoles)
-export class GetModuleRolesApiService extends ApiService {
-  async handle(request: InferApiRequest<typeof roleApi.moduleRoles>) {
+@serverModule.useApi(roleApi.getMany)
+export class GetRolesApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof roleApi.getMany>) {
     const page = request.page || 1;
     const pageSize = 10;
 
@@ -17,10 +17,13 @@ export class GetModuleRolesApiService extends ApiService {
       .findAndCount({
         where: {
           id: request.ids && In(request.ids),
-          scope: request.scope && ILike(`%${request.scope}%`),
-          hasId: false,
+          scope: request.scope
+            ? request.scope
+            : request.scopeText
+            ? ILike(`%${request.scopeText}%`)
+            : undefined,
+          hasId: !!request.scopeId,
         },
-        order: { id: 'desc' },
         take: pageSize,
         skip: (page - 1) * pageSize,
       });

@@ -3,10 +3,10 @@ import { ApiInput } from '@roxavn/core/web';
 
 import { roleApi } from '../../base';
 
-export const ModuleRoleInput = (props: Omit<SelectProps, 'data'>) => (
+export const RoleInput = (props: Omit<SelectProps, 'data'>) => (
   <ApiInput
     {...props}
-    api={roleApi.moduleRoles}
+    api={roleApi.getMany}
     convertData={(items) =>
       items.map((item) => ({
         value: item.id as any,
@@ -14,7 +14,7 @@ export const ModuleRoleInput = (props: Omit<SelectProps, 'data'>) => (
       }))
     }
     fetchOnFocus
-    searchKey="scope"
+    searchKey="scopeText"
     onSearchChangeProp="onSearchChange"
     component={Select}
     searchable

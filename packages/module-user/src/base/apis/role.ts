@@ -1,4 +1,5 @@
 import {
+  accessManager,
   ApiSource,
   ExactProps,
   ForbiddenException,
@@ -23,7 +24,7 @@ export interface RoleResponse {
 
 const roleSource = new ApiSource<RoleResponse>([scopes.Role], baseModule);
 
-class GetModuleRolesRequest extends ExactProps<GetModuleRolesRequest> {
+class GetRolesRequest extends ExactProps<GetRolesRequest> {
   @IsNumberString({}, { each: true })
   @TransformArray()
   @IsOptional()
@@ -31,6 +32,12 @@ class GetModuleRolesRequest extends ExactProps<GetModuleRolesRequest> {
 
   @IsOptional()
   public readonly scope?: string;
+
+  @IsOptional()
+  public readonly scopeText?: string;
+
+  @IsOptional()
+  public readonly scopeId?: string;
 
   @Min(1)
   @TransformNumber()
@@ -51,15 +58,9 @@ type GetModuleRoleStatsResponse = PaginatedCollection<{
 }>;
 
 export const roleApi = {
-  moduleRoles: roleSource.custom<
-    GetModuleRolesRequest,
-    PaginatedCollection<RoleResponse>,
-    UnauthorizedException | ForbiddenException
-  >({
-    path: roleSource.apiPath() + '/module',
-    method: 'GET',
-    permission: permissions.ReadRoles,
-    validator: GetModuleRolesRequest,
+  getMany: roleSource.getMany({
+    validator: GetRolesRequest,
+    permission: accessManager.permissions.ReadRoles,
   }),
   moduleStats: roleSource.custom<
     GetModuleRolStatseRequest,

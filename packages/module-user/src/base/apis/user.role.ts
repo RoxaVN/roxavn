@@ -55,11 +55,11 @@ class GetUserRoleModulesRequest extends ExactProps<GetUserRoleModulesRequest> {
 export const userRoleApi = {
   create: userRoleSource.createRelation({
     validator: CreateUserRoleRequest,
-    permission: permissions.CreateUserRole,
+    permission: accessManager.permissions.CreateUserRole,
   }),
   delete: userRoleSource.delete({
     validator: DeleteUserRoleRequest,
-    permission: permissions.DeleteUserRole,
+    permission: accessManager.permissions.DeleteUserRole,
   }),
   getAll: userRoleSource.getAll({
     validator: GetUserRolesRequest,

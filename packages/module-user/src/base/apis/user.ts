@@ -19,7 +19,7 @@ import { baseModule } from '../module';
 import { permissions } from '../access';
 import { IsUsername } from '../validation';
 
-interface UserResponse {
+export interface UserResponse {
   id: string;
   username: string;
   createdDate: Date;

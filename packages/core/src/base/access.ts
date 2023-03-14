@@ -36,6 +36,17 @@ class AccessManager {
       name: 'dynamicModule',
       dynamicName: (request) => request.module,
     } as Scope,
+    DynamicScope: {
+      name: 'dynamicScope',
+      idParam: 'scopeId',
+      dynamicName: (request) => {
+        if (request.scope) {
+          return request.scope;
+        } else if (request.$getResource) {
+          return request.$getResource().scope;
+        }
+      },
+    } as Scope,
     Setting: {
       name: 'setting',
       idParam: 'settingId',
@@ -46,6 +57,25 @@ class AccessManager {
       idParam: 'userId',
       pluralName: 'users',
     } as Resource,
+  };
+
+  permissions = {
+    CreateUserRole: {
+      name: 'CreateUserRole',
+      allowedScopes: [this.scopes.DynamicScope],
+    },
+    DeleteUserRole: {
+      name: 'DeleteUserRole',
+      allowedScopes: [this.scopes.DynamicScope, this.scopes.Owner],
+    },
+    ReadRoleUsers: {
+      name: 'ReadRoleUsers',
+      allowedScopes: [this.scopes.DynamicScope],
+    },
+    ReadRoles: {
+      name: 'ReadRoles',
+      allowedScopes: [this.scopes.DynamicScope],
+    },
   };
 
   makeScopes<R extends Resources>(module: BaseModule, resources: R) {

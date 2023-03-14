@@ -44,7 +44,7 @@ authorizationManager.middlewares.push({
     const resource = await data.$getResource();
     const scopes = api.permission.allowedScopes
       .map((s) => ({
-        name: s.name,
+        name: s.dynamicName ? s.dynamicName(data) : s.name,
         id:
           s.idParam &&
           (resp.locals[s.idParam] || (resource && resource[s.idParam])),

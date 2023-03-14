@@ -10,7 +10,7 @@ import { IconPlus, IconTrash } from '@tabler/icons';
 import { useParams } from 'react-router-dom';
 
 import { userRoleApi } from '../../base';
-import { ModuleRoleInput } from '../components';
+import { RoleInput } from '../components';
 import { webModule } from '../module';
 import { userReference } from '../references';
 
@@ -38,7 +38,7 @@ const Page = () => {
                 fields={[
                   {
                     name: 'roleId',
-                    input: <ModuleRoleInput label={t('role')} />,
+                    input: <RoleInput label={t('role')} />,
                   },
                 ]}
               />

@@ -28,6 +28,8 @@ export const roles = accessManager.makeRoles(scopes, permissions, {
     name: 'Admin',
     scope: scopes.Project,
     permissions: [
+      accessManager.permissions.CreateUserRole,
+      accessManager.permissions.DeleteUserRole,
       permissions.UpdateProject,
       permissions.CreateTask,
       permissions.UpdateTask,

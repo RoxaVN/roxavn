@@ -16,9 +16,11 @@ const Page = () => {
   const tCore = coreWebModule.useTranslation().t;
   return (
     <ApiTable
-      api={roleApi.moduleRoles}
+      api={roleApi.getMany}
       header={t('roles')}
-      filters={[{ name: 'scope', input: <TextInput label={tCore('apps')} /> }]}
+      filters={[
+        { name: 'scopeText', input: <TextInput label={tCore('apps')} /> },
+      ]}
       columns={{
         scope: { label: tCore('apps') },
         name: { label: t('roleName') },
@@ -37,7 +39,7 @@ webModule.adminPages.push({
   path: '/roles',
   icon: IconCrown,
   element: (
-    <IfCanAccessApi api={roleApi.moduleRoles}>
+    <IfCanAccessApi api={roleApi.getMany}>
       <Page />
     </IfCanAccessApi>
   ),
