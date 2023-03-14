@@ -5,5 +5,4 @@ export * from './module';
 export * from './module.manager';
 export * from './service';
 export * from './tokens';
-export * from './auth';
 export * from './middlewares';

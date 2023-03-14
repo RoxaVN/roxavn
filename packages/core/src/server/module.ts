@@ -11,6 +11,7 @@ import {
 import { databaseManager } from './database';
 import {
   ApiMiddleware,
+  authorizationManager,
   authorizationMiddleware,
   ErrorMiddleware,
   MiddlewareContext,
@@ -98,6 +99,13 @@ export class ServerModule extends BaseModule {
       this.useRawApi(api, async (req, context) => {
         return this.createService(serviceClass, context).handle(req);
       });
+
+      if ('auth' in serviceClass.prototype) {
+        authorizationManager.customs[api.path] = (api, context) => {
+          const service: any = this.createService(serviceClass, context);
+          return service.auth(context.resp.locals as any);
+        };
+      }
     };
   }
 

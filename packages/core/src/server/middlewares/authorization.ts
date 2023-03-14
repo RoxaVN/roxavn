@@ -1,5 +1,5 @@
 import { accessManager, Api, ForbiddenException, Permission } from '../../base';
-import { AuthenticatedData } from '../auth';
+import { AuthenticatedData } from '../service';
 import { ApiMiddleware, MiddlewareContext } from './interfaces';
 
 type AuthorizationMiddleware = (
