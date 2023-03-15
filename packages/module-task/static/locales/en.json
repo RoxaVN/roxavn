@@ -1,4 +1,9 @@
 {
+  "projects": "Projects",
+  "addProject": "Add project",
+  "editProject": "Edit project",
+  "deleteProject": "Delete project",
+
   "Meta": {
     "name": "Task module",
     "description": "Task module"

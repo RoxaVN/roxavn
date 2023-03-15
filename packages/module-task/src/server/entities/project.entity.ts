@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -14,10 +13,6 @@ import { Task } from './task.entity';
 export class Project {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @Index()
-  @Column('uuid')
-  userId: string;
 
   @Column()
   type: string;

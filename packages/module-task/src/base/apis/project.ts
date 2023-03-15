@@ -52,7 +52,7 @@ class CreateProjectRequest extends ExactProps<CreateProjectRequest> {
 
 class UpdateProjectRequest extends ExactProps<UpdateProjectRequest> {
   @MinLength(1)
-  public readonly id!: string;
+  public readonly projectId!: string;
 
   @MinLength(1)
   @IsOptional()
@@ -65,7 +65,7 @@ class UpdateProjectRequest extends ExactProps<UpdateProjectRequest> {
 
 class DeleteProjectRequest extends ExactProps<DeleteProjectRequest> {
   @MinLength(1)
-  public readonly id!: string;
+  public readonly projectId!: string;
 }
 
 export const projectApi = {

@@ -30,7 +30,10 @@
   "createdDate": "Ngày tạo",
   "updatedDate": "Ngày sửa",
   "filter": "Lọc",
-  "operator": "Phương thức",
+  "name": "Tên",
+  "title": "Tiêu đề",
+  "content": "Nội dung",
+  "type": "Loại",
   "id": "Id",
   "detail": "Chi tiết",
 

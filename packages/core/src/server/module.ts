@@ -61,6 +61,7 @@ export class ServerModule extends BaseModule {
             await queryRunner.rollbackTransaction();
             await queryRunner.release();
             error = e;
+            break;
           }
         }
         next(error);

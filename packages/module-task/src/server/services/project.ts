@@ -56,7 +56,7 @@ export class UpdateProjectApiService extends ApiService {
   async handle(request: InferApiRequest<typeof projectApi.update>) {
     await this.dbSession.update(
       Project,
-      { id: request.id },
+      { id: request.projectId },
       { name: request.name, type: request.type }
     );
     return {};
@@ -67,7 +67,7 @@ export class UpdateProjectApiService extends ApiService {
 export class DeleteProjectApiService extends ApiService {
   async handle(request: InferApiRequest<typeof projectApi.delete>) {
     await this.dbSession.getRepository(Project).delete({
-      id: request.id,
+      id: request.projectId,
     });
     return {};
   }

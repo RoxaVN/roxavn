@@ -30,7 +30,10 @@
   "createdDate": "Created date",
   "updatedDate": "Updated date",
   "filter": "Filter",
-  "operator": "Operator",
+  "name": "Name",
+  "title": "Title",
+  "content": "Content",
+  "type": "Type",
   "id": "Id",
   "detail": "Detail",
 

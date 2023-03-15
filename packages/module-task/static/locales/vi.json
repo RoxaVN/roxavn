@@ -1,4 +1,9 @@
 {
+  "projects": "Dự án",
+  "addProject": "Thêm dự án",
+  "editProject": "Sửa dự án",
+  "deleteProject": "Xóa dự án",
+
   "Meta": {
     "name": "Module công việc",
     "description": "Module công việc"
