@@ -61,7 +61,9 @@ export class SearchUsersApiService extends ApiService {
       select: ['id', 'username'],
       where: {
         id: request.ids && In(request.ids),
+        username: request.usernameText && ILike(`${request.usernameText}%`),
       },
+      take: request.ids ? request.ids.length : 10,
     });
     return {
       items: users,

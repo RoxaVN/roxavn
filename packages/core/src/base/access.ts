@@ -133,13 +133,25 @@ class AccessManager {
     };
   }
 
-  makeRoles<R extends { [key: string]: Role }>(
+  makeRoles<R extends { [key: string]: Omit<Role, 'module'> }>(
     scopes: { [key: string]: Scope },
     permissions: { [key: string]: Permission },
     roles: R
   ) {
+    const result: { [key in keyof R]: Role } = Object.fromEntries(
+      Object.keys(roles).map((k) => {
+        return [
+          k as any,
+          {
+            module: scopes.Module.name,
+            ...roles[k],
+          },
+        ];
+      })
+    );
+
     return {
-      ...roles,
+      ...result,
       Admin: {
         name: constants.Role.ADMIN,
         scope: scopes.Module,

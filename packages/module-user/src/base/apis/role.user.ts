@@ -28,7 +28,7 @@ class GetRoleUsersRequest extends ExactProps<GetRoleUsersRequest> {
   @Min(1)
   @TransformNumber()
   @IsOptional()
-  public readonly page = 1;
+  public readonly page?: number;
 }
 
 export const roleUserApi = {

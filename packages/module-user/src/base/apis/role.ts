@@ -5,6 +5,7 @@ import {
   ForbiddenException,
   IsNumberString,
   IsOptional,
+  Max,
   Min,
   PaginatedCollection,
   TransformArray,
@@ -44,7 +45,13 @@ class GetRolesRequest extends ExactProps<GetRolesRequest> {
   @Min(1)
   @TransformNumber()
   @IsOptional()
-  public readonly page = 1;
+  public readonly page?: number;
+
+  @Min(10)
+  @Max(50)
+  @TransformNumber()
+  @IsOptional()
+  public readonly pageSize?: number;
 }
 
 class GetModuleRolStatseRequest extends ExactProps<GetModuleRolStatseRequest> {

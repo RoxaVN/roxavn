@@ -1,4 +1,4 @@
-import { accessManager } from '@roxavn/core/base';
+import { accessManager, constants } from '@roxavn/core/base';
 
 import { baseModule } from './module';
 
@@ -25,11 +25,13 @@ export const permissions = accessManager.makePermissions(scopes, {
 
 export const roles = accessManager.makeRoles(scopes, permissions, {
   ProjectAdmin: {
-    name: 'Admin',
+    name: constants.Role.ADMIN,
     scope: scopes.Project,
     permissions: [
       accessManager.permissions.CreateUserRole,
       accessManager.permissions.DeleteUserRole,
+      accessManager.permissions.ReadRoleUsers,
+      accessManager.permissions.ReadRoles,
       permissions.UpdateProject,
       permissions.CreateTask,
       permissions.UpdateTask,
@@ -45,6 +47,8 @@ export const roles = accessManager.makeRoles(scopes, permissions, {
     name: 'Mediator',
     scope: scopes.Project,
     permissions: [
+      accessManager.permissions.ReadRoleUsers,
+      accessManager.permissions.ReadRoles,
       permissions.CreateTask,
       permissions.AssignMe,
       permissions.AssignTask,
@@ -53,9 +57,11 @@ export const roles = accessManager.makeRoles(scopes, permissions, {
     ],
   },
   ProjectMember: {
-    name: 'Member',
+    name: constants.Role.MEMBER,
     scope: scopes.Project,
     permissions: [
+      accessManager.permissions.ReadRoleUsers,
+      accessManager.permissions.ReadRoles,
       permissions.CreateTask,
       permissions.AssignMe,
       permissions.ReadTasks,
@@ -65,6 +71,11 @@ export const roles = accessManager.makeRoles(scopes, permissions, {
   ProjectJuniorMember: {
     name: 'JuniorMember',
     scope: scopes.Project,
-    permissions: [permissions.ReadTasks, permissions.ReadTask],
+    permissions: [
+      accessManager.permissions.ReadRoleUsers,
+      accessManager.permissions.ReadRoles,
+      permissions.ReadTasks,
+      permissions.ReadTask,
+    ],
   },
 });

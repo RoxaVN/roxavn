@@ -10,7 +10,7 @@ import { serverModule } from '../module';
 export class GetRolesApiService extends ApiService {
   async handle(request: InferApiRequest<typeof roleApi.getMany>) {
     const page = request.page || 1;
-    const pageSize = 10;
+    const pageSize = request.pageSize || 10;
 
     const [roles, totalItems] = await this.dbSession
       .getRepository(Role)

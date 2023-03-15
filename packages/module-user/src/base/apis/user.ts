@@ -37,6 +37,9 @@ class SearchUsersRequest extends ExactProps<SearchUsersRequest> {
   @IsOptional()
   @TransformArray()
   public readonly ids?: string[];
+
+  @IsOptional()
+  public readonly usernameText?: string;
 }
 
 class GetUsersRequest extends ExactProps<GetUsersRequest> {
