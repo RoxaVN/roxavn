@@ -2,7 +2,7 @@
   "name": "@roxavn/module-task",
   "version": "0.1.0",
   "scripts": {
-    "build": "roxavn build",
+    "build": "roxavn hook install",
     "dev": "roxavn dev"
   },
   "license": "UNLICENSED",
@@ -25,6 +25,7 @@
   },
   "exports": {
     ".": "./dist/cjs/index.js",
+    "./hook": "./dist/cjs/hook/index.js",
     "./web": {
       "require": "./dist/cjs/web/index.js",
       "import": "./dist/esm/web/index.js"
@@ -40,6 +41,9 @@
   },
   "typesVersions": {
     "*": {
+      "hook": [
+        "dist/cjs/hook/index.d.ts"
+      ],
       "web": [
         "dist/esm/web/index.d.ts"
       ],
