@@ -34,18 +34,11 @@
   "id": "Id",
   "detail": "Detail",
 
-  "Filter": {
-    "startsWith": "Starts with",
-    "contains": "Contains",
-    "notContains": "Not contains",
-    "endsWith": "Ends with",
-    "equals": "Equals",
-    "notEquals": "Not equals",
-    "in": "In",
-    "lt": "Less than",
-    "lte": "Less than or equal",
-    "gt": "Greater than",
-    "gte": "Greater than or equal"
+  "Roles": {
+    "Admin": "Admin",
+    "Moderator": "Moderator",
+    "Viewer": "Viewer",
+    "Member": "Member"
   },
   "Error": {
     "BadRequestException": "Bad request exception",

@@ -1,4 +1,5 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -24,6 +25,9 @@ export class UserRole {
 
   @ManyToOne(() => Role, (role) => role.users)
   role: Role;
+
+  @Column({ type: 'jsonb', nullable: true })
+  metadata?: any;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;

@@ -80,6 +80,7 @@ export class CreateRolesHook extends BaseService {
         roleModel = new Role();
         roleModel.isPredefined = true;
         roleModel.name = role.name;
+        roleModel.module = role.module;
         roleModel.hasId = !!role.scope.idParam;
         roleModel.scope = role.scope.name;
         mess += 'add role ';

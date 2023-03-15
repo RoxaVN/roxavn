@@ -6,6 +6,7 @@ export const constants = {
     ADMIN: 'Admin',
     MODERATOR: 'Moderator',
     VIEWER: 'Viewer',
+    MEMBER: 'Member',
   },
   API_BASE_PATH: '__api',
   META_I18N_NAMESPACE: 'meta',

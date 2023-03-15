@@ -20,6 +20,9 @@ export class User {
   @Column()
   username: string;
 
+  @Column({ type: 'jsonb', nullable: true })
+  metadata?: any;
+
   @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;
 

@@ -21,6 +21,9 @@ export class Role {
   @Column()
   name: string;
 
+  @Column()
+  module: string;
+
   @Column('text', { array: true })
   permissions: string[];
 
@@ -29,6 +32,9 @@ export class Role {
 
   @Column()
   isPredefined: boolean;
+
+  @Column({ type: 'jsonb', nullable: true })
+  metadata?: any;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;

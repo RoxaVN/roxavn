@@ -21,6 +21,7 @@ export interface Permission {
 export interface Role {
   name: string;
   scope: Scope;
+  module: string;
   permissions: Permission[];
 }
 
@@ -143,10 +144,12 @@ class AccessManager {
         name: constants.Role.ADMIN,
         scope: scopes.Module,
         permissions: Object.values(permissions),
+        module: scopes.Module.name,
       },
       Viewer: {
         name: constants.Role.VIEWER,
         scope: scopes.Module,
+        module: scopes.Module.name,
         permissions: Object.values(permissions).filter(
           (p) => p.name.startsWith('Read') || p.name.startsWith('Get')
         ),

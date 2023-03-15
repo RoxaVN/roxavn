@@ -20,6 +20,8 @@ export interface RoleResponse {
   name: string;
   permissions: string[];
   scope: string;
+  module: string;
+  isPredefined: boolean;
 }
 
 const roleSource = new ApiSource<RoleResponse>([scopes.Role], baseModule);

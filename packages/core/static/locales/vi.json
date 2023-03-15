@@ -34,18 +34,11 @@
   "id": "Id",
   "detail": "Chi tiết",
 
-  "Filter": {
-    "startsWith": "Bắt đầu với",
-    "contains": "Chứa",
-    "notContains": "Không chứa",
-    "endsWith": "Kết thúc với",
-    "equals": "Bằng",
-    "notEquals": "Không bằng",
-    "in": "Thuộc",
-    "lt": "Nhỏ hơn",
-    "lte": "Nhỏ hơn hoặc bằng",
-    "gt": "Lớn hơn",
-    "gte": "Lớn hơn hoặc bằng"
+  "Roles": {
+    "Admin": "Quản trị viên",
+    "Moderator": "Người điều hành",
+    "Viewer": "Người xem",
+    "Member": "Thành viên"
   },
   "Error": {
     "BadRequestException": "Yêu cầu không hợp lệ",
