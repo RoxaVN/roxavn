@@ -7,6 +7,7 @@ import {
   IsDateString,
   IsIn,
   IsOptional,
+  MaxLength,
   Min,
   MinLength,
   TransformNumber,
@@ -44,6 +45,7 @@ class GetProjectsRequest extends ExactProps<GetProjectsRequest> {
 
 class CreateProjectRequest extends ExactProps<CreateProjectRequest> {
   @MinLength(1)
+  @MaxLength(1024)
   public readonly name!: string;
 
   @IsIn(Object.values(constants.ProjectTypes))
@@ -54,6 +56,7 @@ class UpdateProjectRequest extends ExactProps<UpdateProjectRequest> {
   @MinLength(1)
   public readonly projectId!: string;
 
+  @MaxLength(1024)
   @MinLength(1)
   @IsOptional()
   public readonly name?: string;
