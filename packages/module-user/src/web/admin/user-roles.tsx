@@ -25,7 +25,7 @@ const Page = () => {
           label: tCore('detail'),
           icon: IconEye,
           access: { api: userRoleApi.getAll },
-          link: { href: `${item.userId}` },
+          link: { href: item.userId },
         },
       ]}
     />

@@ -1,38 +1,48 @@
 import { Select } from '@mantine/core';
-import { InferApiRequest } from '@roxavn/core/base';
 import {
+  ApiConfirmFormGroup,
   ApiFormGroup,
   userService,
   utils,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
 import { ApiTable, useApi } from '@roxavn/core/web';
-import { IconPlus } from '@tabler/icons';
-import { useState } from 'react';
+import { IconPlus, IconTrash } from '@tabler/icons';
+import { Fragment, useEffect, useState } from 'react';
 
-import { roleApi, roleUserApi, userRoleApi } from '../../base';
+import { roleApi, RoleResponse, roleUserApi, userRoleApi } from '../../base';
 import { webModule } from '../module';
 
 export interface RoleUsersProps {
-  getRolesParams?: InferApiRequest<typeof roleApi.getMany>;
+  module?: string;
+  scope?: string;
+  scopeId?: string;
 }
 
-export const RoleUsers = ({ getRolesParams }: RoleUsersProps) => {
-  const { data } = useApi(roleApi.getMany, getRolesParams);
-  const [roleId, setRoleId] = useState(data && data.items[0].id);
+export const RoleUsers = ({ scope, scopeId, module }: RoleUsersProps) => {
+  const { data } = useApi(roleApi.getMany, { scope, scopeId, module });
+  const [role, setRole] = useState<RoleResponse>();
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
 
-  return (
-    roleId &&
-    data && (
+  useEffect(() => {
+    if (data) {
+      setRole(data?.items[0]);
+    }
+  }, [data]);
+
+  if (role && data) {
+    return (
       <ApiTable
         api={roleUserApi.getMany}
-        apiParams={{ roleId }}
+        apiParams={{ roleId: role.id, scopeId, module }}
         header={
           <Select
-            value={roleId.toString()}
-            onChange={(value) => value && setRoleId(parseInt(value))}
+            value={role.id.toString()}
+            onChange={(value) =>
+              value &&
+              setRole(data.items.find((i) => i.id.toString() === value))
+            }
             data={data.items.map((item) => ({
               value: item.id.toString(),
               label: item.name,
@@ -48,10 +58,7 @@ export const RoleUsers = ({ getRolesParams }: RoleUsersProps) => {
               children: (
                 <ApiFormGroup
                   api={userRoleApi.create}
-                  apiParams={{
-                    roleId: roleId,
-                    scopeId: getRolesParams?.scopeId,
-                  }}
+                  apiParams={{ roleId: role.id, scopeId, module }}
                   fields={[
                     {
                       name: 'userId',
@@ -71,7 +78,29 @@ export const RoleUsers = ({ getRolesParams }: RoleUsersProps) => {
             render: utils.Render.datetime,
           },
         }}
+        cellActions={(item) => [
+          {
+            label: tCore('delete'),
+            icon: IconTrash,
+            modal: (closeModal) => ({
+              title: t('deleteUserRole', { role: role.name }),
+              children: (
+                <ApiConfirmFormGroup
+                  api={userRoleApi.delete}
+                  apiParams={{
+                    roleId: role.id,
+                    userId: item.id,
+                    scopeId,
+                    module,
+                  }}
+                  onCancel={closeModal}
+                />
+              ),
+            }),
+          },
+        ]}
       />
-    )
-  );
+    );
+  }
+  return <Fragment />;
 };

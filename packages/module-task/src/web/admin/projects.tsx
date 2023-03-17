@@ -7,7 +7,13 @@ import {
   ApiFormGroup,
   ApiConfirmFormGroup,
 } from '@roxavn/core/web';
-import { IconEdit, IconInbox, IconPlus, IconTrash } from '@tabler/icons';
+import {
+  IconEdit,
+  IconInbox,
+  IconPlus,
+  IconTrash,
+  IconUsers,
+} from '@tabler/icons';
 
 import { constants, projectApi } from '../../base';
 import { webModule } from '../module';
@@ -97,6 +103,11 @@ const Page = () => {
             ),
           }),
         },
+        {
+          label: tCore('members'),
+          icon: IconUsers,
+          link: { href: item.id },
+        },
       ]}
     />
   );
@@ -104,7 +115,7 @@ const Page = () => {
 
 webModule.adminPages.push({
   label: (t) => t('projects'),
-  path: '/project',
+  path: '/projects',
   icon: IconInbox,
   element: (
     <IfCanAccessApi api={projectApi.getMany}>

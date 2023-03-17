@@ -31,15 +31,19 @@ export class CreateUserRoleApiService extends ApiService {
 @serverModule.useApi(userRoleApi.delete)
 export class DeleteUserRoleApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userRoleApi.delete>) {
+    if (request.module) {
+      const isValid = await this.dbSession
+        .getRepository(Role)
+        .count({ where: { module: request.module, id: request.roleId } });
+      if (!isValid) {
+        throw new BadRequestException();
+      }
+    }
+
     await this.dbSession.getRepository(UserRole).delete({
       scopeId: request.scopeId || '',
       userId: request.userId,
       roleId: request.roleId,
-      role: request.module
-        ? {
-            module: request.module,
-          }
-        : undefined,
     });
   }
 }

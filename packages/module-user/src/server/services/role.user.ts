@@ -6,7 +6,7 @@ import { UserRole } from '../entities';
 import { serverModule } from '../module';
 
 @serverModule.useApi(roleUserApi.getMany)
-export class GetUserRolesApiService extends ApiService {
+export class GetRoleUsersApiService extends ApiService {
   async handle(request: InferApiRequest<typeof roleUserApi.getMany>) {
     const page = request.page || 1;
     const pageSize = 10;
@@ -16,7 +16,6 @@ export class GetUserRolesApiService extends ApiService {
       .findAndCount({
         relations: { user: true },
         select: {
-          scopeId: true,
           user: {
             id: true,
             username: true,

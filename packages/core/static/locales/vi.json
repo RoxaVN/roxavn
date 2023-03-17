@@ -36,6 +36,7 @@
   "type": "Loại",
   "id": "Id",
   "detail": "Chi tiết",
+  "members": "Thành viên",
 
   "Roles": {
     "Admin": "Quản trị viên",

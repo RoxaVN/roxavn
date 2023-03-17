@@ -1,1 +1,2 @@
-import './project';
+import './projects';
+import './project.detail';

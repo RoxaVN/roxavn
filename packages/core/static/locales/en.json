@@ -36,6 +36,7 @@
   "type": "Type",
   "id": "Id",
   "detail": "Detail",
+  "members": "Members",
 
   "Roles": {
     "Admin": "Admin",

@@ -17,6 +17,7 @@ export const UserInput = (props: Omit<SelectProps, 'data'>) => (
     searchKey="usernameText"
     onSearchChangeProp="onSearchChange"
     component={Select}
+    withinPortal
     searchable
   />
 );
