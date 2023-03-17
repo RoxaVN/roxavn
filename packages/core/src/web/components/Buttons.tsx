@@ -5,12 +5,14 @@ import {
   ActionIcon,
   ButtonProps,
   ModalProps,
+  DrawerProps,
+  Drawer,
 } from '@mantine/core';
 import { randomId } from '@mantine/hooks';
 import { closeModal, openModal } from '@mantine/modals';
 import { PolymorphicComponentProps } from '@mantine/utils';
 import { IconCopy, IconCheck } from '@tabler/icons';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { webModule } from '../services';
@@ -41,6 +43,7 @@ export const CopyButton = ({ value }: { value: string }) => {
 };
 
 type _ModalProps = Omit<ModalProps, 'opened' | 'onClose'>;
+type _DrawerProps = Omit<DrawerProps, 'opened' | 'onClose'>;
 
 export interface ActionProps {
   label: React.ReactNode;
@@ -51,6 +54,7 @@ export interface ActionProps {
   onClick?: () => void;
   access?: Omit<IfCanAccessApiProps, 'children'>;
   modal?: _ModalProps | ((closeModal: () => void) => _ModalProps);
+  drawer?: _DrawerProps | ((closeDrawer: () => void) => _DrawerProps);
   modalMiddleware?: (closeModal: () => void, modalProps: _ModalProps) => void;
   link?: { href: string };
 }
@@ -59,6 +63,7 @@ export const ActionButton = ({
   label,
   icon,
   modal,
+  drawer,
   link,
   access,
   onClick,
@@ -66,6 +71,7 @@ export const ActionButton = ({
   ...props
 }: ActionProps & ButtonMantineProps) => {
   const navigate = useNavigate();
+  const [openDrawer, setOpenDrawer] = useState(false);
   const [modalId, modalProps] = useMemo(() => {
     const id = randomId();
     const closeFn = () => {
@@ -80,10 +86,28 @@ export const ActionButton = ({
     }
     return [id, _modalProps];
   }, [modal]);
+  const drawerProps = useMemo(() => {
+    return typeof drawer === 'function'
+      ? drawer(() => setOpenDrawer(false))
+      : drawer;
+  }, [drawer]);
+
   const Icon = icon;
 
   return (
-    <IfCanAccessApi {...{ ...(modalProps?.children as any)?.props, ...access }}>
+    <IfCanAccessApi
+      {...{
+        ...((modalProps?.children || drawerProps?.children) as any)?.props,
+        ...access,
+      }}
+    >
+      {drawerProps && (
+        <Drawer
+          {...drawerProps}
+          opened={openDrawer}
+          onClose={() => setOpenDrawer(false)}
+        />
+      )}
       <Button
         leftIcon={Icon && <Icon size={16} />}
         {...props}
@@ -97,6 +121,8 @@ export const ActionButton = ({
                     closeOnClickOutside: false,
                     ...modalProps,
                   });
+                } else if (drawerProps) {
+                  setOpenDrawer(true);
                 } else if (link) {
                   navigate(link.href);
                 }
