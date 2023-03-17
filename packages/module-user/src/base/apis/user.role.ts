@@ -30,6 +30,10 @@ class CreateUserRoleRequest extends ExactProps<CreateUserRoleRequest> {
 
   @IsOptional()
   public readonly scopeId?: string;
+
+  // add field for DynamicModule
+  @IsOptional()
+  public readonly module?: string;
 }
 
 class DeleteUserRoleRequest extends CreateUserRoleRequest {}
@@ -55,11 +59,11 @@ class GetUserRoleModulesRequest extends ExactProps<GetUserRoleModulesRequest> {
 export const userRoleApi = {
   create: userRoleSource.createRelation({
     validator: CreateUserRoleRequest,
-    permission: accessManager.permissions.CreateUserRole,
+    permission: permissions.CreateUserRole,
   }),
   delete: userRoleSource.delete({
     validator: DeleteUserRoleRequest,
-    permission: accessManager.permissions.DeleteUserRole,
+    permission: permissions.DeleteUserRole,
   }),
   getAll: userRoleSource.getAll({
     validator: GetUserRolesRequest,

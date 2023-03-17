@@ -27,6 +27,11 @@ export class GetUserRolesApiService extends ApiService {
         where: {
           roleId: request.roleId,
           scopeId: request.scopeId || '',
+          role: request.module
+            ? {
+                module: request.module,
+              }
+            : undefined,
         },
         take: pageSize,
         skip: (page - 1) * pageSize,

@@ -47,7 +47,7 @@ const Page = () => {
         },
       ]}
       columns={{
-        module: {
+        scope: {
           label: tCore('apps'),
         },
         name: { label: t('roleName') },

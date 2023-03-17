@@ -63,19 +63,23 @@ class AccessManager {
   permissions = {
     CreateUserRole: {
       name: 'CreateUserRole',
-      allowedScopes: [this.scopes.DynamicScope],
+      allowedScopes: [this.scopes.DynamicScope, this.scopes.DynamicModule],
     },
     DeleteUserRole: {
       name: 'DeleteUserRole',
-      allowedScopes: [this.scopes.DynamicScope, this.scopes.Owner],
+      allowedScopes: [
+        this.scopes.DynamicScope,
+        this.scopes.DynamicModule,
+        this.scopes.Owner,
+      ],
     },
     ReadRoleUsers: {
       name: 'ReadRoleUsers',
-      allowedScopes: [this.scopes.DynamicScope],
+      allowedScopes: [this.scopes.DynamicScope, this.scopes.DynamicModule],
     },
     ReadRoles: {
       name: 'ReadRoles',
-      allowedScopes: [this.scopes.DynamicScope],
+      allowedScopes: [this.scopes.DynamicScope, this.scopes.DynamicModule],
     },
   };
 
@@ -108,7 +112,7 @@ class AccessManager {
   } {
     const result: { [key in keyof P]: Permission } = Object.fromEntries(
       Object.keys(permissions).map((p) => {
-        const allowedScopes = permissions[p].allowedScopes || [];
+        const allowedScopes = [...(permissions[p].allowedScopes || [])];
         allowedScopes.push(scopes.Module);
         return [
           p as any,

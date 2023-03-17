@@ -17,6 +17,7 @@ export class GetRolesApiService extends ApiService {
       .findAndCount({
         where: {
           id: request.ids && In(request.ids),
+          module: request.module,
           scope: request.scope
             ? request.scope
             : request.scopeText

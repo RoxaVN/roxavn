@@ -1,5 +1,4 @@
 import {
-  accessManager,
   ApiSource,
   ExactProps,
   ForbiddenException,
@@ -36,6 +35,10 @@ class GetRolesRequest extends ExactProps<GetRolesRequest> {
   @IsOptional()
   public readonly scope?: string;
 
+  // add field for DynamicModule
+  @IsOptional()
+  public readonly module?: string;
+
   @IsOptional()
   public readonly scopeText?: string;
 
@@ -69,7 +72,7 @@ type GetModuleRoleStatsResponse = PaginatedCollection<{
 export const roleApi = {
   getMany: roleSource.getMany({
     validator: GetRolesRequest,
-    permission: accessManager.permissions.ReadRoles,
+    permission: permissions.ReadRoles,
   }),
   moduleStats: roleSource.custom<
     GetModuleRolStatseRequest,

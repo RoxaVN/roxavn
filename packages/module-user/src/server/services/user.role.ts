@@ -1,14 +1,23 @@
-import { InferApiRequest } from '@roxavn/core/base';
+import { BadRequestException, InferApiRequest } from '@roxavn/core/base';
 import { ApiService, moduleManager } from '@roxavn/core/server';
 import { In } from 'typeorm';
 
 import { userRoleApi } from '../../base';
-import { UserRole } from '../entities';
+import { Role, UserRole } from '../entities';
 import { serverModule } from '../module';
 
 @serverModule.useApi(userRoleApi.create)
 export class CreateUserRoleApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userRoleApi.create>) {
+    if (request.module) {
+      const isValid = await this.dbSession
+        .getRepository(Role)
+        .count({ where: { module: request.module, id: request.roleId } });
+      if (!isValid) {
+        throw new BadRequestException();
+      }
+    }
+
     const userRole = new UserRole();
     userRole.userId = request.userId;
     userRole.roleId = request.roleId;
@@ -26,6 +35,11 @@ export class DeleteUserRoleApiService extends ApiService {
       scopeId: request.scopeId || '',
       userId: request.userId,
       roleId: request.roleId,
+      role: request.module
+        ? {
+            module: request.module,
+          }
+        : undefined,
     });
   }
 }

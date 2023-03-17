@@ -7,7 +7,7 @@ import {
   MinLength,
   TransformNumber,
 } from '@roxavn/core/base';
-import { scopes } from '../access';
+import { permissions, scopes } from '../access';
 import { baseModule } from '../module';
 import { UserResponse } from './user';
 
@@ -25,6 +25,10 @@ class GetRoleUsersRequest extends ExactProps<GetRoleUsersRequest> {
   @IsOptional()
   public readonly scopeId?: string;
 
+  // add field for DynamicModule
+  @IsOptional()
+  public readonly module?: string;
+
   @Min(1)
   @TransformNumber()
   @IsOptional()
@@ -34,6 +38,6 @@ class GetRoleUsersRequest extends ExactProps<GetRoleUsersRequest> {
 export const roleUserApi = {
   getMany: roleUserSource.getMany({
     validator: GetRoleUsersRequest,
-    permission: accessManager.permissions.ReadRoleUsers,
+    permission: permissions.ReadRoleUsers,
   }),
 };
