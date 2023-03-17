@@ -5,6 +5,7 @@ import {
   ApiFormGroup,
   ApiConfirmFormGroup,
   IfCanAccessApi,
+  userService,
 } from '@roxavn/core/web';
 import { IconPlus, IconTrash } from '@tabler/icons';
 import { useParams } from 'react-router-dom';
@@ -12,13 +13,12 @@ import { useParams } from 'react-router-dom';
 import { userRoleApi } from '../../base';
 import { RoleInput } from '../components';
 import { webModule } from '../module';
-import { userReference } from '../references';
 
 const Page = () => {
   const id = useParams().id as any;
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
-  const { renderItem } = userReference.use({ ids: id });
+  const { renderItem } = userService.reference.use({ ids: id });
 
   return id ? (
     <ApiTable

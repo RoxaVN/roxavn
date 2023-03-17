@@ -1,15 +1,14 @@
 import { Menu } from '@mantine/core';
-import { authService, useAuthUser } from '@roxavn/core/web';
+import { authService, useAuthUser, userService } from '@roxavn/core/web';
 import { IconLogout, IconUserCircle } from '@tabler/icons';
 import { Link } from 'react-router-dom';
 
 import { webModule } from '../module';
-import { userReference } from '../references';
 
 export const UserMenu = () => {
   const { t } = webModule.useTranslation();
   const authUser = useAuthUser();
-  const { renderItem } = userReference.use(
+  const { renderItem } = userService.reference.use(
     { ids: [authUser?.id] },
     { cache: true }
   );

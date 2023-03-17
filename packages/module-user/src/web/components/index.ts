@@ -3,4 +3,4 @@ export * from './ResetPasswordForm';
 export * from './RoleInput';
 export * from './UserMenu';
 export * from './RoleUsers';
-export * from './UserInput';
+export { UserInput } from './UserInput';

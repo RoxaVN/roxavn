@@ -1,8 +1,12 @@
-import { authService, http, uiManager } from '@roxavn/core/web';
+import { authService, http, uiManager, userService } from '@roxavn/core/web';
+import { lazy } from 'react';
 import { accessTokenApi, userApi } from '../base';
 
 authService.authenticateApi = userApi.getOne;
 authService.logoutApi = accessTokenApi.delete;
+
+userService.reference.update(userApi.search, (item) => item.username);
+userService.input = lazy(() => import('./components/UserInput'));
 
 http.preSentObserver.subscribe(({ config }) => {
   const data = authService.getTokenData();

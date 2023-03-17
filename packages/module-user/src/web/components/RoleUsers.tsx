@@ -2,6 +2,7 @@ import { Select } from '@mantine/core';
 import { InferApiRequest } from '@roxavn/core/base';
 import {
   ApiFormGroup,
+  userService,
   utils,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
@@ -11,8 +12,6 @@ import { useState } from 'react';
 
 import { roleApi, roleUserApi, userRoleApi } from '../../base';
 import { webModule } from '../module';
-import { userReference } from '../references';
-import { UserInput } from './UserInput';
 
 export interface RoleUsersProps {
   getRolesParams?: InferApiRequest<typeof roleApi.getMany>;
@@ -56,7 +55,7 @@ export const RoleUsers = ({ getRolesParams }: RoleUsersProps) => {
                   fields={[
                     {
                       name: 'userId',
-                      input: <UserInput label={t('user')} />,
+                      input: <userService.input label={t('user')} />,
                     },
                   ]}
                 />
@@ -65,7 +64,7 @@ export const RoleUsers = ({ getRolesParams }: RoleUsersProps) => {
           },
         ]}
         columns={{
-          id: { label: tCore('id'), reference: userReference },
+          id: { label: tCore('id'), reference: userService.reference },
           username: { label: t('username') },
           createdDate: {
             label: tCore('createdDate'),

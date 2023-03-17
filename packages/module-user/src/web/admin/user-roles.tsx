@@ -1,12 +1,12 @@
 import {
   ApiTable,
   IfCanAccessApi,
+  userService,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
 import { IconEye, IconShieldChevron } from '@tabler/icons';
 import { userRoleApi, roleApi } from '../../base';
 import { webModule } from '../module';
-import { userReference } from '../references';
 
 const Page = () => {
   const { t } = webModule.useTranslation();
@@ -17,7 +17,7 @@ const Page = () => {
       api={roleApi.moduleStats}
       itemKey="userId"
       columns={{
-        userId: { label: tCore('id'), reference: userReference },
+        userId: { label: tCore('id'), reference: userService.reference },
         rolesCount: { label: t('roles') },
       }}
       cellActions={(item) => [

@@ -20,3 +20,5 @@ export const UserInput = (props: Omit<SelectProps, 'data'>) => (
     searchable
   />
 );
+
+export default UserInput;

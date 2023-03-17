@@ -5,3 +5,4 @@ export * from './api.fetcher';
 export * from './module';
 export * from './reference';
 export * from './auth';
+export * from './user';
