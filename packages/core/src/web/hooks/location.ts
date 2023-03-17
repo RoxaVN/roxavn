@@ -1,4 +1,3 @@
-import isEqual from 'lodash/isEqual';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -14,8 +13,9 @@ export const useLocationHash = (key: string) => {
     params: paramsObj,
     setOnChange: (data: Record<string, any>) => {
       useEffect(() => {
-        if (!isEqual(paramsObj, data)) {
-          navigate('#' + key + '?' + urlUtils.generateQueryStr(data));
+        const newHash = '#' + key + '?' + urlUtils.generateQueryStr(data);
+        if (newHash !== location.hash) {
+          navigate(newHash);
         }
       }, [data]);
     },
