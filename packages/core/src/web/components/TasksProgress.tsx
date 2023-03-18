@@ -24,7 +24,7 @@ export const TasksProgress = ({ tasks, children }: TasksProgressProps) => {
 
   useEffect(() => {
     load();
-  }, [tasks]);
+  }, []);
 
   if (children && progress === 100) {
     return children;
