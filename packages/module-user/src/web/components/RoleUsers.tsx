@@ -8,9 +8,9 @@ import {
 } from '@roxavn/core/web';
 import { ApiTable, useApi } from '@roxavn/core/web';
 import { IconPlus, IconTrash } from '@tabler/icons';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 
-import { roleApi, RoleResponse, roleUserApi, userRoleApi } from '../../base';
+import { roleApi, roleUserApi, userRoleApi } from '../../base';
 import { webModule } from '../module';
 
 export interface RoleUsersProps {
@@ -21,34 +21,25 @@ export interface RoleUsersProps {
 
 export const RoleUsers = ({ scope, scopeId, module }: RoleUsersProps) => {
   const { data } = useApi(roleApi.getMany, { scope, scopeId, module });
-  const [role, setRole] = useState<RoleResponse>();
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
 
-  useEffect(() => {
-    if (data) {
-      setRole(data?.items[0]);
-    }
-  }, [data]);
-
-  if (role && data) {
+  if (data) {
+    const selectInput = (
+      <Select
+        withinPortal
+        label={t('role')}
+        data={data.items.map((item) => ({
+          value: item.id as any,
+          label: item.name,
+        }))}
+      />
+    );
     return (
       <ApiTable
         api={roleUserApi.getMany}
-        apiParams={{ roleId: role.id, scopeId, module }}
-        header={
-          <Select
-            value={role.id.toString()}
-            onChange={(value) =>
-              value &&
-              setRole(data.items.find((i) => i.id.toString() === value))
-            }
-            data={data.items.map((item) => ({
-              value: item.id.toString(),
-              label: item.name,
-            }))}
-          />
-        }
+        apiParams={{ roleId: data.items[0]?.id, scopeId, module }}
+        filters={[{ name: 'roleId', input: selectInput }]}
         headerActions={[
           {
             label: tCore('add'),
@@ -58,12 +49,13 @@ export const RoleUsers = ({ scope, scopeId, module }: RoleUsersProps) => {
               children: (
                 <ApiFormGroup
                   api={userRoleApi.create}
-                  apiParams={{ roleId: role.id, scopeId, module }}
+                  apiParams={{ scopeId, module }}
                   fields={[
                     {
                       name: 'userId',
                       input: <userService.input label={t('user')} />,
                     },
+                    { name: 'roleId', input: selectInput },
                   ]}
                 />
               ),
@@ -78,17 +70,21 @@ export const RoleUsers = ({ scope, scopeId, module }: RoleUsersProps) => {
             render: utils.Render.datetime,
           },
         }}
-        cellActions={(item) => [
+        cellActions={(item, fetcherRef) => [
           {
             label: tCore('delete'),
             icon: IconTrash,
             modal: (closeModal) => ({
-              title: t('deleteUserRole', { role: role.name }),
+              title: t('deleteUserRole', {
+                role: data.items.find(
+                  (i) => i.id === fetcherRef.currentParams.roleId
+                )?.name,
+              }),
               children: (
                 <ApiConfirmFormGroup
                   api={userRoleApi.delete}
                   apiParams={{
-                    roleId: role.id,
+                    roleId: fetcherRef.currentParams.roleId,
                     userId: item.id,
                     scopeId,
                     module,

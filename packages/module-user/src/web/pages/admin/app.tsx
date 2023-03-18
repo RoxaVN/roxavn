@@ -43,7 +43,7 @@ function AdminComponent() {
     });
 
     return () => subscription.unsubscribe();
-  });
+  }, []);
 
   return (
     <AppShell

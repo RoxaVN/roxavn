@@ -1,8 +1,7 @@
 import { Table, Pagination, Group, Stack, Flex, Text } from '@mantine/core';
-import { useSetState } from '@mantine/hooks';
 import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons';
-import React, { MutableRefObject } from 'react';
+import React, { MutableRefObject, useEffect, useState } from 'react';
 
 import { Api, ApiRequest, Collection, PaginatedCollection } from '../../base';
 import { useLocationHash } from '../hooks';
@@ -73,7 +72,7 @@ export const ApiTable = <
   key,
 }: ApiTableProps<Request, ResponseItem>) => {
   const hash = useLocationHash('/table/' + (key || ''));
-  const [params, setParams] = useSetState<Request>({
+  const [params, setParams] = useState<Partial<Request>>({
     ...hash.params,
     ...apiParams,
   } as Request);
@@ -85,6 +84,9 @@ export const ApiTable = <
     }
   }
   hash.setOnChange(params);
+  useEffect(() => {
+    setParams(apiParams || {});
+  }, [JSON.stringify(apiParams)]);
 
   return (
     <ApiForm
@@ -155,7 +157,7 @@ export const ApiTable = <
                   <ApiFilterButton
                     apiParams={params}
                     fields={filters}
-                    onApply={(p) => setParams(p)}
+                    onApply={(p) => setParams({ ...params, ...p })}
                   />
                 )}
                 {headerActions &&
@@ -215,7 +217,9 @@ export const ApiTable = <
                 <Pagination
                   mb="md"
                   value={data.pagination.page}
-                  onChange={(page) => setParams({ page } as Partial<Request>)}
+                  onChange={(page) =>
+                    setParams({ ...params, page } as Partial<Request>)
+                  }
                   total={Math.ceil(
                     data.pagination.totalItems / data.pagination.pageSize
                   )}

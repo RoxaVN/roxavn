@@ -17,6 +17,7 @@
   "setRoleOf": "Set role of {{name}}",
   "myProfile": "My profile",
   "userList": "User list",
+  "user": "User",
   "roles": "Roles",
   "roleName": "Role name",
   "deleteUserRole": "Delete user role {{role}}",
