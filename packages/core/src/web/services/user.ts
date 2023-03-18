@@ -7,6 +7,13 @@ class UserService {
   input: ComponentType<Omit<SelectProps, 'data'>> = () => {
     throw new Error('Not implement user input');
   };
+  roleUsers: ComponentType<{
+    module?: string;
+    scope?: string;
+    scopeId?: string;
+  }> = () => {
+    throw new Error('Not implement RoleUsers component');
+  };
 }
 
 export const userService = new UserService();

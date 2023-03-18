@@ -1,13 +1,13 @@
-import { RoleUsers } from '@roxavn/module-user/web';
+import { userService } from '@roxavn/core/web';
 import { useParams } from 'react-router-dom';
 import { scopes } from '../../base';
 
 import { webModule } from '../module';
 
 const Page = () => {
-  const id = useParams().id as any;
+  const id = useParams().id;
   return (
-    <RoleUsers
+    <userService.roleUsers
       scopeId={id}
       module={webModule.name}
       scope={scopes.Project.name}

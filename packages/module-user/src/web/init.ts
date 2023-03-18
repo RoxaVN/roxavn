@@ -7,6 +7,7 @@ authService.logoutApi = accessTokenApi.delete;
 
 userService.reference.update(userApi.search, (item) => item.username);
 userService.input = lazy(() => import('./components/UserInput'));
+userService.roleUsers = lazy(() => import('./components/RoleUsers'));
 
 http.preSentObserver.subscribe(({ config }) => {
   const data = authService.getTokenData();

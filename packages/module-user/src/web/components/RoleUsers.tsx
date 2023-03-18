@@ -100,3 +100,5 @@ export const RoleUsers = ({ scope, scopeId, module }: RoleUsersProps) => {
   }
   return <Fragment />;
 };
+
+export default RoleUsers;
