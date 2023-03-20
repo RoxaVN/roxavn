@@ -3,12 +3,41 @@ import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
+import { Suspense } from 'react';
 
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
-const utils = {
+export const utils = {
+  Component: {
+    lazy: (fallback?: React.ReactElement) => {
+      return (target: any, name: PropertyKey): any => {
+        let ComponentType: React.ComponentType;
+        const componentWrapper = (props: any) => {
+          if (ComponentType) {
+            return (
+              <Suspense fallback={fallback}>
+                <ComponentType {...props} />
+              </Suspense>
+            );
+          }
+          throw new Error(name.toString() + " isn't implemented");
+        };
+
+        const descriptor = {
+          get(this: any) {
+            return componentWrapper;
+          },
+          set(newVal: React.ComponentType) {
+            ComponentType = newVal;
+          },
+        };
+
+        Object.defineProperty(target, name, descriptor);
+      };
+    },
+  },
   Number: {
     formatLocale(n: number | string) {
       const number = typeof n === 'string' ? parseFloat(n) : n;
@@ -60,5 +89,3 @@ const utils = {
     ),
   },
 };
-
-export { utils };

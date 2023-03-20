@@ -17,6 +17,7 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "sourceMap": true,
+    "experimentalDecorators": true,
     "strict": true
   },
   "include": ["src", "test"],
