@@ -1,4 +1,4 @@
 import { webModule } from '../../../../module';
-import '../../../../admin';
+import * as pages from '../../../../admin';
 
-export default webModule.makeAdminPages();
+export default webModule.makeAdminPages(pages);

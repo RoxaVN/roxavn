@@ -3,6 +3,7 @@ import {
   IfCanAccessApi,
   webModule as coreWebModule,
   utils,
+  PageItem,
 } from '@roxavn/core/web';
 import { ApiAvatar } from '@roxavn/module-upload/web';
 import { IconUserCircle } from '@tabler/icons';
@@ -36,7 +37,7 @@ const Page = () => {
   );
 };
 
-webModule.adminPages.push({
+export const userInfoPage = new PageItem({
   label: (t) => t('userInfo'),
   path: '/',
   icon: IconUserCircle,

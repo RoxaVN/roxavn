@@ -1,1 +1,1 @@
-import './list';
+export * from './file.storages';

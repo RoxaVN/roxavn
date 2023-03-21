@@ -3,6 +3,7 @@ import {
   webModule as coreWebModule,
   utils,
   IfCanAccessApi,
+  PageItem,
 } from '@roxavn/core/web';
 import { IconUsers } from '@tabler/icons';
 
@@ -30,7 +31,7 @@ const Page = () => {
   );
 };
 
-webModule.adminPages.push({
+export const fileStoragesPage = new PageItem({
   label: (t) => t('fileStorages'),
   path: '/',
   icon: IconUsers,

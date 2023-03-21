@@ -3,6 +3,7 @@ import { DatePickerInput } from '@mantine/dates';
 import { ApiFormGroup, ModuleT, useApi, useAuthUser } from '@roxavn/core/web';
 import { ApiImageUploader } from '@roxavn/module-upload/web';
 import { webModule as userWebModule } from '@roxavn/module-user/web';
+import { IconInfoCircle } from '@tabler/icons';
 
 import { constants, userInfoApi } from '../base';
 import { webModule } from './module';
@@ -55,8 +56,11 @@ const Page = () => {
   );
 };
 
-userWebModule.mePages.push({
-  label: <ModuleT module={webModule} k="userInfo" />,
-  path: '/',
-  element: <Page />,
-});
+export default function () {
+  userWebModule.mePages.push({
+    label: <ModuleT module={webModule} k="userInfo" />,
+    icon: IconInfoCircle,
+    path: '/',
+    element: <Page />,
+  });
+}

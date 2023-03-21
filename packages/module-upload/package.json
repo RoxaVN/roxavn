@@ -8,6 +8,7 @@
   "license": "UNLICENSED",
   "author": "Roxavn",
   "roxavn": {},
+  "sideEffects": false,
   "devDependencies": {
     "@roxavn/dev-web": "^0.1.0",
     "@types/busboy": "^1.5.0",

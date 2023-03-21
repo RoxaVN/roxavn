@@ -14,13 +14,17 @@ export interface AdminSettings {
   };
 }
 
+type PluginRegister = () => Promise<{ default: () => void }>;
+
 export class WebModule extends BaseModule {
-  readonly adminPluginRegisters: Array<() => Promise<() => void>> = [];
+  readonly adminPluginRegisters: Array<PluginRegister> = [];
   readonly adminSettings: AdminSettings = {};
   readonly adminPages: Array<PageItem> = [];
 
-  readonly mePluginRegisters: Array<() => Promise<() => void>> = [];
+  readonly mePluginRegisters: Array<PluginRegister> = [];
   readonly mePages: Array<PageItem> = [];
+
+  private registerMap = new Map();
 
   resolveStaticPath(path: string) {
     return WebModule.resolveStaticPath(this.name, path);
@@ -41,10 +45,7 @@ export class WebModule extends BaseModule {
       const element = useRoutes(pages);
 
       const load = async () => {
-        for (const register of this.adminPluginRegisters) {
-          const handler = await register();
-          handler();
-        }
+        await this.loadRegisters(this.adminPluginRegisters);
         if (
           !this.adminPages.find((p) => p.path === '/settings') &&
           Object.keys(this.adminSettings).length
@@ -78,10 +79,7 @@ export class WebModule extends BaseModule {
       const element = useRoutes(pages);
 
       const load = async () => {
-        for (const register of this.mePluginRegisters) {
-          const handler = await register();
-          handler();
-        }
+        await this.loadRegisters(this.mePluginRegisters);
         setPages([...this.mePages]);
         setWebModule(this);
       };
@@ -92,6 +90,16 @@ export class WebModule extends BaseModule {
 
       return element;
     };
+  }
+
+  private async loadRegisters(registers: Array<PluginRegister>) {
+    for (const register of registers) {
+      const handler = await register();
+      if (!this.registerMap.get(handler)) {
+        handler.default();
+        this.registerMap.set(handler, true);
+      }
+    }
   }
 
   static resolveStaticPath(moduleName: string, path: string) {
