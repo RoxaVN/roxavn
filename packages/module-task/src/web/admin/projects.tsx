@@ -6,6 +6,7 @@ import {
   utils,
   ApiFormGroup,
   ApiConfirmFormGroup,
+  PageItem,
 } from '@roxavn/core/web';
 import {
   IconEdit,
@@ -113,7 +114,7 @@ const Page = () => {
   );
 };
 
-webModule.adminPages.push({
+export const projectsPage = new PageItem({
   label: (t) => t('projects'),
   path: '/projects',
   icon: IconInbox,
