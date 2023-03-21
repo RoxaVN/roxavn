@@ -95,10 +95,12 @@ export const ApiTable = <
       apiParams={params}
       fetchOnMount
       onSuccess={(data) => {
-        for (const k in references) {
-          references[k].setParams({
-            ids: data.items.map((item) => item[k]),
-          } as any);
+        if (data.items.length) {
+          for (const k in references) {
+            references[k].setParams({
+              ids: data.items.map((item) => item[k]),
+            });
+          }
         }
       }}
       dataRender={({ data, fetcher }) => {
