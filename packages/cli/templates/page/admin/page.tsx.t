@@ -4,6 +4,7 @@ to: src/web/admin/<%= h.changeCase.dot(path_name) %>.tsx
 import {
   ApiTable,
   IfCanAccessApi,
+  PageItem,
   webModule as coreWebModule,
   utils,
 } from '@roxavn/core/web';
@@ -18,7 +19,7 @@ const Page = () => {
   return (
     <ApiTable
       api={getUsersApi}
-      header={t('test')}
+      header={t('<%= h.changeCase.camel(path_name) %>')}
       columns={{
         username: { label: t('username') },
         updatedDate: {
@@ -30,9 +31,9 @@ const Page = () => {
   );
 };
 
-webModule.adminPages.push({
-  label: (t) => t('test'),
-  path: '/test',
+export const <%= h.changeCase.camel(path_name) %>Page = new PageItem({
+  label: (t) => t('<%= h.changeCase.camel(path_name) %>'),
+  path: '/<%= h.changeCase.param(path_name) %>',
   icon: IconUsers,
   element: (
     <IfCanAccessApi api={getUsersApi}>
