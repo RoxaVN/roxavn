@@ -73,18 +73,22 @@ class ModuleService {
       fs.existsSync(`${webPath}/init.js`) ||
       fs.existsSync(`${webPath}/init.jsx`)
     ) {
+      const importName = module
+        .replaceAll('/', '$')
+        .replaceAll('@', '')
+        .replaceAll('-', '_');
       new CodeChanger(
         '.web/app/init.client.ts',
         '// start block',
         '// end block'
       )
-        .removeLines(module)
-        .removeLines('../../src/web/init')
+        .removeLines(importName)
         .insertEnd(
           module === moduleManager.currentModule.name
-            ? `import '../../src/web/init';`
-            : `import '${module}/web/init';`
+            ? `import ${importName} from '../../src/web/init';`
+            : `import ${importName} from '${module}/web/init';`
         )
+        .insertEnd(`${importName}();`)
         .save();
     }
   }

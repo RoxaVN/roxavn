@@ -1,3 +1,5 @@
 import { WebModule } from '@roxavn/core/web';
 
-WebModule.settingsPageRenderRegister = () => import('./register');
+export default function () {
+  WebModule.settingsPageRenderRegister = () => import('./register');
+}

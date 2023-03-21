@@ -2,6 +2,7 @@ import { TextInput } from '@mantine/core';
 import {
   ApiTable,
   IfCanAccessApi,
+  PageItem,
   utils,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
@@ -34,7 +35,7 @@ const Page = () => {
   );
 };
 
-webModule.adminPages.push({
+export const rolesPage = new PageItem({
   label: (t) => t('roles'),
   path: '/roles',
   icon: IconCrown,

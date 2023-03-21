@@ -9,6 +9,7 @@ import {
   utils,
   IfCanAccessApi,
   ApiConfirmFormGroup,
+  PageItem,
 } from '@roxavn/core/web';
 import { IconEye, IconKey, IconPlus, IconUsers } from '@tabler/icons';
 
@@ -55,7 +56,13 @@ const Page = () => {
         },
         {
           name: 'createdDate',
-          input: <DatePickerInput type="range" label={tCore('createdDate')} />,
+          input: (
+            <DatePickerInput
+              type="range"
+              label={tCore('createdDate')}
+              clearable
+            />
+          ),
         },
       ]}
       columns={{
@@ -116,7 +123,7 @@ const Page = () => {
   );
 };
 
-webModule.adminPages.push({
+export const usersPage = new PageItem({
   label: (t) => t('userList'),
   path: '/',
   icon: IconUsers,

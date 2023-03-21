@@ -1,6 +1,7 @@
 import {
   ApiTable,
   IfCanAccessApi,
+  PageItem,
   userService,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
@@ -32,7 +33,7 @@ const Page = () => {
   );
 };
 
-webModule.adminPages.push({
+export const userRolesPage = new PageItem({
   label: (t) => t('userRoles'),
   path: '/user-roles',
   icon: IconShieldChevron,

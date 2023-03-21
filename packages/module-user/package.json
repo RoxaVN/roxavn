@@ -8,6 +8,7 @@
   "license": "UNLICENSED",
   "author": "Roxavn",
   "roxavn": {},
+  "sideEffects": false,
   "devDependencies": {
     "@roxavn/dev-web": "^0.1.0",
     "@types/ua-parser-js": "^0.7.36",
@@ -55,6 +56,9 @@
       ],
       "web": [
         "dist/esm/web/index.d.ts"
+      ],
+      "web/init": [
+        "dist/esm/web/init.d.ts"
       ],
       "base": [
         "dist/esm/base/index.d.ts"

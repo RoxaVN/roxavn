@@ -1,3 +1,6 @@
+// to fix bug when load import { accessTokenApi, userApi } from '../base' in src/web/init
+import 'reflect-metadata';
+
 import {
   ApiSource,
   ExactProps,

@@ -6,6 +6,7 @@ import {
   ApiConfirmFormGroup,
   IfCanAccessApi,
   userService,
+  PageItem,
 } from '@roxavn/core/web';
 import { IconPlus, IconTrash } from '@tabler/icons';
 import { useParams } from 'react-router-dom';
@@ -78,7 +79,7 @@ const Page = () => {
   );
 };
 
-webModule.adminPages.push({
+export const userRolesDetailPage = new PageItem({
   path: '/user-roles/:id',
   element: (
     <IfCanAccessApi api={userRoleApi.getAll}>

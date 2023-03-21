@@ -1,6 +1,3 @@
-// to fix bug when load lazy(() => import('./components/UserInput')) in src/web/init
-import 'reflect-metadata';
-
 import {
   accessManager,
   ApiError,

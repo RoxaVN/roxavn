@@ -1,4 +1,4 @@
 import { webModule } from '../../../module';
-import '../../../me';
+import * as pages from '../../../me';
 
-export default webModule.makeMePages();
+export default webModule.makeMePages(pages);

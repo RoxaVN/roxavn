@@ -25,7 +25,8 @@ export const IsAuthenticated = ({
         const timeout = setTimeout(async () => {
           try {
             await authService.authenticate(token);
-          } catch {
+          } catch (e) {
+            console.error(e);
           } finally {
             setLoading(false);
           }

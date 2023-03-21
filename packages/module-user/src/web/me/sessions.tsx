@@ -3,6 +3,7 @@ import {
   ApiConfirmFormGroup,
   ApiList,
   authService,
+  PageItem,
   uiManager,
   utils,
 } from '@roxavn/core/web';
@@ -65,7 +66,7 @@ const Page = () => {
   );
 };
 
-webModule.mePages.push({
+export const sessionsPage = new PageItem({
   label: (t) => t('sessions'),
   path: '/sessions',
   icon: IconCookie,

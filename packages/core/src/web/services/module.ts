@@ -1,22 +1,10 @@
 import { IconSettings } from '@tabler/icons';
-import { TFunction } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOutletContext, useRoutes } from 'react-router-dom';
 
 import { baseModule, BaseModule } from '../../base';
-
-export interface PageItem {
-  label?: React.ReactNode | { (t: TFunction): React.ReactNode };
-  description?: React.ReactNode | { (t: TFunction): React.ReactNode };
-  icon?: React.ComponentType<{
-    size?: number | string;
-    stroke?: number | string;
-  }>;
-  path?: string;
-  element?: React.ReactElement;
-  children?: Array<PageItem>;
-}
+import { PageItem } from './page';
 
 export interface AdminSettings {
   [name: string]: {
@@ -27,11 +15,11 @@ export interface AdminSettings {
 }
 
 export class WebModule extends BaseModule {
-  readonly adminPluginRegisters: Array<() => Promise<any>> = [];
+  readonly adminPluginRegisters: Array<() => Promise<() => void>> = [];
   readonly adminSettings: AdminSettings = {};
   readonly adminPages: Array<PageItem> = [];
 
-  readonly mePluginRegisters: Array<() => Promise<any>> = [];
+  readonly mePluginRegisters: Array<() => Promise<() => void>> = [];
   readonly mePages: Array<PageItem> = [];
 
   resolveStaticPath(path: string) {
@@ -42,7 +30,10 @@ export class WebModule extends BaseModule {
     return useTranslation(this.escapedName);
   }
 
-  makeAdminPages() {
+  makeAdminPages(adminPages: Record<string, PageItem>) {
+    this.adminPages.push(
+      ...Object.values(adminPages).filter((p) => p instanceof PageItem)
+    );
     return () => {
       const { t } = webModule.useTranslation();
       const [pages, setPages] = useState(this.adminPages);
@@ -51,7 +42,8 @@ export class WebModule extends BaseModule {
 
       const load = async () => {
         for (const register of this.adminPluginRegisters) {
-          await register();
+          const handler = await register();
+          handler();
         }
         if (
           !this.adminPages.find((p) => p.path === '/settings') &&
@@ -76,7 +68,10 @@ export class WebModule extends BaseModule {
     };
   }
 
-  makeMePages() {
+  makeMePages(mePages: Record<string, PageItem>) {
+    this.mePages.push(
+      ...Object.values(mePages).filter((p) => p instanceof PageItem)
+    );
     return () => {
       const [pages, setPages] = useState(this.mePages);
       const { setWebModule } = useOutletContext<any>();
@@ -84,7 +79,8 @@ export class WebModule extends BaseModule {
 
       const load = async () => {
         for (const register of this.mePluginRegisters) {
-          await register();
+          const handler = await register();
+          handler();
         }
         setPages([...this.mePages]);
         setWebModule(this);
