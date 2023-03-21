@@ -1,7 +1,8 @@
 import { Table, Pagination, Group, Stack, Flex, Text } from '@mantine/core';
+import { useDidUpdate } from '@mantine/hooks';
 import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons';
-import React, { MutableRefObject, useEffect, useState } from 'react';
+import React, { MutableRefObject, useState } from 'react';
 
 import { Api, ApiRequest, Collection, PaginatedCollection } from '../../base';
 import { useLocationHash } from '../hooks';
@@ -84,7 +85,7 @@ export const ApiTable = <
     }
   }
   hash.setOnChange(params);
-  useEffect(() => {
+  useDidUpdate(() => {
     setParams(apiParams || {});
   }, [JSON.stringify(apiParams)]);
 
