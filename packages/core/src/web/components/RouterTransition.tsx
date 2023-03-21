@@ -5,7 +5,7 @@ import {
   NavigationProgressProps,
 } from '@mantine/nprogress';
 import { useEffect } from 'react';
-import { useTransition } from '@remix-run/react';
+import { useNavigation } from '@remix-run/react';
 
 export function RouterTransition({
   children,
@@ -14,16 +14,16 @@ export function RouterTransition({
   children: React.ReactNode;
   options?: NavigationProgressProps;
 }) {
-  const transition = useTransition();
+  const navigation = useNavigation();
 
   useEffect(() => {
     // if it's not idle then it's submitting a form and loading the next location loaders
-    if (transition.state !== 'idle') {
+    if (navigation.state !== 'idle') {
       startNavigationProgress(); // so you start it
     } else {
       completeNavigationProgress(); // when it's idle again complete it
     }
-  }, [transition.state]);
+  }, [navigation.state]);
 
   return (
     <>
