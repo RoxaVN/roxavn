@@ -42,7 +42,7 @@ export interface ApiTableProps<
     PaginatedCollection<ResponseItem> | Collection<ResponseItem>
   >;
   apiParams?: Request;
-  key?: string;
+  locationKey?: string;
   fetcherRef?: MutableRefObject<ApiFetcherRef<Request> | undefined>;
   columns: ApiTableColumns<ResponseItem>;
   filters?: Array<FormGroupField<Request>>;
@@ -70,9 +70,9 @@ export const ApiTable = <
   headerActions,
   cellActions,
   fetcherRef,
-  key,
+  locationKey = '/table',
 }: ApiTableProps<Request, ResponseItem>) => {
-  const hash = useLocationHash('/table/' + (key || ''));
+  const hash = useLocationHash(locationKey);
   const [params, setParams] = useState<Partial<Request>>({
     ...hash.params,
     ...apiParams,
