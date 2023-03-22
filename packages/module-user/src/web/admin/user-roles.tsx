@@ -1,6 +1,7 @@
 import {
   ApiTable,
   IfCanAccessApi,
+  ModuleT,
   PageItem,
   userService,
   webModule as coreWebModule,
@@ -34,8 +35,8 @@ const Page = () => {
 };
 
 export const userRolesPage = new PageItem({
-  label: (t) => t('userRoles'),
-  path: '/user-roles',
+  label: <ModuleT module={webModule} k="userRoles" />,
+  path: 'user-roles',
   icon: IconShieldChevron,
   element: (
     <IfCanAccessApi api={roleApi.moduleStats}>

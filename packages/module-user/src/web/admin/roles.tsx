@@ -2,6 +2,7 @@ import { TextInput } from '@mantine/core';
 import {
   ApiTable,
   IfCanAccessApi,
+  ModuleT,
   PageItem,
   utils,
   webModule as coreWebModule,
@@ -36,8 +37,8 @@ const Page = () => {
 };
 
 export const rolesPage = new PageItem({
-  label: (t) => t('roles'),
-  path: '/roles',
+  label: <ModuleT module={webModule} k="roles" />,
+  path: 'roles',
   icon: IconCrown,
   element: (
     <IfCanAccessApi api={roleApi.getMany}>

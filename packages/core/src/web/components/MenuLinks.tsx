@@ -4,16 +4,15 @@ import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 import { PageLink, usePageLinks } from '../hooks';
-import { PageItem, WebModule } from '../services';
+import { PageItem } from '../services';
 
 export interface MenuLinksProps {
   pageItems: PageItem[];
-  module: WebModule;
   basePath: string;
 }
 
-export const MenuLinks = ({ pageItems, module, basePath }: MenuLinksProps) => {
-  const _pageLinks = usePageLinks(pageItems, module, basePath);
+export const MenuLinks = ({ pageItems, basePath }: MenuLinksProps) => {
+  const _pageLinks = usePageLinks(pageItems, basePath);
 
   const makeLinks = (pageLinks: PageLink[]) =>
     pageLinks.map((pageLink) => {

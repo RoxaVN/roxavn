@@ -10,6 +10,7 @@ import {
   IfCanAccessApi,
   ApiConfirmFormGroup,
   PageItem,
+  ModuleT,
 } from '@roxavn/core/web';
 import { IconEye, IconKey, IconPlus, IconUsers } from '@tabler/icons';
 
@@ -124,8 +125,8 @@ const Page = () => {
 };
 
 export const usersPage = new PageItem({
-  label: (t) => t('userList'),
-  path: '/',
+  label: <ModuleT module={webModule} k="userList" />,
+  path: '',
   icon: IconUsers,
   element: (
     <IfCanAccessApi api={userApi.getMany}>

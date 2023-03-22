@@ -66,8 +66,7 @@ function AdminComponent() {
           {webModule && (
             <MenuLinks
               pageItems={webModule.adminPages}
-              module={webModule}
-              basePath={BASE}
+              basePath={BASE + '/' + webModule.escapedName}
             />
           )}
         </Navbar>

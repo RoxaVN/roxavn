@@ -2,16 +2,15 @@ import { Tabs } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
 import { usePageLinks } from '../hooks';
-import { PageItem, WebModule } from '../services';
+import { PageItem } from '../services';
 
 export interface TabLinksProps {
   pageItems: PageItem[];
-  module: WebModule;
   basePath: string;
 }
 
-export const TabLinks = ({ pageItems, module, basePath }: TabLinksProps) => {
-  const _pageLinks = usePageLinks(pageItems, module, basePath);
+export const TabLinks = ({ pageItems, basePath }: TabLinksProps) => {
+  const _pageLinks = usePageLinks(pageItems, basePath);
   const navigate = useNavigate();
 
   return (

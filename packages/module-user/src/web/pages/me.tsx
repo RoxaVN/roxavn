@@ -100,8 +100,7 @@ function MeComponent() {
         <Box mb="md">
           <TabLinks
             pageItems={webModule.mePages}
-            module={webModule}
-            basePath={BASE}
+            basePath={BASE + '/' + webModule.escapedName}
           />
         </Box>
       )}

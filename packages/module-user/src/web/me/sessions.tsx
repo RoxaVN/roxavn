@@ -3,6 +3,7 @@ import {
   ApiConfirmFormGroup,
   ApiList,
   authService,
+  ModuleT,
   PageItem,
   uiManager,
   utils,
@@ -67,8 +68,8 @@ const Page = () => {
 };
 
 export const sessionsPage = new PageItem({
-  label: (t) => t('sessions'),
-  path: '/sessions',
+  label: <ModuleT module={webModule} k="sessions" />,
+  path: 'sessions',
   icon: IconCookie,
   element: <Page />,
 });

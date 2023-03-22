@@ -80,7 +80,7 @@ const Page = () => {
 };
 
 export const userRolesDetailPage = new PageItem({
-  path: '/user-roles/:id',
+  path: 'user-roles/:id',
   element: (
     <IfCanAccessApi api={userRoleApi.getAll}>
       <Page />
