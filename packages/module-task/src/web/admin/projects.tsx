@@ -7,6 +7,7 @@ import {
   ApiFormGroup,
   ApiConfirmFormGroup,
   PageItem,
+  userService,
 } from '@roxavn/core/web';
 import {
   IconEdit,
@@ -16,7 +17,7 @@ import {
   IconUsers,
 } from '@tabler/icons';
 
-import { constants, projectApi } from '../../base';
+import { constants, projectApi, scopes } from '../../base';
 import { webModule } from '../module';
 
 const Page = () => {
@@ -107,7 +108,20 @@ const Page = () => {
         {
           label: tCore('members'),
           icon: IconUsers,
-          link: { href: item.id },
+          access: {
+            api: userService.roleUsersAccessApi,
+            apiParams: { module: webModule.name },
+          },
+          drawer: {
+            title: tCore('members'),
+            children: (
+              <userService.roleUsers
+                scopeId={item.id}
+                module={webModule.name}
+                scope={scopes.Project.name}
+              />
+            ),
+          },
         },
       ]}
     />

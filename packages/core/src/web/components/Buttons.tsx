@@ -103,6 +103,8 @@ export const ActionButton = ({
     >
       {drawerProps && (
         <Drawer
+          position="right"
+          size="xl"
           {...drawerProps}
           opened={openDrawer}
           onClose={() => setOpenDrawer(false)}

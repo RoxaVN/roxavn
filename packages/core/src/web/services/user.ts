@@ -1,6 +1,7 @@
 import { SelectProps } from '@mantine/core';
 import { ComponentType } from 'react';
 
+import { Api } from '../../base';
 import { Reference } from './reference';
 import { utils } from './utils';
 
@@ -15,6 +16,12 @@ class UserService {
     module?: string;
     scope?: string;
     scopeId?: string;
+  }>;
+
+  roleUsersAccessApi?: Api<{
+    scope?: string;
+    scopeId?: string;
+    module?: string;
   }>;
 }
 

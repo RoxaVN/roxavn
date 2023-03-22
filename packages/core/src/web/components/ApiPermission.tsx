@@ -85,14 +85,14 @@ export const useRoles = () => useContext(RolesContext).roles;
 
 export const useCanAccessApi = <Request extends ApiRequest>(
   api?: Api<Request>,
-  apiParams?: Request
+  apiParams?: Partial<Request>
 ) => {
   return api ? canAccessApi(useRoles(), api, apiParams) : true;
 };
 
 export interface IfCanAccessApiProps<Request extends ApiRequest = ApiRequest> {
   api?: Api<Request>;
-  apiParams?: Request;
+  apiParams?: Partial<Request>;
   children: React.ReactElement;
 }
 

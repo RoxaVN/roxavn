@@ -1,6 +1,6 @@
 import { authService, http, uiManager, userService } from '@roxavn/core/web';
 import { lazy } from 'react';
-import { accessTokenApi, userApi } from '../base';
+import { accessTokenApi, roleApi, userApi } from '../base';
 
 export default function () {
   authService.authenticateApi = userApi.getOne;
@@ -9,6 +9,7 @@ export default function () {
   userService.reference.update(userApi.search, (item) => item.username);
   userService.input = lazy(() => import('./components/UserInput'));
   userService.roleUsers = lazy(() => import('./components/RoleUsers'));
+  userService.roleUsersAccessApi = roleApi.getMany;
 
   http.preSentObserver.subscribe(({ config }) => {
     const data = authService.getTokenData();
