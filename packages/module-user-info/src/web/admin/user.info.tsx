@@ -4,6 +4,7 @@ import {
   webModule as coreWebModule,
   utils,
   PageItem,
+  ModuleT,
 } from '@roxavn/core/web';
 import { ApiAvatar } from '@roxavn/module-upload/web';
 import { IconUserCircle } from '@tabler/icons';
@@ -38,8 +39,8 @@ const Page = () => {
 };
 
 export const userInfoPage = new PageItem({
-  label: (t) => t('userInfo'),
-  path: '/',
+  label: <ModuleT module={webModule} k="userInfo" />,
+  path: '',
   icon: IconUserCircle,
   element: (
     <IfCanAccessApi api={userInfoApi.getMany}>

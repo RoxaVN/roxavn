@@ -4,6 +4,7 @@ to: src/web/admin/<%= h.changeCase.dot(path_name) %>.tsx
 import {
   ApiTable,
   IfCanAccessApi,
+  ModuleT,
   PageItem,
   webModule as coreWebModule,
   utils,
@@ -32,8 +33,8 @@ const Page = () => {
 };
 
 export const <%= h.changeCase.camel(path_name) %>Page = new PageItem({
-  label: (t) => t('<%= h.changeCase.camel(path_name) %>'),
-  path: '/<%= h.changeCase.param(path_name) %>',
+  label: <ModuleT module={webModule} k="<%= h.changeCase.camel(path_name) %>" />,
+  path: '<%= h.changeCase.param(path_name) %>',
   icon: IconUsers,
   element: (
     <IfCanAccessApi api={getUsersApi}>

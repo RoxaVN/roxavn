@@ -8,6 +8,7 @@ import {
   ApiConfirmFormGroup,
   PageItem,
   userService,
+  ModuleT,
 } from '@roxavn/core/web';
 import {
   IconEdit,
@@ -129,8 +130,8 @@ const Page = () => {
 };
 
 export const projectsPage = new PageItem({
-  label: (t) => t('projects'),
-  path: '/projects',
+  label: <ModuleT module={webModule} k="projects" />,
+  path: 'projects',
   icon: IconInbox,
   element: (
     <IfCanAccessApi api={projectApi.getMany}>

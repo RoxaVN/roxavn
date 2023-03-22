@@ -60,7 +60,7 @@ export default function () {
   userWebModule.mePages.push({
     label: <ModuleT module={webModule} k="userInfo" />,
     icon: IconInfoCircle,
-    path: '/',
+    path: '',
     element: <Page />,
   });
 }

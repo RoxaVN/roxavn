@@ -4,6 +4,7 @@ import {
   utils,
   IfCanAccessApi,
   PageItem,
+  ModuleT,
 } from '@roxavn/core/web';
 import { IconUsers } from '@tabler/icons';
 
@@ -32,8 +33,8 @@ const Page = () => {
 };
 
 export const fileStoragesPage = new PageItem({
-  label: (t) => t('fileStorages'),
-  path: '/',
+  label: <ModuleT module={webModule} k="fileStorages" />,
+  path: '',
   icon: IconUsers,
   element: (
     <IfCanAccessApi api={fileStoageApi.getMany}>
