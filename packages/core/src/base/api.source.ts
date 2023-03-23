@@ -21,6 +21,7 @@ export type ApiOptions<
   Error extends ApiError = ApiError
 > = Omit<Api<Req, Res, Error>, 'path' | 'resources' | 'method'> & {
   method?: Api['method'];
+  path?: Api['path'];
 };
 
 export class ApiSource<T extends ApiResponse> {
@@ -43,11 +44,15 @@ export class ApiSource<T extends ApiResponse> {
       | NotFoundException
       | ForbiddenException
       | UnauthorizedException
-  >(api: ApiOptions<Req>): Api<Req, PaginatedCollection<T>, Error> {
+  >({
+    path,
+    method,
+    ...api
+  }: ApiOptions<Req>): Api<Req, PaginatedCollection<T>, Error> {
     return {
-      method: 'GET',
+      method: method || 'GET',
+      path: path || this.apiPath(),
       ...api,
-      path: this.apiPath(),
       resources: this.resources,
     };
   }
@@ -58,11 +63,11 @@ export class ApiSource<T extends ApiResponse> {
       | NotFoundException
       | ForbiddenException
       | UnauthorizedException
-  >(api: ApiOptions<Req>): Api<Req, Collection<T>, Error> {
+  >({ method, path, ...api }: ApiOptions<Req>): Api<Req, Collection<T>, Error> {
     return {
-      method: 'GET',
+      method: method || 'GET',
+      path: path || this.apiPath(),
       ...api,
-      path: this.apiPath(),
       resources: this.resources,
     };
   }
@@ -73,11 +78,11 @@ export class ApiSource<T extends ApiResponse> {
       | NotFoundException
       | ForbiddenException
       | UnauthorizedException
-  >(api: ApiOptions<Req>): Api<Req, T, Error> {
+  >({ method, path, ...api }: ApiOptions<Req>): Api<Req, T, Error> {
     return {
-      method: 'GET',
+      method: method || 'GET',
+      path: path || this.apiPath({ includeId: true }),
       ...api,
-      path: this.apiPath({ includeId: true }),
       resources: this.resources,
     };
   }
@@ -89,11 +94,11 @@ export class ApiSource<T extends ApiResponse> {
       | NotFoundException
       | ForbiddenException
       | UnauthorizedException
-  >(api: ApiOptions<Req>): Api<Req, Res, Error> {
+  >({ method, path, ...api }: ApiOptions<Req>): Api<Req, Res, Error> {
     return {
-      method: 'POST',
+      method: method || 'POST',
+      path: path || this.apiPath(),
       ...api,
-      path: this.apiPath(),
       resources: this.resources,
     };
   }
@@ -105,12 +110,12 @@ export class ApiSource<T extends ApiResponse> {
       | NotFoundException
       | ForbiddenException
       | UnauthorizedException
-  >(api: ApiOptions<Req>): Api<Req, Res, Error> {
+  >({ method, path, ...api }: ApiOptions<Req>): Api<Req, Res, Error> {
     if (this.resources.length === 2) {
       return {
-        method: 'POST',
+        method: method || 'POST',
+        path: path || this.apiPath({ includeId: true }),
         ...api,
-        path: this.apiPath({ includeId: true }),
         resources: this.resources,
       };
     }
@@ -124,11 +129,11 @@ export class ApiSource<T extends ApiResponse> {
       | NotFoundException
       | ForbiddenException
       | UnauthorizedException
-  >(api: ApiOptions<Req>): Api<Req, Res, Error> {
+  >({ method, path, ...api }: ApiOptions<Req>): Api<Req, Res, Error> {
     return {
-      method: 'PUT',
+      method: method || 'PUT',
+      path: path || this.apiPath({ includeId: true }),
       ...api,
-      path: this.apiPath({ includeId: true }),
       resources: this.resources,
     };
   }
@@ -140,11 +145,11 @@ export class ApiSource<T extends ApiResponse> {
       | NotFoundException
       | ForbiddenException
       | UnauthorizedException
-  >(api: ApiOptions<Req>): Api<Req, Res, Error> {
+  >({ method, path, ...api }: ApiOptions<Req>): Api<Req, Res, Error> {
     return {
-      method: 'DELETE',
+      method: method || 'DELETE',
+      path: path || this.apiPath({ includeId: true }),
       ...api,
-      path: this.apiPath({ includeId: true }),
       resources: this.resources,
     };
   }

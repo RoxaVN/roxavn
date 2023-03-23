@@ -1,7 +1,8 @@
 import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
-import { ApiService } from '@roxavn/core/server';
+import { ApiService, services } from '@roxavn/core/server';
+import { In } from 'typeorm';
 
-import { projectApi } from '../../base';
+import { projectApi, scopes } from '../../base';
 import { Project } from '../entities';
 import { serverModule } from '../module';
 
@@ -36,6 +37,34 @@ export class GetProjectsApiService extends ApiService {
     return {
       items: items,
       pagination: { page, pageSize, totalItems },
+    };
+  }
+}
+
+@serverModule.useApi(projectApi.getManyJoined)
+export class GetJoinedProjectsApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof projectApi.getManyJoined>) {
+    const page = request.page || 1;
+    const pageSize = 10;
+
+    const result = await this.create(services.GetUserScopeIdsApiService).handle(
+      {
+        scope: scopes.Project.name,
+        userId: request.userId,
+        pageSize,
+        page,
+      }
+    );
+
+    const items = result.items.length
+      ? await this.dbSession
+          .getRepository(Project)
+          .find({ where: { id: In(result.items.map((item) => item.scopeId)) } })
+      : [];
+
+    return {
+      items: items,
+      pagination: result.pagination,
     };
   }
 }

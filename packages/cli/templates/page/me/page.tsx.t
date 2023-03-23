@@ -14,7 +14,7 @@ const Page = () => {
 
 export const <%= h.changeCase.camel(path_name) %>Page = new PageItem({
   label: <ModuleT module={webModule} k="<%= h.changeCase.camel(path_name) %>" />,
-  path: '/<%= h.changeCase.param(path_name) %>',
+  path: '<%= h.changeCase.param(path_name) %>',
   icon: IconUsers,
   element: <Page />,
 });

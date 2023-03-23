@@ -1,5 +1,5 @@
 import { BadRequestException, InferApiRequest } from '@roxavn/core/base';
-import { ApiService, moduleManager } from '@roxavn/core/server';
+import { ApiService, moduleManager, services } from '@roxavn/core/server';
 import { In } from 'typeorm';
 
 import { userRoleApi } from '../../base';
@@ -85,3 +85,34 @@ export class GetUserRoleModulesApiService extends ApiService {
     });
   }
 }
+
+const AbstractService = services.GetUserScopeIdsApiService;
+export class GetUserScopeIdsApiService extends AbstractService {
+  async handle(request: {
+    scope: string;
+    userId: string;
+    page?: number;
+    pageSize?: number;
+  }) {
+    const page = request.page || 1;
+    const pageSize = request.pageSize || 10;
+
+    const [items, totalItems] = await this.dbSession
+      .getRepository(UserRole)
+      .findAndCount({
+        select: { scopeId: true, userId: true, roleId: true },
+        where: {
+          userId: request.userId,
+          role: { scope: request.scope },
+        },
+        take: pageSize,
+        skip: (page - 1) * pageSize,
+      });
+
+    return {
+      items: items,
+      pagination: { page, pageSize, totalItems },
+    };
+  }
+}
+services.GetUserScopeIdsApiService = GetUserScopeIdsApiService;

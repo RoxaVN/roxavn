@@ -43,6 +43,16 @@ class GetProjectsRequest extends ExactProps<GetProjectsRequest> {
   public readonly page = 1;
 }
 
+class GetJoinedProjectsRequest extends ExactProps<GetJoinedProjectsRequest> {
+  @MinLength(1)
+  public readonly userId!: string;
+
+  @Min(1)
+  @TransformNumber()
+  @IsOptional()
+  public readonly page?: number;
+}
+
 class CreateProjectRequest extends ExactProps<CreateProjectRequest> {
   @MinLength(1)
   @MaxLength(1024)
@@ -78,6 +88,11 @@ export const projectApi = {
   }),
   getMany: projectSource.getMany({
     validator: GetProjectsRequest,
+    permission: permissions.ReadProjects,
+  }),
+  getManyJoined: projectSource.getMany({
+    path: baseModule.apiPath('/joined-projects'),
+    validator: GetJoinedProjectsRequest,
     permission: permissions.ReadProjects,
   }),
   create: projectSource.create({

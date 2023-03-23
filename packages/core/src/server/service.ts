@@ -1,5 +1,10 @@
 import { EntityManager } from 'typeorm';
-import { Api, InferApiRequest, InferApiResponse } from '../base';
+import {
+  Api,
+  InferApiRequest,
+  InferApiResponse,
+  PaginatedCollection,
+} from '../base';
 
 export type AuthenticatedData = {
   $user: { id: string };
@@ -32,3 +37,20 @@ export abstract class AuthApiService<T extends Api = Api> extends BaseService<
   InferApiRequest<T> & AuthenticatedData,
   InferApiResponse<T>
 > {}
+
+class GetUserScopeIdsApiService extends BaseService {
+  handle(request: {
+    scope: string;
+    userId: string;
+    page?: number;
+    pageSize?: number;
+  }): Promise<PaginatedCollection<{ scopeId: string }>> {
+    throw new Error(
+      "GetUserScopeIdsApiService isn't implemented " + JSON.stringify(request)
+    );
+  }
+}
+
+export const services = {
+  GetUserScopeIdsApiService,
+};
