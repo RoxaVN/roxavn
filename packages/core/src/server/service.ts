@@ -52,5 +52,5 @@ class GetUserScopeIdsApiService extends BaseService {
 }
 
 export const services = {
-  GetUserScopeIdsApiService,
+  getUserScopeIdsApiService: GetUserScopeIdsApiService,
 };

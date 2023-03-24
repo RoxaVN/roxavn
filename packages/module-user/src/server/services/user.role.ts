@@ -86,7 +86,7 @@ export class GetUserRoleModulesApiService extends ApiService {
   }
 }
 
-const AbstractService = services.GetUserScopeIdsApiService;
+const AbstractService = services.getUserScopeIdsApiService;
 export class GetUserScopeIdsApiService extends AbstractService {
   async handle(request: {
     scope: string;
@@ -115,4 +115,4 @@ export class GetUserScopeIdsApiService extends AbstractService {
     };
   }
 }
-services.GetUserScopeIdsApiService = GetUserScopeIdsApiService;
+services.getUserScopeIdsApiService = GetUserScopeIdsApiService;

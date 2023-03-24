@@ -47,7 +47,7 @@ export class GetJoinedProjectsApiService extends ApiService {
     const page = request.page || 1;
     const pageSize = 10;
 
-    const result = await this.create(services.GetUserScopeIdsApiService).handle(
+    const result = await this.create(services.getUserScopeIdsApiService).handle(
       {
         scope: scopes.Project.name,
         userId: request.userId,
