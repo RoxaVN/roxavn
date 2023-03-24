@@ -27,7 +27,7 @@ import {
 import { constants, userRoleApi, WebRoutes } from '../../../base';
 import { UserMenu } from '../../components';
 
-const BASE = '/admin/app';
+const BASE = '/admin/apps';
 
 function AdminComponent() {
   const theme = useMantineTheme();
@@ -88,7 +88,7 @@ function AdminComponent() {
                 mr="xl"
               />
             </MediaQuery>
-            <MediaQuery smallerThan="lg" styles={{ display: 'none' }}>
+            <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
               <Button
                 component={Link}
                 to={BASE}

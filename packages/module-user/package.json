@@ -20,6 +20,7 @@
   "peerDependencies": {
     "@mantine/core": "*",
     "@mantine/prism": "*",
+    "@remix-run/node": "*",
     "@remix-run/react": "*",
     "@roxavn/core": "*",
     "@roxavn/module-utils": "*",

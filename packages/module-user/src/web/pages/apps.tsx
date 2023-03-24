@@ -1,24 +1,35 @@
+import { useState } from 'react';
+import { Navigate, Outlet, useLocation, Link } from 'react-router-dom';
 import {
   AppShell,
-  Burger,
-  Footer,
-  Group,
+  Navbar,
   Header,
-  Loader,
+  Footer,
   MediaQuery,
-  Text,
+  Burger,
   useMantineTheme,
+  Group,
+  Loader,
+  Button,
 } from '@mantine/core';
-import { IsAuthenticated } from '@roxavn/core/web';
-import { useState } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { WebRoutes } from '../../base';
+import { IconApps } from '@tabler/icons';
+import {
+  WebModule,
+  webModule as coreWebModule,
+  MenuLinks,
+  IsAuthenticated,
+} from '@roxavn/core/web';
 
+import { WebRoutes } from '../../base';
 import { UserMenu } from '../components';
 
-function AppComponent() {
+const BASE = '/apps';
+
+function AppsComponent() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  const [webModule, setWebModule] = useState<WebModule>();
+  const tCore = coreWebModule.useTranslation().t;
 
   return (
     <AppShell
@@ -31,6 +42,21 @@ function AppComponent() {
         },
       }}
       navbarOffsetBreakpoint="sm"
+      navbar={
+        <Navbar
+          p="md"
+          hiddenBreakpoint="sm"
+          hidden={!opened}
+          width={{ sm: 200, lg: 300 }}
+        >
+          {webModule && (
+            <MenuLinks
+              pageItems={webModule.adminPages}
+              basePath={BASE + '/' + webModule.escapedName}
+            />
+          )}
+        </Navbar>
+      }
       footer={
         <Footer height={60} p="md">
           Application footer
@@ -48,21 +74,30 @@ function AppComponent() {
                 mr="xl"
               />
             </MediaQuery>
-            <MediaQuery smallerThan="lg" styles={{ display: 'none' }}>
-              <Text>Application header</Text>
+            <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
+              <Button
+                component={Link}
+                to={BASE}
+                variant="subtle"
+                leftIcon={<IconApps size={20} />}
+              >
+                {tCore('apps')}
+              </Button>
             </MediaQuery>
+
             <UserMenu />
           </Group>
         </Header>
       }
     >
-      <Outlet />
+      <Outlet context={{ setWebModule }} />
     </AppShell>
   );
 }
 
 export default function () {
   const location = useLocation();
+
   return (
     <IsAuthenticated
       loadingComponent={
@@ -70,7 +105,7 @@ export default function () {
           <Loader />
         </Group>
       }
-      userComponent={<AppComponent />}
+      userComponent={<AppsComponent />}
       guestComponent={
         <Navigate to={WebRoutes.Login.generate({ ref: location.pathname })} />
       }

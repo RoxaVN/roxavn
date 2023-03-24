@@ -74,6 +74,26 @@ class ModuleManager {
       })
       .map((m) => m.name);
   }
+
+  getModulesHaveAppPages() {
+    return this.modules
+      .filter((m) => {
+        try {
+          const modulePath =
+            m.name === this.currentModule.name
+              ? './src/web/index.ts'
+              : require.resolve(m.name + '/web');
+          const pagesPath = path.join(
+            path.dirname(modulePath),
+            'pages/app/{moduleName}'
+          );
+          return fs.existsSync(pagesPath);
+        } catch (e) {
+          return false;
+        }
+      })
+      .map((m) => m.name);
+  }
 }
 
 export const moduleManager = new ModuleManager();

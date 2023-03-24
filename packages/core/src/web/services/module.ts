@@ -24,6 +24,9 @@ export class WebModule extends BaseModule {
   readonly mePluginRegisters: Array<PluginRegister> = [];
   readonly mePages: Array<PageItem> = [];
 
+  readonly appPluginRegisters: Array<PluginRegister> = [];
+  readonly appPages: Array<PageItem> = [];
+
   private registerMap = new Map();
 
   resolveStaticPath(path: string) {
@@ -81,6 +84,29 @@ export class WebModule extends BaseModule {
       const load = async () => {
         await this.loadRegisters(this.mePluginRegisters);
         setPages([...this.mePages]);
+        setWebModule(this);
+      };
+
+      useEffect(() => {
+        load();
+      }, []);
+
+      return element;
+    };
+  }
+
+  makeAppPages(appPages: Record<string, PageItem>) {
+    this.appPages.push(
+      ...Object.values(appPages).filter((p) => p instanceof PageItem)
+    );
+    return () => {
+      const [pages, setPages] = useState(this.appPages);
+      const { setWebModule } = useOutletContext<any>();
+      const element = useRoutes(pages);
+
+      const load = async () => {
+        await this.loadRegisters(this.appPluginRegisters);
+        setPages([...this.appPages]);
         setWebModule(this);
       };
 

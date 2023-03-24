@@ -19,6 +19,8 @@ to: package.json
   "dependencies": {},
   "peerDependencies": {
     "@mantine/core": "*",
+    "@remix-run/node": "*",
+    "@remix-run/react": "*",
     "@roxavn/core": "*",
     "@roxavn/module-user": "*",
     "@tabler/icons": "*",
