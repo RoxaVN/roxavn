@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate, Outlet, useLocation, Link } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import {
   AppShell,
   Navbar,
@@ -9,7 +9,6 @@ import {
   Burger,
   useMantineTheme,
   Group,
-  Loader,
   Button,
 } from '@mantine/core';
 import { IconApps } from '@tabler/icons';
@@ -20,16 +19,18 @@ import {
   IsAuthenticated,
 } from '@roxavn/core/web';
 
-import { WebRoutes } from '../../base';
+import { webModule as userWebModule } from '../module';
 import { UserMenu } from '../components';
+import { WebRoutes } from '../../base';
 
 const BASE = '/apps';
 
-function AppsComponent() {
+export default function () {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const [webModule, setWebModule] = useState<WebModule>();
   const tCore = coreWebModule.useTranslation().t;
+  const { t } = userWebModule.useTranslation();
 
   return (
     <AppShell
@@ -51,7 +52,7 @@ function AppsComponent() {
         >
           {webModule && (
             <MenuLinks
-              pageItems={webModule.adminPages}
+              pageItems={webModule.appPages}
               basePath={BASE + '/' + webModule.escapedName}
             />
           )}
@@ -85,30 +86,23 @@ function AppsComponent() {
               </Button>
             </MediaQuery>
 
-            <UserMenu />
+            <IsAuthenticated
+              userComponent={<UserMenu />}
+              guestComponent={
+                <Button
+                  component={Link}
+                  variant="outline"
+                  to={WebRoutes.Login.generate({ ref: BASE })}
+                >
+                  {t('login')}
+                </Button>
+              }
+            />
           </Group>
         </Header>
       }
     >
       <Outlet context={{ setWebModule }} />
     </AppShell>
-  );
-}
-
-export default function () {
-  const location = useLocation();
-
-  return (
-    <IsAuthenticated
-      loadingComponent={
-        <Group position="center" align="center" sx={{ height: '100vh' }}>
-          <Loader />
-        </Group>
-      }
-      userComponent={<AppsComponent />}
-      guestComponent={
-        <Navigate to={WebRoutes.Login.generate({ ref: location.pathname })} />
-      }
-    />
   );
 }

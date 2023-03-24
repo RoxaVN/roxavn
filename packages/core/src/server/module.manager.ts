@@ -85,7 +85,7 @@ class ModuleManager {
               : require.resolve(m.name + '/web');
           const pagesPath = path.join(
             path.dirname(modulePath),
-            'pages/app/{moduleName}'
+            'pages/apps/{moduleName}'
           );
           return fs.existsSync(pagesPath);
         } catch (e) {
