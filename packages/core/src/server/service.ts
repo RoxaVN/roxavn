@@ -51,6 +51,20 @@ class GetUserScopeIdsApiService extends BaseService {
   }
 }
 
-export const services = {
+class SetUserRoleApiService extends BaseService {
+  handle(request: {
+    scope: string;
+    scopeId: string;
+    userId: string;
+    roleName: string;
+  }): Promise<void> {
+    throw new Error(
+      "SetUserRoleApiService isn't implemented " + JSON.stringify(request)
+    );
+  }
+}
+
+export const serviceManager = {
   getUserScopeIdsApiService: GetUserScopeIdsApiService,
+  setUserRoleApiService: SetUserRoleApiService,
 };

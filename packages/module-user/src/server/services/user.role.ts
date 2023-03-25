@@ -1,5 +1,9 @@
-import { BadRequestException, InferApiRequest } from '@roxavn/core/base';
-import { ApiService, moduleManager, services } from '@roxavn/core/server';
+import {
+  BadRequestException,
+  InferApiRequest,
+  NotFoundException,
+} from '@roxavn/core/base';
+import { ApiService, moduleManager, serviceManager } from '@roxavn/core/server';
 import { In } from 'typeorm';
 
 import { userRoleApi } from '../../base';
@@ -86,8 +90,8 @@ export class GetUserRoleModulesApiService extends ApiService {
   }
 }
 
-const AbstractService = services.getUserScopeIdsApiService;
-export class GetUserScopeIdsApiService extends AbstractService {
+const AbstractGetService = serviceManager.getUserScopeIdsApiService;
+export class GetUserScopeIdsApiService extends AbstractGetService {
   async handle(request: {
     scope: string;
     userId: string;
@@ -115,4 +119,28 @@ export class GetUserScopeIdsApiService extends AbstractService {
     };
   }
 }
-services.getUserScopeIdsApiService = GetUserScopeIdsApiService;
+serviceManager.getUserScopeIdsApiService = GetUserScopeIdsApiService;
+
+const AbstractSetService = serviceManager.setUserRoleApiService;
+export class SetUserRoleApiService extends AbstractSetService {
+  async handle(request: {
+    scope: string;
+    scopeId: string;
+    userId: string;
+    roleName: string;
+  }) {
+    const role = await this.dbSession.getRepository(Role).findOne({
+      select: ['id'],
+      where: { scope: request.scope, name: request.roleName },
+    });
+    if (role) {
+      return await this.create(CreateUserRoleApiService).handle({
+        roleId: role.id,
+        userId: request.userId,
+        scopeId: request.scopeId,
+      });
+    }
+    throw new NotFoundException();
+  }
+}
+serviceManager.setUserRoleApiService = SetUserRoleApiService;

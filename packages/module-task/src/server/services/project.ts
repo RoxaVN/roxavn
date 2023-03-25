@@ -1,8 +1,12 @@
 import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
-import { ApiService, InferAuthApiRequest, services } from '@roxavn/core/server';
+import {
+  ApiService,
+  InferAuthApiRequest,
+  serviceManager,
+} from '@roxavn/core/server';
 import { In } from 'typeorm';
 
-import { projectApi, scopes } from '../../base';
+import { projectApi, roles, scopes } from '../../base';
 import { Project } from '../entities';
 import { serverModule } from '../module';
 
@@ -47,14 +51,14 @@ export class GetJoinedProjectsApiService extends ApiService {
     const page = request.page || 1;
     const pageSize = 10;
 
-    const result = await this.create(services.getUserScopeIdsApiService).handle(
-      {
-        scope: scopes.Project.name,
-        userId: request.userId,
-        pageSize,
-        page,
-      }
-    );
+    const result = await this.create(
+      serviceManager.getUserScopeIdsApiService
+    ).handle({
+      scope: scopes.Project.name,
+      userId: request.userId,
+      pageSize,
+      page,
+    });
 
     const items = result.items.length
       ? await this.dbSession
@@ -77,6 +81,14 @@ export class CreateProjectApiService extends ApiService {
     project.type = request.type;
     project.userId = request.$user.id;
     await this.dbSession.save(project);
+
+    // auto set creator as admin
+    await this.create(serviceManager.setUserRoleApiService).handle({
+      scope: scopes.Project.name,
+      scopeId: project.id,
+      roleName: roles.ProjectAdmin.name,
+      userId: project.userId,
+    });
     return { id: project.id };
   }
 }
