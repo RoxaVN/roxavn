@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -16,6 +17,10 @@ export class Project {
 
   @Column()
   type: string;
+
+  @Index()
+  @Column('uuid')
+  userId: string;
 
   @Column()
   name: string;

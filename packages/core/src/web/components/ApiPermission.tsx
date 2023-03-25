@@ -1,7 +1,7 @@
 import { useListState, UseListStateHandlers } from '@mantine/hooks';
 import React, { Fragment, useContext, useEffect } from 'react';
-import { Api, ApiRequest, Collection } from '../../base';
-import { useApi } from '../services';
+import { accessManager, Api, ApiRequest, Collection } from '../../base';
+import { authService, useApi } from '../services';
 
 export const RolesContext = React.createContext<{
   roles: Array<RoleItem>;
@@ -61,6 +61,11 @@ export const canAccessApi = <Request extends ApiRequest>(
   apiParams?: Partial<Request>
 ) => {
   const permission = api?.permission;
+  if (permission?.allowedScopes.includes(accessManager.scopes.AuthUser)) {
+    if (authService.isAuthenticated()) {
+      return true;
+    }
+  }
   return permission
     ? permission.allowedScopes.some(
         (scope) =>

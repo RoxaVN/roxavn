@@ -55,6 +55,7 @@ const Page = () => {
         },
       ]}
       columns={{
+        userId: { label: tCore('creator'), reference: userService.reference },
         name: { label: tCore('name') },
         type: { label: tCore('type') },
         createdDate: {

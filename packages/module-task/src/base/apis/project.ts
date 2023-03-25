@@ -21,6 +21,7 @@ const projectSource = new ApiSource<{
   id: string;
   type: string;
   name: string;
+  userId: string;
   createdDate: Date;
 }>([scopes.Project], baseModule);
 

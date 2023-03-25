@@ -36,6 +36,7 @@
   "type": "Type",
   "id": "Id",
   "detail": "Detail",
+  "creator": "Creator",
   "members": "Members",
 
   "Roles": {

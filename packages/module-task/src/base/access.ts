@@ -8,16 +8,20 @@ export const scopes = accessManager.makeScopes(baseModule, {
 });
 
 export const permissions = accessManager.makePermissions(scopes, {
-  CreateProject: {},
-  ReadProject: {},
+  CreateProject: {
+    allowedScopes: [accessManager.scopes.AuthUser],
+  },
+  ReadProject: {
+    allowedScopes: [scopes.Project],
+  },
   ReadProjects: {
     allowedScopes: [accessManager.scopes.Owner],
   },
   UpdateProject: {
-    allowedScopes: [accessManager.scopes.Owner, scopes.Project],
+    allowedScopes: [scopes.Project],
   },
   DeleteProject: {
-    allowedScopes: [accessManager.scopes.Owner, scopes.Project],
+    allowedScopes: [scopes.Project],
   },
 
   CreateUserRole: accessManager.permissions.CreateUserRole,

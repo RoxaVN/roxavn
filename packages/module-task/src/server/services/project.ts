@@ -1,5 +1,5 @@
 import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
-import { ApiService, services } from '@roxavn/core/server';
+import { ApiService, InferAuthApiRequest, services } from '@roxavn/core/server';
 import { In } from 'typeorm';
 
 import { projectApi, scopes } from '../../base';
@@ -71,10 +71,11 @@ export class GetJoinedProjectsApiService extends ApiService {
 
 @serverModule.useApi(projectApi.create)
 export class CreateProjectApiService extends ApiService {
-  async handle(request: InferApiRequest<typeof projectApi.create>) {
+  async handle(request: InferAuthApiRequest<typeof projectApi.create>) {
     const project = new Project();
     project.name = request.name;
     project.type = request.type;
+    project.userId = request.$user.id;
     await this.dbSession.save(project);
     return { id: project.id };
   }
