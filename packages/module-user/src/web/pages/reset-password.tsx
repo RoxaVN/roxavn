@@ -1,6 +1,7 @@
 import { Card, Container } from '@mantine/core';
+import { webRoutes } from '@roxavn/core/base';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { WebRoutes } from '../../base';
+
 import { ResetPasswordForm } from '../components';
 
 const ResetPasswordPage = (): JSX.Element => {
@@ -14,7 +15,7 @@ const ResetPasswordPage = (): JSX.Element => {
           userId={params.get('userId') || ''}
           username={params.get('username') || ''}
           token={params.get('token') || ''}
-          onSuccess={() => navigate(WebRoutes.Login.path)}
+          onSuccess={() => navigate(webRoutes.Login.path)}
         />
       </Card>
     </Container>

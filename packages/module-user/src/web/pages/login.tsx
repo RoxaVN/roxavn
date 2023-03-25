@@ -1,6 +1,7 @@
 import { Card, Container } from '@mantine/core';
+import { webRoutes } from '@roxavn/core/base';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { WebRoutes } from '../../base';
+
 import { LoginForm } from '../components';
 
 const LoginPage = (): JSX.Element => {
@@ -11,7 +12,7 @@ const LoginPage = (): JSX.Element => {
     <Container size={400} py={50}>
       <Card withBorder>
         <LoginForm
-          onSuccess={() => navigate(params.get('ref') || WebRoutes.Me.path)}
+          onSuccess={() => navigate(params.get('ref') || webRoutes.Me.path)}
         />
       </Card>
     </Container>

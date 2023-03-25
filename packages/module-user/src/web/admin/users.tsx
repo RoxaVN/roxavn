@@ -18,7 +18,7 @@ import {
   passwordIdentityApi,
   userApi,
   userRoleApi,
-  WebRoutes,
+  webRoutes,
 } from '../../base';
 import { webModule } from '../module';
 
@@ -95,7 +95,7 @@ const Page = () => {
                 apiParams={{ userId: item.id }}
                 onCancel={onClose}
                 onSuccess={(data) => {
-                  const link = WebRoutes.ResetPassword.generate({
+                  const link = webRoutes.ResetPassword.generate({
                     userId: item.id,
                     username: item.username,
                     token: data.token,

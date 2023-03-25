@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { type MetaFunction } from '@remix-run/node';
-import { Navigate, Outlet, useLocation, Link } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import {
   AppShell,
   Navbar,
@@ -10,7 +10,6 @@ import {
   Burger,
   useMantineTheme,
   Group,
-  Loader,
   Button,
 } from '@mantine/core';
 import { IconApps } from '@tabler/icons';
@@ -21,10 +20,10 @@ import {
   http,
   TasksProgress,
   MenuLinks,
-  IsAuthenticated,
+  ForceLogin,
 } from '@roxavn/core/web';
 
-import { constants, userRoleApi, WebRoutes } from '../../../base';
+import { constants, userRoleApi } from '../../../base';
 import { UserMenu } from '../../components';
 
 const BASE = '/admin/apps';
@@ -110,16 +109,9 @@ function AdminComponent() {
 }
 
 const AdminPage = () => {
-  const location = useLocation();
-
   return (
-    <IsAuthenticated
-      loadingComponent={
-        <Group position="center" align="center" sx={{ height: '100vh' }}>
-          <Loader />
-        </Group>
-      }
-      userComponent={(user) => (
+    <ForceLogin>
+      {(user) => (
         <ApiRolesGetter
           api={userRoleApi.modules}
           apiParams={{ userId: user.id }}
@@ -131,10 +123,7 @@ const AdminPage = () => {
           </TasksProgress>
         </ApiRolesGetter>
       )}
-      guestComponent={
-        <Navigate to={WebRoutes.Login.generate({ ref: location.pathname })} />
-      }
-    />
+    </ForceLogin>
   );
 };
 

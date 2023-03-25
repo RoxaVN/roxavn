@@ -7,7 +7,6 @@ import {
   MediaQuery,
   Burger,
   useMantineTheme,
-  Loader,
   Group,
   NavLink,
   Avatar,
@@ -17,12 +16,11 @@ import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { constants } from '@roxavn/core/base';
 import { moduleManager } from '@roxavn/core/server';
-import { IsAuthenticated, TabLinks, WebModule } from '@roxavn/core/web';
+import { ForceLogin, TabLinks, WebModule } from '@roxavn/core/web';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
-import { WebRoutes } from '../../base';
 import { UserMenu } from '../components';
 
 const BASE = '/me';
@@ -110,19 +108,10 @@ function MeComponent() {
 }
 
 export default function () {
-  const location = useLocation();
   return (
-    <IsAuthenticated
-      loadingComponent={
-        <Group position="center" align="center" sx={{ height: '100vh' }}>
-          <Loader />
-        </Group>
-      }
-      userComponent={<MeComponent />}
-      guestComponent={
-        <Navigate to={WebRoutes.Login.generate({ ref: location.pathname })} />
-      }
-    />
+    <ForceLogin>
+      <MeComponent />
+    </ForceLogin>
   );
 }
 

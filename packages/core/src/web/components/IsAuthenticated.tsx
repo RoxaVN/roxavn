@@ -1,6 +1,8 @@
-import { Loader } from '@mantine/core';
+import { Group, Loader } from '@mantine/core';
 import { useState, useEffect } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 
+import { webRoutes } from '../../base';
 import { useAuthUser } from '../hooks';
 import { authService } from '../services';
 
@@ -46,4 +48,28 @@ export const IsAuthenticated = ({
       ? userComponent(user)
       : userComponent
     : guestComponent;
+};
+
+export interface ForceLoginProps {
+  loader?: JSX.Element;
+  children: IsAuthenticatedProps['userComponent'];
+}
+
+export const ForceLogin = ({ loader, children }: ForceLoginProps) => {
+  const location = useLocation();
+  return (
+    <IsAuthenticated
+      loadingComponent={
+        loader || (
+          <Group position="center" align="center" sx={{ height: '90vh' }}>
+            <Loader />
+          </Group>
+        )
+      }
+      userComponent={children}
+      guestComponent={
+        <Navigate to={webRoutes.Login.generate({ ref: location.pathname })} />
+      }
+    />
+  );
 };

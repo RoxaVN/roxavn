@@ -21,7 +21,7 @@ import {
 
 import { webModule as userWebModule } from '../module';
 import { UserMenu } from '../components';
-import { WebRoutes } from '../../base';
+import { webRoutes } from '@roxavn/core/base';
 
 const BASE = '/apps';
 
@@ -92,7 +92,7 @@ export default function () {
                 <Button
                   component={Link}
                   variant="outline"
-                  to={WebRoutes.Login.generate({ ref: BASE })}
+                  to={webRoutes.Login.generate({ ref: BASE })}
                 >
                   {t('login')}
                 </Button>

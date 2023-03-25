@@ -12,3 +12,11 @@ export class WebRoute<
     return `${path}?${new URLSearchParams(params)}`;
   }
 }
+
+export const webRoutes = {
+  Login: new WebRoute<Empty, { ref?: string }>('/login'),
+  Me: new WebRoute('/me'),
+  Admin: new WebRoute('/admin/apps'),
+  Apps: new WebRoute('/apps'),
+  Home: new WebRoute('/'),
+};
