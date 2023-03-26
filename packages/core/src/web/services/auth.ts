@@ -1,8 +1,9 @@
 import isEmpty from 'lodash/isEmpty';
 import { Subject } from 'rxjs';
 
-import { Api } from '../../base';
+import { Api, constants } from '../../base';
 import { apiFetcher } from './api.fetcher';
+import { cookieService } from './cookie';
 
 type TokenData = { id: string; accessToken: string; userId: string };
 
@@ -29,9 +30,14 @@ export class AuthService {
   setTokenData(tokenData: TokenData) {
     this._tokenData = tokenData;
     localStorage.setItem('_tk', JSON.stringify(tokenData));
+    cookieService.set(constants.Cookie.TOKEN, tokenData.accessToken, {
+      sameSite: 'Lax',
+      days: 365,
+    });
   }
   removeTokenData() {
     localStorage.removeItem('_tk');
+    cookieService.remove(constants.Cookie.TOKEN);
   }
   isAuthenticated() {
     return !isEmpty(this._authData);

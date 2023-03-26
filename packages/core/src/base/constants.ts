@@ -8,6 +8,10 @@ export const constants = {
     VIEWER: 'Viewer',
     MEMBER: 'Member',
   },
+  Cookie: {
+    TOKEN: 'token',
+  },
+
   API_BASE_PATH: '__api',
   META_I18N_NAMESPACE: 'meta',
 
