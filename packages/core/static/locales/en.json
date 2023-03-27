@@ -38,12 +38,22 @@
   "detail": "Detail",
   "creator": "Creator",
   "members": "Members",
+  "backToHomePage": "Take me back to home page",
+  "goToLoginPage": "Take me go to login page",
+  "errorTitle": "Something is not right...",
 
   "Roles": {
     "Admin": "Admin",
     "Moderator": "Moderator",
     "Viewer": "Viewer",
     "Member": "Member"
+  },
+  "RouteError": {
+    "401": "Access is allowed only for registered users.",
+    "403": "You do not have permission to access this page.",
+    "404": "Unfortunately, this is only a 404 page. You may have mistyped the address, or the page has been moved to another URL.",
+    "500": "Our servers could not handle your request. Don't worry, our development team was already notified. Try refreshing the page.",
+    "503": "We cannot handle your request right now, please wait for a couple of minutes and refresh the page. Our team is already working on this issue."
   },
   "Error": {
     "BadRequestException": "Bad request exception",

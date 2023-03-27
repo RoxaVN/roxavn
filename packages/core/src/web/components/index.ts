@@ -16,3 +16,4 @@ export * from './MenuLinks';
 export * from './TabLinks';
 export * from './ApiError';
 export * from './IsAuthenticated';
+export * from './AppBoundary';

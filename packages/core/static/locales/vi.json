@@ -38,12 +38,22 @@
   "detail": "Chi tiết",
   "creator": "Người tạo",
   "members": "Thành viên",
+  "backToHomePage": "Quay trở lại trang chủ",
+  "goToLoginPage": "Đi đến trang đăng nhập",
+  "errorTitle": "có điều gì đó không đúng...",
 
   "Roles": {
     "Admin": "Quản trị viên",
     "Moderator": "Người điều hành",
     "Viewer": "Người xem",
     "Member": "Thành viên"
+  },
+  "RouteError": {
+    "401": "Quyền truy cập chỉ được phép cho người dùng đã đăng ký.",
+    "403": "Bạn không có quyền truy cập trang này.",
+    "404": "Thật không may, đây chỉ là một trang 404. Bạn có thể đã nhập sai địa chỉ hoặc trang đã được chuyển đến một URL khác.",
+    "500": "Máy chủ của chúng tôi không thể xử lý yêu cầu của bạn. Đừng lo lắng, nhóm phát triển của chúng tôi đã được thông báo. Hãy thử làm mới trang.",
+    "503": "Chúng tôi không thể xử lý yêu cầu của bạn ngay bây giờ, vui lòng đợi trong vài phút và làm mới trang. Nhóm của chúng tôi đã làm việc về vấn đề này."
   },
   "Error": {
     "BadRequestException": "Yêu cầu không hợp lệ",
