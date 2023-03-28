@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { Outlet, Link } from 'react-router-dom';
 import {
   AppShell,
   Navbar,
@@ -11,17 +9,19 @@ import {
   Group,
   Button,
 } from '@mantine/core';
-import { IconApps } from '@tabler/icons';
+import { webRoutes } from '@roxavn/core/base';
 import {
   WebModule,
   webModule as coreWebModule,
   MenuLinks,
   IsAuthenticated,
 } from '@roxavn/core/web';
+import { IconApps } from '@tabler/icons';
+import { useState } from 'react';
+import { Outlet, Link } from 'react-router-dom';
 
-import { webModule as userWebModule } from '../module';
 import { UserMenu } from '../components';
-import { webRoutes } from '@roxavn/core/base';
+import { webModule as userWebModule } from '../module';
 
 const BASE = '/apps';
 
