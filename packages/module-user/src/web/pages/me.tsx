@@ -16,7 +16,13 @@ import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { constants } from '@roxavn/core/base';
 import { moduleManager } from '@roxavn/core/server';
-import { ForceLogin, TabLinks, WebModule } from '@roxavn/core/web';
+import {
+  CatchBoundary,
+  ErrorBoundary,
+  ForceLogin,
+  TabLinks,
+  WebModule,
+} from '@roxavn/core/web';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Outlet } from 'react-router-dom';
@@ -120,3 +126,5 @@ export async function loader() {
     modules: moduleManager.getModulesHaveMePages(),
   });
 }
+
+export { CatchBoundary, ErrorBoundary };

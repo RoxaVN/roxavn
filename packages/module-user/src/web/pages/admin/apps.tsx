@@ -14,6 +14,8 @@ import {
 } from '@mantine/core';
 import { IconApps } from '@tabler/icons';
 import {
+  CatchBoundary,
+  ErrorBoundary,
   WebModule,
   webModule as coreWebModule,
   ApiRolesGetter,
@@ -108,7 +110,7 @@ function AdminComponent() {
   );
 }
 
-const AdminPage = () => {
+export default function () {
   return (
     <ForceLogin>
       {(user) => (
@@ -125,10 +127,10 @@ const AdminPage = () => {
       )}
     </ForceLogin>
   );
-};
+}
 
 export const meta: MetaFunction = () => ({
   title: 'Web Erp',
 });
 
-export default AdminPage;
+export { CatchBoundary, ErrorBoundary };

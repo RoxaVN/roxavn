@@ -75,24 +75,22 @@ class ModuleManager {
       .map((m) => m.name);
   }
 
-  getModulesHaveAppPages() {
-    return this.modules
-      .filter((m) => {
-        try {
-          const modulePath =
-            m.name === this.currentModule.name
-              ? './src/web/index.ts'
-              : require.resolve(m.name + '/web');
-          const pagesPath = path.join(
-            path.dirname(modulePath),
-            'pages/apps/{moduleName}'
-          );
-          return fs.existsSync(pagesPath);
-        } catch (e) {
-          return false;
+  async getModulesHaveAppPages() {
+    const result: { name: string; path: string }[] = [];
+    for (const m of this.modules) {
+      try {
+        const baseModule = require(m.name + '/base').baseModule;
+        if (baseModule.options?.appPath) {
+          result.push({
+            name: m.name,
+            path: baseModule.options?.appPath,
+          });
         }
-      })
-      .map((m) => m.name);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    return result;
   }
 }
 

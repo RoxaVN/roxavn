@@ -118,7 +118,7 @@ export class ServerModule extends BaseModule {
   }
 
   static fromBase(base: BaseModule) {
-    return new ServerModule(base.name);
+    return new ServerModule(base.name, base.options);
   }
 }
 

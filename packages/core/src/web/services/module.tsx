@@ -1,7 +1,7 @@
 import { IconSettings } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useOutletContext, useRoutes } from 'react-router-dom';
+import { Outlet, useOutletContext, useRoutes } from 'react-router-dom';
 
 import { baseModule, BaseModule } from '../../base';
 import { PageItem } from './page';
@@ -95,18 +95,13 @@ export class WebModule extends BaseModule {
     };
   }
 
-  makeAppPages(appPages: Record<string, PageItem>) {
-    this.appPages.push(
-      ...Object.values(appPages).filter((p) => p instanceof PageItem)
-    );
+  makeAppPages(appPages: [PageItem]) {
+    this.appPages.push(...appPages);
     return () => {
-      const [pages, setPages] = useState(this.appPages);
       const { setWebModule } = useOutletContext<any>();
-      const element = useRoutes(pages);
 
       const load = async () => {
         await this.loadRegisters(this.appPluginRegisters);
-        setPages([...this.appPages]);
         setWebModule(this);
       };
 
@@ -114,7 +109,7 @@ export class WebModule extends BaseModule {
         load();
       }, []);
 
-      return element;
+      return <Outlet />;
     };
   }
 
@@ -136,7 +131,7 @@ export class WebModule extends BaseModule {
   }
 
   static fromBase(base: BaseModule) {
-    return new WebModule(base.name);
+    return new WebModule(base.name, base.options);
   }
 
   static settingsPageRenderRegister = (): Promise<any> => {

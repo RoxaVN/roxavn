@@ -11,6 +11,8 @@ import {
 } from '@mantine/core';
 import { webRoutes } from '@roxavn/core/base';
 import {
+  CatchBoundary,
+  ErrorBoundary,
   WebModule,
   webModule as coreWebModule,
   MenuLinks,
@@ -53,7 +55,7 @@ export default function () {
           {webModule && (
             <MenuLinks
               pageItems={webModule.appPages}
-              basePath={BASE + '/' + webModule.escapedName}
+              basePath={BASE + '/' + webModule.options?.appPath}
             />
           )}
         </Navbar>
@@ -106,3 +108,5 @@ export default function () {
     </AppShell>
   );
 }
+
+export { CatchBoundary, ErrorBoundary };

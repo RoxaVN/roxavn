@@ -1,7 +1,7 @@
 import { Card, SimpleGrid, Image, Text } from '@mantine/core';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { BaseModule, constants } from '@roxavn/core/base';
+import { constants } from '@roxavn/core/base';
 import { moduleManager } from '@roxavn/core/server';
 import { WebModule } from '@roxavn/core/web';
 import { useEffect } from 'react';
@@ -27,19 +27,19 @@ export default function () {
         { maxWidth: 600, cols: 2, spacing: 'sm' },
       ]}
     >
-      {data.modules.map((moduleName) => (
-        <Card key={moduleName}>
+      {data.modules.map((m) => (
+        <Card key={m.name}>
           <Card.Section>
-            <Link to={BaseModule.escapeName(moduleName)}>
+            <Link to={m.path}>
               <Image
-                src={WebModule.resolveStaticPath(moduleName, '/icon.svg')}
+                src={WebModule.resolveStaticPath(m.name, '/icon.svg')}
                 height={160}
-                alt={moduleName}
+                alt={m.name}
               />
             </Link>
           </Card.Section>
           <Text weight={500} mt="md" align="center">
-            {t(moduleName + '.name')}
+            {t(m.name + '.name')}
           </Text>
         </Card>
       ))}
@@ -49,6 +49,6 @@ export default function () {
 
 export async function loader() {
   return json({
-    modules: moduleManager.getModulesHaveAppPages(),
+    modules: await moduleManager.getModulesHaveAppPages(),
   });
 }

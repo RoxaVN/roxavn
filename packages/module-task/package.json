@@ -2,7 +2,7 @@
   "name": "@roxavn/module-task",
   "version": "0.1.0",
   "scripts": {
-    "build": "roxavn hook install",
+    "build": "roxavn build",
     "dev": "roxavn dev"
   },
   "license": "UNLICENSED",

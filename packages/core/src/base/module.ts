@@ -1,11 +1,17 @@
 import { constants } from './constants';
 
+interface ModuleOptions {
+  appPath?: string;
+}
+
 export class BaseModule {
   private readonly _name: string;
   private readonly _escapedName: string;
+  public readonly options?: ModuleOptions;
 
-  constructor(name: string) {
+  constructor(name: string, options?: ModuleOptions) {
     this._name = name;
+    this.options = options;
     this._escapedName = BaseModule.escapeName(name);
   }
 

@@ -3,26 +3,31 @@ import {
   ApiFormGroup,
   ApiTable,
   authService,
-  ForceLogin,
-  ModuleT,
-  PageItem,
   utils,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
-import { IconInbox, IconPlus } from '@tabler/icons';
+import { IconPlus } from '@tabler/icons';
+import { useEffect, useState } from 'react';
 
-import { constants, projectApi } from '../../base';
-import { webModule } from '../module';
+import { constants, projectApi } from '../../../../base';
+import { webModule } from '../../../module';
 
-const Page = () => {
+export default function () {
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
-  const tokenData = authService.getTokenData();
+  const [userId, setuserid] = useState<string>();
 
-  return tokenData ? (
+  useEffect(() => {
+    const tokenData = authService.getTokenData();
+    if (tokenData) {
+      setuserid(tokenData.userId);
+    }
+  }, []);
+
+  return userId ? (
     <ApiTable
       api={projectApi.getManyJoined}
-      apiParams={{ userId: tokenData.userId }}
+      apiParams={{ userId }}
       headerActions={[
         {
           label: tCore('add'),
@@ -61,15 +66,4 @@ const Page = () => {
   ) : (
     <div />
   );
-};
-
-export const projectsPage = new PageItem({
-  label: <ModuleT module={webModule} k="projects" />,
-  path: 'projects',
-  icon: IconInbox,
-  element: (
-    <ForceLogin>
-      <Page />
-    </ForceLogin>
-  ),
-});
+}
