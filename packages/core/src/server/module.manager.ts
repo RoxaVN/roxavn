@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { ServerModule } from './module';
 import { getPackageJson } from './utils';
 
 interface ModuleInfo {
@@ -12,6 +13,8 @@ interface ModuleInfo {
 }
 
 class ModuleManager {
+  readonly serverModules: ServerModule[] = [];
+
   private _modules?: ModuleInfo[];
   private _currentModule?: ModuleInfo;
 

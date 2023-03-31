@@ -17,10 +17,10 @@ export class Identity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('character varying')
   subject: string;
 
-  @Column()
+  @Column('character varying')
   type: string;
 
   @Column('uuid')

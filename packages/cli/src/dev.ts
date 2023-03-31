@@ -17,7 +17,7 @@ class DevService {
   run() {
     this.initEnv();
     cli.run(['watch', '.web']);
-    nodemon('.web/server.ts');
+    nodemon('.web/server.js');
   }
 }
 

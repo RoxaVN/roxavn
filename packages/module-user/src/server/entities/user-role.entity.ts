@@ -20,7 +20,7 @@ export class UserRole {
   @ManyToOne(() => User, (user) => user.roles)
   user: User;
 
-  @PrimaryColumn()
+  @PrimaryColumn('integer')
   roleId: number;
 
   @ManyToOne(() => Role, (role) => role.users)

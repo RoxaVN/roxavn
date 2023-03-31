@@ -15,22 +15,22 @@ export class Role {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column('character varying')
   scope: string;
 
-  @Column()
+  @Column('character varying')
   name: string;
 
-  @Column()
+  @Column('character varying')
   module: string;
 
   @Column('text', { array: true })
   permissions: string[];
 
-  @Column()
+  @Column('boolean')
   hasId: boolean;
 
-  @Column()
+  @Column('boolean')
   isPredefined: boolean;
 
   @Column({ type: 'jsonb', nullable: true })

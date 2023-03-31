@@ -17,7 +17,7 @@ export class User {
   id: string;
 
   @Index({ unique: true })
-  @Column()
+  @Column('character varying')
   username: string;
 
   @Column({ type: 'jsonb', nullable: true })

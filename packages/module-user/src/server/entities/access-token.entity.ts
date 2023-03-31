@@ -14,16 +14,16 @@ export class AccessToken {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('character varying')
   authenticator: string;
 
-  @Column()
+  @Column('character varying')
   token: string;
 
-  @Column()
+  @Column('character varying')
   ipAddress: string;
 
-  @Column({ nullable: true })
+  @Column('character varying', { nullable: true })
   userAgent?: string;
 
   @Column('uuid')

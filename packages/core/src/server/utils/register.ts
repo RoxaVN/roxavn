@@ -22,7 +22,8 @@ export function registerApiRoutes() {
   moduleManager.modules.map((module) => {
     try {
       if (module.name !== moduleManager.currentModule.name) {
-        require(module.name + '/server');
+        const m = require(module.name + '/server').serverModule;
+        moduleManager.serverModules.push(m);
       }
     } catch (e) {}
   });

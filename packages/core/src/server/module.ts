@@ -31,6 +31,8 @@ export class ServerModule extends BaseModule {
 
   static errorMiddlewares = [serverErrorMiddleware] as Array<ErrorMiddleware>;
 
+  readonly entities: any[] = [];
+
   useRawApi<Req extends ApiRequest, Resp extends ApiResponse>(
     api: Api<Req, Resp>,
     handler: (req: Req, context: MiddlewareContext) => Promise<Resp> | Resp
@@ -117,8 +119,12 @@ export class ServerModule extends BaseModule {
     return new serviceClass(context.dbSession);
   }
 
-  static fromBase(base: BaseModule) {
-    return new ServerModule(base.name, base.options);
+  static fromBase(base: BaseModule, entities?: Record<string, any>) {
+    const module = new ServerModule(base.name, base.options);
+    if (entities) {
+      module.entities.push(...Object.values(entities));
+    }
+    return module;
   }
 }
 

@@ -1,3 +1,5 @@
+require('reflect-metadata');
+
 const path = require('path');
 const express = require('express');
 const compression = require('compression');
@@ -6,6 +8,7 @@ const { createRequestHandler } = require('@remix-run/express');
 const { bootstrap } = require('@roxavn/core/server');
 
 const BUILD_DIR = path.join(__dirname, 'build');
+const build = require(BUILD_DIR);
 
 const app = express();
 
@@ -38,19 +41,15 @@ bootstrap(app).then(() => {
           purgeRequireCache();
 
           return createRequestHandler({
-            build: require(BUILD_DIR),
+            build: build,
             mode: process.env.NODE_ENV,
           })(req, res, next);
         }
       : createRequestHandler({
-          build: require(BUILD_DIR),
+          build: build,
           mode: process.env.NODE_ENV,
         })
   );
-
-  if (configs.callback) {
-    configs.callback();
-  }
 
   const port = process.env.PORT || 3000;
   app.listen(port, () => {
@@ -71,6 +70,4 @@ function purgeRequireCache() {
   }
 }
 
-const configs = { callback: null };
-
-module.exports = configs;
+module.exports = app;
