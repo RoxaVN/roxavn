@@ -4,7 +4,6 @@ import type { EntryContext } from '@remix-run/server-runtime';
 import { moduleManager } from '@roxavn/core/server';
 import { createInstance } from 'i18next';
 import Backend from 'i18next-fs-backend';
-import fs from 'fs';
 import { resolve } from 'node:path';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
@@ -13,10 +12,10 @@ import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18next from './i18next.server';
 import i18n from './i18n'; // your i18n configuration file
 
-if (fs.existsSync('./src/server/index.ts')) {
+try {
   const { serverModule } = require('../../src/server');
   moduleManager.serverModules.push(serverModule);
-}
+} catch {}
 
 const server = createStylesServer();
 

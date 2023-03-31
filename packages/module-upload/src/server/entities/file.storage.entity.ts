@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   OneToMany,
@@ -11,8 +12,8 @@ import { File } from './file.entity';
 
 @Entity()
 export class FileStorage {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Index()
   @Column('uuid')
@@ -21,15 +22,18 @@ export class FileStorage {
   @OneToMany(() => File, (file) => file.fileStorage)
   files: File[];
 
-  @Column({ default: 0 })
+  @Column('unsigned big int', { default: 0 })
   currentSize: number = 0;
 
-  @Column({ default: 0 })
+  @Column('unsigned big int', { default: 0 })
   maxSize: number = 0;
 
-  @Column({ default: 0 })
+  @Column('unsigned big int', { default: 0 })
   maxFileSize: number = 0;
 
-  @UpdateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdDate: Date;
+
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: Date;
 }

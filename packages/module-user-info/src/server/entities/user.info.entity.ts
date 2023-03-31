@@ -23,16 +23,16 @@ export class UserInfo {
   @Column({ type: 'timestamptz', nullable: true })
   birthday?: Date;
 
-  @Column({ nullable: true })
+  @Column('character varying', { nullable: true })
   firstName?: string;
 
-  @Column({ nullable: true })
+  @Column('character varying', { nullable: true })
   lastName?: string;
 
-  @Column({ nullable: true })
+  @Column('character varying', { nullable: true })
   middleName?: string;
 
-  @Column({ nullable: true })
+  @Column('character varying', { nullable: true })
   gender?: string;
 
   @Column({ type: 'jsonb', nullable: true })

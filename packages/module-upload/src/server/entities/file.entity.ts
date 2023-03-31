@@ -15,16 +15,16 @@ export class File {
   @PrimaryColumn('varchar', { length: 33 })
   id: string;
 
-  @Column()
+  @Column('character varying')
   name: string;
 
-  @Column()
+  @Column('unsigned big int')
   size: number;
 
-  @Column()
+  @Column('character varying')
   etag: string;
 
-  @Column()
+  @Column('character varying')
   mime: string;
 
   @Index()
@@ -32,7 +32,7 @@ export class File {
   userId: string;
 
   @Column()
-  fileStorageId: number;
+  fileStorageId: string;
 
   @ManyToOne(() => FileStorage, (fileStorage) => fileStorage.files)
   fileStorage: FileStorage;
@@ -40,9 +40,9 @@ export class File {
   @Column({ type: 'jsonb', nullable: true })
   metadata?: any;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: Date;
 }

@@ -14,10 +14,10 @@ export class Setting {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column('character varying')
   module: string;
 
-  @Column()
+  @Column('character varying')
   name: string;
 
   @Column({ type: 'varchar' })

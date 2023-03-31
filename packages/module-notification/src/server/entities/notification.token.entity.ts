@@ -12,20 +12,20 @@ export class NotificationToken {
   @PrimaryColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('character varying')
   token: string;
 
-  @Column()
+  @Column('character varying')
   provider: string;
 
-  @Column()
+  @Column('character varying')
   providerId: string;
 
   @Index()
   @Column('uuid')
   userId: string;
 
-  @Column({ default: 0 })
+  @Column('integer', { default: 0 })
   failCount: number;
 
   @Column('text', { array: true, nullable: true })

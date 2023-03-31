@@ -13,16 +13,16 @@ export class Notification {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('character varying')
   resource: string;
 
-  @Column()
+  @Column('character varying')
   resourceId: string;
 
-  @Column()
+  @Column('character varying')
   action: string;
 
-  @Column()
+  @Column('character varying')
   module: string;
 
   @Column({ type: 'jsonb', nullable: true })

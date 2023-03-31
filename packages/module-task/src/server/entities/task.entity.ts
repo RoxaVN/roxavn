@@ -34,16 +34,16 @@ export class Task {
   @Column('int', { default: 1 })
   weight = 1;
 
-  @Column()
+  @Column('character varying')
   status: string;
 
-  @Column()
+  @Column('character varying')
   title: string;
 
-  @Column()
+  @Column('character varying')
   content: string;
 
-  @Column()
+  @Column('uuid')
   projectId: string;
 
   @ManyToOne(() => Project, (project) => project.tasks)
