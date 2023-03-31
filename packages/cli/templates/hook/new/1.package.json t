@@ -5,5 +5,5 @@ before: '"web": \['
 skip_if: '"hook"'
 ---
       "hook": [
-        "dist/cjs/hook/index.d.ts"
+        "dist/esm/hook/index.d.ts"
       ],

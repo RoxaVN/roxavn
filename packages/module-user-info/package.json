@@ -49,7 +49,7 @@
   "typesVersions": {
     "*": {
       "hook": [
-        "dist/cjs/hook/index.d.ts"
+        "dist/esm/hook/index.d.ts"
       ],
       "web": [
         "dist/esm/web/index.d.ts"
