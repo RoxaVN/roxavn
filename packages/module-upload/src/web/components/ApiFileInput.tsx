@@ -10,7 +10,7 @@ import {
 import { useListState } from '@mantine/hooks';
 import { InferApiResponse } from '@roxavn/core/base';
 import { ApiError, uiManager, useApi } from '@roxavn/core/web';
-import { IconUpload, IconFileCheck } from '@tabler/icons';
+import { IconUpload, IconFileCheck } from '@tabler/icons-react';
 import { Fragment, useEffect } from 'react';
 
 import { fileApi } from '../../base';

@@ -23,7 +23,7 @@
     "@roxavn/module-user": "*",
     "@roxavn/module-utils": "*",
     "@roxavn/plugin-firebase": "*",
-    "@tabler/icons": "*",
+    "@tabler/icons-react": "*",
     "react": "*",
     "react-router-dom": "*",
     "rxjs": "*",

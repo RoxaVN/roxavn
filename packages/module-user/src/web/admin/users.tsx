@@ -12,7 +12,7 @@ import {
   PageItem,
   ModuleT,
 } from '@roxavn/core/web';
-import { IconEye, IconKey, IconPlus, IconUsers } from '@tabler/icons';
+import { IconEye, IconKey, IconPlus, IconUsers } from '@tabler/icons-react';
 
 import {
   passwordIdentityApi,

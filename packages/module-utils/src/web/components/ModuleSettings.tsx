@@ -2,7 +2,7 @@ import { Text, Card, SimpleGrid } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { InferApiRequest } from '@roxavn/core/base';
 import { ApiForm, webModule as coreWebModule } from '@roxavn/core/web';
-import { IconCheck } from '@tabler/icons';
+import { IconCheck } from '@tabler/icons-react';
 import React from 'react';
 
 import { settingApi } from '../../base';

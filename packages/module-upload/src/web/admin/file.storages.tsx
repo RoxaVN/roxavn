@@ -6,7 +6,7 @@ import {
   PageItem,
   ModuleT,
 } from '@roxavn/core/web';
-import { IconUsers } from '@tabler/icons';
+import { IconUsers } from '@tabler/icons-react';
 
 import { fileStoageApi } from '../../base';
 import { webModule } from '../module';

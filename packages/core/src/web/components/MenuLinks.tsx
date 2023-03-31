@@ -1,5 +1,5 @@
 import { NavLink } from '@mantine/core';
-import { IconChevronRight } from '@tabler/icons';
+import { IconChevronRight } from '@tabler/icons-react';
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 

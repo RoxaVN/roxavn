@@ -1,7 +1,7 @@
 import { ActionIcon, Box, BoxProps, Button, Flex, Input } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { randomId, useListState } from '@mantine/hooks';
-import { IconPlus, IconTrash } from '@tabler/icons';
+import { IconPlus, IconTrash } from '@tabler/icons-react';
 import get from 'lodash/get';
 import React, { useEffect } from 'react';
 import { webModule } from '../services';

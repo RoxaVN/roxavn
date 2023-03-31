@@ -8,7 +8,7 @@ import {
   userService,
   PageItem,
 } from '@roxavn/core/web';
-import { IconPlus, IconTrash } from '@tabler/icons';
+import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { useParams } from 'react-router-dom';
 
 import { userRoleApi } from '../../base';

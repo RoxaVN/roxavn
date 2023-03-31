@@ -11,7 +11,7 @@ import {
 import { randomId } from '@mantine/hooks';
 import { closeModal, openModal } from '@mantine/modals';
 import { PolymorphicComponentProps } from '@mantine/utils';
-import { IconCopy, IconCheck } from '@tabler/icons';
+import { IconCopy, IconCheck } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

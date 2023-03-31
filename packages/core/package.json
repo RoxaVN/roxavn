@@ -33,7 +33,7 @@
     "@mantine/nprogress": "^6.0.0",
     "@remix-run/dev": "^1.7.6",
     "@remix-run/node": "^1.14.3",
-    "@tabler/icons": "^1.117.0",
+    "@tabler/icons-react": "^2.12.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",

@@ -16,7 +16,7 @@ import {
   IconPlus,
   IconTrash,
   IconUsers,
-} from '@tabler/icons';
+} from '@tabler/icons-react';
 
 import { constants, projectApi, scopes } from '../../base';
 import { webModule } from '../module';

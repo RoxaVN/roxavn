@@ -18,7 +18,7 @@ import {
   MenuLinks,
   IsAuthenticated,
 } from '@roxavn/core/web';
-import { IconApps } from '@tabler/icons';
+import { IconApps } from '@tabler/icons-react';
 import { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 

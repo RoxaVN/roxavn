@@ -17,7 +17,7 @@
   "peerDependencies": {
     "@mantine/core": "*",
     "@roxavn/core": "*",
-    "@tabler/icons": "*",
+    "@tabler/icons-react": "*",
     "react": "*",
     "react-router-dom": "*",
     "rxjs": "*",

@@ -6,7 +6,7 @@ import {
   utils,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
-import { IconInbox } from '@tabler/icons';
+import { IconInbox } from '@tabler/icons-react';
 import { projectApi } from '../../base';
 
 import { webModule } from '../module';

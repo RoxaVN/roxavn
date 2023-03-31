@@ -2,7 +2,7 @@
 to: src/web/app/<%= h.changeCase.dot(path_name) %>.tsx
 ---
 import { ModuleT, PageItem } from '@roxavn/core/web';
-import { IconUsers } from '@tabler/icons';
+import { IconUsers } from '@tabler/icons-react';
 
 import { webModule } from '../module';
 

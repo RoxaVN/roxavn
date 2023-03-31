@@ -12,7 +12,7 @@ import {
   Group,
   Button,
 } from '@mantine/core';
-import { IconApps } from '@tabler/icons';
+import { IconApps } from '@tabler/icons-react';
 import {
   CatchBoundary,
   ErrorBoundary,

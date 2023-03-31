@@ -20,7 +20,7 @@
     "@mantine/core": "*",
     "@roxavn/core": "*",
     "@roxavn/module-utils": "*",
-    "@tabler/icons": "*",
+    "@tabler/icons-react": "*",
     "react": "*",
     "react-router-dom": "*",
     "rxjs": "*",

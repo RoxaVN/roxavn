@@ -1,5 +1,5 @@
 import { Button, Group, Popover, Indicator } from '@mantine/core';
-import { IconCheck, IconFilter, IconX } from '@tabler/icons';
+import { IconCheck, IconFilter, IconX } from '@tabler/icons-react';
 import { useState } from 'react';
 import { ApiRequest } from '../../base';
 

@@ -23,7 +23,7 @@ to: package.json
     "@remix-run/react": "*",
     "@roxavn/core": "*",
     "@roxavn/module-user": "*",
-    "@tabler/icons": "*",
+    "@tabler/icons-react": "*",
     "react": "*",
     "react-router-dom": "*",
     "rxjs": "*",

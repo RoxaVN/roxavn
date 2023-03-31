@@ -3,7 +3,7 @@ import { DatePickerInput } from '@mantine/dates';
 import { ApiFormGroup, ModuleT, useApi, useAuthUser } from '@roxavn/core/web';
 import { ApiImageUploader } from '@roxavn/module-upload/web';
 import { webModule as userWebModule } from '@roxavn/module-user/web';
-import { IconInfoCircle } from '@tabler/icons';
+import { IconInfoCircle } from '@tabler/icons-react';
 
 import { constants, userInfoApi } from '../base';
 import { webModule } from './module';

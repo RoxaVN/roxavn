@@ -8,7 +8,7 @@ import {
   uiManager,
   utils,
 } from '@roxavn/core/web';
-import { IconCheckbox, IconCookie } from '@tabler/icons';
+import { IconCheckbox, IconCookie } from '@tabler/icons-react';
 import { UAParser } from 'ua-parser-js';
 
 import { accessTokenApi } from '../../base';

@@ -7,7 +7,7 @@ import {
   ModuleT,
 } from '@roxavn/core/web';
 import { ApiAvatar } from '@roxavn/module-upload/web';
-import { IconUserCircle } from '@tabler/icons';
+import { IconUserCircle } from '@tabler/icons-react';
 
 import { userInfoApi } from '../../base';
 import { webModule } from '../module';

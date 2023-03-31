@@ -1,7 +1,7 @@
 import { Table, Pagination, Group, Stack, Flex, Text } from '@mantine/core';
 import { useDidUpdate } from '@mantine/hooks';
 import { showNotification } from '@mantine/notifications';
-import { IconCheck } from '@tabler/icons';
+import { IconCheck } from '@tabler/icons-react';
 import React, { MutableRefObject, useState } from 'react';
 
 import { Api, ApiRequest, Collection, PaginatedCollection } from '../../base';

@@ -9,7 +9,7 @@ import {
   webModule as coreWebModule,
   utils,
 } from '@roxavn/core/web';
-import { IconUsers } from '@tabler/icons';
+import { IconUsers } from '@tabler/icons-react';
 
 import { getUsersApi } from '../../base';
 import { webModule } from '../module';

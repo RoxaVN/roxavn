@@ -1,6 +1,6 @@
 import { Button, Flex, Group, Input } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
-import { IconSend, IconX } from '@tabler/icons';
+import { IconSend, IconX } from '@tabler/icons-react';
 import React from 'react';
 
 import { ApiRequest, ApiResponse } from '../../base';

@@ -8,7 +8,7 @@ import {
   webModule as coreWebModule,
 } from '@roxavn/core/web';
 import { ApiTable, useApi } from '@roxavn/core/web';
-import { IconPlus, IconTrash } from '@tabler/icons';
+import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { Fragment } from 'react';
 
 import { roleApi, roleUserApi, userRoleApi } from '../../base';

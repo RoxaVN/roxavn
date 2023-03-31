@@ -1,4 +1,4 @@
-import { IconSettings } from '@tabler/icons';
+import { IconSettings } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useOutletContext, useRoutes } from 'react-router-dom';
