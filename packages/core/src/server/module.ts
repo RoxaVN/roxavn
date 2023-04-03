@@ -119,10 +119,13 @@ export class ServerModule extends BaseModule {
     return new serviceClass(context.dbSession);
   }
 
-  static fromBase(base: BaseModule, entities?: Record<string, any>) {
+  static fromBase(
+    base: BaseModule,
+    options?: { entities?: Record<string, any> }
+  ) {
     const module = new ServerModule(base.name, base.options);
-    if (entities) {
-      module.entities.push(...Object.values(entities));
+    if (options?.entities) {
+      module.entities.push(...Object.values(options.entities));
     }
     return module;
   }
