@@ -29,6 +29,7 @@ export class CreateUserRoleApiService extends ApiService {
       userRole.scopeId = request.scopeId;
     }
     await this.dbSession.save(userRole);
+    return {};
   }
 }
 
@@ -49,6 +50,7 @@ export class DeleteUserRoleApiService extends ApiService {
       userId: request.userId,
       roleId: request.roleId,
     });
+    return {};
   }
 }
 

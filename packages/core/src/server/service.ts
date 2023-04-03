@@ -1,6 +1,7 @@
 import { EntityManager } from 'typeorm';
 import {
   Api,
+  Empty,
   InferApiRequest,
   InferApiResponse,
   PaginatedCollection,
@@ -19,7 +20,7 @@ export type InferAuthApiRequest<T> = T extends Api<infer U, any, any>
 export abstract class BaseService<Request = any, Response = any> {
   constructor(public dbSession: EntityManager) {}
 
-  abstract handle(request: Request): Promise<Response> | Response;
+  abstract handle(request: Request): Promise<Response>;
 
   create<Req, Resp>(classType: new (...args: any[]) => BaseService<Req, Resp>) {
     return new classType(this.dbSession);
@@ -57,7 +58,7 @@ class SetUserRoleApiService extends BaseService {
     scopeId: string;
     userId: string;
     roleName: string;
-  }): Promise<void> {
+  }): Promise<Empty> {
     throw new Error(
       "SetUserRoleApiService isn't implemented " + JSON.stringify(request)
     );
