@@ -39,7 +39,9 @@ export const usePageLinks = (
       }
       const pagePath =
         pageItem.path !== undefined
-          ? basePath + '/' + pageItem.path
+          ? pageItem.path
+            ? basePath + '/' + pageItem.path
+            : basePath
           : undefined;
       result.push({
         key: (index + 1).toString(),
