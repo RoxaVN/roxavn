@@ -34,6 +34,7 @@ export class GetProjectsApiService extends ApiService {
     const [items, totalItems] = await this.dbSession
       .getRepository(Project)
       .findAndCount({
+        where: { type: request.type },
         take: pageSize,
         skip: (page - 1) * pageSize,
       });

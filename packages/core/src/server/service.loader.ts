@@ -35,7 +35,7 @@ class ServicesLoader {
         const service = new services[key].service(queryRunner.manager);
         result[key] = await service.handle({
           ...services[key].params,
-          ...filters[key],
+          ...filters?.[key],
         });
       }
       return json(result);

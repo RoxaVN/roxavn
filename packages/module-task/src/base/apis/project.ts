@@ -31,6 +31,9 @@ class GetProjectRequest extends ExactProps<GetProjectRequest> {
 }
 
 class GetProjectsRequest extends ExactProps<GetProjectsRequest> {
+  @IsOptional()
+  public readonly type?: string;
+
   @IsArray()
   @ArrayMinSize(2)
   @ArrayMaxSize(2)
