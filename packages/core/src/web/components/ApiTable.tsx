@@ -216,18 +216,17 @@ export const ApiTable = <
               </tbody>
             </Table>
             {data && 'pagination' in data && (
-              <Group position="center">
-                <Pagination
-                  mb="md"
-                  value={data.pagination.page}
-                  onChange={(page) =>
-                    setParams({ ...params, page } as Partial<Request>)
-                  }
-                  total={Math.ceil(
-                    data.pagination.totalItems / data.pagination.pageSize
-                  )}
-                />
-              </Group>
+              <Pagination
+                mb="md"
+                position="center"
+                value={data.pagination.page}
+                onChange={(page) =>
+                  setParams({ ...params, page } as Partial<Request>)
+                }
+                total={Math.ceil(
+                  data.pagination.totalItems / data.pagination.pageSize
+                )}
+              />
             )}
           </Stack>
         );

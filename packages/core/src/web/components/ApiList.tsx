@@ -1,4 +1,4 @@
-import { Box, Group, Pagination } from '@mantine/core';
+import { Box, Pagination } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
 import { Fragment } from 'react';
 
@@ -16,7 +16,7 @@ export interface ApiListProps<
     PaginatedCollection<ResponseItem> | Collection<ResponseItem>
   >;
   apiParams?: Partial<Request>;
-  key?: string;
+  locationKey?: string;
   itemKey?: keyof ResponseItem;
   itemRender: (
     item: ResponseItem,
@@ -33,10 +33,10 @@ export const ApiList = <
   apiParams,
   itemRender,
   itemKey,
-  key,
+  locationKey = '/list',
   containerRender,
 }: ApiListProps<Request, ResponseItem>) => {
-  const hash = useLocationHash('/list/' + (key || ''));
+  const hash = useLocationHash(locationKey);
   const [params, setParams] = useSetState<Partial<Request>>({
     ...hash.params,
     ...apiParams,
@@ -67,16 +67,15 @@ export const ApiList = <
                 <Box mb="md">{children}</Box>
               )}
               {'pagination' in data && (
-                <Group position="center">
-                  <Pagination
-                    mb="md"
-                    value={data.pagination.page}
-                    onChange={(page) => setParams({ page } as any)}
-                    total={Math.ceil(
-                      data.pagination.totalItems / data.pagination.pageSize
-                    )}
-                  />
-                </Group>
+                <Pagination
+                  mb="md"
+                  position="center"
+                  value={data.pagination.page}
+                  onChange={(page) => setParams({ page } as any)}
+                  total={Math.ceil(
+                    data.pagination.totalItems / data.pagination.pageSize
+                  )}
+                />
               )}
             </div>
           );
