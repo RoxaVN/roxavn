@@ -13,7 +13,7 @@ to: package.json
   "roxavn": {},
   "sideEffects": false,
   "devDependencies": {
-    "@roxavn/dev-web": "^0.1.0",
+    "@roxavn/cli": "^0.1.0",
     "typescript": "^4.3.5"
   },
   "dependencies": {},

@@ -29,6 +29,7 @@
   "dependencies": {
     "@remix-run/dev": "^1.7.6",
     "@roxavn/core": "^0.1.28",
+    "@roxavn/dev-web": "^0.1.0",
     "commander": "^9.4.1",
     "fs-extra": "^11.1.0",
     "hygen": "^6.2.11",
