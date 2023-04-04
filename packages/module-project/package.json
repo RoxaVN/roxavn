@@ -1,5 +1,5 @@
 {
-  "name": "@roxavn/module-task",
+  "name": "@roxavn/module-project",
   "version": "0.1.0",
   "scripts": {
     "build": "roxavn build",

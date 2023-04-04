@@ -5,7 +5,7 @@
   "deleteProject": "Delete project",
 
   "Meta": {
-    "name": "Task module",
-    "description": "Task module"
+    "name": "Project module",
+    "description": "Project module"
   }
 }
