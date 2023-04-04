@@ -3,7 +3,7 @@ import {
   ApiFormGroup,
   ApiTable,
   authService,
-  ForceLogin,
+  IsAuthenticatedPage,
   utils,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
@@ -71,8 +71,8 @@ function MePage() {
 
 export default function () {
   return (
-    <ForceLogin>
+    <IsAuthenticatedPage>
       <MePage />
-    </ForceLogin>
+    </IsAuthenticatedPage>
   );
 }

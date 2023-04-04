@@ -41,6 +41,7 @@
   "backToHomePage": "Quay trở lại trang chủ",
   "goToLoginPage": "Đi đến trang đăng nhập",
   "errorTitle": "có điều gì đó không đúng...",
+  "loginRequired": "Vui lòng đăng nhập",
 
   "Roles": {
     "Admin": "Quản trị viên",

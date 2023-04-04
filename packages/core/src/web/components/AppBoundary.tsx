@@ -7,7 +7,7 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { useCatch, Link } from '@remix-run/react';
+import { useCatch, Link, useLocation } from '@remix-run/react';
 
 import { webRoutes } from '../../base';
 import { webModule } from '../services';
@@ -55,6 +55,7 @@ const useStyles = createStyles((theme) => ({
 
 export const CatchBoundary = () => {
   const caught = useCatch();
+  const location = useLocation();
   const { classes } = useStyles();
   const { t } = webModule.useTranslation();
 
@@ -76,7 +77,9 @@ export const CatchBoundary = () => {
           size="md"
           component={Link}
           to={
-            caught.status === 401 ? webRoutes.Login.path : webRoutes.Home.path
+            caught.status === 401
+              ? webRoutes.Login.generate({ ref: location.pathname })
+              : webRoutes.Home.path
           }
         >
           {t(caught.status === 401 ? 'goToLoginPage' : 'backToHomePage')}
@@ -114,3 +117,33 @@ export function ErrorBoundary({ error }: { error: Error }) {
     </Container>
   );
 }
+
+export const LoginRequired = () => {
+  const { classes } = useStyles();
+  const location = useLocation();
+  const { t } = webModule.useTranslation();
+  return (
+    <Container className={classes.root}>
+      <div className={classes.label}>403</div>
+      <Title className={classes.title}>{t('loginRequired')}</Title>
+      <Text
+        color="dimmed"
+        size="lg"
+        align="center"
+        className={classes.description}
+      >
+        {t('RouteError.403')}
+      </Text>
+      <Group position="center">
+        <Button
+          variant="subtle"
+          size="md"
+          component={Link}
+          to={webRoutes.Login.generate({ ref: location.pathname })}
+        >
+          {t('goToLoginPage')}
+        </Button>
+      </Group>
+    </Container>
+  );
+};

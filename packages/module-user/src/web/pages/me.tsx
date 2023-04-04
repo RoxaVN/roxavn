@@ -19,7 +19,7 @@ import { moduleManager } from '@roxavn/core/server';
 import {
   CatchBoundary,
   ErrorBoundary,
-  ForceLogin,
+  IsAuthenticatedPage,
   TabLinks,
   WebModule,
 } from '@roxavn/core/web';
@@ -115,9 +115,9 @@ function MeComponent() {
 
 export default function () {
   return (
-    <ForceLogin>
+    <IsAuthenticatedPage redirect>
       <MeComponent />
-    </ForceLogin>
+    </IsAuthenticatedPage>
   );
 }
 

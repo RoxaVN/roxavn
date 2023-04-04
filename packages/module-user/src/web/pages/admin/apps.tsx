@@ -22,7 +22,7 @@ import {
   http,
   TasksProgress,
   MenuLinks,
-  ForceLogin,
+  IsAuthenticatedPage,
 } from '@roxavn/core/web';
 
 import { constants, userRoleApi } from '../../../base';
@@ -112,7 +112,7 @@ function AdminComponent() {
 
 export default function () {
   return (
-    <ForceLogin>
+    <IsAuthenticatedPage redirect>
       {(user) => (
         <ApiRolesGetter
           api={userRoleApi.modules}
@@ -125,7 +125,7 @@ export default function () {
           </TasksProgress>
         </ApiRolesGetter>
       )}
-    </ForceLogin>
+    </IsAuthenticatedPage>
   );
 }
 

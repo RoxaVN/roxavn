@@ -5,6 +5,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { webRoutes } from '../../base';
 import { useAuthUser } from '../hooks';
 import { authService } from '../services';
+import { LoginRequired } from './AppBoundary';
 
 export interface IsAuthenticatedProps {
   guestComponent: JSX.Element;
@@ -50,12 +51,17 @@ export const IsAuthenticated = ({
     : guestComponent;
 };
 
-export interface ForceLoginProps {
+export interface IsAuthenticatedPageProps {
   loader?: JSX.Element;
+  redirect?: boolean;
   children: IsAuthenticatedProps['userComponent'];
 }
 
-export const ForceLogin = ({ loader, children }: ForceLoginProps) => {
+export const IsAuthenticatedPage = ({
+  loader,
+  children,
+  redirect,
+}: IsAuthenticatedPageProps) => {
   const location = useLocation();
   return (
     <IsAuthenticated
@@ -68,7 +74,11 @@ export const ForceLogin = ({ loader, children }: ForceLoginProps) => {
       }
       userComponent={children}
       guestComponent={
-        <Navigate to={webRoutes.Login.generate({ ref: location.pathname })} />
+        redirect ? (
+          <Navigate to={webRoutes.Login.generate({ ref: location.pathname })} />
+        ) : (
+          <LoginRequired />
+        )
       }
     />
   );
