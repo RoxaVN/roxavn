@@ -1,5 +1,6 @@
 {
   "projects": "Projects",
+  "myProjects": "My projects",
   "addProject": "Add project",
   "editProject": "Edit project",
   "deleteProject": "Delete project",

@@ -95,7 +95,7 @@ export class WebModule extends BaseModule {
     };
   }
 
-  makeAppPages(appPages: [PageItem]) {
+  makeAppPages(appPages: PageItem[]) {
     this.appPages.push(...appPages);
     return () => {
       const { setWebModule } = useOutletContext<any>();
