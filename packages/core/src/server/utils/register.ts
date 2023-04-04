@@ -18,7 +18,7 @@ function isRouteModuleFile(filename: string): boolean {
   return routeModuleExts.includes(path.extname(filename));
 }
 
-export function registerApiRoutes() {
+export function registerServerModules() {
   moduleManager.modules.map((module) => {
     try {
       if (module.name !== moduleManager.currentModule.name) {

@@ -2,10 +2,10 @@ import type { Express, NextFunction, Request, Response } from 'express';
 import { databaseManager } from '../database';
 
 import { ServerModule } from '../module';
-import { registerApiRoutes } from './register';
+import { registerServerModules } from './register';
 
 export async function bootstrap(app: Express) {
-  registerApiRoutes();
+  registerServerModules();
   app.use('/', ServerModule.apiRouter);
   for (const handler of ServerModule.errorMiddlewares) {
     app.use((error: any, req: Request, resp: Response, next: NextFunction) =>

@@ -1,5 +1,7 @@
 import {
   databaseManager,
+  moduleManager,
+  registerServerModules,
   runModuleHook,
   runModuleHooks,
 } from '@roxavn/core/server';
@@ -15,6 +17,12 @@ class HookService {
     });
     // must build to update lastest entities
     buildService.compile({});
+
+    registerServerModules();
+    // load current module
+    const m = require(moduleManager.currentModule.name +
+      '/server').serverModule;
+    moduleManager.serverModules.push(m);
 
     await databaseManager.createSource({ synchronize: true });
 
