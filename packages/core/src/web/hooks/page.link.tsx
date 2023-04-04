@@ -66,23 +66,21 @@ export const usePageLinks = (
           for (const item of pageLinks) {
             if (item.path) {
               firstPath = item.path;
+              break;
             } else if (item.children) {
               const childPath = findFirst(item.children);
               if (childPath) {
                 firstPath = childPath;
+                break;
               }
-            } else if (location.pathname === item.path) {
-              throw new Error('Path exists');
             }
           }
           return firstPath;
         };
-        try {
-          const firstPath = findFirst(result);
-          if (firstPath) {
-            navigate(firstPath);
-          }
-        } catch {}
+        const firstPath = findFirst(result);
+        if (firstPath && location.pathname !== firstPath) {
+          navigate(firstPath);
+        }
       }
     }
   }, []);
