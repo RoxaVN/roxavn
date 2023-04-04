@@ -86,7 +86,7 @@ export class CreateProjectApiService extends ApiService {
     // auto set creator as admin
     await this.create(serviceManager.setUserRoleApiService).handle({
       scope: scopes.Project.name,
-      scopeId: project.id,
+      scopeId: project.id.toString(),
       roleName: roles.ProjectAdmin.name,
       userId: project.userId,
     });

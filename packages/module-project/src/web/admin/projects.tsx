@@ -73,7 +73,7 @@ const Page = () => {
               <ApiFormGroup
                 api={projectApi.update}
                 apiParams={{
-                  projectId: item.id,
+                  projectId: item.id.toString(),
                   name: item.name,
                   type: item.type,
                 }}
@@ -118,7 +118,7 @@ const Page = () => {
             title: tCore('members'),
             children: (
               <userService.roleUsers
-                scopeId={item.id}
+                scopeId={item.id.toString()}
                 module={webModule.name}
                 scope={scopes.Project.name}
               />

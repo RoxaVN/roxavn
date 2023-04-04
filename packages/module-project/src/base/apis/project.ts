@@ -18,7 +18,7 @@ import { permissions, scopes } from '../access';
 import { constants } from '../constants';
 
 const projectSource = new ApiSource<{
-  id: string;
+  id: number;
   type: string;
   name: string;
   userId: string;
@@ -27,7 +27,7 @@ const projectSource = new ApiSource<{
 
 class GetProjectRequest extends ExactProps<GetProjectRequest> {
   @MinLength(1)
-  public readonly id!: string;
+  public readonly id!: number;
 }
 
 class GetProjectsRequest extends ExactProps<GetProjectsRequest> {
@@ -82,7 +82,7 @@ class UpdateProjectRequest extends ExactProps<UpdateProjectRequest> {
 
 class DeleteProjectRequest extends ExactProps<DeleteProjectRequest> {
   @MinLength(1)
-  public readonly projectId!: string;
+  public readonly projectId!: number;
 }
 
 export const projectApi = {
@@ -99,7 +99,7 @@ export const projectApi = {
     validator: GetJoinedProjectsRequest,
     permission: permissions.ReadProjects,
   }),
-  create: projectSource.create({
+  create: projectSource.create<CreateProjectRequest, { id: number }>({
     validator: CreateProjectRequest,
     permission: permissions.CreateProject,
   }),

@@ -12,8 +12,8 @@ import { Task } from './task.entity';
 
 @Entity()
 export class Project {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment', { type: 'bigint' })
+  id: number;
 
   @Column('character varying')
   type: string;
