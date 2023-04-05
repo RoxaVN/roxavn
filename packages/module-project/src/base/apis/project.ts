@@ -64,6 +64,9 @@ class CreateProjectRequest extends ExactProps<CreateProjectRequest> {
 
   @IsIn(Object.values(constants.ProjectTypes))
   public readonly type!: string;
+
+  @Min(1)
+  public readonly duration!: number;
 }
 
 class UpdateProjectRequest extends ExactProps<UpdateProjectRequest> {

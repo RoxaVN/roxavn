@@ -4,6 +4,7 @@
   "addProject": "Add project",
   "editProject": "Edit project",
   "deleteProject": "Delete project",
+  "projectDuration": "Project duration (in day)",
 
   "Meta": {
     "name": "Project module",

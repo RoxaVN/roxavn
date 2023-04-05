@@ -1,4 +1,4 @@
-import { Select, TextInput } from '@mantine/core';
+import { NumberInput, Select, TextInput } from '@mantine/core';
 import {
   ApiFormGroup,
   ApiTable,
@@ -44,10 +44,15 @@ function MePage() {
                     name: 'type',
                     input: (
                       <Select
+                        withinPortal
                         label={tCore('type')}
                         data={Object.values(constants.ProjectTypes)}
                       />
                     ),
+                  },
+                  {
+                    name: 'duration',
+                    input: <NumberInput label={t('projectDuration')} />,
                   },
                 ]}
               />

@@ -4,6 +4,7 @@
   "addProject": "Thêm dự án",
   "editProject": "Sửa dự án",
   "deleteProject": "Xóa dự án",
+  "projectDuration": "Thời gian hoàn thành dự án (tính theo ngày)",
 
   "Meta": {
     "name": "Module dự án",

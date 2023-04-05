@@ -5,7 +5,9 @@ import {
   Index,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
+import { constants } from '../../base';
 
 import { Project } from './project.entity';
 
@@ -22,8 +24,8 @@ export class Task {
   @Column('uuid', { nullable: true })
   assignee?: string;
 
-  @Column('uuid', { array: true })
-  parents: string[];
+  @Column('bigint', { array: true, nullable: true })
+  parents?: string[];
 
   @Column('int', { default: 0 })
   childrenCount = 0;
@@ -34,17 +36,17 @@ export class Task {
   @Column('int', { default: 1 })
   weight = 1;
 
-  @Column('character varying')
+  @Column('character varying', { default: constants.TaskStatus.PENDING })
   status: string;
 
   @Column('character varying')
   title: string;
 
-  @Column('character varying')
-  content: string;
+  @Column('character varying', { nullable: true })
+  content?: string;
 
-  @Column('uuid')
-  projectId: string;
+  @Column('bigint')
+  projectId: number;
 
   @ManyToOne(() => Project, (project) => project.tasks)
   project: Project;
@@ -55,12 +57,18 @@ export class Task {
   @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;
 
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedDate: Date;
+
   @Column({ type: 'timestamptz' })
+  expiryDate: Date;
+
+  @Column({ type: 'timestamptz', nullable: true })
   startedDate?: Date;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'timestamptz', nullable: true })
   finishedDate?: Date;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'timestamptz', nullable: true })
   rejectedDate?: Date;
 }

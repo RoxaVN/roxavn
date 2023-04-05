@@ -4,10 +4,11 @@ import {
   InferAuthApiRequest,
   serviceManager,
 } from '@roxavn/core/server';
+import dayjs from 'dayjs';
 import { In } from 'typeorm';
 
 import { projectApi, roles, scopes } from '../../base';
-import { Project } from '../entities';
+import { Project, Task } from '../entities';
 import { serverModule } from '../module';
 
 @serverModule.useApi(projectApi.getOne)
@@ -90,6 +91,14 @@ export class CreateProjectApiService extends ApiService {
       roleName: roles.ProjectAdmin.name,
       userId: project.userId,
     });
+
+    const task = new Task();
+    task.projectId = project.id;
+    task.userId = request.$user.id;
+    task.title = request.name;
+    task.expiryDate = dayjs().add(request.duration, 'day').toDate();
+    await this.dbSession.save(task);
+
     return { id: project.id };
   }
 }

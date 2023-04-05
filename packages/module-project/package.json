@@ -21,6 +21,7 @@
     "@roxavn/core": "*",
     "@roxavn/module-user": "*",
     "@tabler/icons-react": "*",
+    "dayjs": "^1.11.7",
     "react": "*",
     "react-router-dom": "*",
     "rxjs": "*",
