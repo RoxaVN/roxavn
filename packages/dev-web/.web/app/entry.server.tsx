@@ -15,7 +15,11 @@ import i18n from './i18n'; // your i18n configuration file
 try {
   const { serverModule } = require('../../src/server');
   moduleManager.serverModules.push(serverModule);
-} catch {}
+} catch (e) {
+  if (e?.code !== 'MODULE_NOT_FOUND') {
+    console.log(e);
+  }
+}
 
 const server = createStylesServer();
 
