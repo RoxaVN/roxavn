@@ -40,7 +40,7 @@ export const ApiList = <
   const [params, setParams] = useSetState<Partial<Request>>({
     ...hash.params,
     ...apiParams,
-  });
+  } as any);
   hash.setOnChange(params);
 
   return (

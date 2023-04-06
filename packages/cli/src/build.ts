@@ -67,7 +67,6 @@ class BuildService {
         noImplicitAny: true,
         strictNullChecks: true,
         experimentalDecorators: true,
-        suppressImplicitAnyIndexErrors: true,
         allowSyntheticDefaultImports: true,
         skipLibCheck: true,
         emitDecoratorMetadata: true,

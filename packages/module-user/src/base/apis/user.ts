@@ -77,7 +77,7 @@ export const userApi = {
     Collection<{ id: string; username: string }>,
     ApiError
   >({
-    method: 'GET',
+    method: 'get',
     path: userSource.apiPath() + '/public/search',
     validator: SearchUsersRequest,
   }),

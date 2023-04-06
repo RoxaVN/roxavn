@@ -51,7 +51,7 @@ const urlUtils = {
   },
   parseQueryStr(queryStr: string) {
     const params = new URLSearchParams(queryStr);
-    const result = {};
+    const result: Record<string, any> = {};
 
     for (const [k, v] of params) {
       if (k in result) {

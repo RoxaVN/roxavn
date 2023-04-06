@@ -12,7 +12,7 @@ export const validatorMiddleware: ApiMiddleware = async (
     const rawData = Object.assign(
       {},
       req.params || {},
-      api.method === 'GET' ? req.query : req.body
+      api.method === 'get' ? req.query : req.body
     );
     const parsedData = plainToInstance(api.validator, rawData);
 

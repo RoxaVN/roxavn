@@ -24,7 +24,7 @@ class UpdateFirbaseServerSettingRequest extends ExactProps<UpdateFirbaseServerSe
 
 export const settingApi = {
   updateFirbaseServerSetting: settingSource.custom({
-    method: 'POST',
+    method: 'post',
     path: settingSource.apiPath() + '/server',
     validator: UpdateFirbaseServerSettingRequest,
     permission: permissions.UpdateSetting,

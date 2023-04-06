@@ -37,7 +37,7 @@ export class ServerModule extends BaseModule {
     api: Api<Req, Resp>,
     handler: (req: Req, context: MiddlewareContext) => Promise<Resp> | Resp
   ) {
-    ServerModule.apiRouter[api.method.toLowerCase()](
+    ServerModule.apiRouter[api.method](
       api.path,
       async function (req: Request, resp: Response, next: NextFunction) {
         const queryRunner = databaseManager.dataSource.createQueryRunner();
