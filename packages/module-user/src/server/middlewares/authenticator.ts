@@ -1,6 +1,5 @@
-import { AuthenticatedData, ServerModule } from '@roxavn/core/server';
-import { Resource, UnauthorizedException } from '@roxavn/core/base';
-import snakeCase from 'lodash/snakeCase';
+import { ServerModule } from '@roxavn/core/server';
+import { UnauthorizedException } from '@roxavn/core/base';
 import { Raw } from 'typeorm';
 import { AccessToken } from '../entities';
 import { tokenService } from '../services';
@@ -51,32 +50,6 @@ ServerModule.authenticatorMiddleware = async (
     Object.assign(resp.locals, {
       $user: { id: accessToken.userId },
       $accessToken: { id: accessToken.id },
-      $getResource: async () => {
-        if ('$resource' in resp.locals) {
-          return resp.locals.$resource;
-        }
-        let resource: Resource | undefined;
-        let result = null;
-        for (const r of api.resources.reverse()) {
-          if (resp.locals[r.idParam]) {
-            resource = r;
-            break;
-          }
-        }
-        if (resource) {
-          const resourceTable = snakeCase(resource.name);
-          result = await dbSession
-            .createQueryBuilder()
-            .select(resourceTable)
-            .from(resourceTable, resourceTable)
-            .where(`${resourceTable}.id = :id`, {
-              id: resp.locals[resource.idParam],
-            })
-            .getOne();
-        }
-        resp.locals.$resource = result;
-        return result;
-      },
-    } as AuthenticatedData);
+    });
   }
 };

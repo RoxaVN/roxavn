@@ -1,4 +1,11 @@
-import { accessManager, Api, ForbiddenException, Permission } from '../../base';
+import { snakeCase } from 'lodash';
+import {
+  accessManager,
+  Api,
+  ForbiddenException,
+  Permission,
+  Resource,
+} from '../../base';
 import { AuthenticatedData } from '../service';
 import { ApiMiddleware, MiddlewareContext } from './interfaces';
 
@@ -17,8 +24,39 @@ class AuthorizationManager {
 
 export const authorizationManager = new AuthorizationManager();
 
+function updateResp(api: Api, { dbSession, resp }: MiddlewareContext) {
+  resp.locals.$getResource = async () => {
+    if ('$resource' in resp.locals) {
+      return resp.locals.$resource;
+    }
+    let resource: Resource | undefined;
+    let result = null;
+    for (const r of api.resources.reverse()) {
+      if (resp.locals[r.idParam]) {
+        resource = r;
+        break;
+      }
+    }
+    if (resource) {
+      const resourceTable = snakeCase(resource.name);
+      result = await dbSession
+        .createQueryBuilder()
+        .select(resourceTable)
+        .from(resourceTable, resourceTable)
+        .where(`${resourceTable}.id = :id`, {
+          id: resp.locals[resource.idParam],
+        })
+        .getOne();
+    }
+    resp.locals.$resource = result;
+    return result;
+  };
+}
+
 export const authorizationMiddleware: ApiMiddleware = async (api, context) => {
   if (api.permission) {
+    updateResp(api, context);
+
     if (api.path in authorizationManager.customs) {
       if (await authorizationManager.customs[api.path](api as any, context)) {
         return;
