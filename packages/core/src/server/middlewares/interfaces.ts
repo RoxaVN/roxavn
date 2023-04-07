@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { EntityManager } from 'typeorm';
+import { type EntityManager } from 'typeorm';
 
 import { Api } from '../../base';
 

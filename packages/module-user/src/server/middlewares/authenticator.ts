@@ -1,4 +1,4 @@
-import { ServerModule } from '@roxavn/core/server';
+import { MiddlewareContext, ServerModule } from '@roxavn/core/server';
 import { UnauthorizedException } from '@roxavn/core/base';
 import { Raw } from 'typeorm';
 import { AccessToken } from '../entities';
@@ -16,25 +16,40 @@ ServerModule.authenticatorMiddleware = async (
     }
 
     const token = authorizationHeader.slice(7);
-    if (!token) {
-      throw new UnauthorizedException();
-    }
+    const accessToken = await checkToken(token, dbSession);
 
-    const signatureIndex = token.lastIndexOf('.');
-    if (signatureIndex < 0) {
-      throw new UnauthorizedException();
-    }
+    Object.assign(resp.locals, {
+      $user: { id: accessToken.userId },
+      $accessToken: { id: accessToken.id },
+    });
+  }
+};
 
-    const signature = token.slice(signatureIndex + 1);
-    const tokenPart = token.slice(0, signatureIndex);
-    const isValid = await tokenService.signer.verify(tokenPart, signature);
-    if (!isValid) {
-      throw new UnauthorizedException();
-    }
+async function checkToken(
+  token: string,
+  dbSession: MiddlewareContext['dbSession']
+) {
+  if (!token) {
+    throw new UnauthorizedException();
+  }
 
-    const userId = tokenPart.split('.')[1];
+  const signatureIndex = token.lastIndexOf('.');
+  if (signatureIndex < 0) {
+    throw new UnauthorizedException();
+  }
 
-    const accessToken = await dbSession.getRepository(AccessToken).findOne({
+  const signature = token.slice(signatureIndex + 1);
+  const tokenPart = token.slice(0, signatureIndex);
+  const isValid = await tokenService.signer.verify(tokenPart, signature);
+  if (!isValid) {
+    throw new UnauthorizedException();
+  }
+
+  const userId = tokenPart.split('.')[1];
+
+  const accessToken: { userId: string; id: string } | null = await dbSession
+    .getRepository(AccessToken)
+    .findOne({
       select: ['userId', 'id'],
       where: {
         userId: userId,
@@ -43,13 +58,8 @@ ServerModule.authenticatorMiddleware = async (
       },
     });
 
-    if (!accessToken) {
-      throw new UnauthorizedException();
-    }
-
-    Object.assign(resp.locals, {
-      $user: { id: accessToken.userId },
-      $accessToken: { id: accessToken.id },
-    });
+  if (!accessToken) {
+    throw new UnauthorizedException();
   }
-};
+  return accessToken;
+}
