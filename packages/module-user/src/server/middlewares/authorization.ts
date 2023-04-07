@@ -7,6 +7,7 @@ import { UserRole } from '../entities';
 // check in admin pages
 authorizationManager.middlewares.push({
   apiMatcher: /./,
+  priority: 2,
   handler: async (api, { dbSession, resp, req }) => {
     const user: AuthenticatedData['$user'] = resp.locals.$user;
     const scopeHeader = req.get(constants.AUTH_SCOPE_HTTP_HEADER);
@@ -39,6 +40,7 @@ authorizationManager.middlewares.push({
 // check in resource scope
 authorizationManager.middlewares.push({
   apiMatcher: /./,
+  priority: 2,
   handler: async (api, { dbSession, resp }) => {
     const data: AuthenticatedData = resp.locals as any;
     const resource = await data.$getResource();

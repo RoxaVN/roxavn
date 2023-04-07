@@ -17,9 +17,9 @@ type AuthorizationMiddleware = (
 class AuthorizationManager {
   middlewares: Array<{
     apiMatcher: RegExp;
+    priority: number;
     handler: AuthorizationMiddleware;
   }> = [];
-  customs: Record<string, AuthorizationMiddleware> = {};
 }
 
 export const authorizationManager = new AuthorizationManager();
@@ -92,16 +92,12 @@ export const authorizationMiddleware: ApiMiddleware = async (api, context) => {
   if (api.permission) {
     updateResp(api, context);
 
-    if (api.path in authorizationManager.customs) {
-      if (await authorizationManager.customs[api.path](api as any, context)) {
-        return;
-      }
-    } else {
-      for (const middleware of authorizationManager.middlewares) {
-        if (middleware.apiMatcher.exec(api.path)) {
-          if (await middleware.handler(api as any, context)) {
-            return;
-          }
+    for (const middleware of authorizationManager.middlewares
+      .concat()
+      .sort((a, b) => a.priority - b.priority)) {
+      if (middleware.apiMatcher.exec(api.path)) {
+        if (await middleware.handler(api as any, context)) {
+          return;
         }
       }
     }
@@ -112,6 +108,7 @@ export const authorizationMiddleware: ApiMiddleware = async (api, context) => {
 // check is auth user
 authorizationManager.middlewares.push({
   apiMatcher: /./,
+  priority: 1,
   handler: async (api) => {
     const hasScope = !!api.permission.allowedScopes.find(
       (r) => r.name === accessManager.scopes.AuthUser.name
@@ -123,6 +120,7 @@ authorizationManager.middlewares.push({
 // check is owner
 authorizationManager.middlewares.push({
   apiMatcher: /./,
+  priority: 1,
   handler: async (api, { resp }) => {
     const data: AuthenticatedData = resp.locals as any;
     const hasOwner = !!api.permission.allowedScopes.find(
@@ -147,6 +145,7 @@ authorizationManager.middlewares.push({
 // check special resource
 authorizationManager.middlewares.push({
   apiMatcher: /./,
+  priority: 10,
   handler: async (api, { resp }) => {
     const data: AuthenticatedData = resp.locals as any;
     const conditionResources: Resource[] = api.permission.allowedScopes.filter(
