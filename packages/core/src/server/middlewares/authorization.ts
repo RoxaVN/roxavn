@@ -1,4 +1,4 @@
-import { snakeCase } from 'lodash';
+import snakeCase from 'lodash/snakeCase';
 import {
   accessManager,
   Api,
@@ -25,18 +25,21 @@ class AuthorizationManager {
 export const authorizationManager = new AuthorizationManager();
 
 function updateResp(api: Api, { dbSession, resp }: MiddlewareContext) {
-  resp.locals.$getResource = async () => {
+  const getActiveResource = () => {
+    for (const r of api.resources.reverse()) {
+      if (resp.locals[r.idParam]) {
+        return r;
+      }
+    }
+    return null;
+  };
+
+  const getResource = async (): Promise<Record<string, any> | null> => {
     if ('$resource' in resp.locals) {
       return resp.locals.$resource;
     }
-    let resource: Resource | undefined;
     let result = null;
-    for (const r of api.resources.reverse()) {
-      if (resp.locals[r.idParam]) {
-        resource = r;
-        break;
-      }
-    }
+    const resource = getActiveResource();
     if (resource) {
       const resourceTable = snakeCase(resource.name);
       result = await dbSession
@@ -49,6 +52,38 @@ function updateResp(api: Api, { dbSession, resp }: MiddlewareContext) {
         .getOne();
     }
     resp.locals.$resource = result;
+    return result;
+  };
+
+  resp.locals.$getResource = getResource;
+  resp.locals.$relateResource = {};
+  resp.locals.$getRelateResource = async (resource: Resource) => {
+    if (resource.name in resp.locals.$relateResource) {
+      return resp.locals.$relateResource[resource.name];
+    }
+    let result = null;
+    const activeResource = getActiveResource();
+    if (activeResource?.name === resource.name) {
+      result = await getResource();
+    } else {
+      const activeResourceData = await getResource();
+      if (activeResourceData) {
+        const relateResourceid = activeResourceData[resource.idParam];
+        if (relateResourceid) {
+          const resourceTable = snakeCase(resource.name);
+          result = await dbSession
+            .createQueryBuilder()
+            .select(resourceTable)
+            .from(resourceTable, resourceTable)
+            .where(`${resourceTable}.id = :id`, {
+              id: relateResourceid,
+            })
+            .getOne();
+        }
+      }
+    }
+
+    resp.locals.$relateResource[resource.name] = result;
     return result;
   };
 }
@@ -103,6 +138,29 @@ authorizationManager.middlewares.push({
         resource[accessManager.scopes.User.idParam] === data.$user.id
       ) {
         return true;
+      }
+    }
+    return false;
+  },
+});
+
+// check special resource
+authorizationManager.middlewares.push({
+  apiMatcher: /./,
+  handler: async (api, { resp }) => {
+    const data: AuthenticatedData = resp.locals as any;
+    const conditionResources: Resource[] = api.permission.allowedScopes.filter(
+      (r) => 'condition' in r
+    ) as any;
+    for (const resource of conditionResources) {
+      if (resource.condition) {
+        const relateResource = await data.$getRelateResource(resource);
+        if (relateResource) {
+          const isValid = resource.condition(relateResource, data);
+          if (isValid) {
+            return true;
+          }
+        }
       }
     }
     return false;

@@ -11,11 +11,15 @@ export interface Scope {
 export interface Resource extends Scope {
   idParam: string;
   pluralName: string;
+  condition?: (
+    resourceObject: Record<string, any>,
+    request: Record<string, any>
+  ) => boolean;
 }
 
 export interface Permission {
   name: string;
-  allowedScopes: Scope[];
+  allowedScopes: (Scope | Resource)[];
 }
 
 export interface Role {
