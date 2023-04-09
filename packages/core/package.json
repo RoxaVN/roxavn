@@ -13,7 +13,6 @@
   "sideEffects": false,
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
-    "@types/express": "^4.17.14",
     "@types/jest": "^27.5.2",
     "@types/lodash": "^4.14.189",
     "@types/uuid": "^9.0.0",
@@ -38,7 +37,6 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "dayjs": "^1.11.7",
-    "express": "^4.18.2",
     "i18next": "^22.0.3",
     "lodash": "^4.17.21",
     "nanoid": "^3.0.0",

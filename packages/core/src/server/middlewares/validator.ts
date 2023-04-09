@@ -2,17 +2,18 @@ import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 
 import { ErrorResponse, ValidationException } from '../../base';
-import { ApiMiddleware } from './interfaces';
+import { ServerMiddleware } from './interfaces';
 
-export const validatorMiddleware: ApiMiddleware = async (
+export const validatorMiddleware: ServerMiddleware = async ({
+  request,
+  state,
   api,
-  { req, resp }
-) => {
-  if (api.validator) {
+}) => {
+  if (api?.validator) {
     const rawData = Object.assign(
       {},
-      req.params || {},
-      api.method === 'get' ? req.query : req.body
+      request.params || {},
+      api.method === 'get' ? request.query : request.body
     );
     const parsedData = plainToInstance(api.validator, rawData);
 
@@ -29,6 +30,6 @@ export const validatorMiddleware: ApiMiddleware = async (
       throw new ValidationException(i18n);
     }
 
-    Object.assign(resp.locals, parsedData);
+    Object.assign(state, parsedData);
   }
 };

@@ -7,11 +7,10 @@ import {
   Resource,
 } from '../../base';
 import { AuthenticatedData } from '../service';
-import { ApiMiddleware, MiddlewareContext } from './interfaces';
+import { ServerMiddleware, MiddlewareContext } from './interfaces';
 
 type AuthorizationMiddleware = (
-  api: Api & { permission: Permission },
-  context: MiddlewareContext
+  context: MiddlewareContext & { api: Api & { permission: Permission } }
 ) => Promise<boolean>;
 
 class AuthorizationManager {
@@ -24,19 +23,21 @@ class AuthorizationManager {
 
 export const authorizationManager = new AuthorizationManager();
 
-function updateResp(api: Api, { dbSession, resp }: MiddlewareContext) {
+function updateResp({ dbSession, state, api }: MiddlewareContext) {
   const getActiveResource = () => {
-    for (const r of api.resources.reverse()) {
-      if (resp.locals[r.idParam]) {
-        return r;
+    if (api) {
+      for (const r of api.resources.reverse()) {
+        if (state[r.idParam]) {
+          return r;
+        }
       }
     }
     return null;
   };
 
   const getResource = async (): Promise<Record<string, any> | null> => {
-    if ('$resource' in resp.locals) {
-      return resp.locals.$resource;
+    if ('$resource' in state) {
+      return state.$resource;
     }
     let result = null;
     const resource = getActiveResource();
@@ -47,19 +48,19 @@ function updateResp(api: Api, { dbSession, resp }: MiddlewareContext) {
         .select(resourceTable)
         .from(resourceTable, resourceTable)
         .where(`${resourceTable}.id = :id`, {
-          id: resp.locals[resource.idParam],
+          id: state[resource.idParam],
         })
         .getOne();
     }
-    resp.locals.$resource = result;
+    state.$resource = result;
     return result;
   };
 
-  resp.locals.$getResource = getResource;
-  resp.locals.$relateResource = {};
-  resp.locals.$getRelateResource = async (resource: Resource) => {
-    if (resource.name in resp.locals.$relateResource) {
-      return resp.locals.$relateResource[resource.name];
+  state.$getResource = getResource;
+  state.$relateResource = {};
+  state.$getRelateResource = async (resource: Resource) => {
+    if (resource.name in state.$relateResource) {
+      return state.$relateResource[resource.name];
     }
     let result = null;
     const activeResource = getActiveResource();
@@ -83,20 +84,20 @@ function updateResp(api: Api, { dbSession, resp }: MiddlewareContext) {
       }
     }
 
-    resp.locals.$relateResource[resource.name] = result;
+    state.$relateResource[resource.name] = result;
     return result;
   };
 }
 
-export const authorizationMiddleware: ApiMiddleware = async (api, context) => {
-  if (api.permission) {
-    updateResp(api, context);
+export const authorizationMiddleware: ServerMiddleware = async (context) => {
+  if (context.api?.permission) {
+    updateResp(context);
 
     for (const middleware of authorizationManager.middlewares
       .concat()
       .sort((a, b) => a.priority - b.priority)) {
-      if (middleware.apiMatcher.exec(api.path)) {
-        if (await middleware.handler(api as any, context)) {
+      if (middleware.apiMatcher.exec(context.api.path)) {
+        if (await middleware.handler(context as any)) {
           return;
         }
       }
@@ -109,7 +110,7 @@ export const authorizationMiddleware: ApiMiddleware = async (api, context) => {
 authorizationManager.middlewares.push({
   apiMatcher: /./,
   priority: 1,
-  handler: async (api) => {
+  handler: async ({ api }) => {
     const hasScope = !!api.permission.allowedScopes.find(
       (r) => r.name === accessManager.scopes.AuthUser.name
     );
@@ -121,13 +122,13 @@ authorizationManager.middlewares.push({
 authorizationManager.middlewares.push({
   apiMatcher: /./,
   priority: 1,
-  handler: async (api, { resp }) => {
-    const data: AuthenticatedData = resp.locals as any;
+  handler: async ({ api, state }) => {
+    const data: AuthenticatedData = state as any;
     const hasOwner = !!api.permission.allowedScopes.find(
       (r) => r.name === accessManager.scopes.Owner.name
     );
     if (hasOwner) {
-      if (resp.locals[accessManager.scopes.User.idParam] === data.$user.id) {
+      if (state[accessManager.scopes.User.idParam] === data.$user.id) {
         return true;
       }
       const resource = await data.$getResource();
@@ -146,8 +147,8 @@ authorizationManager.middlewares.push({
 authorizationManager.middlewares.push({
   apiMatcher: /./,
   priority: 10,
-  handler: async (api, { resp }) => {
-    const data: AuthenticatedData = resp.locals as any;
+  handler: async ({ api, state }) => {
+    const data: AuthenticatedData = state as any;
     const conditionResources: Resource[] = api.permission.allowedScopes.filter(
       (r) => 'condition' in r
     ) as any;

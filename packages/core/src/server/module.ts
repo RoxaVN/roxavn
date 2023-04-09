@@ -1,95 +1,78 @@
-import { Request, Response, Router, NextFunction } from 'express';
-import { QueryRunner } from 'typeorm';
 import {
   Api,
   ApiRequest,
   ApiResponse,
   baseModule,
   BaseModule,
-  FullApiResponse,
+  ServerException,
 } from '../base';
 import { databaseManager } from './database';
 import {
-  ApiMiddleware,
+  ServerMiddleware,
   authorizationMiddleware,
-  ErrorMiddleware,
   MiddlewareContext,
-  serverErrorMiddleware,
   validatorMiddleware,
+  IRequest,
+  IResponse,
 } from './middlewares';
 import { ApiService } from './service';
 
 export class ServerModule extends BaseModule {
-  static apiRouter = Router();
-  static apiMiddlewares = [] as Array<ApiMiddleware>;
+  static apiRoutes: Array<{
+    api: Api;
+    handler: (request: IRequest, response: IResponse) => Promise<void>;
+  }> = [];
+  static apiMiddlewares: Array<ServerMiddleware> = [];
   static validatorMiddleware = validatorMiddleware;
   static authorizationMiddleware = authorizationMiddleware;
-  static authenticatorMiddleware: ApiMiddleware = () => {
+  static authenticatorMiddleware: ServerMiddleware = () => {
     throw new Error('authenticatorMiddleware not implemented');
   };
-
-  static errorMiddlewares = [serverErrorMiddleware] as Array<ErrorMiddleware>;
 
   readonly entities: any[] = [];
 
   useRawApi<Req extends ApiRequest, Resp extends ApiResponse>(
     api: Api<Req, Resp>,
-    handler: (req: Req, context: MiddlewareContext) => Promise<Resp> | Resp
+    handler: (
+      requestData: Req,
+      context: MiddlewareContext
+    ) => Promise<Resp> | Resp
   ) {
-    ServerModule.apiRouter[api.method](
-      api.path,
-      async function (req: Request, resp: Response, next: NextFunction) {
+    ServerModule.apiRoutes.push({
+      api: api,
+      handler: async (request, response) => {
         const queryRunner = databaseManager.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
-        resp.locals.$queryRunner = queryRunner;
-
-        let error;
-        for (const middleware of [
+        const middlewares = [
           ServerModule.validatorMiddleware,
           ServerModule.authenticatorMiddleware,
           ServerModule.authorizationMiddleware,
           ...ServerModule.apiMiddlewares,
-        ]) {
-          try {
-            await middleware(api, {
-              req,
-              resp,
-              dbSession: resp.locals.$queryRunner.manager,
-            });
-          } catch (e) {
-            console.error(e);
-            await queryRunner.rollbackTransaction();
-            await queryRunner.release();
-            error = e;
-            break;
-          }
-        }
-        next(error);
-      },
-      async function (req: Request, resp: Response, next: NextFunction) {
-        const queryRunner: QueryRunner = resp.locals.$queryRunner;
-        let error;
+        ];
+        const state = {};
         try {
-          const result = await handler(resp.locals as Req, {
-            req,
-            resp,
+          const context = {
+            request,
+            response,
             dbSession: queryRunner.manager,
-          });
+            state,
+          };
+          for (const middleware of middlewares) {
+            await middleware(context);
+          }
+          const result = await handler(context.state as Req, context);
           await queryRunner.commitTransaction();
-          resp.status(200).json({ code: 200, data: result } as FullApiResponse);
+          response.status(200).send({ code: 200, data: result });
         } catch (e) {
           console.error(e);
           await queryRunner.rollbackTransaction();
-          error = e;
+          throw e;
         } finally {
           await queryRunner.release();
         }
-        if (error) {
-          next(error);
-        }
-      }
-    );
+      },
+    });
   }
 
   useApi<Req extends ApiRequest, Resp extends ApiResponse>(
@@ -98,8 +81,8 @@ export class ServerModule extends BaseModule {
     return (
       serviceClass: new (...args: any[]) => ApiService<Api<Req, Resp>>
     ) => {
-      this.useRawApi(api, async (req, context) => {
-        return this.createService(serviceClass, context).handle(req);
+      this.useRawApi(api, async (requestData, context) => {
+        return this.createService(serviceClass, context).handle(requestData);
       });
     };
   }
@@ -109,6 +92,18 @@ export class ServerModule extends BaseModule {
     context: MiddlewareContext
   ) {
     return new serviceClass(context.dbSession);
+  }
+
+  static handleError(
+    error: any,
+    { response }: { request: IRequest; response: IResponse }
+  ) {
+    if (!error.code || !error.toJson) {
+      error = new ServerException();
+    }
+    response
+      .status(error.code)
+      .send({ code: error.code, error: error.toJson() });
   }
 
   static fromBase(
