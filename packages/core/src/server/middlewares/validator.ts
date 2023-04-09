@@ -5,16 +5,12 @@ import { ErrorResponse, ValidationException } from '../../base';
 import { ServerMiddleware } from './interfaces';
 
 export const validatorMiddleware: ServerMiddleware = async ({
-  request,
+  context,
   state,
   api,
 }) => {
   if (api?.validator) {
-    const rawData = Object.assign(
-      {},
-      request.params || {},
-      api.method === 'get' ? request.query : request.body
-    );
+    const rawData = context.getRequestData();
     const parsedData = plainToInstance(api.validator, rawData);
 
     const errors = validateSync(parsedData, {

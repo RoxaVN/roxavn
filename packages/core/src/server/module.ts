@@ -1,3 +1,4 @@
+import { json } from '@remix-run/node';
 import {
   Api,
   ApiRequest,
@@ -10,17 +11,19 @@ import { databaseManager } from './database';
 import {
   ServerMiddleware,
   authorizationMiddleware,
-  MiddlewareContext,
+  ServerLoaderArgs,
   validatorMiddleware,
-  IRequest,
-  IResponse,
+  ServerLoaderContext,
 } from './middlewares';
 import { ApiService } from './service';
 
 export class ServerModule extends BaseModule {
   static apiRoutes: Array<{
     api: Api;
-    handler: (request: IRequest, response: IResponse) => Promise<void>;
+    handler: (
+      request: Request,
+      context: ServerLoaderContext
+    ) => Promise<Response>;
   }> = [];
   static apiMiddlewares: Array<ServerMiddleware> = [];
   static validatorMiddleware = validatorMiddleware;
@@ -33,14 +36,11 @@ export class ServerModule extends BaseModule {
 
   useRawApi<Req extends ApiRequest, Resp extends ApiResponse>(
     api: Api<Req, Resp>,
-    handler: (
-      requestData: Req,
-      context: MiddlewareContext
-    ) => Promise<Resp> | Resp
+    handler: (requestData: Req, args: ServerLoaderArgs) => Promise<Resp>
   ) {
     ServerModule.apiRoutes.push({
       api: api,
-      handler: async (request, response) => {
+      handler: async (request, context) => {
         const queryRunner = databaseManager.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -50,22 +50,20 @@ export class ServerModule extends BaseModule {
           ServerModule.authorizationMiddleware,
           ...ServerModule.apiMiddlewares,
         ];
-        const state = {};
         try {
-          const context = {
+          const args = {
             request,
-            response,
+            context,
+            state: {},
             dbSession: queryRunner.manager,
-            state,
           };
           for (const middleware of middlewares) {
-            await middleware(context);
+            await middleware(args);
           }
-          const result = await handler(context.state as Req, context);
+          const result = await handler(args.state as Req, args);
           await queryRunner.commitTransaction();
-          response.status(200).send({ code: 200, data: result });
+          return json({ code: 200, data: result });
         } catch (e) {
-          console.error(e);
           await queryRunner.rollbackTransaction();
           throw e;
         } finally {
@@ -89,21 +87,20 @@ export class ServerModule extends BaseModule {
 
   createService<Req extends ApiRequest, Resp extends ApiResponse>(
     serviceClass: new (...args: any[]) => ApiService<Api<Req, Resp>>,
-    context: MiddlewareContext
+    args: ServerLoaderArgs
   ) {
-    return new serviceClass(context.dbSession);
+    return new serviceClass(args.dbSession);
   }
 
-  static handleError(
-    error: any,
-    { response }: { request: IRequest; response: IResponse }
-  ) {
+  static handleError(error: any) {
+    console.error(error);
     if (!error.code || !error.toJson) {
       error = new ServerException();
     }
-    response
-      .status(error.code)
-      .send({ code: error.code, error: error.toJson() });
+    return json(
+      { code: error.code, error: error.toJson() },
+      { status: error.code }
+    );
   }
 
   static fromBase(

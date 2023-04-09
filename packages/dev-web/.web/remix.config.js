@@ -4,5 +4,6 @@ const { registerWebRoutes } = require('@roxavn/core/server');
 module.exports = {
   ignoredRouteFiles: ['**/.*'],
   watchPaths: ['./src/**/*'],
+  server: '.web/server.ts',
   routes: (defineRoutes) => registerWebRoutes(defineRoutes),
 };

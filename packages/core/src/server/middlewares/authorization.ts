@@ -7,10 +7,10 @@ import {
   Resource,
 } from '../../base';
 import { AuthenticatedData } from '../service';
-import { ServerMiddleware, MiddlewareContext } from './interfaces';
+import { ServerMiddleware, ServerLoaderArgs } from './interfaces';
 
 type AuthorizationMiddleware = (
-  context: MiddlewareContext & { api: Api & { permission: Permission } }
+  args: ServerLoaderArgs & { api: Api & { permission: Permission } }
 ) => Promise<boolean>;
 
 class AuthorizationManager {
@@ -23,7 +23,7 @@ class AuthorizationManager {
 
 export const authorizationManager = new AuthorizationManager();
 
-function updateResp({ dbSession, state, api }: MiddlewareContext) {
+function updateResp({ dbSession, state, api }: ServerLoaderArgs) {
   const getActiveResource = () => {
     if (api) {
       for (const r of api.resources.reverse()) {
@@ -89,15 +89,15 @@ function updateResp({ dbSession, state, api }: MiddlewareContext) {
   };
 }
 
-export const authorizationMiddleware: ServerMiddleware = async (context) => {
-  if (context.api?.permission) {
-    updateResp(context);
+export const authorizationMiddleware: ServerMiddleware = async (args) => {
+  if (args.api?.permission) {
+    updateResp(args);
 
     for (const middleware of authorizationManager.middlewares
       .concat()
       .sort((a, b) => a.priority - b.priority)) {
-      if (middleware.apiMatcher.exec(context.api.path)) {
-        if (await middleware.handler(context as any)) {
+      if (middleware.apiMatcher.exec(args.api.path)) {
+        if (await middleware.handler(args as any)) {
           return;
         }
       }
