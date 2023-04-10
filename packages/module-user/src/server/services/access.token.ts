@@ -46,7 +46,7 @@ export class CreateAccessTokenService extends BaseService {
     identityid: string;
     authenticator: string;
     ipAddress: string;
-    userAgent?: string;
+    userAgent?: string | null;
   }) {
     const token = await tokenService.creator.create({
       alphabetType: 'ALPHA_NUM',
@@ -64,7 +64,7 @@ export class CreateAccessTokenService extends BaseService {
     accessToken.token = signature;
     accessToken.expiredDate = expiredAt;
     accessToken.ipAddress = request.ipAddress;
-    accessToken.userAgent = request.userAgent;
+    accessToken.userAgent = request.userAgent || undefined;
     await this.dbSession.getRepository(AccessToken).save(accessToken);
 
     return {

@@ -8,9 +8,9 @@ import { UserRole } from '../entities';
 authorizationManager.middlewares.push({
   apiMatcher: /./,
   priority: 2,
-  handler: async (api, { dbSession, resp, req }) => {
-    const user: AuthenticatedData['$user'] = resp.locals.$user;
-    const scopeHeader = req.get(constants.AUTH_SCOPE_HTTP_HEADER);
+  handler: async ({ api, dbSession, state, request }) => {
+    const user: AuthenticatedData['$user'] = state.$user;
+    const scopeHeader = request.headers.get(constants.AUTH_SCOPE_HTTP_HEADER);
     if (scopeHeader === constants.ADMIN_AUTH_SCOPE) {
       const allow = await dbSession.getRepository(UserRole).count({
         where: {
@@ -20,9 +20,7 @@ authorizationManager.middlewares.push({
             scope: In(
               api.permission.allowedScopes
                 .filter((s) => !s.idParam)
-                .map((s) =>
-                  s.dynamicName ? s.dynamicName(resp.locals) : s.name
-                )
+                .map((s) => (s.dynamicName ? s.dynamicName(state) : s.name))
             ),
             permissions: ArrayContains([api.permission.name]),
           },
@@ -41,15 +39,14 @@ authorizationManager.middlewares.push({
 authorizationManager.middlewares.push({
   apiMatcher: /./,
   priority: 2,
-  handler: async (api, { dbSession, resp }) => {
-    const data: AuthenticatedData = resp.locals as any;
+  handler: async ({ api, dbSession, state }) => {
+    const data: AuthenticatedData = state as any;
     const resource = await data.$getResource();
     const scopes = api.permission.allowedScopes
       .map((s) => ({
         name: s.dynamicName ? s.dynamicName(data) : s.name,
         id:
-          s.idParam &&
-          (resp.locals[s.idParam] || (resource && resource[s.idParam])),
+          s.idParam && (state[s.idParam] || (resource && resource[s.idParam])),
       }))
       .filter((s) => s.id);
 

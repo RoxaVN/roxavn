@@ -52,6 +52,7 @@ export class ServerModule extends BaseModule {
         ];
         try {
           const args = {
+            api,
             request,
             context,
             state: {},

@@ -1,16 +1,18 @@
-import { MiddlewareContext, ServerModule } from '@roxavn/core/server';
+import { ServerLoaderArgs, ServerModule } from '@roxavn/core/server';
 import { UnauthorizedException } from '@roxavn/core/base';
 import { Raw } from 'typeorm';
 import { AccessToken } from '../entities';
 import { tokenService } from '../services';
 
 // authenticate access token
-ServerModule.authenticatorMiddleware = async (
+ServerModule.authenticatorMiddleware = async ({
+  dbSession,
+  state,
+  request,
   api,
-  { dbSession, resp, req }
-) => {
-  if (api.permission) {
-    const authorizationHeader = req.get('authorization');
+}) => {
+  if (api?.permission) {
+    const authorizationHeader = request.headers.get('authorization');
     if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
       throw new UnauthorizedException();
     }
@@ -18,7 +20,7 @@ ServerModule.authenticatorMiddleware = async (
     const token = authorizationHeader.slice(7);
     const accessToken = await checkToken(token, dbSession);
 
-    Object.assign(resp.locals, {
+    Object.assign(state, {
       $user: { id: accessToken.userId },
       $accessToken: { id: accessToken.id },
     });
@@ -27,7 +29,7 @@ ServerModule.authenticatorMiddleware = async (
 
 async function checkToken(
   token: string,
-  dbSession: MiddlewareContext['dbSession']
+  dbSession: ServerLoaderArgs['dbSession']
 ) {
   if (!token) {
     throw new UnauthorizedException();

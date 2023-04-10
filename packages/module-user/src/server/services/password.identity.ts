@@ -12,8 +12,8 @@ import { serverModule } from '../module';
 import { CreateAccessTokenService } from './access.token';
 import { tokenService } from './token';
 
-serverModule.useRawApi(passwordIdentityApi.auth, async (request, context) => {
-  const identity = await context.dbSession.getRepository(Identity).findOne({
+serverModule.useRawApi(passwordIdentityApi.auth, async (request, args) => {
+  const identity = await args.dbSession.getRepository(Identity).findOne({
     select: ['id', 'userId', 'metadata'],
     where: {
       user: { username: request.username },
@@ -37,13 +37,13 @@ serverModule.useRawApi(passwordIdentityApi.auth, async (request, context) => {
   }
 
   return await serverModule
-    .createService(CreateAccessTokenService, context)
+    .createService(CreateAccessTokenService, args)
     .handle({
       userId: identity.userId,
       identityid: identity.id,
       authenticator: constants.identityTypes.PASSWORD,
-      ipAddress: context.req.ip,
-      userAgent: context.req.headers['user-agent'],
+      ipAddress: args.context.getClientIp(),
+      userAgent: args.request.headers.get('user-agent'),
     });
 });
 
