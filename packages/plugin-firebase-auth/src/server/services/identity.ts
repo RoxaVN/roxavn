@@ -6,9 +6,9 @@ import firebaseAdmin from 'firebase-admin';
 import { identityApi } from '../../base';
 import { serverModule } from '../module';
 
-serverModule.useRawApi(identityApi.verifyToken, async (request, context) => {
+serverModule.useRawApi(identityApi.verifyToken, async (request, args) => {
   const firebaseApp = await serverModule
-    .createService(GetFirebaseAppService, context)
+    .createService(GetFirebaseAppService, args)
     .handle({ projectId: request.projectId });
 
   const user = await firebaseAdmin
@@ -16,10 +16,10 @@ serverModule.useRawApi(identityApi.verifyToken, async (request, context) => {
     .verifyIdToken(request.token);
   const data = {
     authenticator: 'firebase',
-    ipAddress: context.req.ip,
-    userAgent: context.req.headers['user-agent'],
+    ipAddress: args.context.getClientIp(),
+    userAgent: args.request.headers.get('user-agent'),
   };
-  const service = serverModule.createService(IdentityService, context);
+  const service = serverModule.createService(IdentityService, args);
   if (user.email_verified && user.email) {
     return service.handle({
       ...data,

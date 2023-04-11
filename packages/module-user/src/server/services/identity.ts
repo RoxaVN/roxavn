@@ -9,7 +9,7 @@ export class IdentityService extends BaseService {
     subject: string;
     type: string;
     authenticator: string;
-    userAgent?: string;
+    userAgent?: string | null;
     ipAddress: string;
   }) {
     let identity = await this.dbSession.getRepository(Identity).findOne({
