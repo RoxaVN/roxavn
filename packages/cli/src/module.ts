@@ -2,7 +2,7 @@ import fs from 'fs';
 import fse from 'fs-extra';
 import path from 'path';
 import { BaseModule, constants } from '@roxavn/core/base';
-import { moduleManager } from '@roxavn/core/server';
+import { getPackageRootPath, moduleManager } from '@roxavn/core/server';
 
 import { CodeChanger } from './lib';
 
@@ -125,7 +125,7 @@ class ModuleService {
     if (fs.existsSync('.web')) {
       fs.rmSync('.web', { recursive: true, force: true });
     }
-    const webModulePath = path.dirname(require.resolve('@roxavn/dev-web'));
+    const webModulePath = getPackageRootPath('@roxavn/dev-web');
     fse.copySync(path.join(webModulePath, '.web'), '.web');
   }
 }
