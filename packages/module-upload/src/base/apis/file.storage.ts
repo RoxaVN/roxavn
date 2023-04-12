@@ -29,4 +29,7 @@ export const fileStoageApi = {
     validator: GetFileStoragesRequest,
     permission: permissions.ReadFIleStorages,
   }),
+  create: fileStoageSource.create({
+    permission: permissions.CreateFIleStorages,
+  }),
 };

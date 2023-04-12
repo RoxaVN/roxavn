@@ -1,73 +1,84 @@
 import {
+  unstable_createFileUploadHandler,
+  unstable_parseMultipartFormData,
+} from '@remix-run/node';
+import {
+  BadRequestException,
   InferApiRequest,
-  InferApiResponse,
   NotFoundException,
-  ServerException,
 } from '@roxavn/core/base';
 import { ApiService, BaseService } from '@roxavn/core/server';
-import busboy from 'busboy';
 import sample from 'lodash/sample';
 
 import { ExceedsStorageLimitException, fileApi } from '../../base';
-import { File, FileStorage } from '../entities';
+import { File as FileEntity } from '../entities';
 import { serverModule } from '../module';
 import { SeaweedClient, seaweedClient } from './seaweed';
+import {
+  GetUserFileStorageService,
+  UpdateFileStorageService,
+} from './file.storage';
+import { storageManager } from '../storage.handler';
 
-serverModule.useRawApi(fileApi.upload, (_, { req, dbSession, resp }) => {
-  return new Promise<InferApiResponse<typeof fileApi.upload>>(
-    (resolve, reject) => {
-      const bb = busboy({ headers: req.headers });
-      bb.on('file', async (name, fileStream, info) => {
-        try {
-          const result = await seaweedClient.write(fileStream);
-          const fileName = Buffer.from(info.filename, 'latin1').toString(
-            'utf8'
-          );
+const uploadHandler = unstable_createFileUploadHandler();
 
-          const userId = resp.locals.$user.id;
-          let storage = await dbSession
-            .getRepository(FileStorage)
-            .findOne({ where: { userId: userId } });
-          if (!storage) {
-            storage = new FileStorage();
-            storage.userId = userId;
-          }
-          storage.currentSize += result.size;
-          if (storage.maxSize && storage.currentSize > storage.maxSize) {
-            return reject(new ExceedsStorageLimitException(storage.maxSize));
-          }
-          await dbSession.save(storage);
-
-          const file = new File();
-          file.id = result.fid;
-          file.size = result.size;
-          file.etag = result.eTag;
-          file.name = fileName;
-          file.userId = userId;
-          file.mime = info.mimeType;
-          file.fileStorageId = storage.id;
-          await dbSession.save(file);
-
-          resolve({
-            id: result.fid,
-            mime: info.mimeType,
-            url: result.url,
-            name: fileName,
-          });
-        } catch (e) {
-          console.log(e);
-          reject(new ServerException());
-        }
-      });
-      req.pipe(bb);
-    }
+serverModule.useRawApi(fileApi.upload, async (_, args) => {
+  const handler = storageManager.getFirst();
+  const userId = args.state.$user.id;
+  const formData = await unstable_parseMultipartFormData(
+    args.request,
+    uploadHandler
   );
+  const file = formData.get('file') as File;
+  if (!handler) {
+    throw new NotFoundException();
+  }
+  if (file) {
+    const filesize = file.length;
+    const mime = file.type;
+    const name = file.name;
+    // check size
+    const storage = await serverModule
+      .createService(GetUserFileStorageService, args)
+      .handle({ userId: userId, storageName: handler.name });
+    if (storage.currentSize + filesize > storage.maxSize) {
+      throw new ExceedsStorageLimitException(storage.maxSize);
+    }
+
+    const uploadResult = await handler.upload(file.stream(), file.length);
+
+    // update storage later because avoid wait lock for update
+    const update = await serverModule
+      .createService(UpdateFileStorageService, args)
+      .handle({
+        userId: userId,
+        storageName: handler.name,
+        fileSize: filesize,
+      });
+    if (update.error) {
+      await handler.remove(uploadResult.id);
+      throw new ExceedsStorageLimitException(storage.maxSize);
+    }
+
+    await serverModule.createService(CreateFileService, args).handle({
+      id: uploadResult.id,
+      size: filesize,
+      eTag: uploadResult.eTag,
+      fileStorageId: storage.id,
+      mime,
+      name,
+      userId,
+    });
+
+    return { id: uploadResult.id, mime, name, url: uploadResult.url };
+  }
+  throw new BadRequestException();
 });
 
 @serverModule.useApi(fileApi.getOne)
 export class GetFileApiService extends ApiService {
   async handle(request: InferApiRequest<typeof fileApi.getOne>) {
-    const result = await this.dbSession.getRepository(File).findOne({
+    const result = await this.dbSession.getRepository(FileEntity).findOne({
       where: { id: request.fileId },
     });
     if (result) {
@@ -82,6 +93,22 @@ export class GetFileApiService extends ApiService {
       };
     }
     throw new NotFoundException();
+  }
+}
+
+export class CreateFileService extends BaseService {
+  handle(request: {
+    id: string;
+    size: number;
+    eTag: string;
+    name: string;
+    userId: string;
+    mime: string;
+    fileStorageId: string;
+  }) {
+    const file = new FileEntity();
+    Object.assign(file, request);
+    return this.dbSession.save(file);
   }
 }
 

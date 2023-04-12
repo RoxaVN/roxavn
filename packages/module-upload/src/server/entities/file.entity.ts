@@ -12,26 +12,26 @@ import { FileStorage } from './file.storage.entity';
 
 @Entity()
 export class File {
-  @PrimaryColumn('varchar', { length: 33 })
+  @PrimaryColumn('varchar', { length: 64 })
   id: string;
 
-  @Column('character varying')
+  @Column('text')
   name: string;
 
-  @Column('unsigned big int')
+  @Column('bigint')
   size: number;
 
-  @Column('character varying')
+  @Column('text')
   etag: string;
 
-  @Column('character varying')
+  @Column('text')
   mime: string;
 
   @Index()
   @Column('uuid')
   userId: string;
 
-  @Column()
+  @Column('uuid')
   fileStorageId: string;
 
   @ManyToOne(() => FileStorage, (fileStorage) => fileStorage.files)
