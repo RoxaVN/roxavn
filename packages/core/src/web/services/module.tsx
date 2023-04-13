@@ -50,13 +50,13 @@ export class WebModule extends BaseModule {
       const load = async () => {
         await this.loadRegisters(this.adminPluginRegisters);
         if (
-          !this.adminPages.find((p) => p.path === '/settings') &&
+          !this.adminPages.find((p) => p.path === 'settings') &&
           Object.keys(this.adminSettings).length
         ) {
           this.adminPages.push({
             label: t('settings'),
             icon: IconSettings,
-            path: '/settings',
+            path: 'settings',
             element: WebModule.settingsPageRender(this),
           });
         }
