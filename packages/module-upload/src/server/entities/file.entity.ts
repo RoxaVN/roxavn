@@ -27,6 +27,9 @@ export class File {
   @Column('text')
   mime: string;
 
+  @Column('text')
+  url: string;
+
   @Index()
   @Column('uuid')
   userId: string;

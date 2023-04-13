@@ -13,9 +13,7 @@
     "@roxavn/cli": "^0.1.0",
     "typescript": "^4.3.5"
   },
-  "dependencies": {
-    "form-data": "^4.0.0"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@mantine/core": "*",
     "@mantine/dropzone": "*",
