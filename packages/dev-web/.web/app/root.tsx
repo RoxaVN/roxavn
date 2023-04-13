@@ -14,7 +14,6 @@ import i18next from './i18next.server';
 import { createEmotionCache } from '@mantine/core';
 import { StylesPlaceholder } from '@mantine/remix';
 import React, { useEffect } from 'react';
-import 'reflect-metadata';
 
 import './init.client';
 
@@ -54,6 +53,12 @@ export default function Root() {
     <AppProvider>
       <html lang={locale} dir={i18n.dir()}>
         <head>
+          <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect.min.js"
+            integrity="sha512-jvbPH2TH5BSZumEfOJZn9IV+5bSwwN+qG4dvthYe3KCGC3/9HmxZ4phADbt9Pfcp+XSyyfc2vGZ/RMsSUZ9tbQ=="
+            crossOrigin="anonymous"
+            referrerPolicy="no-referrer"
+          ></script>
           <StylesPlaceholder />
           <Meta />
           <Links />
