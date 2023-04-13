@@ -20,6 +20,7 @@
     "@roxavn/core": "*",
     "@roxavn/module-upload": "*",
     "@roxavn/module-user": "*",
+    "@roxavn/module-utils": "*",
     "@tabler/icons-react": "*",
     "react": "*",
     "react-router-dom": "*",
@@ -31,6 +32,10 @@
     "./web": {
       "require": "./dist/cjs/web/index.js",
       "import": "./dist/esm/web/index.js"
+    },
+    "./web/init": {
+      "require": "./dist/cjs/web/init.js",
+      "import": "./dist/esm/web/init.js"
     },
     "./base": {
       "require": "./dist/cjs/base/index.js",
@@ -45,6 +50,9 @@
     "*": {
       "web": [
         "dist/esm/web/index.d.ts"
+      ],
+      "web/init": [
+        "dist/esm/web/init.d.ts"
       ],
       "base": [
         "dist/esm/base/index.d.ts"

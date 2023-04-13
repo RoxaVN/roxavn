@@ -1,4 +1,5 @@
 {
+  "updateSeaweedFSMasterUrlSetting": "Cập nhật url cho SeaweedFS master",
   "Meta": {
     "name": "Tải lên SeaweedFS",
     "description": "Tải lên SeaweedFS"

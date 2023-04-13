@@ -1,9 +1,8 @@
 import {
   ApiSource,
   ExactProps,
-  IsNumberString,
   IsOptional,
-  Min,
+  TransformNumber,
 } from '@roxavn/core/base';
 
 import { baseModule } from '../module';
@@ -18,10 +17,9 @@ const fileStoageSource = new ApiSource<{
 }>([scopes.FileStorage], baseModule);
 
 class GetFileStoragesRequest extends ExactProps<GetFileStoragesRequest> {
-  @Min(1)
-  @IsNumberString()
+  @TransformNumber()
   @IsOptional()
-  public readonly page = 1;
+  public readonly page?: number;
 }
 
 export const fileStoageApi = {
