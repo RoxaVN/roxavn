@@ -1,3 +1,4 @@
+# cna't work with rootless mode because must use network_mode host
 version: '3.9'
 
 services:
@@ -15,20 +16,14 @@ services:
 
   seaweed_master:
     image: chrislusf/seaweedfs
-    ports:
-      - 9333:9333
-      - 19333:19333
-      - 9324:9324
-    command: 'master -ip=seaweed_master -ip.bind=0.0.0.0 -metricsPort=9324'
+    network_mode: 'host'
+    command: 'master -ip=localhost -ip.bind=0.0.0.0 -metricsPort=9324'
 
   seaweed_volume:
     image: chrislusf/seaweedfs
-    ports:
-      - 28080:28080
-      - 18080:18080
-      - 9325:9325
+    network_mode: 'host'
     volumes:
       - ./docker-data/seaweed:/data
-    command: 'volume -mserver="seaweed_master:9333" -ip.bind=0.0.0.0 -port=28080 -publicUrl="http://localhost:28080" -metricsPort=9325'
+    command: 'volume -mserver="localhost:9333" -ip.bind=0.0.0.0 -port=28080 -publicUrl="http://localhost:28080" -metricsPort=9325'
     depends_on:
       - seaweed_master
