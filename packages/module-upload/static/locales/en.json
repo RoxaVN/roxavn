@@ -12,6 +12,8 @@
     "MaxFiles": "Max uploaded files is {{ count }}"
   },
   "Error": {
+    "NotFoundUserStorageException": "Not found user storage exception",
+    "NotFoundStorageHandlerException": "Not found storage handler exception",
     "ExceedsUploadLimitException": "Exceeds upload limit of {{ size }}",
     "ExceedsStorageLimitException": "Exceeds storage limit of {{ size }}"
   }

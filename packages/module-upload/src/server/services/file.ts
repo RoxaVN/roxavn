@@ -31,14 +31,17 @@ serverModule.useRawApi(fileApi.upload, async (_, args) => {
     .createService(GetStorageHandlerService, args)
     .handle({});
   if (file) {
-    const filesize = file.length;
+    const filesize = file.size;
     const mime = file.type;
     const name = file.name;
     // check size
     const storage = await serverModule
       .createService(GetUserFileStorageService, args)
       .handle({ userId: userId, storageName: storageHandler.name });
-    if (storage.currentSize + filesize > storage.maxSize) {
+    if (
+      storage.maxSize > 0 &&
+      storage.currentSize + filesize > storage.maxSize
+    ) {
       throw new ExceedsStorageLimitException(storage.maxSize);
     }
 

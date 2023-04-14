@@ -12,6 +12,8 @@
     "MaxFiles": "Chỉ được tải lên tối đa {{ count }} tệp tin"
   },
   "Error": {
+    "NotFoundUserStorageException": "Người dùng chưa khởi tạo lưu trữ",
+    "NotFoundStorageHandlerException": "Không tìm thấy plugin xử lý tải lên",
     "ExceedsUploadLimitException": "Vượt quá giới hạn tải lên {{ size }}",
     "ExceedsStorageLimitException": "Vượt quá giới hạn lưu trữ {{ size }}"
   }

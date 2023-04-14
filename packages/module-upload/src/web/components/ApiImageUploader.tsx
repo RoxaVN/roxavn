@@ -1,15 +1,15 @@
 import { CloseButton, LoadingOverlay, Tooltip } from '@mantine/core';
 import { IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import { ApiError, useApi } from '@roxavn/core/web';
+import { ApiError } from '@roxavn/core/web';
 import { useEffect, useState } from 'react';
 
-import { fileApi } from '../../base';
 import {
   ApiFileInput,
   ApiFileInputProps,
   UploadeditemProps,
   UploaditemProps,
 } from './ApiFileInput';
+import { useUpload } from '../hooks';
 import { useApiFileInputStyles } from './ApiFileInput.styles';
 
 const UploadedImageitem = ({ value, onRemove }: UploadeditemProps) => {
@@ -28,7 +28,7 @@ const UploadedImageitem = ({ value, onRemove }: UploadeditemProps) => {
 
 const UploadImageItem = ({ value, onChange }: UploaditemProps) => {
   const [image, setImage] = useState<string>();
-  const { data, error, loading } = useApi(fileApi.upload, { file: value });
+  const { data, error, loading } = useUpload(value);
   const { classes } = useApiFileInputStyles();
 
   useEffect(() => {

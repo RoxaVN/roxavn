@@ -1,4 +1,9 @@
-import { BadRequestException, I18nErrorField } from '@roxavn/core/base';
+import {
+  BadRequestException,
+  I18nErrorField,
+  NotFoundException,
+} from '@roxavn/core/base';
+
 import { baseModule } from './module';
 
 export class ExceedsStorageLimitException extends BadRequestException {
@@ -19,6 +24,24 @@ export class ExceedsUploadLimitException extends ExceedsStorageLimitException {
   i18n = {
     default: {
       key: 'Error.ExceedsUploadLimitException',
+      ns: baseModule.escapedName,
+    },
+  };
+}
+
+export class NotFoundStorageHandlerException extends NotFoundException {
+  i18n = {
+    default: {
+      key: 'Error.NotFoundStorageHandlerException',
+      ns: baseModule.escapedName,
+    },
+  };
+}
+
+export class NotFoundUserStorageException extends NotFoundException {
+  i18n = {
+    default: {
+      key: 'Error.NotFoundUserStorageException',
       ns: baseModule.escapedName,
     },
   };

@@ -9,11 +9,12 @@ import {
 } from '@mantine/core';
 import { useListState } from '@mantine/hooks';
 import { InferApiResponse } from '@roxavn/core/base';
-import { ApiError, uiManager, useApi } from '@roxavn/core/web';
+import { ApiError, uiManager } from '@roxavn/core/web';
 import { IconUpload, IconFileCheck } from '@tabler/icons-react';
 import { Fragment, useEffect } from 'react';
 
 import { fileApi } from '../../base';
+import { useUpload } from '../hooks';
 import { webModule } from '../module';
 import { useApiFileInputStyles } from './ApiFileInput.styles';
 
@@ -56,7 +57,7 @@ export interface UploaditemProps {
 }
 
 const UploadItem = ({ value, onChange }: UploaditemProps) => {
-  const { data, error, loading } = useApi(fileApi.upload, { file: value });
+  const { data, error, loading } = useUpload(value);
   const { classes } = useApiFileInputStyles();
 
   useEffect(() => {

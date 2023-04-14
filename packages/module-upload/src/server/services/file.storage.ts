@@ -1,4 +1,4 @@
-import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
+import { InferApiRequest } from '@roxavn/core/base';
 import {
   ApiService,
   BaseService,
@@ -6,7 +6,11 @@ import {
 } from '@roxavn/core/server';
 import { Raw } from 'typeorm';
 
-import { fileStoageApi } from '../../base';
+import {
+  NotFoundStorageHandlerException,
+  NotFoundUserStorageException,
+  fileStoageApi,
+} from '../../base';
 import { FileStorage } from '../entities';
 import { serverModule } from '../module';
 import { GetStorageHandlerService } from './storage.handler';
@@ -59,7 +63,7 @@ export class CreateFileStorageApiService extends ApiService {
         .execute();
       return { id: result.raw };
     }
-    throw new NotFoundException();
+    throw new NotFoundStorageHandlerException();
   }
 }
 
@@ -71,7 +75,7 @@ export class GetUserFileStorageService extends BaseService {
     if (result) {
       return result;
     }
-    throw new NotFoundException();
+    throw new NotFoundUserStorageException();
   }
 }
 
@@ -83,9 +87,11 @@ export class UpdateFileStorageService extends BaseService {
   }) {
     const result = await this.dbSession.getRepository(FileStorage).increment(
       {
-        maxFileSize: Raw((alias) => `${alias} > size + ${request.fileSize}`),
+        maxFileSize: Raw(
+          (alias) => `${alias} > currentSize + ${request.fileSize}`
+        ),
       },
-      'size',
+      'currentSize',
       request.fileSize
     );
     return { error: !result.affected };

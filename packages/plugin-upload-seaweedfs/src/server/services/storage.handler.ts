@@ -9,9 +9,9 @@ import { SeaweedFSClient } from './seaweedfs.client';
 import { constants } from '../../base';
 
 export class SeaweedFSStorageHandler implements StorageHandler {
-  name: 'SeaweedFS';
-  defaultMaxFileSize: 0;
-  defaultMaxSize: 0;
+  name = 'SeaweedFS';
+  defaultMaxFileSize = 0;
+  defaultMaxSize = 0;
 
   constructor(private seaweedFSClient: SeaweedFSClient) {}
 
