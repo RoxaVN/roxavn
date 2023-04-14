@@ -9,7 +9,7 @@ import { Raw } from 'typeorm';
 import { fileStoageApi } from '../../base';
 import { FileStorage } from '../entities';
 import { serverModule } from '../module';
-import { storageManager } from '../storage.handler';
+import { GetStorageHandlerService } from './storage.handler';
 
 @serverModule.useApi(fileStoageApi.getMany)
 export class GetFileStoragesApiService extends ApiService {
@@ -41,7 +41,9 @@ export class GetFileStoragesApiService extends ApiService {
 @serverModule.useApi(fileStoageApi.create)
 export class CreateFileStorageApiService extends ApiService {
   async handle(request: InferAuthApiRequest<typeof fileStoageApi.create>) {
-    const storageHandler = storageManager.getFirst();
+    const storageHandler = await this.create(GetStorageHandlerService).handle(
+      {}
+    );
     if (storageHandler) {
       const result = await this.dbSession
         .createQueryBuilder()

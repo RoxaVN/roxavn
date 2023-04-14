@@ -16,21 +16,20 @@ import {
   GetUserFileStorageService,
   UpdateFileStorageService,
 } from './file.storage';
-import { storageManager } from '../storage.handler';
+import { GetStorageHandlerService } from './storage.handler';
 
 const uploadHandler = unstable_createFileUploadHandler();
 
 serverModule.useRawApi(fileApi.upload, async (_, args) => {
-  const handler = storageManager.getFirst();
   const userId = args.state.$user.id;
   const formData = await unstable_parseMultipartFormData(
     args.request,
     uploadHandler
   );
   const file = formData.get('file') as File;
-  if (!handler) {
-    throw new NotFoundException();
-  }
+  const storageHandler = await serverModule
+    .createService(GetStorageHandlerService, args)
+    .handle({});
   if (file) {
     const filesize = file.length;
     const mime = file.type;
@@ -38,23 +37,26 @@ serverModule.useRawApi(fileApi.upload, async (_, args) => {
     // check size
     const storage = await serverModule
       .createService(GetUserFileStorageService, args)
-      .handle({ userId: userId, storageName: handler.name });
+      .handle({ userId: userId, storageName: storageHandler.name });
     if (storage.currentSize + filesize > storage.maxSize) {
       throw new ExceedsStorageLimitException(storage.maxSize);
     }
 
-    const uploadResult = await handler.upload(file.stream(), file.length);
+    const uploadResult = await storageHandler.upload(
+      file.stream(),
+      file.length
+    );
 
     // update storage later because avoid wait lock for update
     const update = await serverModule
       .createService(UpdateFileStorageService, args)
       .handle({
         userId: userId,
-        storageName: handler.name,
+        storageName: storageHandler.name,
         fileSize: filesize,
       });
     if (update.error) {
-      await handler.remove(uploadResult.id);
+      await storageHandler.remove(uploadResult.id);
       throw new ExceedsStorageLimitException(storage.maxSize);
     }
 
