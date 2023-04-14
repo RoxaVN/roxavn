@@ -2,8 +2,8 @@ import { urlUtils } from '@roxavn/core/base';
 
 const cacheLookup: Record<string, any> = {};
 
-export class SeaweedClient {
-  constructor(private baseUrl: string) {}
+export class SeaweedFSClient {
+  constructor(private masterUrl: string) {}
 
   private _urlWithSchema = (url: string): string =>
     url.startsWith('http') ? url : `http://${url}`;
@@ -15,7 +15,7 @@ export class SeaweedClient {
       return cacheLookup[params.volumeId];
     }
     const result = await fetch(
-      new URL('dir/lookup?' + urlUtils.generateQueryStr(params), this.baseUrl)
+      new URL('dir/lookup?' + urlUtils.generateQueryStr(params), this.masterUrl)
     ).then((resp) => resp.json());
     cacheLookup[params.volumeId] = result;
     return result;
@@ -31,7 +31,7 @@ export class SeaweedClient {
     return fetch(
       new URL(
         'dir/assign?' + urlUtils.generateQueryStr(params || {}),
-        this.baseUrl
+        this.masterUrl
       )
     ).then((resp) => resp.json());
   }
@@ -40,7 +40,7 @@ export class SeaweedClient {
     file: ReadableStream,
     size: number
   ): Promise<{
-    fid: string;
+    id: string;
     url: string;
     size: number;
     eTag: string;
@@ -59,14 +59,14 @@ export class SeaweedClient {
     if (result.size !== size) {
       throw new Error('Invalid file size');
     }
-    result.fid = finfo.fid;
+    result.id = finfo.fid;
     result.url = new URL(finfo.fid, finfo.publicUrl).toString();
 
     return result;
   }
 
   async delete(fid: string): Promise<{ success: boolean }> {
-    const result = await fetch(new URL(fid, this.baseUrl), {
+    const result = await fetch(new URL(fid, this.masterUrl), {
       method: 'delete',
     }).then((resp) => resp.json());
     return { success: result.size > 0 };

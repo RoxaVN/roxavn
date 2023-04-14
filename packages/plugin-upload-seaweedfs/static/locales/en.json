@@ -1,5 +1,5 @@
 {
-  "updateSeaweedFSMasterUrlSetting": "Update SeaweedFS master server url",
+  "updateSeaweedFSSetting": "Update SeaweedFS setting",
   "Meta": {
     "name": "Upload to SeaweedFS",
     "description": "Upload to SeaweedFS"

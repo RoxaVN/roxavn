@@ -10,13 +10,13 @@ const settingSource = new ApiSource<SettingResponse>(
 
 class UpdateSeaweedFSMasterUrlSettingRequest extends ExactProps<UpdateSeaweedFSMasterUrlSettingRequest> {
   @IsUrl({ require_tld: false })
-  public readonly url: string;
+  public readonly masterUrl: string;
 }
 
 export const settingApi = {
-  updateSeaweedFSMasterUrlSetting: settingSource.custom({
+  updateSeaweedFSSetting: settingSource.custom({
     method: 'post',
-    path: settingSource.apiPath() + '/seaweedfs_url',
+    path: settingSource.apiPath() + '/seaweedfs',
     validator: UpdateSeaweedFSMasterUrlSettingRequest,
     permission: permissions.UpdateSetting,
   }),

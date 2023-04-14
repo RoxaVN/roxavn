@@ -9,7 +9,7 @@ export interface StorageHandler {
     file: ReadableStream,
     size: number
   ): Promise<{ id: string; url: string; eTag: string }>;
-  remove(fileId: string): Promise<void>;
+  remove(fileId: string): Promise<{ success: boolean }>;
 }
 
 export abstract class StorageHandlerService extends BaseService {

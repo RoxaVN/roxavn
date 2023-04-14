@@ -1,3 +1,4 @@
 export const constants = {
-  SEAWEEDFS_MASTER_URL_SETTING: 'seaweedFsHostSetting',
+  SEAWEEDFS_SETTING: 'seaweedFsSetting',
+  SEAWEEDFS_MASTER_URL_DEFAULT: 'http://localhost:9333',
 };

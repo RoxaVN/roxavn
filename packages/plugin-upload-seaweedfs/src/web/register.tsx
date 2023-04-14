@@ -6,15 +6,19 @@ import { constants, settingApi } from '../base';
 import { webModule } from './module';
 
 export default function () {
-  uploadWebModule.adminSettings[constants.SEAWEEDFS_MASTER_URL_SETTING] = {
-    title: <ModuleT module={webModule} k="updateSeaweedFSMasterUrlSetting" />,
+  uploadWebModule.adminSettings[constants.SEAWEEDFS_SETTING] = {
+    title: <ModuleT module={webModule} k="updateSeaweedFSSetting" />,
     form: (
       <ApiFormGroup
-        api={settingApi.updateSeaweedFSMasterUrlSetting}
+        api={settingApi.updateSeaweedFSSetting}
         fields={[
           {
-            name: 'url',
-            input: <TextInput placeholder="Default http://localhost:9333" />,
+            name: 'masterUrl',
+            input: (
+              <TextInput
+                placeholder={`Default ${constants.SEAWEEDFS_MASTER_URL_DEFAULT}`}
+              />
+            ),
           },
         ]}
       />
