@@ -1,4 +1,5 @@
 import {
+  MaxPartSizeExceededError,
   unstable_createFileUploadHandler,
   unstable_parseMultipartFormData,
 } from '@remix-run/node';
@@ -18,32 +19,38 @@ import {
 } from './file.storage';
 import { GetStorageHandlerService } from './storage.handler';
 
-const uploadHandler = unstable_createFileUploadHandler();
-
 serverModule.useRawApi(fileApi.upload, async (_, args) => {
   const userId = args.state.$user.id;
-  const formData = await unstable_parseMultipartFormData(
-    args.request,
-    uploadHandler
-  );
-  const file = formData.get('file') as File;
   const storageHandler = await serverModule
     .createService(GetStorageHandlerService, args)
     .handle({});
+  const storage = await serverModule
+    .createService(GetUserFileStorageService, args)
+    .handle({ userId: userId, storageName: storageHandler.name });
+  const remainSize =
+    storage.maxSize > 0 ? storage.maxSize - storage.currentSize : undefined;
+
+  const uploadHandler = unstable_createFileUploadHandler({
+    maxPartSize: remainSize,
+  });
+  let formData: FormData;
+  try {
+    formData = await unstable_parseMultipartFormData(
+      args.request,
+      uploadHandler
+    );
+  } catch (e) {
+    if (e instanceof MaxPartSizeExceededError) {
+      throw new ExceedsStorageLimitException(storage.maxSize);
+    } else {
+      throw e;
+    }
+  }
+  const file = formData.get('file') as File;
   if (file) {
     const filesize = file.size;
     const mime = file.type;
     const name = file.name;
-    // check size
-    const storage = await serverModule
-      .createService(GetUserFileStorageService, args)
-      .handle({ userId: userId, storageName: storageHandler.name });
-    if (
-      storage.maxSize > 0 &&
-      storage.currentSize + filesize > storage.maxSize
-    ) {
-      throw new ExceedsStorageLimitException(storage.maxSize);
-    }
 
     const uploadResult = await storageHandler.upload(
       file.stream(),
