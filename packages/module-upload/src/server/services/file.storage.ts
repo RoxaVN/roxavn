@@ -6,11 +6,7 @@ import {
 } from '@roxavn/core/server';
 import { Raw } from 'typeorm';
 
-import {
-  NotFoundStorageHandlerException,
-  NotFoundUserStorageException,
-  fileStoageApi,
-} from '../../base';
+import { NotFoundUserStorageException, fileStoageApi } from '../../base';
 import { FileStorage } from '../entities';
 import { serverModule } from '../module';
 import { GetStorageHandlerService } from './storage.handler';
@@ -48,22 +44,19 @@ export class CreateFileStorageApiService extends ApiService {
     const storageHandler = await this.create(GetStorageHandlerService).handle(
       {}
     );
-    if (storageHandler) {
-      const result = await this.dbSession
-        .createQueryBuilder()
-        .insert()
-        .into(FileStorage)
-        .values({
-          userId: request.$user.id,
-          name: storageHandler.name,
-          maxSize: storageHandler.defaultMaxSize,
-          maxFileSize: storageHandler.defaultMaxFileSize,
-        })
-        .orIgnore()
-        .execute();
-      return { id: result.raw };
-    }
-    throw new NotFoundStorageHandlerException();
+    const result = await this.dbSession
+      .createQueryBuilder()
+      .insert()
+      .into(FileStorage)
+      .values({
+        userId: request.$user.id,
+        name: storageHandler.name,
+        maxSize: storageHandler.defaultMaxSize,
+        maxFileSize: storageHandler.defaultMaxFileSize,
+      })
+      .orIgnore()
+      .execute();
+    return { id: result.raw };
   }
 }
 

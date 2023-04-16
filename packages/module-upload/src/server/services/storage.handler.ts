@@ -1,5 +1,5 @@
-import { NotFoundException } from '@roxavn/core/base';
 import { BaseService } from '@roxavn/core/server';
+import { NotFoundStorageHandlerException } from '../../base';
 
 export interface StorageHandler {
   name: string;
@@ -29,6 +29,6 @@ export class GetStorageHandlerService extends BaseService {
       const service = this.create(serviceClass);
       return service.handle({});
     }
-    throw new NotFoundException();
+    throw new NotFoundStorageHandlerException();
   }
 }
