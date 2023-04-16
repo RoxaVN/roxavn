@@ -6,12 +6,12 @@ import { ApiFileInput, ApiImageUploader } from '../components';
 export default function () {
   return (
     <div>
-      <p>
+      <div>
         <ApiFileInput />
-      </p>
-      <p>
+      </div>
+      <div>
         <ApiImageUploader />
-      </p>
+      </div>
     </div>
   );
 }
