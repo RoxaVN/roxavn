@@ -22,7 +22,7 @@ export class File {
   size: number;
 
   @Column('text')
-  etag: string;
+  eTag: string;
 
   @Column('text')
   mime: string;

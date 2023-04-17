@@ -80,8 +80,9 @@ export class UpdateFileStorageService extends BaseService {
   }) {
     const result = await this.dbSession.getRepository(FileStorage).increment(
       {
-        maxFileSize: Raw(
-          (alias) => `${alias} > currentSize + ${request.fileSize}`
+        maxSize: Raw(
+          (alias) =>
+            `${alias} = 0 OR ${alias} > currentSize + ${request.fileSize}`
         ),
       },
       'currentSize',

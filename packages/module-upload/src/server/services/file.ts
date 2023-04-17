@@ -2,6 +2,7 @@ import {
   MaxPartSizeExceededError,
   unstable_createFileUploadHandler,
   unstable_parseMultipartFormData,
+  NodeOnDiskFile,
 } from '@remix-run/node';
 import {
   BadRequestException,
@@ -9,8 +10,13 @@ import {
   NotFoundException,
 } from '@roxavn/core/base';
 import { ApiService, BaseService } from '@roxavn/core/server';
+import { createReadStream } from 'fs';
 
-import { ExceedsStorageLimitException, fileApi } from '../../base';
+import {
+  ExceedsStorageLimitException,
+  ExceedsUploadLimitException,
+  fileApi,
+} from '../../base';
 import { File as FileEntity } from '../entities';
 import { serverModule } from '../module';
 import {
@@ -46,15 +52,18 @@ serverModule.useRawApi(fileApi.upload, async (_, args) => {
       throw e;
     }
   }
-  const file = formData.get('file') as File;
+  const file: NodeOnDiskFile = formData.get('file') as any;
   if (file) {
     const filesize = file.size;
     const mime = file.type;
     const name = file.name;
 
+    if (storage.maxFileSize > 0 && storage.maxFileSize < filesize) {
+      throw new ExceedsUploadLimitException(storage.maxFileSize);
+    }
+
     const uploadResult = await storageHandler.upload(
-      file.stream(),
-      file.length
+      createReadStream(file.getFilePath())
     );
 
     // update storage later because avoid wait lock for update

@@ -4,6 +4,7 @@ import {
   serverModule as uploadServerModule,
 } from '@roxavn/module-upload/server';
 import { GetSettingService } from '@roxavn/module-utils/server';
+import { type ReadStream } from 'fs';
 
 import { SeaweedFSClient } from './seaweedfs.client';
 import { constants } from '../../base';
@@ -15,8 +16,8 @@ export class SeaweedFSStorageHandler implements StorageHandler {
 
   constructor(private seaweedFSClient: SeaweedFSClient) {}
 
-  upload(file: ReadableStream<any>, size: number) {
-    return this.seaweedFSClient.write(file, size);
+  upload(file: ReadStream) {
+    return this.seaweedFSClient.write(file);
   }
 
   remove(fileId: string) {

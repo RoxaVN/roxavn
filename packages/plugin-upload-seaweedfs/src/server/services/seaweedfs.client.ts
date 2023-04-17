@@ -1,4 +1,6 @@
 import { urlUtils } from '@roxavn/core/base';
+import FormData from 'form-data';
+import { ReadStream } from 'fs';
 
 const cacheLookup: Record<string, any> = {};
 
@@ -36,10 +38,7 @@ export class SeaweedFSClient {
     ).then((resp) => resp.json());
   }
 
-  async write(
-    file: ReadableStream,
-    size: number
-  ): Promise<{
+  async write(file: ReadStream): Promise<{
     id: string;
     url: string;
     size: number;
@@ -47,18 +46,15 @@ export class SeaweedFSClient {
   }> {
     const finfo = await this.assign();
     const form = new FormData();
-    form.append('file', file as any);
+    form.append('file', file);
 
     const result = await fetch(
       new URL(finfo.fid, this._urlWithSchema(finfo.url)),
       {
         method: 'post',
-        body: form,
+        body: form as any,
       }
     ).then((resp) => resp.json());
-    if (result.size !== size) {
-      throw new Error('Invalid file size');
-    }
     result.id = finfo.fid;
     result.url = new URL(finfo.fid, finfo.publicUrl).toString();
 

@@ -1,14 +1,13 @@
 import { BaseService } from '@roxavn/core/server';
+import { ReadStream } from 'fs';
+
 import { NotFoundStorageHandlerException } from '../../base';
 
 export interface StorageHandler {
   name: string;
   defaultMaxSize: number;
   defaultMaxFileSize: number;
-  upload(
-    file: ReadableStream,
-    size: number
-  ): Promise<{ id: string; url: string; eTag: string }>;
+  upload(file: ReadStream): Promise<{ id: string; url: string; eTag: string }>;
   remove(fileId: string): Promise<{ success: boolean }>;
 }
 
