@@ -80,8 +80,8 @@ export class ServerModule extends BaseModule {
     return (
       serviceClass: new (...args: any[]) => ApiService<Api<Req, Resp>>
     ) => {
-      this.useRawApi(api, async (requestData, context) => {
-        return this.createService(serviceClass, context).handle(requestData);
+      this.useRawApi(api, async (requestData, args) => {
+        return this.createService(serviceClass, args).handle(requestData);
       });
     };
   }

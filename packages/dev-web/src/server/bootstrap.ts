@@ -1,4 +1,5 @@
 import {
+  type ServerLoaderContext,
   ServerModule,
   databaseManager,
   registerServerModules,
@@ -19,7 +20,7 @@ export async function bootstrap(currentDir: string) {
     const resp: any = ServerModule.handleError(error);
     sendRemixResponse(reply, resp);
   });
-  const getLoadContext = (request: FastifyRequest) => ({
+  const getLoadContext = (request: FastifyRequest): ServerLoaderContext => ({
     getClientIp: () => request.ip,
     getRequestData: () =>
       Object.assign({}, request.params, request.query, request.body),
@@ -28,7 +29,7 @@ export async function bootstrap(currentDir: string) {
     build: path.join(currentDir, '.web/build/index.js'),
     rootDir: path.join(currentDir, '.web'),
     mode: process.env.NODE_ENV,
-    getLoadContext: getLoadContext,
+    getLoadContext: getLoadContext as any,
     purgeRequireCacheInDevelopment: false,
   });
   // register api routes
