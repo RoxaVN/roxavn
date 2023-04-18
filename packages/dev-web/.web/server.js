@@ -1,4 +1,4 @@
-const { bootstrap } = require('@roxavn/dev-web');
+const { bootstrap } = require('@roxavn/dev-web/server');
 
 bootstrap(process.cwd())
   .then((address) => console.log(`✅ App ready: ${address}`))

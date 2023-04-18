@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "dist/cjs",
     "target": "es6",
     "module": "CommonJS",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -19,6 +19,6 @@
     "experimentalDecorators": true,
     "strict": true
   },
-  "include": ["src", "test"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }
