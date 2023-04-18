@@ -17,6 +17,9 @@ export const PaginationLinks = ({
   const [searchParams] = useSearchParams();
   const genLink = (page: number) => {
     let href: string;
+    if (page < 1 || page > total) {
+      return {};
+    }
     if (
       locationKey &&
       searchParams.get(constants.LOCATION_SEARCH_KEY) === locationKey
@@ -29,7 +32,7 @@ export const PaginationLinks = ({
         href += '&' + constants.LOCATION_SEARCH_KEY + '=' + locationKey;
       }
     }
-    return { component: Link, href: href };
+    return { component: Link, to: href };
   };
   const total = Math.ceil(data.totalItems / data.pageSize);
 

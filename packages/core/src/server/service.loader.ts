@@ -1,6 +1,6 @@
 import { json, LoaderArgs, TypedResponse } from '@remix-run/node';
 
-import { ApiRequest, ApiResponse, LogicException } from '../base';
+import { ApiRequest, ApiResponse, constants, LogicException } from '../base';
 import { databaseManager } from './database';
 import { BaseService } from './service';
 
@@ -28,14 +28,14 @@ class ServicesLoader {
     await queryRunner.startTransaction();
     try {
       const result: any = {};
+      const requestData = (args.context as any).getRequestData();
       for (const key of Object.keys(services)) {
-        const filters = args.params.filters
-          ? JSON.parse(args.params.filters)
-          : undefined;
         const service = new services[key].service(queryRunner.manager);
         result[key] = await service.handle({
           ...services[key].params,
-          ...filters?.[key],
+          ...(requestData[constants.LOCATION_SEARCH_KEY] === key
+            ? requestData
+            : {}),
         });
       }
       return json(result);
