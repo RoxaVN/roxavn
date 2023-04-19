@@ -1,7 +1,9 @@
 import { DataSource } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import { constants } from '../base';
-import { moduleManager } from './module.manager';
+
+import { constants } from '../../base';
+import { moduleManager } from './../module.manager';
+import { MemoryQueryResultCache } from './cache';
 
 class DatabaseManager {
   dataSource!: DataSource;
@@ -16,6 +18,11 @@ class DatabaseManager {
       entities: entities,
       logging: isDev ? true : false,
       synchronize: isDev ? true : false,
+      cache: {
+        provider() {
+          return new MemoryQueryResultCache();
+        },
+      },
       ...options,
     });
     await this.dataSource.initialize();
