@@ -44,7 +44,7 @@ class ServicesLoader {
       const requestData = (args.context as any).getRequestData();
       for (const key of Object.keys(services)) {
         const serviceClass = services[key].service;
-        let state = { ...services[key].options?.params };
+        let state = { ...services[key].options?.params, ...args.params };
         if (serviceClass.$api) {
           const argsMiddleware = {
             api: serviceClass.$api,

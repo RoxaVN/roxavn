@@ -1,5 +1,5 @@
 import { ServerLoaderArgs, ServerModule } from '@roxavn/core/server';
-import { UnauthorizedException } from '@roxavn/core/base';
+import { Cookie, UnauthorizedException, constants } from '@roxavn/core/base';
 import { Raw } from 'typeorm';
 import { AccessToken } from '../entities';
 import { tokenService } from '../services';
@@ -18,18 +18,29 @@ ServerModule.authenticatorMiddleware = async ({
     }
 
     const token = authorizationHeader.slice(7);
-    const accessToken = await checkToken(token, dbSession);
+    await checkToken(token, dbSession, state);
+  }
+};
 
-    Object.assign(state, {
-      $user: { id: accessToken.userId },
-      $accessToken: { id: accessToken.id },
-    });
+ServerModule.authenticatorLoaderMiddleware = async ({
+  dbSession,
+  request,
+  state,
+  api,
+}) => {
+  if (api?.permission) {
+    const cookie = request.headers.get('cookie');
+    const token = cookie
+      ? new Cookie(cookie).get(constants.Cookie.TOKEN)
+      : null;
+    await checkToken(token, dbSession, state);
   }
 };
 
 async function checkToken(
-  token: string,
-  dbSession: ServerLoaderArgs['dbSession']
+  token: string | null,
+  dbSession: ServerLoaderArgs['dbSession'],
+  state: Record<string, any>
 ) {
   if (!token) {
     throw new UnauthorizedException();
@@ -63,5 +74,9 @@ async function checkToken(
   if (!accessToken) {
     throw new UnauthorizedException();
   }
-  return accessToken;
+
+  Object.assign(state, {
+    $user: { id: accessToken.userId },
+    $accessToken: { id: accessToken.id },
+  });
 }

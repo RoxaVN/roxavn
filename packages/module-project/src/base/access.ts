@@ -1,9 +1,14 @@
-import { accessManager, constants } from '@roxavn/core/base';
+import { accessManager, constants as coreConstants } from '@roxavn/core/base';
 
 import { baseModule } from './module';
+import { constants } from './constants';
 
 export const scopes = accessManager.makeScopes(baseModule, {
   Project: { name: 'project' },
+  PublicProject: {
+    name: 'project',
+    condition: (project) => project.type === constants.ProjectTypes.PUBLIC,
+  },
   Task: { name: 'task' },
 });
 
@@ -12,7 +17,7 @@ export const permissions = accessManager.makePermissions(scopes, {
     allowedScopes: [accessManager.scopes.AuthUser],
   },
   ReadProject: {
-    allowedScopes: [scopes.Project],
+    allowedScopes: [scopes.Project, scopes.PublicProject],
   },
   ReadProjects: {
     allowedScopes: [accessManager.scopes.Owner],
@@ -41,7 +46,7 @@ export const permissions = accessManager.makePermissions(scopes, {
 
 export const roles = accessManager.makeRoles(scopes, permissions, {
   ProjectAdmin: {
-    name: constants.Role.ADMIN,
+    name: coreConstants.Role.ADMIN,
     scope: scopes.Project,
     permissions: [
       permissions.CreateUserRole,
@@ -76,7 +81,7 @@ export const roles = accessManager.makeRoles(scopes, permissions, {
     ],
   },
   ProjectMember: {
-    name: constants.Role.MEMBER,
+    name: coreConstants.Role.MEMBER,
     scope: scopes.Project,
     permissions: [
       permissions.ReadRoleUsers,

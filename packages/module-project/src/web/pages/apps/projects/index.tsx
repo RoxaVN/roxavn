@@ -1,6 +1,6 @@
 import { Card, Text } from '@mantine/core';
 import { LoaderArgs } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 import { ServiceLoaderItem, servicesLoader } from '@roxavn/core/server';
 import { PaginationLinks, utils } from '@roxavn/core/web';
 
@@ -14,7 +14,9 @@ export default function () {
     <div>
       {data.projects.items.map((item) => (
         <Card key={item.id}>
-          <Text weight="500">{item.name}</Text>
+          <Link to={item.id.toString()}>
+            <Text weight="500">{item.name}</Text>
+          </Link>
           <Text size="sm" color="dimmed">
             {utils.Render.relativeTime(item.updatedDate)}
           </Text>
