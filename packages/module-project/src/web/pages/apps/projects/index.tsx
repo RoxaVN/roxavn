@@ -32,7 +32,7 @@ export default function () {
 export function loader(args: LoaderArgs) {
   return servicesLoader.load(args, {
     projects: new ServiceLoaderItem(GetProjectsApiService, {
-      type: constants.ProjectTypes.PUBLIC,
+      params: { type: constants.ProjectTypes.PUBLIC },
     }),
   });
 }

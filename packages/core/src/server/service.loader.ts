@@ -1,16 +1,29 @@
 import { json, LoaderArgs, TypedResponse } from '@remix-run/node';
 
-import { ApiRequest, ApiResponse, constants, LogicException } from '../base';
+import {
+  Api,
+  ApiRequest,
+  ApiResponse,
+  constants,
+  LogicException,
+} from '../base';
 import { databaseManager } from './database';
 import { BaseService } from './service';
+import { ServerModule } from './module';
 
 export class ServiceLoaderItem<
   Req extends ApiRequest = ApiRequest,
   Resp extends ApiResponse = ApiResponse
 > {
   constructor(
-    public service: new (...args: any[]) => BaseService<Req, Resp>,
-    public params?: Partial<Req>
+    public service: {
+      new (...args: any[]): BaseService<Req, Resp>;
+      $api?: Api;
+    },
+    public options?: {
+      params?: Partial<Req>;
+      checkPermission?: boolean;
+    }
   ) {}
 }
 
@@ -30,13 +43,33 @@ class ServicesLoader {
       const result: any = {};
       const requestData = (args.context as any).getRequestData();
       for (const key of Object.keys(services)) {
-        const service = new services[key].service(queryRunner.manager);
-        result[key] = await service.handle({
-          ...services[key].params,
-          ...(requestData[constants.LOCATION_SEARCH_KEY] === key
-            ? requestData
-            : {}),
-        });
+        const serviceClass = services[key].service;
+        let state = { ...services[key].options?.params };
+        if (serviceClass.$api) {
+          const argsMiddleware = {
+            api: serviceClass.$api,
+            request: args.request,
+            context: args.context as any,
+            state,
+            dbSession: queryRunner.manager,
+          };
+          const middlewares = [...ServerModule.loaderMiddlewares];
+          if (services[key].options?.checkPermission) {
+            middlewares.unshift(ServerModule.authorizationMiddleware);
+            middlewares.unshift(ServerModule.authenticatorLoaderMiddleware);
+          }
+          if (requestData[constants.LOCATION_SEARCH_KEY] === key) {
+            Object.assign(state, requestData);
+            middlewares.unshift(ServerModule.validatorMiddleware);
+          }
+          for (const middleware of middlewares) {
+            await middleware(argsMiddleware);
+          }
+          state = argsMiddleware.state;
+        }
+
+        const service = new serviceClass(queryRunner.manager);
+        result[key] = await service.handle(state);
       }
       return json(result);
     } catch (e) {

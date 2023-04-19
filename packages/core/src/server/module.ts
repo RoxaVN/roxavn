@@ -26,10 +26,15 @@ export class ServerModule extends BaseModule {
     ) => Promise<Response>;
   }> = [];
   static apiMiddlewares: Array<ServerMiddleware> = [];
+  static loaderMiddlewares: Array<ServerMiddleware> = [];
   static validatorMiddleware = validatorMiddleware;
   static authorizationMiddleware = authorizationMiddleware;
   static authenticatorMiddleware: ServerMiddleware = () => {
     throw new Error('authenticatorMiddleware not implemented');
+  };
+
+  static authenticatorLoaderMiddleware: ServerMiddleware = () => {
+    throw new Error('authenticatorLoaderMiddleware not implemented');
   };
 
   readonly entities: any[] = [];
@@ -77,9 +82,11 @@ export class ServerModule extends BaseModule {
   useApi<Req extends ApiRequest, Resp extends ApiResponse>(
     api: Api<Req, Resp>
   ) {
-    return (
-      serviceClass: new (...args: any[]) => ApiService<Api<Req, Resp>>
-    ) => {
+    return (serviceClass: {
+      new (...args: any[]): ApiService<Api<Req, Resp>>;
+      $api?: Api;
+    }) => {
+      serviceClass.$api = api;
       this.useRawApi(api, async (requestData, args) => {
         return this.createService(serviceClass, args).handle(requestData);
       });

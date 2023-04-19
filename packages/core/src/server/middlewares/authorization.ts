@@ -36,56 +36,46 @@ function updateResp({ dbSession, state, api }: ServerLoaderArgs) {
   };
 
   const getResource = async (): Promise<Record<string, any> | null> => {
-    if ('$resource' in state) {
-      return state.$resource;
-    }
-    let result = null;
     const resource = getActiveResource();
     if (resource) {
       const resourceTable = snakeCase(resource.name);
-      result = await dbSession
+      return await dbSession
         .createQueryBuilder()
         .select(resourceTable)
         .from(resourceTable, resourceTable)
         .where(`${resourceTable}.id = :id`, {
           id: state[resource.idParam],
         })
+        .cache(true)
         .getOne();
     }
-    state.$resource = result;
-    return result;
+    return null;
   };
 
   state.$getResource = getResource;
-  state.$relateResource = {};
   state.$getRelateResource = async (resource: Resource) => {
-    if (resource.name in state.$relateResource) {
-      return state.$relateResource[resource.name];
-    }
-    let result = null;
     const activeResource = getActiveResource();
     if (activeResource?.name === resource.name) {
-      result = await getResource();
+      return await getResource();
     } else {
       const activeResourceData = await getResource();
       if (activeResourceData) {
         const relateResourceid = activeResourceData[resource.idParam];
         if (relateResourceid) {
           const resourceTable = snakeCase(resource.name);
-          result = await dbSession
+          return await dbSession
             .createQueryBuilder()
             .select(resourceTable)
             .from(resourceTable, resourceTable)
             .where(`${resourceTable}.id = :id`, {
               id: relateResourceid,
             })
+            .cache(true)
             .getOne();
         }
       }
     }
-
-    state.$relateResource[resource.name] = result;
-    return result;
+    return null;
   };
 }
 
