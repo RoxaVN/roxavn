@@ -1,4 +1,3 @@
-import snakeCase from 'lodash/snakeCase';
 import {
   accessManager,
   Api,
@@ -8,6 +7,7 @@ import {
 } from '../../base';
 import { AuthenticatedData } from '../service';
 import { ServerMiddleware, ServerLoaderArgs } from './interfaces';
+import { databaseManager } from '../database';
 
 type AuthorizationMiddleware = (
   args: ServerLoaderArgs & { api: Api & { permission: Permission } }
@@ -38,16 +38,12 @@ function updateResp({ dbSession, state, api }: ServerLoaderArgs) {
   const getResource = async (): Promise<Record<string, any> | null> => {
     const resource = getActiveResource();
     if (resource) {
-      const resourceTable = snakeCase(resource.name);
-      return await dbSession
-        .createQueryBuilder()
-        .select(resourceTable)
-        .from(resourceTable, resourceTable)
-        .where(`${resourceTable}.id = :id`, {
-          id: state[resource.idParam],
-        })
-        .cache(true)
-        .getOne();
+      const entity = databaseManager.getEntity(resource.name);
+      const resourceId = state[resource.idParam];
+      return await dbSession.getRepository(entity).findOne({
+        where: { id: resourceId },
+        cache: true,
+      });
     }
     return null;
   };
@@ -62,16 +58,11 @@ function updateResp({ dbSession, state, api }: ServerLoaderArgs) {
       if (activeResourceData) {
         const relateResourceid = activeResourceData[resource.idParam];
         if (relateResourceid) {
-          const resourceTable = snakeCase(resource.name);
-          return await dbSession
-            .createQueryBuilder()
-            .select(resourceTable)
-            .from(resourceTable, resourceTable)
-            .where(`${resourceTable}.id = :id`, {
-              id: relateResourceid,
-            })
-            .cache(true)
-            .getOne();
+          const entity = databaseManager.getEntity(resource.name);
+          return await dbSession.getRepository(entity).findOne({
+            where: { id: relateResourceid },
+            cache: true,
+          });
         }
       }
     }

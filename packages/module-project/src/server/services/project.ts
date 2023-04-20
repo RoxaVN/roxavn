@@ -16,6 +16,7 @@ export class GetProjectApiService extends ApiService {
   async handle(request: InferApiRequest<typeof projectApi.getOne>) {
     const result = await this.dbSession.getRepository(Project).findOne({
       where: { id: request.projectId },
+      cache: true,
     });
     if (result) {
       return result;

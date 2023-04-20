@@ -7,15 +7,16 @@ import { MemoryQueryResultCache } from './cache';
 
 class DatabaseManager {
   dataSource!: DataSource;
+  private entities: any[] = [];
 
   async createSource(options?: Partial<PostgresConnectionOptions>) {
     const isDev = process.env.NODE_ENV === constants.ENV_DEVELOPMENT;
-    const entities = moduleManager.serverModules.map((m) => m.entities).flat();
+    this.entities = moduleManager.serverModules.map((m) => m.entities).flat();
 
     this.dataSource = new DataSource({
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      entities: entities,
+      entities: this.entities,
       logging: isDev ? true : false,
       synchronize: isDev ? true : false,
       cache: {
@@ -26,6 +27,11 @@ class DatabaseManager {
       ...options,
     });
     await this.dataSource.initialize();
+  }
+
+  getEntity(name: string) {
+    const capitalName = name[0].toUpperCase() + name.slice(1);
+    return this.entities.find((e) => e.name === capitalName);
   }
 }
 
