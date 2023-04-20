@@ -27,7 +27,7 @@ const projectSource = new ApiSource<{
 
 class GetProjectRequest extends ExactProps<GetProjectRequest> {
   @MinLength(1)
-  public readonly id!: number;
+  public readonly projectId!: number;
 }
 
 class GetProjectsRequest extends ExactProps<GetProjectsRequest> {

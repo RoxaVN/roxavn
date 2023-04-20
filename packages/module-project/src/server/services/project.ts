@@ -15,9 +15,7 @@ import { serverModule } from '../module';
 export class GetProjectApiService extends ApiService {
   async handle(request: InferApiRequest<typeof projectApi.getOne>) {
     const result = await this.dbSession.getRepository(Project).findOne({
-      where: {
-        id: request.id,
-      },
+      where: { id: request.projectId },
     });
     if (result) {
       return result;
