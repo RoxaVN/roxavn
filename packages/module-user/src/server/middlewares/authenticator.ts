@@ -75,7 +75,7 @@ async function checkToken(
     throw new UnauthorizedException();
   }
 
-  Object.assign(state, {
+  Object.assign(state.request, {
     $user: { id: accessToken.userId },
     $accessToken: { id: accessToken.id },
   });

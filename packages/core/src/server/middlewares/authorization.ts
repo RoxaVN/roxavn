@@ -54,7 +54,7 @@ authorizationManager.middlewares.push({
   apiMatcher: /./,
   priority: 1,
   handler: async ({ api, state, helper }) => {
-    const data: AuthenticatedData = state as any;
+    const data: AuthenticatedData = state.request as any;
     const hasOwner = !!api.permission.allowedScopes.find(
       (r) => r.name === accessManager.scopes.Owner.name
     );

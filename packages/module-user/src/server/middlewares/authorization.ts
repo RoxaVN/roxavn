@@ -9,7 +9,7 @@ authorizationManager.middlewares.push({
   apiMatcher: /./,
   priority: 2,
   handler: async ({ api, dbSession, state, request }) => {
-    const user: AuthenticatedData['$user'] = state.$user;
+    const user: AuthenticatedData['$user'] = state.request.$user;
     const scopeHeader = request.headers.get(constants.AUTH_SCOPE_HTTP_HEADER);
     if (scopeHeader === constants.ADMIN_AUTH_SCOPE) {
       const allow = await dbSession.getRepository(UserRole).count({

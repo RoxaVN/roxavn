@@ -58,7 +58,7 @@ export class ServerModule extends BaseModule {
         ];
         try {
           const dbSession = queryRunner.manager;
-          const state = {};
+          const state = { request: {} };
           const context = {
             api,
             request,
@@ -69,7 +69,7 @@ export class ServerModule extends BaseModule {
           for (const middleware of middlewares) {
             await middleware(context);
           }
-          const result = await handler(context.state as Req, context);
+          const result = await handler(context.state.request as Req, context);
           await queryRunner.commitTransaction();
           return json({ code: 200, data: result });
         } catch (e) {
@@ -90,8 +90,8 @@ export class ServerModule extends BaseModule {
       $api?: Api;
     }) => {
       serviceClass.$api = api;
-      this.useRawApi(api, async (requestData, args) => {
-        return this.createService(serviceClass, args).handle(requestData);
+      this.useRawApi(api, async (requestData, context) => {
+        return this.createService(serviceClass, context).handle(requestData);
       });
     };
   }

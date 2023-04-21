@@ -26,6 +26,6 @@ export const validatorMiddleware: ServerMiddleware = async ({
       throw new ValidationException(i18n);
     }
 
-    Object.assign(state, parsedData);
+    Object.assign(state.request, parsedData);
   }
 };
