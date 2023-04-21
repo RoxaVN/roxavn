@@ -1,10 +1,17 @@
 import { type EntityManager } from 'typeorm';
 
-import { Api } from '../../base';
+import { Api, Resource } from '../../base';
 
-export interface ServerLoaderContextHelper {
+export interface RemixLoaderContextHelper {
   getRequestData: () => Record<string, any>;
   getClientIp: () => string;
+}
+
+export interface ServerLoaderContextHelper extends RemixLoaderContextHelper {
+  getResourceInstance: () => Promise<Record<string, any> | null>;
+  getRelatedResourceInstance: (
+    resource: Resource
+  ) => Promise<Record<string, any> | null>;
 }
 
 export interface ServerLoaderContext {

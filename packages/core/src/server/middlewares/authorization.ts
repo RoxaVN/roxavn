@@ -7,7 +7,6 @@ import {
 } from '../../base';
 import { AuthenticatedData } from '../service';
 import { ServerMiddleware, ServerLoaderContext } from './interfaces';
-import { databaseManager } from '../database';
 
 type AuthorizationMiddleware = (
   context: ServerLoaderContext & { api: Api & { permission: Permission } }
@@ -23,62 +22,13 @@ class AuthorizationManager {
 
 export const authorizationManager = new AuthorizationManager();
 
-function updateResp({ dbSession, state, api }: ServerLoaderContext) {
-  const getActiveResource = () => {
-    if (api) {
-      for (const r of api.resources.reverse()) {
-        if (state[r.idParam]) {
-          return r;
-        }
-      }
-    }
-    return null;
-  };
-
-  const getResource = async (): Promise<Record<string, any> | null> => {
-    const resource = getActiveResource();
-    if (resource) {
-      const entity = databaseManager.getEntity(resource.name);
-      const resourceId = state[resource.idParam];
-      return await dbSession.getRepository(entity).findOne({
-        where: { id: resourceId },
-        cache: true,
-      });
-    }
-    return null;
-  };
-
-  state.$getResource = getResource;
-  state.$getRelateResource = async (resource: Resource) => {
-    const activeResource = getActiveResource();
-    if (activeResource?.name === resource.name) {
-      return await getResource();
-    } else {
-      const activeResourceData = await getResource();
-      if (activeResourceData) {
-        const relateResourceid = activeResourceData[resource.idParam];
-        if (relateResourceid) {
-          const entity = databaseManager.getEntity(resource.name);
-          return await dbSession.getRepository(entity).findOne({
-            where: { id: relateResourceid },
-            cache: true,
-          });
-        }
-      }
-    }
-    return null;
-  };
-}
-
-export const authorizationMiddleware: ServerMiddleware = async (args) => {
-  if (args.api?.permission) {
-    updateResp(args);
-
+export const authorizationMiddleware: ServerMiddleware = async (context) => {
+  if (context.api?.permission) {
     for (const middleware of authorizationManager.middlewares
       .concat()
       .sort((a, b) => a.priority - b.priority)) {
-      if (middleware.apiMatcher.exec(args.api.path)) {
-        if (await middleware.handler(args as any)) {
+      if (middleware.apiMatcher.exec(context.api.path)) {
+        if (await middleware.handler(context as any)) {
           return;
         }
       }
@@ -103,7 +53,7 @@ authorizationManager.middlewares.push({
 authorizationManager.middlewares.push({
   apiMatcher: /./,
   priority: 1,
-  handler: async ({ api, state }) => {
+  handler: async ({ api, state, helper }) => {
     const data: AuthenticatedData = state as any;
     const hasOwner = !!api.permission.allowedScopes.find(
       (r) => r.name === accessManager.scopes.Owner.name
@@ -112,7 +62,7 @@ authorizationManager.middlewares.push({
       if (state[accessManager.scopes.User.idParam] === data.$user.id) {
         return true;
       }
-      const resource = await data.$getResource();
+      const resource = await helper.getResourceInstance();
       if (
         resource &&
         resource[accessManager.scopes.User.idParam] === data.$user.id
@@ -128,16 +78,17 @@ authorizationManager.middlewares.push({
 authorizationManager.middlewares.push({
   apiMatcher: /./,
   priority: 10,
-  handler: async ({ api, state }) => {
-    const data: AuthenticatedData = state as any;
+  handler: async ({ api, state, helper }) => {
     const conditionResources: Resource[] = api.permission.allowedScopes.filter(
       (r) => 'condition' in r
     ) as any;
     for (const resource of conditionResources) {
       if (resource.condition) {
-        const relateResource = await data.$getRelateResource(resource);
-        if (relateResource) {
-          const isValid = resource.condition(relateResource, data);
+        const relatedResource = await helper.getRelatedResourceInstance(
+          resource
+        );
+        if (relatedResource) {
+          const isValid = resource.condition(state, relatedResource);
           if (isValid) {
             return true;
           }

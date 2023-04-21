@@ -5,15 +5,18 @@ import { BaseModule } from './module';
 export interface Scope {
   name: string;
   idParam?: string;
-  dynamicName?: (request: Record<string, any>) => string;
+  dynamicName?: (
+    request: Record<string, any>,
+    resource?: Record<string, any> | null
+  ) => string;
 }
 
 export interface Resource extends Scope {
   idParam: string;
   pluralName: string;
   condition?: (
-    resourceObject: Record<string, any>,
-    request: Record<string, any>
+    request: Record<string, any>,
+    resource?: Record<string, any> | null
   ) => boolean;
 }
 
@@ -44,11 +47,11 @@ class AccessManager {
     DynamicScope: {
       name: 'dynamicScope',
       idParam: 'scopeId',
-      dynamicName: (request) => {
+      dynamicName: (request, resource) => {
         if (request.scope) {
           return request.scope;
-        } else if (request.$getResource) {
-          return request.$getResource().scope;
+        } else if (resource) {
+          return resource.scope;
         }
       },
     } as Scope,

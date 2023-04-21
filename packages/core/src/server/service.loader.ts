@@ -10,6 +10,7 @@ import {
 import { databaseManager } from './database';
 import { BaseService } from './service';
 import { ServerModule } from './module';
+import { makeContextHelper } from './middlewares';
 
 export class ServiceLoaderItem<
   Req extends ApiRequest = ApiRequest,
@@ -49,8 +50,12 @@ class ServicesLoader {
           const middlewareContext = {
             api: serviceClass.$api,
             request: args.request,
-            helper: args.context as any,
             state,
+            helper: makeContextHelper(args.context as any, {
+              dbSession: queryRunner.manager,
+              api: serviceClass.$api,
+              state: state,
+            }),
             dbSession: queryRunner.manager,
           };
           const middlewares = [...ServerModule.loaderMiddlewares];

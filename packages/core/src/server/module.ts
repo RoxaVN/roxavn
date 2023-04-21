@@ -10,8 +10,9 @@ import {
 import { databaseManager } from './database';
 import {
   authorizationMiddleware,
+  makeContextHelper,
+  RemixLoaderContextHelper,
   ServerLoaderContext,
-  ServerLoaderContextHelper,
   ServerMiddleware,
   validatorMiddleware,
 } from './middlewares';
@@ -22,7 +23,7 @@ export class ServerModule extends BaseModule {
     api: Api;
     handler: (
       request: Request,
-      helper: ServerLoaderContextHelper
+      helper: RemixLoaderContextHelper
     ) => Promise<Response>;
   }> = [];
   static apiMiddlewares: Array<ServerMiddleware> = [];
@@ -56,12 +57,14 @@ export class ServerModule extends BaseModule {
           ...ServerModule.apiMiddlewares,
         ];
         try {
+          const dbSession = queryRunner.manager;
+          const state = {};
           const context = {
             api,
             request,
-            helper,
-            state: {},
-            dbSession: queryRunner.manager,
+            state,
+            dbSession,
+            helper: makeContextHelper(helper, { dbSession, api, state }),
           };
           for (const middleware of middlewares) {
             await middleware(context);

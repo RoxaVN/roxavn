@@ -39,12 +39,12 @@ authorizationManager.middlewares.push({
 authorizationManager.middlewares.push({
   apiMatcher: /./,
   priority: 2,
-  handler: async ({ api, dbSession, state }) => {
+  handler: async ({ api, dbSession, state, helper }) => {
     const data: AuthenticatedData = state as any;
-    const resource = await data.$getResource();
+    const resource = await helper.getResourceInstance();
     const scopes = api.permission.allowedScopes
       .map((s) => ({
-        name: s.dynamicName ? s.dynamicName(data) : s.name,
+        name: s.dynamicName ? s.dynamicName(state, resource) : s.name,
         id:
           s.idParam && (state[s.idParam] || (resource && resource[s.idParam])),
       }))
