@@ -1,4 +1,4 @@
-import { ServerLoaderArgs, ServerModule } from '@roxavn/core/server';
+import { ServerLoaderContext, ServerModule } from '@roxavn/core/server';
 import { Cookie, UnauthorizedException, constants } from '@roxavn/core/base';
 import { Raw } from 'typeorm';
 import { AccessToken } from '../entities';
@@ -39,7 +39,7 @@ ServerModule.authenticatorLoaderMiddleware = async ({
 
 async function checkToken(
   token: string | null,
-  dbSession: ServerLoaderArgs['dbSession'],
+  dbSession: ServerLoaderContext['dbSession'],
   state: Record<string, any>
 ) {
   if (!token) {

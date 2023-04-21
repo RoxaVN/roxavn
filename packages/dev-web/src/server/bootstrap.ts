@@ -1,5 +1,5 @@
 import {
-  type ServerLoaderContext,
+  type ServerLoaderContextHelper,
   ServerModule,
   databaseManager,
   registerServerModules,
@@ -20,7 +20,9 @@ export async function bootstrap(currentDir: string) {
     const resp: any = ServerModule.handleError(error);
     sendRemixResponse(reply, resp);
   });
-  const getLoadContext = (request: FastifyRequest): ServerLoaderContext => ({
+  const getLoadContext = (
+    request: FastifyRequest
+  ): ServerLoaderContextHelper => ({
     getClientIp: () => request.ip,
     getRequestData: () =>
       Object.assign({}, request.params, request.query, request.body),

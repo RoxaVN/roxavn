@@ -6,11 +6,11 @@ import {
   Resource,
 } from '../../base';
 import { AuthenticatedData } from '../service';
-import { ServerMiddleware, ServerLoaderArgs } from './interfaces';
+import { ServerMiddleware, ServerLoaderContext } from './interfaces';
 import { databaseManager } from '../database';
 
 type AuthorizationMiddleware = (
-  args: ServerLoaderArgs & { api: Api & { permission: Permission } }
+  context: ServerLoaderContext & { api: Api & { permission: Permission } }
 ) => Promise<boolean>;
 
 class AuthorizationManager {
@@ -23,7 +23,7 @@ class AuthorizationManager {
 
 export const authorizationManager = new AuthorizationManager();
 
-function updateResp({ dbSession, state, api }: ServerLoaderArgs) {
+function updateResp({ dbSession, state, api }: ServerLoaderContext) {
   const getActiveResource = () => {
     if (api) {
       for (const r of api.resources.reverse()) {

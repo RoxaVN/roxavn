@@ -9,11 +9,11 @@ import {
 } from '../base';
 import { databaseManager } from './database';
 import {
-  ServerMiddleware,
   authorizationMiddleware,
-  ServerLoaderArgs,
-  validatorMiddleware,
   ServerLoaderContext,
+  ServerLoaderContextHelper,
+  ServerMiddleware,
+  validatorMiddleware,
 } from './middlewares';
 import { ApiService } from './service';
 
@@ -22,7 +22,7 @@ export class ServerModule extends BaseModule {
     api: Api;
     handler: (
       request: Request,
-      context: ServerLoaderContext
+      helper: ServerLoaderContextHelper
     ) => Promise<Response>;
   }> = [];
   static apiMiddlewares: Array<ServerMiddleware> = [];
@@ -41,11 +41,11 @@ export class ServerModule extends BaseModule {
 
   useRawApi<Req extends ApiRequest, Resp extends ApiResponse>(
     api: Api<Req, Resp>,
-    handler: (requestData: Req, args: ServerLoaderArgs) => Promise<Resp>
+    handler: (requestData: Req, context: ServerLoaderContext) => Promise<Resp>
   ) {
     ServerModule.apiRoutes.push({
       api: api,
-      handler: async (request, context) => {
+      handler: async (request, helper) => {
         const queryRunner = databaseManager.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -56,17 +56,17 @@ export class ServerModule extends BaseModule {
           ...ServerModule.apiMiddlewares,
         ];
         try {
-          const args = {
+          const context = {
             api,
             request,
-            context,
+            helper,
             state: {},
             dbSession: queryRunner.manager,
           };
           for (const middleware of middlewares) {
-            await middleware(args);
+            await middleware(context);
           }
-          const result = await handler(args.state as Req, args);
+          const result = await handler(context.state as Req, context);
           await queryRunner.commitTransaction();
           return json({ code: 200, data: result });
         } catch (e) {
@@ -95,9 +95,9 @@ export class ServerModule extends BaseModule {
 
   createService<Req extends ApiRequest, Resp extends ApiResponse>(
     serviceClass: new (...args: any[]) => ApiService<Api<Req, Resp>>,
-    args: ServerLoaderArgs
+    context: ServerLoaderContext
   ) {
-    return new serviceClass(args.dbSession);
+    return new serviceClass(context.dbSession);
   }
 
   static handleError(error: any) {

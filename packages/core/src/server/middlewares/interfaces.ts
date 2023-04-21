@@ -2,17 +2,17 @@ import { type EntityManager } from 'typeorm';
 
 import { Api } from '../../base';
 
-export interface ServerLoaderContext {
+export interface ServerLoaderContextHelper {
   getRequestData: () => Record<string, any>;
   getClientIp: () => string;
 }
 
-export interface ServerLoaderArgs {
+export interface ServerLoaderContext {
   request: Request;
   dbSession: EntityManager;
   state: Record<string, any>;
   api?: Api;
-  context: ServerLoaderContext;
+  helper: ServerLoaderContextHelper;
 }
 
-export type ServerMiddleware = (args: ServerLoaderArgs) => Promise<void>;
+export type ServerMiddleware = (context: ServerLoaderContext) => Promise<void>;

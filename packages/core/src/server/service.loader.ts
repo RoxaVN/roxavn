@@ -46,10 +46,10 @@ class ServicesLoader {
         const serviceClass = services[key].service;
         let state = { ...services[key].options?.params, ...args.params };
         if (serviceClass.$api) {
-          const argsMiddleware = {
+          const middlewareContext = {
             api: serviceClass.$api,
             request: args.request,
-            context: args.context as any,
+            helper: args.context as any,
             state,
             dbSession: queryRunner.manager,
           };
@@ -63,9 +63,9 @@ class ServicesLoader {
             middlewares.unshift(ServerModule.validatorMiddleware);
           }
           for (const middleware of middlewares) {
-            await middleware(argsMiddleware);
+            await middleware(middlewareContext);
           }
-          state = argsMiddleware.state;
+          state = middlewareContext.state;
         }
 
         const service = new serviceClass(queryRunner.manager);

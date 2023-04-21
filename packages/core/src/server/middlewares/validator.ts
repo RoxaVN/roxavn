@@ -5,12 +5,12 @@ import { ErrorResponse, ValidationException } from '../../base';
 import { ServerMiddleware } from './interfaces';
 
 export const validatorMiddleware: ServerMiddleware = async ({
-  context,
+  helper,
   state,
   api,
 }) => {
   if (api?.validator) {
-    const rawData = context.getRequestData();
+    const rawData = helper.getRequestData();
     const parsedData = plainToInstance(api.validator, rawData);
 
     const errors = validateSync(parsedData, {
