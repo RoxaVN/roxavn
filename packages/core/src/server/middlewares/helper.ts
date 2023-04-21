@@ -13,7 +13,7 @@ export function makeContextHelper(
   const getActiveResource = () => {
     if (api) {
       for (const r of api.resources.reverse()) {
-        if (state[r.idParam]) {
+        if (state.request[r.idParam]) {
           return r;
         }
       }
@@ -25,7 +25,7 @@ export function makeContextHelper(
     const resource = getActiveResource();
     if (resource) {
       const entity = databaseManager.getEntity(resource.name);
-      const resourceId = state[resource.idParam];
+      const resourceId = state.request[resource.idParam];
       return await dbSession.getRepository(entity).findOne({
         where: { id: resourceId },
         cache: true,

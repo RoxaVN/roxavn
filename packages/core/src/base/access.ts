@@ -93,13 +93,14 @@ class AccessManager {
   makeScopes<R extends Resources>(module: BaseModule, resources: R) {
     const result: { [key in keyof R]: Resource } = Object.fromEntries(
       Object.keys(resources).map((k) => {
-        const name = camelCase(k);
+        const name = resources[k].name || camelCase(k);
         return [
           k as any,
           {
-            name: resources[k].name || name,
+            name,
             pluralName: resources[k].pluralName || name + 's',
             idParam: resources[k].idParam || name + 'Id',
+            condition: resources[k].condition,
           },
         ];
       })

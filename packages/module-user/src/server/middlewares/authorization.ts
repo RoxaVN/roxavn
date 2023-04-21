@@ -1,6 +1,8 @@
 import { ForbiddenException, UnauthorizedException } from '@roxavn/core/base';
 import { authorizationManager } from '@roxavn/core/server';
+import uniqBy from 'lodash/uniqBy';
 import { ArrayContains, In } from 'typeorm';
+
 import { constants } from '../../base';
 import { UserRole } from '../entities';
 
@@ -49,7 +51,7 @@ authorizationManager.middlewares.push({
       return false;
     }
     const resource = await helper.getResourceInstance();
-    const scopes = api.permission.allowedScopes
+    let scopes = api.permission.allowedScopes
       .map((s) => ({
         name: s.dynamicName ? s.dynamicName(state, resource) : s.name,
         id:
@@ -60,6 +62,7 @@ authorizationManager.middlewares.push({
     if (scopes.length < 1) {
       return false;
     }
+    scopes = uniqBy(scopes, (item) => item.name);
 
     const allow = await dbSession.getRepository(UserRole).count({
       where: scopes.map((scope) => ({

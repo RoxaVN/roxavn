@@ -25,6 +25,7 @@
     "@roxavn/core": "*",
     "@roxavn/module-utils": "*",
     "@tabler/icons-react": "*",
+    "lodash": "*",
     "react": "*",
     "react-router-dom": "*",
     "rxjs": "*",

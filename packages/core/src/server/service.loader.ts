@@ -66,7 +66,7 @@ class ServicesLoader {
             middlewares.unshift(ServerModule.authenticatorLoaderMiddleware);
           }
           if (requestData[constants.LOCATION_SEARCH_KEY] === key) {
-            Object.assign(state, requestData);
+            Object.assign(state.request, requestData);
             middlewares.unshift(ServerModule.validatorMiddleware);
           }
           for (const middleware of middlewares) {
@@ -76,7 +76,7 @@ class ServicesLoader {
         }
 
         const service = new serviceClass(queryRunner.manager);
-        result[key] = await service.handle(state);
+        result[key] = await service.handle(state.request);
       }
       return json(result);
     } catch (e) {

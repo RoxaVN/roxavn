@@ -7,7 +7,7 @@ export const scopes = accessManager.makeScopes(baseModule, {
   Project: { name: 'project' },
   PublicProject: {
     name: 'project',
-    condition: (project) => project.type === constants.ProjectTypes.PUBLIC,
+    condition: (_, project) => project?.type === constants.ProjectTypes.PUBLIC,
   },
   Task: { name: 'task' },
 });
