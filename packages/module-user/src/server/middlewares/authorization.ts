@@ -1,5 +1,5 @@
-import { ForbiddenException } from '@roxavn/core/base';
-import { AuthenticatedData, authorizationManager } from '@roxavn/core/server';
+import { ForbiddenException, UnauthorizedException } from '@roxavn/core/base';
+import { authorizationManager } from '@roxavn/core/server';
 import { ArrayContains, In } from 'typeorm';
 import { constants } from '../../base';
 import { UserRole } from '../entities';
@@ -9,27 +9,31 @@ authorizationManager.middlewares.push({
   apiMatcher: /./,
   priority: 2,
   handler: async ({ api, dbSession, state, request }) => {
-    const user: AuthenticatedData['$user'] = state.request.$user;
+    const user = state.request.$user;
     const scopeHeader = request.headers.get(constants.AUTH_SCOPE_HTTP_HEADER);
     if (scopeHeader === constants.ADMIN_AUTH_SCOPE) {
-      const allow = await dbSession.getRepository(UserRole).count({
-        where: {
-          userId: user.id,
-          role: {
-            hasId: false,
-            scope: In(
-              api.permission.allowedScopes
-                .filter((s) => !s.idParam)
-                .map((s) => (s.dynamicName ? s.dynamicName(state) : s.name))
-            ),
-            permissions: ArrayContains([api.permission.name]),
+      if (user) {
+        const allow = await dbSession.getRepository(UserRole).count({
+          where: {
+            userId: user.id,
+            role: {
+              hasId: false,
+              scope: In(
+                api.permission.allowedScopes
+                  .filter((s) => !s.idParam)
+                  .map((s) => (s.dynamicName ? s.dynamicName(state) : s.name))
+              ),
+              permissions: ArrayContains([api.permission.name]),
+            },
           },
-        },
-      });
-      if (!allow) {
+        });
+        if (allow) {
+          return true;
+        }
         throw new ForbiddenException();
+      } else {
+        throw new UnauthorizedException();
       }
-      return true;
     }
     return false;
   },
@@ -40,7 +44,10 @@ authorizationManager.middlewares.push({
   apiMatcher: /./,
   priority: 2,
   handler: async ({ api, dbSession, state, helper }) => {
-    const data: AuthenticatedData = state as any;
+    const user = state.request.$user;
+    if (!user) {
+      return false;
+    }
     const resource = await helper.getResourceInstance();
     const scopes = api.permission.allowedScopes
       .map((s) => ({
@@ -56,7 +63,7 @@ authorizationManager.middlewares.push({
 
     const allow = await dbSession.getRepository(UserRole).count({
       where: scopes.map((scope) => ({
-        userId: data.$user.id,
+        userId: user.id,
         scopeId: scope.id,
         role: {
           hasId: true,

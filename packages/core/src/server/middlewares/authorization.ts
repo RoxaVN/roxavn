@@ -4,8 +4,8 @@ import {
   ForbiddenException,
   Permission,
   Resource,
+  UnauthorizedException,
 } from '../../base';
-import { AuthenticatedData } from '../service';
 import { ServerMiddleware, ServerLoaderContext } from './interfaces';
 
 type AuthorizationMiddleware = (
@@ -33,7 +33,10 @@ export const authorizationMiddleware: ServerMiddleware = async (context) => {
         }
       }
     }
-    throw new ForbiddenException();
+    if (context.state.request.$user) {
+      throw new ForbiddenException();
+    }
+    throw new UnauthorizedException();
   }
 };
 
@@ -54,19 +57,17 @@ authorizationManager.middlewares.push({
   apiMatcher: /./,
   priority: 1,
   handler: async ({ api, state, helper }) => {
-    const data: AuthenticatedData = state.request as any;
+    const user = state.request.$user;
     const hasOwner = !!api.permission.allowedScopes.find(
       (r) => r.name === accessManager.scopes.Owner.name
     );
-    if (hasOwner) {
-      if (state[accessManager.scopes.User.idParam] === data.$user.id) {
+    if (hasOwner && user) {
+      const userIdParam = accessManager.scopes.User.idParam;
+      if (state.request[userIdParam] === user.id) {
         return true;
       }
       const resource = await helper.getResourceInstance();
-      if (
-        resource &&
-        resource[accessManager.scopes.User.idParam] === data.$user.id
-      ) {
+      if (resource && resource[userIdParam] === user.id) {
         return true;
       }
     }

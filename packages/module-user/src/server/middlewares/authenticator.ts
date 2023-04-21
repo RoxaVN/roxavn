@@ -1,5 +1,5 @@
 import { ServerLoaderContext, ServerModule } from '@roxavn/core/server';
-import { Cookie, UnauthorizedException, constants } from '@roxavn/core/base';
+import { Cookie, constants } from '@roxavn/core/base';
 import { Raw } from 'typeorm';
 import { AccessToken } from '../entities';
 import { tokenService } from '../services';
@@ -13,11 +13,10 @@ ServerModule.authenticatorMiddleware = async ({
 }) => {
   if (api?.permission) {
     const authorizationHeader = request.headers.get('authorization');
-    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException();
-    }
-
-    const token = authorizationHeader.slice(7);
+    const token =
+      authorizationHeader && authorizationHeader.startsWith('Bearer ')
+        ? authorizationHeader.slice(7)
+        : null;
     await checkToken(token, dbSession, state);
   }
 };
@@ -43,19 +42,19 @@ async function checkToken(
   state: Record<string, any>
 ) {
   if (!token) {
-    throw new UnauthorizedException();
+    return;
   }
 
   const signatureIndex = token.lastIndexOf('.');
   if (signatureIndex < 0) {
-    throw new UnauthorizedException();
+    return;
   }
 
   const signature = token.slice(signatureIndex + 1);
   const tokenPart = token.slice(0, signatureIndex);
   const isValid = await tokenService.signer.verify(tokenPart, signature);
   if (!isValid) {
-    throw new UnauthorizedException();
+    return;
   }
 
   const userId = tokenPart.split('.')[1];
@@ -72,7 +71,7 @@ async function checkToken(
     });
 
   if (!accessToken) {
-    throw new UnauthorizedException();
+    return;
   }
 
   Object.assign(state.request, {

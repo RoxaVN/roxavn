@@ -7,13 +7,11 @@ import {
   PaginatedCollection,
 } from '../base';
 
-export type AuthenticatedData = {
-  $user: { id: string };
-  $accessToken: { id: string };
-};
-
 export type InferAuthApiRequest<T> = T extends Api<infer U, any, any>
-  ? U & AuthenticatedData
+  ? U & {
+      $user: { id: string };
+      $accessToken: { id: string };
+    }
   : never;
 
 export abstract class BaseService<Request = any, Response = any> {
@@ -34,7 +32,7 @@ export abstract class ApiService<T extends Api = Api> extends BaseService<
 }
 
 export abstract class AuthApiService<T extends Api = Api> extends BaseService<
-  InferApiRequest<T> & AuthenticatedData,
+  InferAuthApiRequest<T>,
   InferApiResponse<T>
 > {}
 
