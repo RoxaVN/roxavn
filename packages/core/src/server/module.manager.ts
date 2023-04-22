@@ -80,13 +80,12 @@ class ModuleManager {
 
   async getModulesHaveAppPages() {
     const result: { name: string; path: string }[] = [];
-    for (const m of this.modules) {
+    for (const serverModule of this.serverModules) {
       try {
-        const baseModule = require(m.name + '/base').baseModule;
-        if (baseModule.options?.appPath) {
+        if (serverModule.options?.appPath) {
           result.push({
-            name: m.name,
-            path: baseModule.options?.appPath,
+            name: serverModule.name,
+            path: serverModule.options?.appPath,
           });
         }
       } catch (e) {
