@@ -24,6 +24,10 @@ export class Task {
   @Column('uuid', { nullable: true })
   assignee?: string;
 
+  @Index()
+  @Column('bigint', { nullable: true })
+  parentId?: number;
+
   @Column('bigint', { array: true, nullable: true })
   parents?: number[];
 

@@ -1,10 +1,12 @@
 import {
   ApiSource,
   ExactProps,
+  IsOptional,
   MaxLength,
   Min,
   MinLength,
   TransformDate,
+  TransformNumber,
 } from '@roxavn/core/base';
 
 import { baseModule } from '../module';
@@ -44,6 +46,16 @@ class CreateSubtaskRequest extends ExactProps<CreateSubtaskRequest> {
   public readonly expiryDate!: Date;
 }
 
+class GetSubtasksRequest extends ExactProps<GetSubtasksRequest> {
+  @Min(1)
+  public readonly taskId!: number;
+
+  @Min(1)
+  @TransformNumber()
+  @IsOptional()
+  public readonly page?: number;
+}
+
 class GetTaskRequest extends ExactProps<GetTaskRequest> {
   @Min(1)
   public readonly taskId!: number;
@@ -56,9 +68,14 @@ class DeleteTaskRequest extends ExactProps<DeleteTaskRequest> {
 
 export const taskApi = {
   createSubtask: taskSource.create<CreateSubtaskRequest, { id: number }>({
-    path: taskSource.apiPath({ includeId: true }) + '/subtask',
+    path: taskSource.apiPath({ includeId: true }) + '/subtasks',
     validator: CreateSubtaskRequest,
     permission: permissions.CreateTask,
+  }),
+  getSubtasks: taskSource.getMany({
+    path: taskSource.apiPath({ includeId: true }) + '/subtasks',
+    validator: GetSubtasksRequest,
+    permission: permissions.ReadTasks,
   }),
   getOne: taskSource.getOne({
     validator: GetTaskRequest,

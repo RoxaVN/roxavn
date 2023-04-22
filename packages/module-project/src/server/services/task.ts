@@ -28,6 +28,7 @@ export class CreateSubtaskApiService extends ApiService {
     subTask.title = request.title;
     subTask.expiryDate = request.expiryDate;
     subTask.projectId = task.projectId;
+    subTask.parentId = task.id;
     subTask.parents = [...(task.parents || []), task.id];
     await this.dbSession.save(subTask);
 
@@ -36,6 +37,33 @@ export class CreateSubtaskApiService extends ApiService {
       .increment({ id: request.taskId }, 'childrenCount', 1);
 
     return { id: subTask.id };
+  }
+}
+
+@serverModule.useApi(taskApi.getSubtasks)
+export class GetSubtasksApiService extends ApiService {
+  async handle(request: InferAuthApiRequest<typeof taskApi.getSubtasks>) {
+    const task = await this.dbSession.getRepository(Task).findOne({
+      where: { id: request.taskId },
+      cache: true,
+    });
+    if (!task) {
+      throw new NotFoundException();
+    }
+
+    const page = request.page || 1;
+    const pageSize = 10;
+    const totalItems = task.childrenCount;
+    const items = await this.dbSession.getRepository(Task).find({
+      where: { parentId: task.id },
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+    });
+
+    return {
+      items: items,
+      pagination: { page, pageSize, totalItems },
+    };
   }
 }
 
@@ -64,19 +92,15 @@ export class DeleteTaskApiService extends ApiService {
       throw new NotFoundException();
     }
     if (
-      !task.parents ||
+      !task.parentId ||
       task.childrenCount ||
       task.status !== constants.TaskStatus.PENDING
     ) {
       throw new DeleteTaskException();
     }
-    await this.dbSession.getRepository(Task).decrement(
-      {
-        id: task.parents[task.parents.length - 1],
-      },
-      'childrenCount',
-      1
-    );
+    await this.dbSession
+      .getRepository(Task)
+      .decrement({ id: task.parentId }, 'childrenCount', 1);
     return {};
   }
 }
