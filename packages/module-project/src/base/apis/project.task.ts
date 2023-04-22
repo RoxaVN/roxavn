@@ -2,27 +2,7 @@ import { ApiSource, ExactProps, Min, TransformNumber } from '@roxavn/core/base';
 
 import { baseModule } from '../module';
 import { permissions, scopes } from '../access';
-
-export interface TaskResponse {
-  id: number;
-  userId: string;
-  assignee?: string;
-  parents?: string[];
-  childrenCount: number;
-  progress: number;
-  weight: number;
-  status: string;
-  title: string;
-  content?: string;
-  projectId: number;
-  metadata?: any;
-  createdDate: Date;
-  updatedDate: Date;
-  expiryDate: Date;
-  startedDate?: Date;
-  finishedDate?: Date;
-  rejectedDate?: Date;
-}
+import { TaskResponse } from './task';
 
 const projectTaskSource = new ApiSource<TaskResponse>(
   [scopes.Project],

@@ -15,14 +15,14 @@ export class Project {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   id: number;
 
-  @Column('character varying')
+  @Column('text')
   type: string;
 
   @Index()
   @Column('uuid')
   userId: string;
 
-  @Column('character varying')
+  @Column('text')
   name: string;
 
   @Column({ type: 'jsonb', nullable: true })

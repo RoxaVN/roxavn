@@ -25,7 +25,7 @@ export class Task {
   assignee?: string;
 
   @Column('bigint', { array: true, nullable: true })
-  parents?: string[];
+  parents?: number[];
 
   @Column('int', { default: 0 })
   childrenCount = 0;
@@ -36,14 +36,11 @@ export class Task {
   @Column('int', { default: 1 })
   weight = 1;
 
-  @Column('character varying', { default: constants.TaskStatus.PENDING })
+  @Column('text', { default: constants.TaskStatus.PENDING })
   status: string;
 
-  @Column('character varying')
+  @Column('text')
   title: string;
-
-  @Column('character varying', { nullable: true })
-  content?: string;
 
   @Column('bigint')
   projectId: number;

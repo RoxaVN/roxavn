@@ -6,6 +6,9 @@
   "deleteProject": "Delete project",
   "projectDuration": "Project duration (in day)",
 
+  "Error": {
+    "InvalidExpiryDateException": "The expiry date of the child job cannot be greater than the expiry date of the parent job"
+  },
   "Meta": {
     "name": "Project module",
     "description": "Project module"

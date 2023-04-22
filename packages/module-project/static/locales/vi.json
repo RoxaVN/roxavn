@@ -6,6 +6,9 @@
   "deleteProject": "Xóa dự án",
   "projectDuration": "Thời gian hoàn thành dự án (tính theo ngày)",
 
+  "Error": {
+    "InvalidExpiryDateException": "Ngày hết hạn của công việc con không được lớn hơn ngày hết hạn của công việc cha"
+  },
   "Meta": {
     "name": "Module dự án",
     "description": "Module dự án"
