@@ -1,13 +1,18 @@
 import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { ApiService, InferAuthApiRequest } from '@roxavn/core/server';
 
-import { InvalidExpiryDateException, taskApi } from '../../base';
+import {
+  constants,
+  DeleteTaskException,
+  InvalidExpiryDateException,
+  taskApi,
+} from '../../base';
 import { Task } from '../entities';
 import { serverModule } from '../module';
 
-@serverModule.useApi(taskApi.createSub)
-export class CreateSubTaskApiService extends ApiService {
-  async handle(request: InferAuthApiRequest<typeof taskApi.createSub>) {
+@serverModule.useApi(taskApi.createSubtask)
+export class CreateSubtaskApiService extends ApiService {
+  async handle(request: InferAuthApiRequest<typeof taskApi.createSubtask>) {
     const task = await this.dbSession.getRepository(Task).findOne({
       where: { id: request.taskId },
       cache: true,
@@ -45,5 +50,33 @@ export class GetTaskApiService extends ApiService {
       return result;
     }
     throw new NotFoundException();
+  }
+}
+
+@serverModule.useApi(taskApi.delete)
+export class DeleteTaskApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof taskApi.delete>) {
+    const task = await this.dbSession.getRepository(Task).findOne({
+      where: { id: request.taskId },
+      cache: true,
+    });
+    if (!task) {
+      throw new NotFoundException();
+    }
+    if (
+      !task.parents ||
+      task.childrenCount ||
+      task.status !== constants.TaskStatus.PENDING
+    ) {
+      throw new DeleteTaskException();
+    }
+    await this.dbSession.getRepository(Task).decrement(
+      {
+        id: task.parents[task.parents.length - 1],
+      },
+      'childrenCount',
+      1
+    );
+    return {};
   }
 }

@@ -32,7 +32,7 @@ export interface TaskResponse {
 
 const taskSource = new ApiSource<TaskResponse>([scopes.Task], baseModule);
 
-class CreateSubTaskRequest extends ExactProps<CreateSubTaskRequest> {
+class CreateSubtaskRequest extends ExactProps<CreateSubtaskRequest> {
   @Min(1)
   public readonly taskId!: number;
 
@@ -49,14 +49,23 @@ class GetTaskRequest extends ExactProps<GetTaskRequest> {
   public readonly taskId!: number;
 }
 
+class DeleteTaskRequest extends ExactProps<DeleteTaskRequest> {
+  @Min(1)
+  public readonly taskId!: number;
+}
+
 export const taskApi = {
-  createSub: taskSource.create<CreateSubTaskRequest, { id: number }>({
-    path: taskSource.apiPath({ includeId: true }) + '/sub',
-    validator: CreateSubTaskRequest,
+  createSubtask: taskSource.create<CreateSubtaskRequest, { id: number }>({
+    path: taskSource.apiPath({ includeId: true }) + '/subtask',
+    validator: CreateSubtaskRequest,
     permission: permissions.CreateTask,
   }),
   getOne: taskSource.getOne({
     validator: GetTaskRequest,
     permission: permissions.ReadTask,
+  }),
+  delete: taskSource.delete({
+    validator: DeleteTaskRequest,
+    permission: permissions.DeleteTask,
   }),
 };

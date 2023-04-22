@@ -9,3 +9,12 @@ export class InvalidExpiryDateException extends BadRequestException {
     },
   };
 }
+
+export class DeleteTaskException extends BadRequestException {
+  i18n = {
+    default: {
+      key: 'Error.DeleteTaskException',
+      ns: baseModule.escapedName,
+    },
+  };
+}

@@ -7,6 +7,7 @@
   "projectDuration": "Thời gian hoàn thành dự án (tính theo ngày)",
 
   "Error": {
+    "DeleteTaskException": "Chỉ xoắ được công việc đang ở trạng thái chờ, không có công việc con, và không phải công việc gốc",
     "InvalidExpiryDateException": "Ngày hết hạn của công việc con không được lớn hơn ngày hết hạn của công việc cha"
   },
   "Meta": {
