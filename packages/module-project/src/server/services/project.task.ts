@@ -1,6 +1,6 @@
 import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { ApiService } from '@roxavn/core/server';
-import { IsNull } from 'typeorm';
+import { In, IsNull } from 'typeorm';
 
 import { projectTaskApi } from '../../base';
 import { Task } from '../entities';
@@ -19,5 +19,18 @@ export class GetProjectRootTaskApiService extends ApiService {
       return result;
     }
     throw new NotFoundException();
+  }
+}
+
+@serverModule.useApi(projectTaskApi.getSome)
+export class GetProjectTasksApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof projectTaskApi.getSome>) {
+    const items = await this.dbSession.getRepository(Task).find({
+      where: {
+        projectId: request.projectId,
+        id: In(request.ids),
+      },
+    });
+    return { items };
   }
 }
