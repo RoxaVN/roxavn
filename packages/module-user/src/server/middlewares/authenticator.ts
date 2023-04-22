@@ -68,6 +68,10 @@ async function checkToken(
         token: signature,
         expiredDate: Raw((alias) => `${alias} > NOW()`),
       },
+      cache: {
+        id: 'getAccessToken',
+        milliseconds: 60000, // 1 minute
+      },
     });
 
   if (!accessToken) {
