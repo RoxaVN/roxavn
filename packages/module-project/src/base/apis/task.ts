@@ -44,10 +44,19 @@ class CreateSubTaskRequest extends ExactProps<CreateSubTaskRequest> {
   public readonly expiryDate!: Date;
 }
 
+class GetTaskRequest extends ExactProps<GetTaskRequest> {
+  @Min(1)
+  public readonly taskId!: number;
+}
+
 export const taskApi = {
   createSub: taskSource.create<CreateSubTaskRequest, { id: number }>({
     path: taskSource.apiPath({ includeId: true }) + '/sub',
     validator: CreateSubTaskRequest,
     permission: permissions.CreateTask,
+  }),
+  getOne: taskSource.getOne({
+    validator: GetTaskRequest,
+    permission: permissions.ReadTask,
   }),
 };

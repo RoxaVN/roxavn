@@ -1,4 +1,4 @@
-import { NotFoundException } from '@roxavn/core/base';
+import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { ApiService, InferAuthApiRequest } from '@roxavn/core/server';
 
 import { InvalidExpiryDateException, taskApi } from '../../base';
@@ -31,5 +31,19 @@ export class CreateSubTaskApiService extends ApiService {
       .increment({ id: request.taskId }, 'childrenCount', 1);
 
     return { id: subTask.id };
+  }
+}
+
+@serverModule.useApi(taskApi.getOne)
+export class GetTaskApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof taskApi.getOne>) {
+    const result = await this.dbSession.getRepository(Task).findOne({
+      where: { id: request.taskId },
+      cache: true,
+    });
+    if (result) {
+      return result;
+    }
+    throw new NotFoundException();
   }
 }
