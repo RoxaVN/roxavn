@@ -16,7 +16,7 @@ class HookService {
       NODE_ENV: constants.ENV_PRODUCTION,
     });
     // must build to update lastest entities
-    buildService.compile({});
+    buildService.compile();
 
     registerServerModules();
     // load current module

@@ -41,7 +41,6 @@ program
 program
   .command('build')
   .description('Build module for publish')
-  .option('--clear', 'clear dist folder before build')
-  .action((options) => buildService.compile(options));
+  .action(() => buildService.compile());
 
 export default program;

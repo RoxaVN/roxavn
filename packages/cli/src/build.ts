@@ -1,4 +1,6 @@
+import { visitFiles } from '@roxavn/core/server';
 import fs from 'fs';
+import path from 'path';
 import ts from 'typescript';
 
 class BuildService {
@@ -45,12 +47,24 @@ class BuildService {
     }
   }
 
-  compile(options: { clear?: boolean }) {
-    if (options.clear && fs.existsSync('dist')) {
-      console.log('Clear dist folder');
-      fs.rmSync('dist', { recursive: true, force: true });
-    }
+  removeOldFiles(buildPath: string) {
+    visitFiles(
+      buildPath,
+      (filePath: string) => {
+        if (filePath.endsWith('.js')) {
+          const source = path.join('./src', filePath.slice(0, -3));
+          if (
+            !(fs.existsSync(source + '.ts') || fs.existsSync(source + '.tsx'))
+          ) {
+            fs.rmSync(path.join(buildPath, filePath));
+          }
+        }
+      },
+      buildPath
+    );
+  }
 
+  compile() {
     const cjsConfig = {
       compilerOptions: {
         outDir: 'dist/cjs',
@@ -78,6 +92,7 @@ class BuildService {
     };
     console.log('Build commonjs');
     this.compileWithConfig(cjsConfig);
+    this.removeOldFiles(cjsConfig.compilerOptions.outDir);
 
     console.log('Build es module');
     const esmConfig = { ...cjsConfig };
@@ -86,6 +101,7 @@ class BuildService {
       module: 'esnext',
     });
     this.compileWithConfig(esmConfig);
+    this.removeOldFiles(esmConfig.compilerOptions.outDir);
   }
 }
 
