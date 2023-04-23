@@ -1,7 +1,7 @@
 import { Anchor, Card, Text } from '@mantine/core';
 import { LoaderArgs } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
-import { ServiceLoaderItem, servicesLoader } from '@roxavn/core/server';
+import { servicesLoader } from '@roxavn/core/server';
 import { PaginationLinks, utils } from '@roxavn/core/web';
 
 import { constants } from '../../../../base';
@@ -33,8 +33,9 @@ export default function () {
 
 export function loader(args: LoaderArgs) {
   return servicesLoader.load(args, {
-    projects: new ServiceLoaderItem(GetProjectsApiService, {
+    projects: {
+      service: GetProjectsApiService,
       params: { type: constants.ProjectTypes.PUBLIC },
-    }),
+    },
   });
 }

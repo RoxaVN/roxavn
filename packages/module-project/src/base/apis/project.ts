@@ -17,13 +17,18 @@ import { baseModule } from '../module';
 import { permissions, scopes } from '../access';
 import { constants } from '../constants';
 
-const projectSource = new ApiSource<{
+export interface ProjectResponse {
   id: number;
   type: string;
   name: string;
   userId: string;
   createdDate: Date;
-}>([scopes.Project], baseModule);
+}
+
+const projectSource = new ApiSource<ProjectResponse>(
+  [scopes.Project],
+  baseModule
+);
 
 class GetProjectRequest extends ExactProps<GetProjectRequest> {
   @MinLength(1)

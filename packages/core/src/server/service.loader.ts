@@ -12,20 +12,16 @@ import { BaseService } from './service';
 import { ServerModule } from './module';
 import { makeContextHelper } from './middlewares';
 
-export class ServiceLoaderItem<
+export interface ServiceLoaderItem<
   Req extends ApiRequest = ApiRequest,
   Resp extends ApiResponse = ApiResponse
 > {
-  constructor(
-    public service: {
-      new (...args: any[]): BaseService<Req, Resp>;
-      $api?: Api;
-    },
-    public options?: {
-      params?: Partial<Req>;
-      checkPermission?: boolean;
-    }
-  ) {}
+  service: {
+    new (...args: any[]): BaseService<Req, Resp>;
+    $api?: Api;
+  };
+  params?: Partial<Req>;
+  checkPermission?: boolean;
 }
 
 class ServicesLoader {
@@ -46,7 +42,7 @@ class ServicesLoader {
       for (const key of Object.keys(services)) {
         const serviceClass = services[key].service;
         let state = {
-          request: { ...services[key].options?.params, ...args.params },
+          request: { ...services[key].params, ...args.params },
         };
         if (serviceClass.$api) {
           const middlewareContext = {
@@ -61,7 +57,7 @@ class ServicesLoader {
             dbSession: queryRunner.manager,
           };
           const middlewares = [...ServerModule.loaderMiddlewares];
-          if (services[key].options?.checkPermission) {
+          if (services[key].checkPermission) {
             middlewares.unshift(ServerModule.authorizationMiddleware);
             middlewares.unshift(ServerModule.authenticatorLoaderMiddleware);
           }

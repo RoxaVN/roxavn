@@ -1,18 +1,30 @@
 import { LoaderArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { ServiceLoaderItem, servicesLoader } from '@roxavn/core/server';
-import { GetProjectApiService } from '../../../../server';
+import { servicesLoader } from '@roxavn/core/server';
+import {
+  GetProjectApiService,
+  GetProjectRootTaskApiService,
+} from '../../../../server';
 
 export default function () {
   const data = useLoaderData<typeof loader>();
 
-  return <div>{JSON.stringify(data.project)}</div>;
+  return (
+    <div>
+      <p>{JSON.stringify(data.project)}</p>
+      <p>{JSON.stringify(data.task)}</p>
+    </div>
+  );
 }
 
 export function loader(args: LoaderArgs) {
   return servicesLoader.load(args, {
-    project: new ServiceLoaderItem(GetProjectApiService, {
+    project: {
+      service: GetProjectApiService,
       checkPermission: true,
-    }),
+    },
+    task: {
+      service: GetProjectRootTaskApiService,
+    },
   });
 }
