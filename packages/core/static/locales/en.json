@@ -42,6 +42,8 @@
   "goToLoginPage": "Take me go to login page",
   "errorTitle": "Something is not right...",
   "loginRequired": "Login required",
+  "public": "Public",
+  "private": "Private",
 
   "Roles": {
     "Admin": "Admin",

@@ -23,6 +23,7 @@ export interface ProjectResponse {
   name: string;
   userId: string;
   createdDate: Date;
+  updatedDate: Date;
 }
 
 const projectSource = new ApiSource<ProjectResponse>(

@@ -5,13 +5,14 @@ import {
   GetProjectApiService,
   GetProjectRootTaskApiService,
 } from '../../../../server';
+import { ProjectInfo } from '../../../components';
 
 export default function () {
   const data = useLoaderData<typeof loader>();
 
   return (
     <div>
-      <p>{JSON.stringify(data.project)}</p>
+      <ProjectInfo project={data.project as any} />
       <p>{JSON.stringify(data.task)}</p>
     </div>
   );

@@ -42,6 +42,8 @@
   "goToLoginPage": "Đi đến trang đăng nhập",
   "errorTitle": "có điều gì đó không đúng...",
   "loginRequired": "Vui lòng đăng nhập",
+  "public": "Công khai",
+  "private": "Riêng tư",
 
   "Roles": {
     "Admin": "Quản trị viên",
