@@ -1,8 +1,8 @@
 import { Anchor, Card, Text } from '@mantine/core';
 import { LoaderArgs } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { Link } from '@remix-run/react';
 import { servicesLoader } from '@roxavn/core/server';
-import { PaginationLinks, utils } from '@roxavn/core/web';
+import { PaginationLinks, useLoaderData, utils } from '@roxavn/core/web';
 
 import { constants } from '../../../../base';
 import { GetProjectsApiService } from '../../../../server';

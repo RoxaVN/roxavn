@@ -1,4 +1,5 @@
 import { json, LoaderArgs, TypedResponse } from '@remix-run/node';
+import { serialize } from 'superjson';
 
 import {
   Api,
@@ -30,7 +31,12 @@ class ServicesLoader {
     services: S
   ): Promise<
     TypedResponse<{
-      [k in keyof S]: S[k] extends ServiceLoaderItem<any, infer U> ? U : never;
+      json: {
+        [k in keyof S]: S[k] extends ServiceLoaderItem<any, infer U>
+          ? U
+          : never;
+      };
+      meta?: any;
     }>
   > {
     const queryRunner = databaseManager.dataSource.createQueryRunner();
@@ -74,7 +80,7 @@ class ServicesLoader {
         const service = new serviceClass(queryRunner.manager);
         result[key] = await service.handle(state.request);
       }
-      return json(result);
+      return json(serialize(result) as any);
     } catch (e) {
       await queryRunner.rollbackTransaction();
       if (e instanceof LogicException) {

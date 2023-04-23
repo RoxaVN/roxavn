@@ -1,6 +1,6 @@
 import { LoaderArgs } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
 import { servicesLoader } from '@roxavn/core/server';
+import { useLoaderData } from '@roxavn/core/web';
 import {
   GetProjectApiService,
   GetProjectRootTaskApiService,
@@ -12,7 +12,7 @@ export default function () {
 
   return (
     <div>
-      <ProjectInfo project={data.project as any} />
+      <ProjectInfo project={data.project} />
       <p>{JSON.stringify(data.task)}</p>
     </div>
   );
