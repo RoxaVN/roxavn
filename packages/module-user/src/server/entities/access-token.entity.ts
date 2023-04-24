@@ -48,5 +48,5 @@ export class AccessToken {
   updatedDate: Date;
 
   @Column({ type: 'timestamptz' })
-  expiredDate: Date;
+  expiryDate: Date;
 }

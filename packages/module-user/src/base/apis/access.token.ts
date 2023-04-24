@@ -16,7 +16,7 @@ const accessTokenSource = new ApiSource<{
   userAgent?: string;
   createdDate: Date;
   updatedDate: Date;
-  expiredDate: Date;
+  expiryDate: Date;
 }>([scopes.AccessToken], baseModule);
 
 class DeleteAccessTokenRequest extends ExactProps<DeleteAccessTokenRequest> {

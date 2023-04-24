@@ -66,7 +66,7 @@ async function checkToken(
       where: {
         userId: userId,
         token: signature,
-        expiredDate: Raw((alias) => `${alias} > NOW()`),
+        expiryDate: Raw((alias) => `${alias} > NOW()`),
       },
       cache: {
         id: 'getAccessToken',

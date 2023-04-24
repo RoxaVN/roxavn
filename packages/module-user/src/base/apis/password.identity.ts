@@ -15,7 +15,7 @@ type IdentityResponse = {
   userId: string;
   createdDate: Date;
   updatedDate: Date;
-  expiredDate: Date;
+  expiryDate: Date;
 };
 
 const passwordIdentitySource = new ApiSource<IdentityResponse>(
