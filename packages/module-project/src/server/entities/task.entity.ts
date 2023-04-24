@@ -14,7 +14,7 @@ import { Project } from './project.entity';
 @Entity()
 export class Task {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
-  id: number;
+  id: string;
 
   @Index()
   @Column('uuid')
@@ -26,10 +26,10 @@ export class Task {
 
   @Index()
   @Column('bigint', { nullable: true })
-  parentId?: number;
+  parentId?: string;
 
   @Column('bigint', { array: true, nullable: true })
-  parents?: number[];
+  parents?: string[];
 
   @Column('int', { default: 0 })
   childrenCount = 0;
@@ -47,7 +47,7 @@ export class Task {
   title: string;
 
   @Column('bigint')
-  projectId: number;
+  projectId: string;
 
   @ManyToOne(() => Project, (project) => project.tasks)
   project: Project;

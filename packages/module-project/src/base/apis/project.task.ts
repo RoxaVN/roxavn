@@ -2,9 +2,8 @@ import {
   ApiSource,
   ArrayMaxSize,
   ExactProps,
-  Min,
+  MinLength,
   TransformArray,
-  TransformNumber,
 } from '@roxavn/core/base';
 
 import { baseModule } from '../module';
@@ -17,20 +16,18 @@ const projectTaskSource = new ApiSource<TaskResponse>(
 );
 
 class GetProjectRootTaskRequest extends ExactProps<GetProjectRootTaskRequest> {
-  @Min(1)
-  @TransformNumber()
-  public readonly projectId!: number;
+  @MinLength(1)
+  public readonly projectId!: string;
 }
 
 class GetProjectRootTasksRequest extends ExactProps<GetProjectRootTasksRequest> {
-  @Min(1)
-  @TransformNumber()
-  public readonly projectId: number;
+  @MinLength(1)
+  public readonly projectId: string;
 
-  @Min(1, { each: true })
+  @MinLength(1, { each: true })
   @ArrayMaxSize(20)
-  @TransformArray(Number)
-  public readonly ids: number[];
+  @TransformArray()
+  public readonly ids: string[];
 }
 
 export const projectTaskApi = {

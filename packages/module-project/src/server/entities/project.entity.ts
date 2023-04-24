@@ -13,7 +13,7 @@ import { Task } from './task.entity';
 @Entity()
 export class Project {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
-  id: number;
+  id: string;
 
   @Column('text')
   type: string;
