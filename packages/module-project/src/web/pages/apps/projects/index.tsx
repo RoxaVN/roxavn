@@ -14,7 +14,7 @@ export default function () {
     <div>
       {data.projects.items.map((item) => (
         <Card key={item.id}>
-          <Anchor component={Link} to={item.id.toString()}>
+          <Anchor component={Link} to={item.id}>
             <Text weight="500">{item.name}</Text>
           </Anchor>
           <Text size="sm" color="dimmed">

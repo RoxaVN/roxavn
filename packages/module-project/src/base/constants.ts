@@ -5,7 +5,7 @@ export const constants = {
   },
   TaskStatus: {
     PENDING: 'pending',
-    STARTED: 'started',
+    INPROGRESS: 'inprogress',
     FINISHED: 'finished',
     REJECTED: 'rejected',
   },

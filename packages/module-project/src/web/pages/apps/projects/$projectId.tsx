@@ -1,3 +1,4 @@
+import { Card } from '@mantine/core';
 import { LoaderArgs } from '@remix-run/node';
 import { servicesLoader } from '@roxavn/core/server';
 import { useLoaderData } from '@roxavn/core/web';
@@ -5,7 +6,7 @@ import {
   GetProjectApiService,
   GetProjectRootTaskApiService,
 } from '../../../../server';
-import { ProjectInfo } from '../../../components';
+import { ProjectInfo, TaskPreview } from '../../../components';
 
 export default function () {
   const data = useLoaderData<typeof loader>();
@@ -13,7 +14,9 @@ export default function () {
   return (
     <div>
       <ProjectInfo project={data.project} />
-      <p>{JSON.stringify(data.task)}</p>
+      <Card shadow="md" padding="md" radius="md" mb="md" withBorder>
+        <TaskPreview task={data.task} />
+      </Card>
     </div>
   );
 }

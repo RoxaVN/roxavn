@@ -74,7 +74,7 @@ export const utils = {
       </div>
     ),
     boolean: (v: boolean | number) => v && <i className="pi pi-check" />,
-    percent: (v: number) => v && `${v}%`,
+    percent: (v: number) => v && `${(v * 100).toFixed(1)}%`,
     number: (v: number) => utils.Number.formatLocale(v),
     abbrNumber: (v: number) => utils.Number.abbreviate(v),
     relativeTime: (v: dayjs.ConfigType) => v && dayjs.utc(v).fromNow(),

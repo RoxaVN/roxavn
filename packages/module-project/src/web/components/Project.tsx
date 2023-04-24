@@ -10,7 +10,7 @@ export const ProjectInfo = ({ project }: ProjectInfoProps) => {
   const { t } = coreWebModule.useTranslation();
 
   return (
-    <Card shadow="md" padding="md" radius="md" withBorder>
+    <Card shadow="md" padding="md" radius="md" mb="md" withBorder>
       <Group position="apart" mb="xs">
         <Text weight={500}>{project.name}</Text>
         <Badge

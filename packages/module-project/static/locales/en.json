@@ -5,6 +5,11 @@
   "editProject": "Edit project",
   "deleteProject": "Delete project",
   "projectDuration": "Project duration (in day)",
+  "pending": "Pending",
+  "inprogress": "Inprogress",
+  "finished": "Finished",
+  "rejected": "Rejected",
+  "assignee": "Assignee",
 
   "Error": {
     "DeleteTaskException": "Only delete the task that is in the pending state, no subtasks, and not the root task",

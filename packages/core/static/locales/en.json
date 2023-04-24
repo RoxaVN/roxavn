@@ -29,6 +29,7 @@
   "statistic": "Statistic",
   "createdDate": "Created date",
   "updatedDate": "Updated date",
+  "expiryDate": "Expiry date",
   "filter": "Filter",
   "name": "Name",
   "title": "Title",
