@@ -21,7 +21,7 @@ export interface ServiceLoaderItem<
     new (...args: any[]): BaseService<Req, Resp>;
     $api?: Api;
   };
-  params?: Partial<Req>;
+  params?: Partial<Req> | { (data: any): Partial<Req> };
   checkPermission?: boolean;
 }
 
@@ -47,8 +47,14 @@ class ServicesLoader {
       const requestData = (args.context as any).getRequestData();
       for (const key of Object.keys(services)) {
         const serviceClass = services[key].service;
+        const serviceParams = services[key].params;
         let state = {
-          request: { ...services[key].params, ...args.params },
+          request: {
+            ...(typeof serviceParams === 'function'
+              ? serviceParams(result)
+              : serviceParams),
+            ...args.params,
+          },
         };
         if (serviceClass.$api) {
           const middlewareContext = {

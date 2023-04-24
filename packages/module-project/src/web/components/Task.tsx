@@ -1,11 +1,12 @@
-import { Badge, Card, Group, Table, Text } from '@mantine/core';
+import { Anchor, Badge, Card, Group, Table, Text } from '@mantine/core';
+import { Link } from '@remix-run/react';
 import {
   userService,
   utils,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
 
-import { TaskResponse, constants } from '../../base';
+import { TaskResponse, constants, webRoutes } from '../../base';
 import { webModule } from '../module';
 
 export interface TaskInfoProps {
@@ -49,7 +50,7 @@ export function TaskInfo({ task }: TaskInfoProps) {
             <td>{renderItem(task.userId)}</td>
           </tr>
           <tr>
-            <th>{tCore('assignee')}</th>
+            <th>{t('assignee')}</th>
             <td>{renderItem(task.assignee)}</td>
           </tr>
           <tr>
@@ -75,7 +76,12 @@ export function TaskPreview({ task }: TaskPreviewProps) {
 
   return (
     <Group position="apart">
-      <Text weight={500}>{task.title}</Text>
+      <Anchor
+        component={Link}
+        to={webRoutes.Task.generate({ taskId: task.id })}
+      >
+        <Text weight={500}>{task.title}</Text>
+      </Anchor>
       <Badge color={mapColor(task.status)} variant="light">
         {task.status === constants.TaskStatus.INPROGRESS
           ? utils.Render.percent(task.progress)
