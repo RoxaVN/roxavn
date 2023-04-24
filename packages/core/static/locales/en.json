@@ -45,6 +45,7 @@
   "loginRequired": "Login required",
   "public": "Public",
   "private": "Private",
+  "status": "Status",
 
   "Roles": {
     "Admin": "Admin",

@@ -45,6 +45,7 @@
   "loginRequired": "Vui lòng đăng nhập",
   "public": "Công khai",
   "private": "Riêng tư",
+  "status": "Trạng thái",
 
   "Roles": {
     "Admin": "Quản trị viên",

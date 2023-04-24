@@ -37,14 +37,17 @@ export function TaskInfo({ task }: TaskInfoProps) {
     <Card shadow="md" padding="md" radius="md" mb="md" withBorder>
       <Group position="apart" mb="xs">
         <Text weight={500}>{task.title}</Text>
-        <Badge color={mapColor(task.status)} variant="light">
-          {task.status === constants.TaskStatus.INPROGRESS
-            ? utils.Render.percent(task.progress)
-            : t(task.status)}
-        </Badge>
       </Group>
       <Table>
         <tbody>
+          <tr>
+            <th>{tCore('status')}</th>
+            <td>
+              <Badge color={mapColor(task.status)} variant="light">
+                {t(task.status)}
+              </Badge>
+            </td>
+          </tr>
           <tr>
             <th>{tCore('creator')}</th>
             <td>{renderItem(task.userId)}</td>
@@ -52,6 +55,10 @@ export function TaskInfo({ task }: TaskInfoProps) {
           <tr>
             <th>{t('assignee')}</th>
             <td>{renderItem(task.assignee)}</td>
+          </tr>
+          <tr>
+            <th>{t('progress')}</th>
+            <td>{utils.Render.percent(task.progress)}</td>
           </tr>
           <tr>
             <th>{tCore('createdDate')}</th>

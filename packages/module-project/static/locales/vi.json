@@ -10,6 +10,7 @@
   "finished": "Đã hoàn thành",
   "rejected": "Bị hủy bỏ",
   "assignee": "Người được giao",
+  "progress": "Tiến độ",
 
   "Error": {
     "DeleteTaskException": "Chỉ xoắ được công việc đang ở trạng thái chờ, không có công việc con, và không phải công việc gốc",
