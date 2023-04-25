@@ -34,6 +34,10 @@ class CreateUserRoleRequest extends ExactProps<CreateUserRoleRequest> {
   // add field for DynamicModule
   @IsOptional()
   public readonly module?: string;
+
+  // add field for DynamicScope
+  @IsOptional()
+  public readonly scope?: string;
 }
 
 class DeleteUserRoleRequest extends CreateUserRoleRequest {}

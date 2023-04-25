@@ -10,6 +10,12 @@ export class GetRoleUsersApiService extends ApiService {
   async handle(request: InferApiRequest<typeof roleUserApi.getMany>) {
     const page = request.page || 1;
     const pageSize = 10;
+    let filterRole;
+    if (request.module) {
+      filterRole = { module: request.module };
+    } else if (request.scope) {
+      filterRole = { scope: request.scope };
+    }
 
     const [items, totalItems] = await this.dbSession
       .getRepository(UserRole)
@@ -26,11 +32,7 @@ export class GetRoleUsersApiService extends ApiService {
         where: {
           roleId: request.roleId,
           scopeId: request.scopeId || '',
-          role: request.module
-            ? {
-                module: request.module,
-              }
-            : undefined,
+          role: filterRole,
         },
         take: pageSize,
         skip: (page - 1) * pageSize,

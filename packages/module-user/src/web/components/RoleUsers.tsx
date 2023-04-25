@@ -39,11 +39,11 @@ export const RoleUsers = ({ scope, scopeId, module }: RoleUsersProps) => {
     return (
       <IfCanAccessApi
         api={roleUserApi.getMany}
-        apiParams={{ scope, scopeId, module } as any}
+        apiParams={{ scope, scopeId, module }}
       >
         <ApiTable
           api={roleUserApi.getMany}
-          apiParams={{ roleId: data.items[0]?.id, scopeId, module }}
+          apiParams={{ roleId: data.items[0]?.id, scopeId, module, scope }}
           filters={[{ name: 'roleId', input: selectInput }]}
           locationKey=""
           headerActions={[
@@ -55,7 +55,7 @@ export const RoleUsers = ({ scope, scopeId, module }: RoleUsersProps) => {
                 children: (
                   <ApiFormGroup
                     api={userRoleApi.create}
-                    apiParams={{ scopeId, module }}
+                    apiParams={{ scopeId, module, scope }}
                     fields={[
                       {
                         name: 'userId',
@@ -94,6 +94,7 @@ export const RoleUsers = ({ scope, scopeId, module }: RoleUsersProps) => {
                       userId: item.id,
                       scopeId,
                       module,
+                      scope,
                     }}
                     onCancel={closeModal}
                   />

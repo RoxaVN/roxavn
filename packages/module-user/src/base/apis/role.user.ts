@@ -29,6 +29,10 @@ class GetRoleUsersRequest extends ExactProps<GetRoleUsersRequest> {
   @IsOptional()
   public readonly module?: string;
 
+  // add field for DynamicScope
+  @IsOptional()
+  public readonly scope?: string;
+
   @Min(1)
   @TransformNumber()
   @IsOptional()

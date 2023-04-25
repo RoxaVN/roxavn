@@ -13,10 +13,14 @@ import { serverModule } from '../module';
 @serverModule.useApi(userRoleApi.create)
 export class CreateUserRoleApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userRoleApi.create>) {
-    if (request.module) {
-      const isValid = await this.dbSession
-        .getRepository(Role)
-        .count({ where: { module: request.module, id: request.roleId } });
+    if (request.module || request.scope) {
+      const isValid = await this.dbSession.getRepository(Role).count({
+        where: {
+          module: request.module,
+          scope: request.scope,
+          id: request.roleId,
+        },
+      });
       if (!isValid) {
         throw new BadRequestException();
       }
@@ -36,10 +40,14 @@ export class CreateUserRoleApiService extends ApiService {
 @serverModule.useApi(userRoleApi.delete)
 export class DeleteUserRoleApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userRoleApi.delete>) {
-    if (request.module) {
-      const isValid = await this.dbSession
-        .getRepository(Role)
-        .count({ where: { module: request.module, id: request.roleId } });
+    if (request.module || request.scope) {
+      const isValid = await this.dbSession.getRepository(Role).count({
+        where: {
+          module: request.module,
+          scope: request.scope,
+          id: request.roleId,
+        },
+      });
       if (!isValid) {
         throw new BadRequestException();
       }
