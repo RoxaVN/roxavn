@@ -1,22 +1,67 @@
-import { Card } from '@mantine/core';
+import { Card, Tabs } from '@mantine/core';
 import { LoaderArgs } from '@remix-run/node';
 import { servicesLoader } from '@roxavn/core/server';
-import { useLoaderData } from '@roxavn/core/web';
+import {
+  useLoaderData,
+  webModule as coreWebModule,
+  userService,
+  ApiRolesGetter,
+  useAuthUser,
+} from '@roxavn/core/web';
+import { userRoleApi } from '@roxavn/module-user/base';
+import { IconSubtask, IconUsers } from '@tabler/icons-react';
+
 import {
   GetProjectApiService,
   GetProjectRootTaskApiService,
 } from '../../../../server';
 import { ProjectInfo, TaskPreview } from '../../../components';
+import { webModule } from '../../../module';
+import { scopes } from '../../../../base';
 
 export default function () {
   const data = useLoaderData<typeof loader>();
+  const { t } = webModule.useTranslation();
+  const tCore = coreWebModule.useTranslation().t;
+  const user = useAuthUser();
 
   return (
     <div>
+      {user && (
+        <ApiRolesGetter
+          api={userRoleApi.getAll}
+          apiParams={{
+            userId: user.id,
+            scopes: [scopes.Project.name],
+            scopeId: data.project.id,
+          }}
+        >
+          <span />
+        </ApiRolesGetter>
+      )}
       <ProjectInfo project={data.project} />
-      <Card shadow="md" padding="md" radius="md" mb="md" withBorder>
-        <TaskPreview task={data.task} />
-      </Card>
+      <Tabs defaultValue="tasks" mb="md" keepMounted={false}>
+        <Tabs.List mb="md">
+          <Tabs.Tab value="tasks" icon={<IconSubtask size="0.8rem" />}>
+            {t('tasks')}
+          </Tabs.Tab>
+          <Tabs.Tab value="members" icon={<IconUsers size="0.8rem" />}>
+            {tCore('members')}
+          </Tabs.Tab>
+        </Tabs.List>
+
+        <Tabs.Panel value="tasks">
+          <Card shadow="md" padding="md" radius="md" withBorder>
+            <TaskPreview task={data.task} />
+          </Card>
+        </Tabs.Panel>
+        <Tabs.Panel value="members">
+          <userService.roleUsers
+            scopeId={data.project.id}
+            scope={scopes.Project.name}
+          />
+        </Tabs.Panel>
+      </Tabs>
     </div>
   );
 }

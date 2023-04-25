@@ -15,7 +15,7 @@ import { baseModule } from '../module';
 import { permissions, scopes } from '../access';
 import { RoleResponse } from './role';
 
-const userRoleSource = new ApiSource<RoleResponse>(
+const userRoleSource = new ApiSource<RoleResponse & { scopeId: string }>(
   [accessManager.scopes.User, scopes.Role],
   baseModule
 );

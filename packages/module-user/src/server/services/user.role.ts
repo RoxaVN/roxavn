@@ -78,7 +78,7 @@ export class GetUserRolesApiService extends ApiService {
           : undefined,
       },
     });
-    return { items: items.map((i) => i.role) };
+    return { items: items.map((i) => ({ ...i.role, scopeId: i.scopeId })) };
   }
 }
 

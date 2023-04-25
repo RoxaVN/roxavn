@@ -67,22 +67,27 @@ export const canAccessApi = <Request extends ApiRequest>(
     }
   }
   return permission
-    ? permission.allowedScopes.some(
-        (scope) =>
-          roles.findIndex(
-            (role) =>
-              role.permissions.indexOf(permission.name) > -1 &&
-              role.scope ===
-                (scope.dynamicName
-                  ? scope.dynamicName(apiParams || {})
-                  : scope.name) &&
-              (scope.idParam
-                ? apiParams
-                  ? role.scopeId === apiParams[scope.idParam]
-                  : false
-                : true)
-          ) > -1
-      )
+    ? permission.allowedScopes.some((scope) => {
+        const scopeName = scope.dynamicName
+          ? scope.dynamicName(apiParams || {})
+          : scope.name;
+        return (
+          roles.findIndex((role) => {
+            if (role.permissions.indexOf(permission.name) < 0) {
+              return false;
+            }
+            if (role.scope !== scopeName) {
+              return false;
+            }
+            if (scope.idParam) {
+              if (!apiParams || apiParams[scope.idParam] !== role.scopeId) {
+                return false;
+              }
+            }
+            return true;
+          }) > -1
+        );
+      })
     : true;
 };
 

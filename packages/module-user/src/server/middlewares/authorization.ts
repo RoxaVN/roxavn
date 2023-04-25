@@ -55,7 +55,8 @@ authorizationManager.middlewares.push({
       .map((s) => ({
         name: s.dynamicName ? s.dynamicName(state, resource) : s.name,
         id:
-          s.idParam && (state[s.idParam] || (resource && resource[s.idParam])),
+          s.idParam &&
+          (state.request[s.idParam] || (resource && resource[s.idParam])),
       }))
       .filter((s) => s.id);
 
