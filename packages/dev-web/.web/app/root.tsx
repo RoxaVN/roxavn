@@ -1,6 +1,6 @@
 import { createRoot, meta, loader } from '@roxavn/dev-web/web';
 
-import './init.client';
+import * as initModules from './init.modules';
 
-export default createRoot();
+export default createRoot({ initModules });
 export { meta, loader };

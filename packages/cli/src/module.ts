@@ -78,17 +78,16 @@ class ModuleService {
         .replaceAll('@', '')
         .replaceAll('-', '_');
       new CodeChanger(
-        '.web/app/init.client.ts',
+        '.web/app/init.modules.ts',
         '// start block',
         '// end block'
       )
         .removeLines(importName)
         .insertEnd(
           module === moduleManager.currentModule.name
-            ? `import ${importName} from '../../src/web/init';`
-            : `import ${importName} from '${module}/web/init';`
+            ? `export { default as ${importName} } from '../../src/web/init';`
+            : `export { default as ${importName} } from '${module}/web/init';`
         )
-        .insertEnd(`${importName}();`)
         .save();
     }
   }

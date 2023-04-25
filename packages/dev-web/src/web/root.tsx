@@ -32,8 +32,15 @@ function useChangeLanguage(locale: string) {
   }, [locale, i18n]);
 }
 
-export function createRoot() {
+export function createRoot({
+  initModules,
+}: {
+  initModules: Record<string, () => void>;
+}) {
   createEmotionCache({ key: 'mantine' });
+  for (const k in initModules) {
+    initModules[k]();
+  }
 
   return function Root() {
     // Get the locale from the loader
