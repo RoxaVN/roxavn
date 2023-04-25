@@ -155,7 +155,7 @@ export const ApiTable = <
               gap="md"
             >
               <Text fz="lg">{header}</Text>
-              <Group>
+              <Group pr="md">
                 {filters && (
                   <ApiFilterButton
                     apiParams={params}
