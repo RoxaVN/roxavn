@@ -94,15 +94,13 @@ class AccessManager {
     const result: { [key in keyof R]: Resource } = Object.fromEntries(
       Object.keys(resources).map((k) => {
         const name = resources[k].name || camelCase(k);
-        return [
-          k as any,
-          {
-            name,
-            pluralName: resources[k].pluralName || name + 's',
-            idParam: resources[k].idParam || name + 'Id',
-            condition: resources[k].condition,
-          },
-        ];
+        const resource: Resource = {
+          name,
+          pluralName: resources[k].pluralName || name + 's',
+          idParam: resources[k].idParam || name + 'Id',
+          condition: resources[k].condition,
+        };
+        return [k, , resource];
       })
     );
 

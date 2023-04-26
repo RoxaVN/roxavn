@@ -65,6 +65,13 @@ export class DeleteUserRoleApiService extends ApiService {
 @serverModule.useApi(userRoleApi.getAll)
 export class GetUserRolesApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userRoleApi.getAll>) {
+    let roleFilter;
+    if (request.scopes) {
+      roleFilter = { scope: In(request.scopes) };
+    } else if (request.scope) {
+      roleFilter = { scope: request.scope };
+    }
+
     const items = await this.dbSession.getRepository(UserRole).find({
       relations: { role: true },
       select: {
@@ -79,11 +86,7 @@ export class GetUserRolesApiService extends ApiService {
       where: {
         userId: request.userId,
         scopeId: request.scopeId || '',
-        role: request.scopes?.length
-          ? {
-              scope: In(request.scopes),
-            }
-          : undefined,
+        role: roleFilter,
       },
     });
     return { items: items.map((i) => ({ ...i.role, scopeId: i.scopeId })) };

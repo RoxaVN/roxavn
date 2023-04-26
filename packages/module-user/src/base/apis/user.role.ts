@@ -1,10 +1,10 @@
 import {
   accessManager,
   ApiSource,
+  ArrayMinSize,
   BadRequestException,
   Collection,
   ExactProps,
-  IsArray,
   IsOptional,
   Min,
   MinLength,
@@ -46,10 +46,13 @@ class GetUserRolesRequest extends ExactProps<GetUserRolesRequest> {
   @MinLength(1)
   public readonly userId: string;
 
-  @IsArray()
+  @ArrayMinSize(1)
   @TransformArray()
   @IsOptional()
   public readonly scopes?: string[];
+
+  @IsOptional()
+  public readonly scope?: string;
 
   @IsOptional()
   public readonly scopeId?: string;
