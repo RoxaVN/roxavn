@@ -6,7 +6,6 @@ import {
   webModule as coreWebModule,
   userService,
   ApiRolesGetter,
-  IfCanAccessApi,
 } from '@roxavn/core/web';
 import { IconSubtask, IconUsers } from '@tabler/icons-react';
 
@@ -33,14 +32,11 @@ export default function () {
           <Tabs.Tab value="tasks" icon={<IconSubtask size="0.8rem" />}>
             {t('tasks')}
           </Tabs.Tab>
-          <IfCanAccessApi
-            api={userService.roleUsersAccessApi}
-            apiParams={params}
-          >
+          <userService.roleUsersGuard {...params}>
             <Tabs.Tab value="members" icon={<IconUsers size="0.8rem" />}>
               {tCore('members')}
             </Tabs.Tab>
-          </IfCanAccessApi>
+          </userService.roleUsersGuard>
         </Tabs.List>
 
         <Tabs.Panel value="tasks">

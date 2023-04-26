@@ -1,17 +1,10 @@
 import { SelectProps } from '@mantine/core';
-import { ComponentType } from 'react';
+import { ComponentType, Fragment, createElement } from 'react';
 
 import { Api, Collection } from '../../base';
 import { Reference } from './reference';
 import { utils } from './utils';
-
-export interface RoleItem {
-  scope: string;
-  scopeId?: string;
-  permissions: string[];
-  name: string;
-  id: number;
-}
+import { RoleItem, useCanAccessApi } from './role';
 
 class UserService {
   reference = new Reference();
@@ -31,6 +24,20 @@ class UserService {
     scopeId?: string;
     module?: string;
   }>;
+
+  roleUsersGuard({
+    children,
+    ...props
+  }: {
+    scope?: string;
+    scopeId?: string;
+    module?: string;
+    children: React.ReactElement;
+  }) {
+    return useCanAccessApi(userService.roleUsersAccessApi, props)
+      ? children
+      : createElement(Fragment);
+  }
 
   getUserRolesApi?: Api<
     {

@@ -1,14 +1,16 @@
-import { useListState, UseListStateHandlers } from '@mantine/hooks';
+import { useListState } from '@mantine/hooks';
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 
-import { accessManager, Api, ApiRequest, Collection } from '../../base';
-import { apiFetcher, authService, userService, RoleItem } from '../services';
+import { Api, ApiRequest, Collection } from '../../base';
+import {
+  apiFetcher,
+  authService,
+  userService,
+  RoleItem,
+  RolesContext,
+  useCanAccessApi,
+} from '../services';
 import { useAuthUser } from '../hooks';
-
-export const RolesContext = React.createContext<{
-  roles: Array<RoleItem>;
-  handlers: UseListStateHandlers<RoleItem>;
-}>({} as any);
 
 export const RolesProvider = ({ children }: { children: React.ReactNode }) => {
   const [roles, handlers] = useListState<RoleItem>([]);
@@ -78,51 +80,6 @@ export const ApiRolesGetter = <Request extends ApiRequest>({
   }, [user]);
 
   return load && children ? children : <Fragment />;
-};
-
-export const canAccessApi = <Request extends ApiRequest>(
-  roles: Array<RoleItem>,
-  api: Api<Request>,
-  apiParams?: Partial<Request>
-) => {
-  const permission = api?.permission;
-  if (permission?.allowedScopes.includes(accessManager.scopes.AuthUser)) {
-    if (authService.isAuthenticated()) {
-      return true;
-    }
-  }
-  return permission
-    ? permission.allowedScopes.some((scope) => {
-        const scopeName = scope.dynamicName
-          ? scope.dynamicName(apiParams || {})
-          : scope.name;
-        return (
-          roles.findIndex((role) => {
-            if (role.permissions.indexOf(permission.name) < 0) {
-              return false;
-            }
-            if (role.scope !== scopeName) {
-              return false;
-            }
-            if (scope.idParam) {
-              if (!apiParams || apiParams[scope.idParam] !== role.scopeId) {
-                return false;
-              }
-            }
-            return true;
-          }) > -1
-        );
-      })
-    : true;
-};
-
-export const useRoles = () => useContext(RolesContext).roles;
-
-export const useCanAccessApi = <Request extends ApiRequest>(
-  api?: Api<Request>,
-  apiParams?: Partial<Request>
-) => {
-  return api ? canAccessApi(useRoles(), api, apiParams) : true;
 };
 
 export interface IfCanAccessApiProps<Request extends ApiRequest = ApiRequest> {
