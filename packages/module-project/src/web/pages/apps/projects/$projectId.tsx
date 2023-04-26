@@ -22,15 +22,11 @@ export default function () {
   const data = useLoaderData<typeof loader>();
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
+  const params = scopes.Project.makeScopeParams(data.project.id);
 
   return (
     <div>
-      <ApiRolesGetter
-        apiParams={{
-          scope: scopes.Project.name,
-          scopeId: data.project.id,
-        }}
-      />
+      <ApiRolesGetter apiParams={params} />
       <ProjectInfo project={data.project} />
       <Tabs defaultValue="tasks" mb="md" keepMounted={false}>
         <Tabs.List mb="md">
@@ -39,10 +35,7 @@ export default function () {
           </Tabs.Tab>
           <IfCanAccessApi
             api={userService.roleUsersAccessApi}
-            apiParams={{
-              scope: scopes.Project.name,
-              scopeId: data.project.id,
-            }}
+            apiParams={params}
           >
             <Tabs.Tab value="members" icon={<IconUsers size="0.8rem" />}>
               {tCore('members')}
@@ -56,10 +49,7 @@ export default function () {
           </Card>
         </Tabs.Panel>
         <Tabs.Panel value="members">
-          <userService.roleUsers
-            scopeId={data.project.id}
-            scope={scopes.Project.name}
-          />
+          <userService.roleUsers {...params} />
         </Tabs.Panel>
       </Tabs>
     </div>

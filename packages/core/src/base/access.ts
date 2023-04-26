@@ -18,6 +18,7 @@ export interface Resource extends Scope {
     request: Record<string, any>,
     resource?: Record<string, any> | null
   ) => boolean;
+  makeScopeParams: (scopeId: string) => { scope: string; scopeId: string };
 }
 
 export interface Permission {
@@ -99,6 +100,7 @@ class AccessManager {
           pluralName: resources[k].pluralName || name + 's',
           idParam: resources[k].idParam || name + 'Id',
           condition: resources[k].condition,
+          makeScopeParams: (scopeId) => ({ scope: name, scopeId }),
         };
         return [k as any, resource];
       })
