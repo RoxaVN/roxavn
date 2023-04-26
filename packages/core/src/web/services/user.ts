@@ -1,9 +1,17 @@
 import { SelectProps } from '@mantine/core';
 import { ComponentType } from 'react';
 
-import { Api } from '../../base';
+import { Api, Collection } from '../../base';
 import { Reference } from './reference';
 import { utils } from './utils';
+
+export interface RoleItem {
+  scope: string;
+  scopeId?: string;
+  permissions: string[];
+  name: string;
+  id: number;
+}
 
 class UserService {
   reference = new Reference();
@@ -23,6 +31,14 @@ class UserService {
     scopeId?: string;
     module?: string;
   }>;
+
+  getUserRolesApi?: Api<
+    {
+      scope?: string;
+      scopeId?: string;
+    },
+    Collection<RoleItem>
+  >;
 }
 
 export const userService = new UserService();

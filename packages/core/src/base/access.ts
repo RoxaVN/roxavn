@@ -100,7 +100,7 @@ class AccessManager {
           idParam: resources[k].idParam || name + 'Id',
           condition: resources[k].condition,
         };
-        return [k, , resource];
+        return [k as any, resource];
       })
     );
 

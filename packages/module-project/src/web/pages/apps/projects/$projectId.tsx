@@ -8,7 +8,6 @@ import {
   ApiRolesGetter,
   IfCanAccessApi,
 } from '@roxavn/core/web';
-import { userRoleApi } from '@roxavn/module-user/base';
 import { IconSubtask, IconUsers } from '@tabler/icons-react';
 
 import {
@@ -27,9 +26,8 @@ export default function () {
   return (
     <div>
       <ApiRolesGetter
-        api={userRoleApi.getAll}
         apiParams={{
-          scopes: [scopes.Project.name],
+          scope: scopes.Project.name,
           scopeId: data.project.id,
         }}
       />

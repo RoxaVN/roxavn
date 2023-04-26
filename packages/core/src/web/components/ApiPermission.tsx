@@ -2,21 +2,13 @@ import { useListState, UseListStateHandlers } from '@mantine/hooks';
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 
 import { accessManager, Api, ApiRequest, Collection } from '../../base';
-import { apiFetcher, authService } from '../services';
+import { apiFetcher, authService, userService, RoleItem } from '../services';
 import { useAuthUser } from '../hooks';
 
 export const RolesContext = React.createContext<{
   roles: Array<RoleItem>;
   handlers: UseListStateHandlers<RoleItem>;
 }>({} as any);
-
-export interface RoleItem {
-  scope: string;
-  scopeId?: string;
-  permissions: string[];
-  name: string;
-  id: number;
-}
 
 export const RolesProvider = ({ children }: { children: React.ReactNode }) => {
   const [roles, handlers] = useListState<RoleItem>([]);
@@ -40,8 +32,8 @@ export const RolesProvider = ({ children }: { children: React.ReactNode }) => {
 
 interface ApiRolesGetterProps<Request extends ApiRequest> {
   children?: React.ReactElement;
-  api: Api<Request, Collection<RoleItem>>;
-  apiParams?: Omit<Request, 'userId'>;
+  api?: Api<Request, Collection<RoleItem>>;
+  apiParams?: Request | { scope: string; scopeId: string };
 }
 
 export const ApiRolesGetter = <Request extends ApiRequest>({
@@ -56,7 +48,13 @@ export const ApiRolesGetter = <Request extends ApiRequest>({
   async function getRoles() {
     try {
       if (user) {
-        const data = await apiFetcher.fetch(api, {
+        const _api = api || userService.getUserRolesApi;
+        if (!_api) {
+          throw new Error(
+            'ApiRolesGetter: must define api prop or userService.getUserRolesApi'
+          );
+        }
+        const data = await apiFetcher.fetch(_api, {
           ...apiParams,
           userId: user.id,
         } as any);
