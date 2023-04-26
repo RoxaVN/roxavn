@@ -64,18 +64,36 @@ authorizationManager.middlewares.push({
       return false;
     }
     scopes = uniqBy(scopes, (item) => item.name);
+    if (scopes.length > 1) {
+      console.warn(`${api.path} allow many resources, should allow a resource`);
+    }
 
-    const allow = await dbSession.getRepository(UserRole).count({
-      where: scopes.map((scope) => ({
-        userId: user.id,
-        scopeId: scope.id,
-        role: {
-          hasId: true,
-          scope: scope.name,
-          permissions: ArrayContains([api.permission.name]),
+    for (const scope of scopes) {
+      // query must be same in GetUserRolesApiService to cache
+      const userRoles = await dbSession.getRepository(UserRole).find({
+        relations: { role: true },
+        select: {
+          scopeId: true,
+          role: {
+            id: true,
+            name: true,
+            permissions: true,
+            scope: true,
+          },
         },
-      })),
-    });
-    return !!allow;
+        where: {
+          userId: user.id,
+          scopeId: scope.id,
+          role: { scope: scope.name },
+        },
+        cache: 30000, // 30 seconds
+      });
+      for (const userRole of userRoles) {
+        if (userRole.role.permissions.includes(api.permission.name)) {
+          return true;
+        }
+      }
+    }
+    return false;
   },
 });

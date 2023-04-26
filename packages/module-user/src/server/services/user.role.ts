@@ -72,6 +72,7 @@ export class GetUserRolesApiService extends ApiService {
       roleFilter = { scope: request.scope };
     }
 
+    // query must be same in authorization middleware to cache
     const items = await this.dbSession.getRepository(UserRole).find({
       relations: { role: true },
       select: {
@@ -88,8 +89,11 @@ export class GetUserRolesApiService extends ApiService {
         scopeId: request.scopeId || '',
         role: roleFilter,
       },
+      cache: 30000, // 30 seconds
     });
-    return { items: items.map((i) => ({ ...i.role, scopeId: i.scopeId })) };
+    return {
+      items: items.map((i) => ({ ...i.role, scopeId: i.scopeId })),
+    };
   }
 }
 
