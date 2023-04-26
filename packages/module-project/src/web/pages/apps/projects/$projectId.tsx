@@ -6,7 +6,6 @@ import {
   webModule as coreWebModule,
   userService,
   ApiRolesGetter,
-  useAuthUser,
   IfCanAccessApi,
 } from '@roxavn/core/web';
 import { userRoleApi } from '@roxavn/module-user/base';
@@ -24,22 +23,16 @@ export default function () {
   const data = useLoaderData<typeof loader>();
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
-  const user = useAuthUser();
 
   return (
     <div>
-      {user && (
-        <ApiRolesGetter
-          api={userRoleApi.getAll}
-          apiParams={{
-            userId: user.id,
-            scopes: [scopes.Project.name],
-            scopeId: data.project.id,
-          }}
-        >
-          <span />
-        </ApiRolesGetter>
-      )}
+      <ApiRolesGetter
+        api={userRoleApi.getAll}
+        apiParams={{
+          scopes: [scopes.Project.name],
+          scopeId: data.project.id,
+        }}
+      />
       <ProjectInfo project={data.project} />
       <Tabs defaultValue="tasks" mb="md" keepMounted={false}>
         <Tabs.List mb="md">

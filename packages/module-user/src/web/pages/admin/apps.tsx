@@ -113,18 +113,13 @@ function AdminComponent() {
 export default function () {
   return (
     <IsAuthenticatedPage redirect>
-      {(user) => (
-        <ApiRolesGetter
-          api={userRoleApi.modules}
-          apiParams={{ userId: user.id }}
+      <ApiRolesGetter api={userRoleApi.modules}>
+        <TasksProgress
+          tasks={[{ handler: WebModule.settingsPageRenderRegister }]}
         >
-          <TasksProgress
-            tasks={[{ handler: WebModule.settingsPageRenderRegister }]}
-          >
-            <AdminComponent />
-          </TasksProgress>
-        </ApiRolesGetter>
-      )}
+          <AdminComponent />
+        </TasksProgress>
+      </ApiRolesGetter>
     </IsAuthenticatedPage>
   );
 }

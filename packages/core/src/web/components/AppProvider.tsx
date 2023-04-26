@@ -57,8 +57,8 @@ export const AppProviderConfigs: {
   navigationProgress: { component: RouterTransition },
   modalsProvider: { component: ModalsProvider },
   notificationsProvider: { component: NotificationsProvider },
-  rolesProvider: { component: RolesProvider },
   authProvider: { component: AuthProvider },
+  rolesProvider: { component: RolesProvider },
 };
 
 export const AppProvider = ({ children }: { children: React.ReactElement }) => {

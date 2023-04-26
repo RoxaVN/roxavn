@@ -1,7 +1,9 @@
 import { useListState, UseListStateHandlers } from '@mantine/hooks';
-import React, { Fragment, useContext, useEffect } from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
+
 import { accessManager, Api, ApiRequest, Collection } from '../../base';
-import { authService, useApi } from '../services';
+import { apiFetcher, authService } from '../services';
+import { useAuthUser } from '../hooks';
 
 export const RolesContext = React.createContext<{
   roles: Array<RoleItem>;
@@ -18,6 +20,17 @@ export interface RoleItem {
 
 export const RolesProvider = ({ children }: { children: React.ReactNode }) => {
   const [roles, handlers] = useListState<RoleItem>([]);
+
+  useEffect(() => {
+    const sub = authService.authObserver.subscribe((data) => {
+      if (!data) {
+        // if logout, reset roles
+        handlers.setState([]);
+      }
+    });
+    return () => sub.unsubscribe();
+  });
+
   return (
     <RolesContext.Provider value={{ roles, handlers }}>
       {children}
@@ -26,9 +39,9 @@ export const RolesProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 interface ApiRolesGetterProps<Request extends ApiRequest> {
-  children: React.ReactElement;
+  children?: React.ReactElement;
   api: Api<Request, Collection<RoleItem>>;
-  apiParams?: Request;
+  apiParams?: Omit<Request, 'userId'>;
 }
 
 export const ApiRolesGetter = <Request extends ApiRequest>({
@@ -36,23 +49,37 @@ export const ApiRolesGetter = <Request extends ApiRequest>({
   api,
   apiParams,
 }: ApiRolesGetterProps<Request>) => {
+  const user = useAuthUser();
+  const [load, setLoad] = useState(false);
   const { roles, handlers } = useContext(RolesContext);
-  const { data } = useApi(api, apiParams);
-  useEffect(() => {
-    if (data) {
-      const newRoles = data.items.filter(
-        (item) =>
-          !roles.find(
-            (role) => role.id === item.id && role.scopeId === item.scopeId
-          )
-      );
-      if (newRoles.length) {
-        handlers.append(...newRoles);
-      }
-    }
-  }, [data]);
 
-  return data ? children : <Fragment />;
+  async function getRoles() {
+    try {
+      if (user) {
+        const data = await apiFetcher.fetch(api, {
+          ...apiParams,
+          userId: user.id,
+        } as any);
+        const newRoles = data.items.filter(
+          (item) =>
+            !roles.find(
+              (role) => role.id === item.id && role.scopeId === item.scopeId
+            )
+        );
+        if (newRoles.length) {
+          handlers.append(...newRoles);
+        }
+      }
+    } finally {
+      setLoad(true);
+    }
+  }
+
+  useEffect(() => {
+    getRoles();
+  }, [user]);
+
+  return load && children ? children : <Fragment />;
 };
 
 export const canAccessApi = <Request extends ApiRequest>(
