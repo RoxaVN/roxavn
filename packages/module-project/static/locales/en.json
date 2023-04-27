@@ -1,6 +1,8 @@
 {
   "projects": "Projects",
   "tasks": "Tasks",
+  "subtasks": "Subtasks",
+  "addSubtask": "Add subtask",
   "myProjects": "My projects",
   "addProject": "Add project",
   "editProject": "Edit project",

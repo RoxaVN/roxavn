@@ -16,6 +16,7 @@
   "dependencies": {},
   "peerDependencies": {
     "@mantine/core": "*",
+    "@mantine/dates": "*",
     "@remix-run/node": "*",
     "@remix-run/react": "*",
     "@roxavn/core": "*",
