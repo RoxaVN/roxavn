@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { urlUtils } from '../../base';
+import { constants, urlUtils } from '../../base';
 
 export const useLocationHash = (key: string) => {
   const location = useLocation();
@@ -19,6 +19,30 @@ export const useLocationHash = (key: string) => {
           if (newHash !== location.hash) {
             navigate(newHash);
           }
+        }
+      }, [data]);
+    },
+  };
+};
+
+export const useLocationSearch = (key: string) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const paramsObj = Object.fromEntries(searchParams);
+  let params = {};
+  if (paramsObj[constants.LOCATION_SEARCH_KEY] === key) {
+    params = paramsObj;
+    delete paramsObj[constants.LOCATION_SEARCH_KEY];
+  }
+
+  return {
+    params,
+    setOnChange: (data: Record<string, any>) => {
+      useEffect(() => {
+        if (key) {
+          setSearchParams({
+            ...data,
+            [constants.LOCATION_SEARCH_KEY]: key,
+          });
         }
       }, [data]);
     },

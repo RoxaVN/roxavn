@@ -1,11 +1,12 @@
-import { Box, Pagination } from '@mantine/core';
+import { Box } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
 import { Fragment } from 'react';
 
 import { Api, ApiRequest, Collection, PaginatedCollection } from '../../base';
-import { useLocationHash } from '../hooks';
+import { useLocationSearch } from '../hooks';
 import { ApiForm } from './ApiForm';
 import { ApiFetcherRef } from './ApiTable';
+import { PaginationLinks } from './PaginationLinks';
 
 export interface ApiListProps<
   Request extends ApiRequest,
@@ -36,12 +37,12 @@ export const ApiList = <
   locationKey = '/list',
   containerRender,
 }: ApiListProps<Request, ResponseItem>) => {
-  const hash = useLocationHash(locationKey);
-  const [params, setParams] = useSetState<Partial<Request>>({
-    ...hash.params,
+  const search = useLocationSearch(locationKey);
+  const [params] = useSetState<Partial<Request>>({
+    ...search.params,
     ...apiParams,
   } as any);
-  hash.setOnChange(params);
+  search.setOnChange(params);
 
   return (
     <ApiForm
@@ -67,14 +68,10 @@ export const ApiList = <
                 <Box mb="md">{children}</Box>
               )}
               {'pagination' in data && (
-                <Pagination
+                <PaginationLinks
                   mb="md"
-                  position="center"
-                  value={data.pagination.page}
-                  onChange={(page) => setParams({ page } as any)}
-                  total={Math.ceil(
-                    data.pagination.totalItems / data.pagination.pageSize
-                  )}
+                  data={data.pagination}
+                  locationKey={locationKey}
                 />
               )}
             </div>
