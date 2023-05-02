@@ -8,9 +8,11 @@ import {
   webModule as coreWebModule,
 } from '@roxavn/core/web';
 import { IconPlus } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 
 import { TaskResponse, taskApi } from '../../base';
 import { webModule } from '../module';
+import { TaskPreview } from './Task';
 
 export interface SubtasksProps {
   task: TaskResponse;
@@ -18,6 +20,7 @@ export interface SubtasksProps {
 }
 
 export function Subtasks({ subtasks, task }: SubtasksProps) {
+  const navigate = useNavigate();
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
 
@@ -27,7 +30,7 @@ export function Subtasks({ subtasks, task }: SubtasksProps) {
         <Text weight={500}>{t('subtasks')}</Text>
         <ModalTrigger
           title={t('addSubtask')}
-          content={
+          content={({ setOpened }) => (
             <ApiFormGroup
               api={taskApi.createSubtask}
               apiParams={{ taskId: task.id }}
@@ -44,12 +47,21 @@ export function Subtasks({ subtasks, task }: SubtasksProps) {
                   ),
                 },
               ]}
+              onSuccess={() => {
+                setOpened(false);
+                navigate('.');
+              }}
             />
-          }
+          )}
         >
           <Button leftIcon={<IconPlus size={16} />}>{tCore('add')}</Button>
         </ModalTrigger>
       </Group>
+      <div>
+        {subtasks.items.map((item) => (
+          <TaskPreview key={item.id} task={item} />
+        ))}
+      </div>
       <PaginationLinks
         my="md"
         data={subtasks.pagination}

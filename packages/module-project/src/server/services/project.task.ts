@@ -25,12 +25,16 @@ export class GetProjectRootTaskApiService extends ApiService {
 @serverModule.useApi(projectTaskApi.getSome)
 export class GetProjectTasksApiService extends ApiService {
   async handle(request: InferApiRequest<typeof projectTaskApi.getSome>) {
-    const items = await this.dbSession.getRepository(Task).find({
-      where: {
-        projectId: request.projectId,
-        id: In(request.ids),
-      },
-    });
-    return { items };
+    if (request.ids?.length > 0) {
+      const items = await this.dbSession.getRepository(Task).find({
+        where: {
+          projectId: request.projectId,
+          id: In(request.ids),
+        },
+        order: { id: 'ASC' },
+      });
+      return { items };
+    }
+    return { items: [] };
   }
 }
