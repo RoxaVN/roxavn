@@ -51,11 +51,11 @@ export const useApi = <
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>();
 
-  useEffect(() => {
+  function fetcher(params?: Request) {
     if (api) {
       setLoading(true);
       const timeout = setTimeout(() => {
-        const key = api.path + '?' + JSON.stringify(apiParams);
+        const key = api.path + '?' + JSON.stringify(params);
         if (options?.cache && cache[key]) {
           setLoading(false);
           setData(cache[key]);
@@ -78,7 +78,11 @@ export const useApi = <
       return () => clearTimeout(timeout);
     }
     return;
+  }
+
+  useEffect(() => {
+    return fetcher(apiParams);
   }, [api?.path, JSON.stringify(apiParams)]);
 
-  return { data, loading, error };
+  return { data, loading, error, fetcher };
 };
