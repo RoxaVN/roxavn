@@ -19,7 +19,7 @@ export abstract class BaseService<Request = any, Response = any> {
 
   abstract handle(request: Request): Promise<Response>;
 
-  create<Req, Resp>(classType: new (...args: any[]) => BaseService<Req, Resp>) {
+  create<T extends BaseService>(classType: new (...args: any[]) => T) {
     return new classType(this.dbSession);
   }
 }

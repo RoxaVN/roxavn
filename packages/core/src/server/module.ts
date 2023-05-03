@@ -16,7 +16,7 @@ import {
   ServerMiddleware,
   validatorMiddleware,
 } from './middlewares';
-import { ApiService } from './service';
+import { ApiService, BaseService } from './service';
 
 export class ServerModule extends BaseModule {
   static apiRoutes: Array<{
@@ -96,8 +96,8 @@ export class ServerModule extends BaseModule {
     };
   }
 
-  createService<Req extends ApiRequest, Resp extends ApiResponse>(
-    serviceClass: new (...args: any[]) => ApiService<Api<Req, Resp>>,
+  createService<T extends BaseService>(
+    serviceClass: new (...args: any[]) => T,
     context: ServerLoaderContext
   ) {
     return new serviceClass(context.dbSession);
