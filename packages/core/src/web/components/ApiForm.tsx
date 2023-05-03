@@ -3,7 +3,7 @@ import { useForm, UseFormReturnType } from '@mantine/form';
 import { IconAlertCircle } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
 
-import { Api, ApiRequest, ApiResponse } from '../../base';
+import { Api, ApiRequest, ApiResponse, ErrorResponse } from '../../base';
 import { webModule, apiFetcher } from '../services';
 import { ApiError } from './ApiError';
 
@@ -45,12 +45,14 @@ export function ApiForm<
   const [data, setData] = useState<Response | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>();
+  const [errorAlert, setErrorAlert] = useState<ErrorResponse>();
 
   const { t } = webModule.useTranslation();
 
   const fetcher = async (params: Partial<Request>) => {
     setError(null);
     setLoading(true);
+    setErrorAlert(undefined);
     if (onBeforeSubmit) {
       try {
         params = await onBeforeSubmit(params);
@@ -78,7 +80,11 @@ export function ApiForm<
                 })
               )
             );
+          } else {
+            setErrorAlert(error);
           }
+        } else {
+          setErrorAlert(e);
         }
       } finally {
         setLoading(false);
@@ -97,21 +103,19 @@ export function ApiForm<
   }, [api, apiParams]);
 
   function renderError() {
-    if (error) {
-      const errorData = apiFetcher.getErrorData(error);
-      if (errorData?.type !== 'ValidationException') {
-        return (
-          <Alert
-            icon={<IconAlertCircle />}
-            title={t('error')}
-            withCloseButton
-            color="red"
-            mt="md"
-          >
-            <ApiError error={error} />
-          </Alert>
-        );
-      }
+    if (errorAlert) {
+      return (
+        <Alert
+          icon={<IconAlertCircle />}
+          title={t('error')}
+          withCloseButton
+          color="red"
+          mt="md"
+          onClose={() => setErrorAlert(undefined)}
+        >
+          <ApiError error={errorAlert} />
+        </Alert>
+      );
     }
     return null;
   }
