@@ -20,6 +20,7 @@ class DatabaseManager {
       logging: isDev ? true : false,
       synchronize: isDev ? true : false,
       cache: {
+        duration: constants.QUERY_CACHE_DURATION,
         provider() {
           return new MemoryQueryResultCache();
         },

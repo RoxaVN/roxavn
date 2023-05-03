@@ -8,7 +8,7 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { Link, useNavigate } from '@remix-run/react';
+import { Link } from '@remix-run/react';
 import {
   ApiFormGroup,
   ModalTrigger,
@@ -25,7 +25,6 @@ export interface ProjectInfoProps {
 
 export const ProjectInfo = ({ project }: ProjectInfoProps) => {
   const tCore = coreWebModule.useTranslation().t;
-  const navigate = useNavigate();
 
   return (
     <Card shadow="md" padding="md" radius="md" mb="md" withBorder>
@@ -53,7 +52,7 @@ export const ProjectInfo = ({ project }: ProjectInfoProps) => {
       <Group position="right">
         <ModalTrigger
           title={tCore('edit')}
-          content={({ setOpened }) => (
+          content={({ navigate }) => (
             <ApiFormGroup
               api={projectApi.update}
               apiParams={{
@@ -74,10 +73,7 @@ export const ProjectInfo = ({ project }: ProjectInfoProps) => {
                   ),
                 },
               ]}
-              onSuccess={() => {
-                setOpened(false);
-                navigate('.');
-              }}
+              onSuccess={() => navigate()}
             />
           )}
         >

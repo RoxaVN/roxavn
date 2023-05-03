@@ -8,7 +8,6 @@ import {
   webModule as coreWebModule,
 } from '@roxavn/core/web';
 import { IconPlus } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
 
 import { TaskResponse, taskApi } from '../../base';
 import { webModule } from '../module';
@@ -20,7 +19,6 @@ export interface SubtasksProps {
 }
 
 export function Subtasks({ subtasks, task }: SubtasksProps) {
-  const navigate = useNavigate();
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
 
@@ -30,7 +28,7 @@ export function Subtasks({ subtasks, task }: SubtasksProps) {
         <Text weight={500}>{t('subtasks')}</Text>
         <ModalTrigger
           title={t('addSubtask')}
-          content={({ setOpened }) => (
+          content={({ navigate }) => (
             <ApiFormGroup
               api={taskApi.createSubtask}
               apiParams={{ taskId: task.id }}
@@ -47,10 +45,7 @@ export function Subtasks({ subtasks, task }: SubtasksProps) {
                   ),
                 },
               ]}
-              onSuccess={() => {
-                setOpened(false);
-                navigate('.');
-              }}
+              onSuccess={() => navigate()}
             />
           )}
         >

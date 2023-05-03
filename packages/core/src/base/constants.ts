@@ -12,6 +12,8 @@ export const constants = {
     TOKEN: 'token',
   },
 
+  QUERY_CACHE_DURATION: 500,
+
   LOCATION_SEARCH_KEY: '__key',
 
   API_BASE_PATH: '__api',
