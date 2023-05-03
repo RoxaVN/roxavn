@@ -1,5 +1,5 @@
 const urlUtils = {
-  parseValue: (k: any, v: any) => {
+  parseValue: (v: any) => {
     if (typeof v === 'string' && v.length > 9) {
       const d = new Date(v);
       return isNaN(d.getDate()) ? v : d;
@@ -56,12 +56,12 @@ const urlUtils = {
     for (const [k, v] of params) {
       if (k in result) {
         if (Array.isArray(result[k])) {
-          result[k].push(urlUtils.parseValue(k, v));
+          result[k].push(urlUtils.parseValue(v));
         } else {
-          result[k] = [result[k], urlUtils.parseValue(k, v)];
+          result[k] = [result[k], urlUtils.parseValue(v)];
         }
       } else {
-        result[k] = urlUtils.parseValue(k, v);
+        result[k] = urlUtils.parseValue(v);
       }
     }
     return result;

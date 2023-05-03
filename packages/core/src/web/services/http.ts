@@ -17,7 +17,7 @@ async function checkStatus(response: Response) {
   let data;
   let errorMsg;
   try {
-    data = JSON.parse(text, urlUtils.parseValue);
+    data = JSON.parse(text, (_, v) => urlUtils.parseValue(v));
   } catch (e) {
     errorMsg = "Can't parse JSON";
   }

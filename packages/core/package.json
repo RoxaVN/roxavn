@@ -48,7 +48,6 @@
     "react-router-dom": "^6.8.0",
     "remix-i18next": "^5.1.1",
     "rxjs": "^7.2.0",
-    "superjson": "^1.12.3",
     "typeorm": "^0.3.10"
   },
   "exports": {
