@@ -10,9 +10,7 @@ type InferLoaderData<T> = T extends (...args: any[]) => infer Output
     : Awaited<Output>
   : Awaited<T>;
 
-type InferDeserialize<T> = T extends { json: any } ? T['json'] : unknown;
-
-export function useLoaderData<T>(): InferDeserialize<InferLoaderData<T>> {
+export function useLoaderData<T>(): InferLoaderData<T> {
   const data = useLoaderDataRemix();
   return cloneDeepWith(data, (value) => {
     const parsed = urlUtils.parseValue(value);

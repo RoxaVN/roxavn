@@ -1,4 +1,5 @@
-import { NumberInput, Select, TextInput } from '@mantine/core';
+import { Anchor, NumberInput, Select, TextInput } from '@mantine/core';
+import { Link } from '@remix-run/react';
 import {
   ApiFormGroup,
   ApiTable,
@@ -10,7 +11,7 @@ import {
 import { IconPlus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
-import { constants, projectApi } from '../../../../base';
+import { constants, projectApi, webRoutes } from '../../../../base';
 import { webModule } from '../../../module';
 
 function MePage() {
@@ -61,7 +62,17 @@ function MePage() {
         },
       ]}
       columns={{
-        name: { label: tCore('name') },
+        name: {
+          label: tCore('name'),
+          render: (name, item) => (
+            <Anchor
+              component={Link}
+              to={webRoutes.Project.generate({ projectId: item.id })}
+            >
+              {name}
+            </Anchor>
+          ),
+        },
         type: { label: tCore('type') },
         createdDate: {
           label: tCore('createdDate'),

@@ -13,6 +13,11 @@ export const scopes = accessManager.makeScopes(baseModule, {
 });
 
 export const permissions = accessManager.makePermissions(scopes, {
+  CreateUserRole: accessManager.permissions.CreateUserRole,
+  DeleteUserRole: accessManager.permissions.DeleteUserRole,
+  ReadRoleUsers: accessManager.permissions.ReadRoleUsers,
+  ReadRoles: accessManager.permissions.ReadRoles,
+
   CreateProject: {
     allowedScopes: [accessManager.scopes.AuthUser],
   },
@@ -28,11 +33,6 @@ export const permissions = accessManager.makePermissions(scopes, {
   DeleteProject: {
     allowedScopes: [scopes.Project],
   },
-
-  CreateUserRole: accessManager.permissions.CreateUserRole,
-  DeleteUserRole: accessManager.permissions.DeleteUserRole,
-  ReadRoleUsers: accessManager.permissions.ReadRoleUsers,
-  ReadRoles: accessManager.permissions.ReadRoles,
 
   CreateTask: { allowedScopes: [scopes.Project] },
   ReadTask: { allowedScopes: [scopes.Project] },
@@ -74,6 +74,7 @@ export const roles = accessManager.makeRoles(scopes, permissions, {
       permissions.ReadRoles,
       permissions.ReadProject,
       permissions.CreateTask,
+      permissions.UpdateTask,
       permissions.AssignMe,
       permissions.AssignTask,
       permissions.ReadTasks,

@@ -1,15 +1,31 @@
-import { Anchor, Badge, Card, Group, Text } from '@mantine/core';
-import { Link } from '@remix-run/react';
-import { utils, webModule as coreWebModule } from '@roxavn/core/web';
+import {
+  Anchor,
+  Badge,
+  Button,
+  Card,
+  Group,
+  Select,
+  Text,
+  TextInput,
+} from '@mantine/core';
+import { Link, useNavigate } from '@remix-run/react';
+import {
+  ApiFormGroup,
+  ModalTrigger,
+  utils,
+  webModule as coreWebModule,
+} from '@roxavn/core/web';
+import { IconEdit } from '@tabler/icons-react';
 
-import { constants, ProjectResponse, webRoutes } from '../../base';
+import { constants, projectApi, ProjectResponse, webRoutes } from '../../base';
 
 export interface ProjectInfoProps {
   project: ProjectResponse;
 }
 
 export const ProjectInfo = ({ project }: ProjectInfoProps) => {
-  const { t } = coreWebModule.useTranslation();
+  const tCore = coreWebModule.useTranslation().t;
+  const navigate = useNavigate();
 
   return (
     <Card shadow="md" padding="md" radius="md" mb="md" withBorder>
@@ -26,13 +42,48 @@ export const ProjectInfo = ({ project }: ProjectInfoProps) => {
           }
           variant="light"
         >
-          {t(project.type)}
+          {tCore(project.type)}
         </Badge>
       </Group>
 
       <Text size="sm" color="dimmed">
         {utils.Render.relativeTime(project.createdDate)}
       </Text>
+
+      <Group position="right">
+        <ModalTrigger
+          title={tCore('edit')}
+          content={({ setOpened }) => (
+            <ApiFormGroup
+              api={projectApi.update}
+              apiParams={{
+                projectId: project.id,
+                name: project.name,
+                type: project.type,
+              }}
+              fields={[
+                { name: 'name', input: <TextInput label={tCore('name')} /> },
+                {
+                  name: 'type',
+                  input: (
+                    <Select
+                      withinPortal
+                      label={tCore('type')}
+                      data={Object.values(constants.ProjectTypes)}
+                    />
+                  ),
+                },
+              ]}
+              onSuccess={() => {
+                setOpened(false);
+                navigate('.');
+              }}
+            />
+          )}
+        >
+          <Button leftIcon={<IconEdit size={16} />}>{tCore('edit')}</Button>
+        </ModalTrigger>
+      </Group>
     </Card>
   );
 };
