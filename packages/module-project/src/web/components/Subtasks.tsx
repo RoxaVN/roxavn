@@ -1,4 +1,4 @@
-import { Button, Group, Text, TextInput } from '@mantine/core';
+import { Button, Card, Group, Text, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { InferApiResponse } from '@roxavn/core/base';
 import {
@@ -25,7 +25,7 @@ export function Subtasks({ subtasks, task }: SubtasksProps) {
   const tCore = coreWebModule.useTranslation().t;
 
   return (
-    <div>
+    <Card shadow="md" padding="md" radius="md" mb="md" withBorder>
       <Group position="apart" mb="xs">
         <Text weight={500}>{t('subtasks')}</Text>
         <ModalTrigger
@@ -67,6 +67,6 @@ export function Subtasks({ subtasks, task }: SubtasksProps) {
         data={subtasks.pagination}
         locationKey="subtasks"
       />
-    </div>
+    </Card>
   );
 }

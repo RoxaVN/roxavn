@@ -1,5 +1,6 @@
 import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { ApiService, InferAuthApiRequest } from '@roxavn/core/server';
+import dayjs from 'dayjs';
 
 import {
   constants,
@@ -20,7 +21,8 @@ export class CreateSubtaskApiService extends ApiService {
     if (!task) {
       throw new NotFoundException();
     }
-    if (task.expiryDate < request.expiryDate) {
+    // https://github.com/typeorm/typeorm/issues/2794#issuecomment-1202730034
+    if (dayjs(task.expiryDate).isBefore(request.expiryDate)) {
       throw new InvalidExpiryDateException();
     }
     const subTask = new Task();
