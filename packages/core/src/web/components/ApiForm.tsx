@@ -1,9 +1,11 @@
-import { Box, LoadingOverlay } from '@mantine/core';
+import { Alert, Box, LoadingOverlay } from '@mantine/core';
 import { useForm, UseFormReturnType } from '@mantine/form';
+import { IconAlertCircle } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
 
 import { Api, ApiRequest, ApiResponse } from '../../base';
-import { uiManager, webModule, apiFetcher } from '../services';
+import { webModule, apiFetcher } from '../services';
+import { ApiError } from './ApiError';
 
 export interface ApiFormProps<
   Request extends ApiRequest,
@@ -76,8 +78,6 @@ export function ApiForm<
                 })
               )
             );
-          } else {
-            uiManager.errorModal(error);
           }
         }
       } finally {
@@ -96,11 +96,32 @@ export function ApiForm<
     return;
   }, [api, apiParams]);
 
+  function renderError() {
+    if (error) {
+      const errorData = apiFetcher.getErrorData(error);
+      if (errorData?.type !== 'ValidationException') {
+        return (
+          <Alert
+            icon={<IconAlertCircle />}
+            title={t('error')}
+            withCloseButton
+            color="red"
+            mt="md"
+          >
+            <ApiError error={error} />
+          </Alert>
+        );
+      }
+    }
+    return null;
+  }
+
   return (
     <Box sx={{ position: 'relative' }}>
       <LoadingOverlay visible={loading} />
       <form onSubmit={form.onSubmit((params) => fetcher(params as any))}>
         {formRender && formRender(form)}
+        {renderError()}
       </form>
       {dataRender && dataRender({ data, error, loading, fetcher })}
     </Box>
