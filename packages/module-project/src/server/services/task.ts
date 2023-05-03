@@ -23,8 +23,9 @@ export class CreateSubtaskApiService extends ApiService {
     }
     // https://github.com/typeorm/typeorm/issues/2794#issuecomment-1202730034
     if (dayjs(task.expiryDate).isBefore(request.expiryDate)) {
-      throw new InvalidExpiryDateException();
+      throw new InvalidExpiryDateException(task.expiryDate);
     }
+
     const subTask = new Task();
     subTask.userId = request.$user.id;
     subTask.title = request.title;
@@ -66,6 +67,40 @@ export class GetSubtasksApiService extends ApiService {
       items: items,
       pagination: { page, pageSize, totalItems },
     };
+  }
+}
+
+@serverModule.useApi(taskApi.update)
+export class UpdateTaskApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof taskApi.update>) {
+    const task = await this.dbSession.getRepository(Task).findOne({
+      where: { id: request.taskId },
+      cache: true,
+    });
+    if (!task) {
+      throw new NotFoundException();
+    }
+    if (task.parentId) {
+      const parentTask = await this.dbSession.getRepository(Task).findOne({
+        where: { id: task.parentId },
+        select: ['expiryDate'],
+      });
+      if (!parentTask) {
+        throw new NotFoundException();
+      }
+      if (dayjs(parentTask.expiryDate).isBefore(request.expiryDate)) {
+        throw new InvalidExpiryDateException(parentTask.expiryDate);
+      }
+    }
+
+    await this.dbSession.getRepository(Task).update(
+      { id: request.taskId },
+      {
+        title: request.title,
+        expiryDate: request.expiryDate,
+      }
+    );
+    return {};
   }
 }
 

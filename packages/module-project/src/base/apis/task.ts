@@ -47,6 +47,8 @@ class CreateSubtaskRequest extends ExactProps<CreateSubtaskRequest> {
   public readonly expiryDate!: Date;
 }
 
+const UpdateTaskRequest = CreateSubtaskRequest;
+
 class GetSubtasksRequest extends ExactProps<GetSubtasksRequest> {
   @MinLength(1)
   public readonly taskId!: string;
@@ -77,6 +79,10 @@ export const taskApi = {
     path: taskSource.apiPath({ includeId: true }) + '/subtasks',
     validator: GetSubtasksRequest,
     permission: permissions.ReadTasks,
+  }),
+  update: taskSource.update({
+    validator: UpdateTaskRequest,
+    permission: permissions.UpdateTask,
   }),
   getOne: taskSource.getOne({
     validator: GetTaskRequest,

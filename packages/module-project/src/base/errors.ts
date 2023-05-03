@@ -1,4 +1,4 @@
-import { BadRequestException } from '@roxavn/core/base';
+import { BadRequestException, I18nErrorField } from '@roxavn/core/base';
 import { baseModule } from './module';
 
 export class InvalidExpiryDateException extends BadRequestException {
@@ -6,8 +6,13 @@ export class InvalidExpiryDateException extends BadRequestException {
     default: {
       key: 'Error.InvalidExpiryDateException',
       ns: baseModule.escapedName,
-    },
+    } as I18nErrorField,
   };
+
+  constructor(maxExpiryDate: Date) {
+    super();
+    this.i18n.default.params = { maxExpiryDate };
+  }
 }
 
 export class DeleteTaskException extends BadRequestException {

@@ -17,7 +17,7 @@
 
   "Error": {
     "DeleteTaskException": "Chỉ xoắ được công việc đang ở trạng thái chờ, không có công việc con, và không phải công việc gốc",
-    "InvalidExpiryDateException": "Ngày hết hạn của công việc con không được lớn hơn ngày hết hạn của công việc cha"
+    "InvalidExpiryDateException": "Ngày hết hạn của công việc con lớn nhất là {{maxExpiryDate, datetime}}, không được lớn hơn ngày hết hạn của công việc cha"
   },
   "Meta": {
     "name": "Module dự án",

@@ -1,12 +1,25 @@
-import { Anchor, Badge, Card, Group, Table, Text } from '@mantine/core';
+import {
+  Anchor,
+  Badge,
+  Button,
+  Card,
+  Group,
+  Table,
+  Text,
+  TextInput,
+} from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
 import { Link } from '@remix-run/react';
 import {
+  ApiFormGroup,
+  ModalTrigger,
   userService,
   utils,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
+import { IconEdit } from '@tabler/icons-react';
 
-import { TaskResponse, constants, webRoutes } from '../../base';
+import { TaskResponse, constants, webRoutes, taskApi } from '../../base';
 import { webModule } from '../module';
 
 export interface TaskInfoProps {
@@ -37,6 +50,34 @@ export function TaskInfo({ task }: TaskInfoProps) {
     <Card shadow="md" padding="md" radius="md" mb="md" withBorder>
       <Group position="apart" mb="xs">
         <Text weight={500}>{task.title}</Text>
+        <ModalTrigger
+          title={tCore('edit')}
+          content={({ navigate }) => (
+            <ApiFormGroup
+              api={taskApi.update}
+              apiParams={{
+                taskId: task.id,
+                title: task.title,
+                expiryDate: task.expiryDate,
+              }}
+              fields={[
+                { name: 'title', input: <TextInput label={tCore('title')} /> },
+                {
+                  name: 'expiryDate',
+                  input: (
+                    <DatePickerInput
+                      label={tCore('expiryDate')}
+                      popoverProps={{ withinPortal: true }}
+                    />
+                  ),
+                },
+              ]}
+              onSuccess={() => navigate()}
+            />
+          )}
+        >
+          <Button leftIcon={<IconEdit size={16} />}>{tCore('edit')}</Button>
+        </ModalTrigger>
       </Group>
       <Table>
         <tbody>
