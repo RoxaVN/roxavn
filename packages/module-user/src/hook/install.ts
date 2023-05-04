@@ -5,6 +5,6 @@ import { CreateAdminUserHook } from './database';
 export class InstallHook extends BaseService {
   async handle() {
     await this.create(hookManager.createRoleService).handle(roles);
-    await this.create(CreateAdminUserHook).handle(null);
+    await this.create(CreateAdminUserHook).handle();
   }
 }
