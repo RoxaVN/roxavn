@@ -12,8 +12,10 @@ type InferLoaderData<T> = T extends (...args: any[]) => infer Output
 
 export function useLoaderData<T>(): InferLoaderData<T> {
   const data = useLoaderDataRemix();
-  return cloneDeepWith(data, (value) => {
-    const parsed = urlUtils.parseValue(value);
-    return parsed === value ? undefined : parsed;
+  return cloneDeepWith(data, (value, key) => {
+    if (key) {
+      const parsed = urlUtils.parseValue(key.toString(), value);
+      return parsed === value ? undefined : parsed;
+    }
   });
 }

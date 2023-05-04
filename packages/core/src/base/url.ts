@@ -1,10 +1,12 @@
 const urlUtils = {
-  parseValue: (v: any) => {
-    if (typeof v === 'string' && v.length > 9) {
-      const d = new Date(v);
-      return isNaN(d.getDate()) ? v : d;
+  /**
+   * Parse Date if key ends with "Date" string
+   */
+  parseValue: (key: string, value: any) => {
+    if (key.endsWith('Date')) {
+      return new Date(value);
     }
-    return v;
+    return value;
   },
 
   generatePath(urlPattern: string, params: Record<string, any>) {
@@ -56,12 +58,12 @@ const urlUtils = {
     for (const [k, v] of params) {
       if (k in result) {
         if (Array.isArray(result[k])) {
-          result[k].push(urlUtils.parseValue(v));
+          result[k].push(urlUtils.parseValue(k, v));
         } else {
-          result[k] = [result[k], urlUtils.parseValue(v)];
+          result[k] = [result[k], urlUtils.parseValue(k, v)];
         }
       } else {
-        result[k] = urlUtils.parseValue(v);
+        result[k] = urlUtils.parseValue(k, v);
       }
     }
     return result;
