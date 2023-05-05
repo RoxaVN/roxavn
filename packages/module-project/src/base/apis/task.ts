@@ -77,6 +77,11 @@ class AssignTaskRequest extends ExactProps<AssignTaskRequest> {
   public readonly userId!: string;
 }
 
+class AssignMeTaskRequest extends ExactProps<AssignMeTaskRequest> {
+  @MinLength(1)
+  public readonly taskId!: string;
+}
+
 export const taskApi = {
   createSubtask: taskSource.create({
     path: taskSource.apiPath({ includeId: true }) + '/subtasks',
@@ -103,6 +108,11 @@ export const taskApi = {
   assign: taskSource.update({
     path: taskSource.apiPath({ includeId: true }) + '/assign',
     validator: AssignTaskRequest,
+    permission: permissions.AssignTask,
+  }),
+  assignMe: taskSource.update({
+    path: taskSource.apiPath({ includeId: true }) + '/assignMe',
+    validator: AssignMeTaskRequest,
     permission: permissions.AssignTask,
   }),
 };

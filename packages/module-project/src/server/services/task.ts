@@ -186,3 +186,13 @@ export class AssignTaskApiService extends ApiService {
     return {};
   }
 }
+
+@serverModule.useApi(taskApi.assignMe)
+export class AssignMeTaskApiService extends ApiService {
+  async handle(request: InferAuthApiRequest<typeof taskApi.assignMe>) {
+    return this.create(AssignTaskApiService).handle({
+      taskId: request.taskId,
+      userId: request.$user.id,
+    });
+  }
+}
