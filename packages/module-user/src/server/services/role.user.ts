@@ -1,5 +1,6 @@
 import { InferApiRequest } from '@roxavn/core/base';
-import { ApiService } from '@roxavn/core/server';
+import { ApiService, serviceManager } from '@roxavn/core/server';
+import { In } from 'typeorm';
 
 import { roleUserApi } from '../../base';
 import { UserRole } from '../entities';
@@ -43,3 +44,22 @@ export class GetRoleUsersApiService extends ApiService {
     };
   }
 }
+
+const AbstractCheckRoleUsersApiService =
+  serviceManager.checkRoleUsersApiService;
+export class CheckRoleUsersApiService extends AbstractCheckRoleUsersApiService {
+  async handle(request: { scope: string; scopeId: string; userIds: string[] }) {
+    const count = await this.dbSession.getRepository(UserRole).count({
+      where: {
+        scopeId: request.scopeId,
+        role: { scope: request.scope },
+        userId: In(request.userIds),
+      },
+    });
+
+    return {
+      success: count === request.userIds.length,
+    };
+  }
+}
+serviceManager.checkRoleUsersApiService = CheckRoleUsersApiService;

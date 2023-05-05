@@ -1,5 +1,9 @@
 import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
-import { ApiService, InferAuthApiRequest } from '@roxavn/core/server';
+import {
+  ApiService,
+  InferAuthApiRequest,
+  serviceManager,
+} from '@roxavn/core/server';
 import dayjs from 'dayjs';
 import { IsNull } from 'typeorm';
 
@@ -8,8 +12,10 @@ import {
   constants,
   DeleteTaskException,
   InvalidExpiryDateSubtaskException,
+  scopes,
   taskApi,
   UnassignedTaskException,
+  UserNotInProjectException,
 } from '../../base';
 import { Task } from '../entities';
 import { serverModule } from '../module';
@@ -157,6 +163,16 @@ export class AssignTaskApiService extends ApiService {
     });
     if (!task) {
       throw new NotFoundException();
+    }
+    const resultCheck = await this.create(
+      serviceManager.checkRoleUsersApiService
+    ).handle({
+      scopeId: task.projectId,
+      scope: scopes.Project.name,
+      userIds: [request.userId],
+    });
+    if (!resultCheck.success) {
+      throw new UserNotInProjectException();
     }
     const result = await this.dbSession
       .getRepository(Task)

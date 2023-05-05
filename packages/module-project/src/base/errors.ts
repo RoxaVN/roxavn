@@ -33,6 +33,15 @@ export class AlreadyAssignedTaskException extends BadRequestException {
   };
 }
 
+export class UserNotInProjectException extends BadRequestException {
+  i18n = {
+    default: {
+      key: 'Error.UserNotInProjectException',
+      ns: baseModule.escapedName,
+    },
+  };
+}
+
 export class DeleteTaskException extends BadRequestException {
   i18n = {
     default: {
