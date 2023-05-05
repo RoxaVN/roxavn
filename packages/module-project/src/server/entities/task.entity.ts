@@ -34,11 +34,14 @@ export class Task {
   @Column('int', { default: 0 })
   childrenCount = 0;
 
-  @Column('float', { default: 0 })
+  @Column('int', { default: 0 })
   progress = 0;
 
   @Column('int', { default: 1 })
   weight = 1;
+
+  @Column('int', { default: 0 })
+  childrenWeight = 0;
 
   @Column('text', { default: constants.TaskStatus.PENDING })
   status: string;

@@ -2,6 +2,7 @@ import {
   ApiSource,
   ExactProps,
   IsOptional,
+  IsPositive,
   MaxLength,
   Min,
   MinLength,
@@ -21,6 +22,7 @@ export interface TaskResponse {
   childrenCount: number;
   progress: number;
   weight: number;
+  childrenWeight: number;
   status: string;
   title: string;
   projectId: string;
@@ -45,6 +47,10 @@ class CreateSubtaskRequest extends ExactProps<CreateSubtaskRequest> {
 
   @TransformDate()
   public readonly expiryDate!: Date;
+
+  @IsPositive()
+  @IsOptional()
+  public readonly weight?: number;
 }
 
 const UpdateTaskRequest = CreateSubtaskRequest;
