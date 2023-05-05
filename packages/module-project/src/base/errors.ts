@@ -24,6 +24,15 @@ export class UnassignedTaskException extends BadRequestException {
   };
 }
 
+export class AlreadyAssignedTaskException extends BadRequestException {
+  i18n = {
+    default: {
+      key: 'Error.AlreadyAssignedTaskException',
+      ns: baseModule.escapedName,
+    },
+  };
+}
+
 export class DeleteTaskException extends BadRequestException {
   i18n = {
     default: {

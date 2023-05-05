@@ -1,8 +1,10 @@
 import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { ApiService, InferAuthApiRequest } from '@roxavn/core/server';
 import dayjs from 'dayjs';
+import { IsNull } from 'typeorm';
 
 import {
+  AlreadyAssignedTaskException,
   constants,
   DeleteTaskException,
   InvalidExpiryDateSubtaskException,
@@ -142,6 +144,29 @@ export class DeleteTaskApiService extends ApiService {
     await this.dbSession
       .getRepository(Task)
       .decrement({ id: task.parentId }, 'childrenCount', 1);
+    return {};
+  }
+}
+
+@serverModule.useApi(taskApi.assign)
+export class AssignTaskApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof taskApi.assign>) {
+    const task = await this.dbSession.getRepository(Task).findOne({
+      where: { id: request.taskId },
+      cache: true,
+    });
+    if (!task) {
+      throw new NotFoundException();
+    }
+    const result = await this.dbSession
+      .getRepository(Task)
+      .update(
+        { id: request.taskId, assignee: IsNull() },
+        { assignee: request.userId }
+      );
+    if (!result.affected) {
+      throw new AlreadyAssignedTaskException();
+    }
     return {};
   }
 }

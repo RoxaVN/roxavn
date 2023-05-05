@@ -69,6 +69,14 @@ class DeleteTaskRequest extends ExactProps<DeleteTaskRequest> {
   public readonly taskId!: string;
 }
 
+class AssignTaskRequest extends ExactProps<AssignTaskRequest> {
+  @MinLength(1)
+  public readonly taskId!: string;
+
+  @MinLength(1)
+  public readonly userId!: string;
+}
+
 export const taskApi = {
   createSubtask: taskSource.create({
     path: taskSource.apiPath({ includeId: true }) + '/subtasks',
@@ -91,5 +99,10 @@ export const taskApi = {
   delete: taskSource.delete({
     validator: DeleteTaskRequest,
     permission: permissions.DeleteTask,
+  }),
+  assign: taskSource.update({
+    path: taskSource.apiPath({ includeId: true }) + '/assign',
+    validator: AssignTaskRequest,
+    permission: permissions.AssignTask,
   }),
 };

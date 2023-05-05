@@ -18,6 +18,7 @@
   "Error": {
     "DeleteTaskException": "Only delete the task that is in the pending state, no subtasks, and not the root task",
     "UnassignedTaskException": "Please assign the task to anyone before taking this action",
+    "AlreadyAssignedTaskException": "The task has already been assigned, cannot be reassigned to others",
     "InvalidExpiryDateSubtaskException": "The expiry date of the child task is up to {{maxExpiryDate, datetime}}, cannot be greater than the expiry date of the parent task"
   },
   "Meta": {
