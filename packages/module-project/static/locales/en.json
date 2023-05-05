@@ -9,13 +9,17 @@
   "deleteProject": "Delete project",
   "projectDuration": "Project duration (in day)",
   "pending": "Pending",
-  "inprogress": "Inprogress",
+  "inprogress": "In progress",
   "finished": "Finished",
   "rejected": "Rejected",
   "assignee": "Assignee",
   "progress": "Progress",
 
   "Error": {
+    "InprogressTaskException": "Only task status can be changed from pending to in progress",
+    "RejectTaskException": "only reject the subtask from pending staus or in progress status",
+    "FinishSubtaskException": "Only complete subtask from in progress status",
+    "FinishParenttaskException": "Only complete the parent task when the subtasks has been completed",
     "DeleteTaskException": "Only delete the task that is in the pending state, no subtasks, and not the root task",
     "UnassignedTaskException": "Please assign the task to anyone before taking this action",
     "AlreadyAssignedTaskException": "The task has already been assigned, cannot be reassigned to others",

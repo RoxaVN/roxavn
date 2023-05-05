@@ -5,13 +5,17 @@ import {
   serviceManager,
 } from '@roxavn/core/server';
 import dayjs from 'dayjs';
-import { IsNull } from 'typeorm';
+import { In, IsNull } from 'typeorm';
 
 import {
   AlreadyAssignedTaskException,
   constants,
   DeleteTaskException,
+  FinishParenttaskException,
+  FinishSubtaskException,
+  InprogressTaskException,
   InvalidExpiryDateSubtaskException,
+  RejectTaskException,
   scopes,
   taskApi,
   UnassignedTaskException,
@@ -133,10 +137,9 @@ export class GetTaskApiService extends ApiService {
 @serverModule.useApi(taskApi.delete)
 export class DeleteTaskApiService extends ApiService {
   async handle(request: InferApiRequest<typeof taskApi.delete>) {
-    const task = await this.dbSession.getRepository(Task).findOne({
-      where: { id: request.taskId },
-      cache: true,
-    });
+    const task = await this.dbSession
+      .getRepository(Task)
+      .findOne({ where: { id: request.taskId }, cache: true });
     if (!task) {
       throw new NotFoundException();
     }
@@ -157,10 +160,9 @@ export class DeleteTaskApiService extends ApiService {
 @serverModule.useApi(taskApi.assign)
 export class AssignTaskApiService extends ApiService {
   async handle(request: InferApiRequest<typeof taskApi.assign>) {
-    const task = await this.dbSession.getRepository(Task).findOne({
-      where: { id: request.taskId },
-      cache: true,
-    });
+    const task = await this.dbSession
+      .getRepository(Task)
+      .findOne({ where: { id: request.taskId }, cache: true });
     if (!task) {
       throw new NotFoundException();
     }
@@ -194,5 +196,85 @@ export class AssignMeTaskApiService extends ApiService {
       taskId: request.taskId,
       userId: request.$user.id,
     });
+  }
+}
+
+@serverModule.useApi(taskApi.inprogress)
+export class InprogressTaskApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof taskApi.inprogress>) {
+    const result = await this.dbSession
+      .getRepository(Task)
+      .update(
+        { id: request.taskId, status: constants.TaskStatus.PENDING },
+        { status: constants.TaskStatus.INPROGRESS, startedDate: new Date() }
+      );
+    if (result.affected) {
+      return {};
+    }
+    throw new InprogressTaskException();
+  }
+}
+
+@serverModule.useApi(taskApi.reject)
+export class RejectTaskApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof taskApi.reject>) {
+    const result = await this.dbSession.getRepository(Task).update(
+      {
+        id: request.taskId,
+        status: In([
+          constants.TaskStatus.PENDING,
+          constants.TaskStatus.INPROGRESS,
+        ]),
+        childrenCount: 0,
+      },
+      {
+        status: constants.TaskStatus.REJECTED,
+        rejectedDate: new Date(),
+        weight: 0,
+        progress: 1,
+      }
+    );
+    if (result.affected) {
+      return {};
+    }
+    throw new RejectTaskException();
+  }
+}
+
+@serverModule.useApi(taskApi.finish)
+export class FinishTaskApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof taskApi.finish>) {
+    const task = await this.dbSession
+      .getRepository(Task)
+      .findOne({ where: { id: request.taskId }, cache: true });
+    if (!task) {
+      throw new NotFoundException();
+    }
+    const finishUpdate = {
+      status: constants.TaskStatus.FINISHED,
+      finishedDate: new Date(),
+      progress: 1,
+    };
+    if (task.childrenCount) {
+      const result = await this.dbSession
+        .getRepository(Task)
+        .update({ id: request.taskId, progress: 1 }, finishUpdate);
+      if (!result.affected) {
+        throw new FinishParenttaskException();
+      }
+    } else {
+      const result = await this.dbSession.getRepository(Task).update(
+        {
+          id: request.taskId,
+          status: constants.TaskStatus.INPROGRESS,
+          childrenCount: 0,
+        },
+        finishUpdate
+      );
+      if (!result.affected) {
+        throw new FinishSubtaskException();
+      }
+    }
+    return {};
   }
 }

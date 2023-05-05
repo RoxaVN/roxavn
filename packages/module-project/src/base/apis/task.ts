@@ -82,6 +82,11 @@ class AssignMeTaskRequest extends ExactProps<AssignMeTaskRequest> {
   public readonly taskId!: string;
 }
 
+class UpdateTaskStatusRequest extends ExactProps<UpdateTaskStatusRequest> {
+  @MinLength(1)
+  public readonly taskId!: string;
+}
+
 export const taskApi = {
   createSubtask: taskSource.create({
     path: taskSource.apiPath({ includeId: true }) + '/subtasks',
@@ -114,5 +119,21 @@ export const taskApi = {
     path: taskSource.apiPath({ includeId: true }) + '/assignMe',
     validator: AssignMeTaskRequest,
     permission: permissions.AssignTask,
+  }),
+
+  inprogress: taskSource.update({
+    path: taskSource.apiPath({ includeId: true }) + '/inprogress',
+    validator: UpdateTaskStatusRequest,
+    permission: permissions.UpdateTaskStatus,
+  }),
+  finish: taskSource.update({
+    path: taskSource.apiPath({ includeId: true }) + '/finish',
+    validator: UpdateTaskStatusRequest,
+    permission: permissions.UpdateTaskStatus,
+  }),
+  reject: taskSource.update({
+    path: taskSource.apiPath({ includeId: true }) + '/reject',
+    validator: UpdateTaskStatusRequest,
+    permission: permissions.UpdateTaskStatus,
   }),
 };

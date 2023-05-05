@@ -10,6 +10,10 @@ export const scopes = accessManager.makeScopes(baseModule, {
     condition: (_, project) => project?.type === constants.ProjectTypes.PUBLIC,
   },
   Task: { name: 'task' },
+  TaskAssignee: {
+    name: 'task',
+    condition: (request, task) => task?.assignee === request.$user?.id,
+  },
 });
 
 export const permissions = accessManager.makePermissions(scopes, {
@@ -38,6 +42,7 @@ export const permissions = accessManager.makePermissions(scopes, {
   ReadTask: { allowedScopes: [scopes.Project] },
   ReadTasks: { allowedScopes: [scopes.Project] },
   UpdateProgress: { allowedScopes: [scopes.Project] },
+  UpdateTaskStatus: { allowedScopes: [scopes.TaskAssignee] },
   UpdateTask: { allowedScopes: [scopes.Project, accessManager.scopes.Owner] },
   DeleteTask: { allowedScopes: [scopes.Project, accessManager.scopes.Owner] },
   AssignTask: { allowedScopes: [scopes.Project] },

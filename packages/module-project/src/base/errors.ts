@@ -50,3 +50,38 @@ export class DeleteTaskException extends BadRequestException {
     },
   };
 }
+
+export class InprogressTaskException extends BadRequestException {
+  i18n = {
+    default: {
+      key: 'Error.InprogressTaskException',
+      ns: baseModule.escapedName,
+    },
+  };
+}
+
+export class RejectTaskException extends BadRequestException {
+  i18n = {
+    default: {
+      key: 'Error.RejectTaskException',
+      ns: baseModule.escapedName,
+    },
+  };
+}
+
+export class FinishSubtaskException extends BadRequestException {
+  i18n = {
+    default: {
+      key: 'Error.FinishSubtaskException',
+      ns: baseModule.escapedName,
+    },
+  };
+}
+export class FinishParenttaskException extends BadRequestException {
+  i18n = {
+    default: {
+      key: 'Error.FinishParenttaskException',
+      ns: baseModule.escapedName,
+    },
+  };
+}
