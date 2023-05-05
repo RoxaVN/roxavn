@@ -5,8 +5,9 @@ import dayjs from 'dayjs';
 import {
   constants,
   DeleteTaskException,
-  InvalidExpiryDateException,
+  InvalidExpiryDateSubtaskException,
   taskApi,
+  UnassignedTaskException,
 } from '../../base';
 import { Task } from '../entities';
 import { serverModule } from '../module';
@@ -23,7 +24,10 @@ export class CreateSubtaskApiService extends ApiService {
     }
     // https://github.com/typeorm/typeorm/issues/2794#issuecomment-1202730034
     if (dayjs(task.expiryDate).isBefore(request.expiryDate)) {
-      throw new InvalidExpiryDateException(task.expiryDate);
+      throw new InvalidExpiryDateSubtaskException(task.expiryDate);
+    }
+    if (!task.assignee) {
+      throw new UnassignedTaskException();
     }
 
     const subTask = new Task();
@@ -89,7 +93,7 @@ export class UpdateTaskApiService extends ApiService {
         throw new NotFoundException();
       }
       if (dayjs(parentTask.expiryDate).isBefore(request.expiryDate)) {
-        throw new InvalidExpiryDateException(parentTask.expiryDate);
+        throw new InvalidExpiryDateSubtaskException(parentTask.expiryDate);
       }
     }
 

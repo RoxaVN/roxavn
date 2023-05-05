@@ -17,7 +17,8 @@
 
   "Error": {
     "DeleteTaskException": "Only delete the task that is in the pending state, no subtasks, and not the root task",
-    "InvalidExpiryDateException": "The expiry date of the child task is up to {{maxExpiryDate, datetime}}, cannot be greater than the expiry date of the parent task"
+    "UnassignedTaskException": "Please assign the task to anyone before taking this action",
+    "InvalidExpiryDateSubtaskException": "The expiry date of the child task is up to {{maxExpiryDate, datetime}}, cannot be greater than the expiry date of the parent task"
   },
   "Meta": {
     "name": "Project module",
