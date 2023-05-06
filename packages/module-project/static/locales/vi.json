@@ -7,6 +7,8 @@
   "addProject": "Thêm dự án",
   "editProject": "Sửa dự án",
   "deleteProject": "Xóa dự án",
+  "editTask": "Sửa công việc",
+  "deleteTask": "Xóa công việc",
   "projectDuration": "Thời gian hoàn thành dự án (tính theo ngày)",
   "pending": "Đang chờ",
   "inprogress": "Đang thực hiện",

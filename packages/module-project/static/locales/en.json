@@ -7,6 +7,8 @@
   "addProject": "Add project",
   "editProject": "Edit project",
   "deleteProject": "Delete project",
+  "editTask": "Edit task",
+  "deleteTask": "Delete task",
   "projectDuration": "Project duration (in day)",
   "pending": "Pending",
   "inprogress": "In progress",

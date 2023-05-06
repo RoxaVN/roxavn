@@ -11,13 +11,14 @@ import {
 import { DatePickerInput } from '@mantine/dates';
 import { Link } from '@remix-run/react';
 import {
+  ApiConfirmFormGroup,
   ApiFormGroup,
   ModalTrigger,
   userService,
   utils,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
-import { IconEdit } from '@tabler/icons-react';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
 
 import { TaskResponse, constants, webRoutes, taskApi } from '../../base';
 import { webModule } from '../module';
@@ -50,34 +51,67 @@ export function TaskInfo({ task }: TaskInfoProps) {
     <Card shadow="md" padding="md" radius="md" mb="md" withBorder>
       <Group position="apart" mb="xs">
         <Text weight={500}>{task.title}</Text>
-        <ModalTrigger
-          title={tCore('edit')}
-          content={({ navigate }) => (
-            <ApiFormGroup
-              api={taskApi.update}
-              apiParams={{
-                taskId: task.id,
-                title: task.title,
-                expiryDate: task.expiryDate,
-              }}
-              fields={[
-                { name: 'title', input: <TextInput label={tCore('title')} /> },
-                {
-                  name: 'expiryDate',
-                  input: (
-                    <DatePickerInput
-                      label={tCore('expiryDate')}
-                      popoverProps={{ withinPortal: true }}
-                    />
-                  ),
-                },
-              ]}
-              onSuccess={() => navigate()}
-            />
-          )}
-        >
-          <Button leftIcon={<IconEdit size={16} />}>{tCore('edit')}</Button>
-        </ModalTrigger>
+        <Group spacing="md">
+          <ModalTrigger
+            title={t('editTask')}
+            content={({ navigate }) => (
+              <ApiFormGroup
+                api={taskApi.update}
+                apiParams={{
+                  taskId: task.id,
+                  title: task.title,
+                  expiryDate: task.expiryDate,
+                }}
+                fields={[
+                  {
+                    name: 'title',
+                    input: <TextInput label={tCore('title')} />,
+                  },
+                  {
+                    name: 'expiryDate',
+                    input: (
+                      <DatePickerInput
+                        label={tCore('expiryDate')}
+                        popoverProps={{ withinPortal: true }}
+                      />
+                    ),
+                  },
+                ]}
+                onSuccess={() => navigate()}
+              />
+            )}
+          >
+            <Button leftIcon={<IconEdit size={16} />} variant="outline">
+              {tCore('edit')}
+            </Button>
+          </ModalTrigger>
+          <ModalTrigger
+            title={t('deleteTask')}
+            content={({ navigate, setOpened }) => (
+              <ApiConfirmFormGroup
+                api={taskApi.delete}
+                apiParams={{
+                  taskId: task.id,
+                }}
+                onCancel={() => setOpened(false)}
+                onSuccess={() =>
+                  navigate(
+                    task.parentId &&
+                      webRoutes.Task.generate({ taskId: task.parentId })
+                  )
+                }
+              />
+            )}
+          >
+            <Button
+              leftIcon={<IconTrash size={16} />}
+              color="red"
+              variant="outline"
+            >
+              {tCore('delete')}
+            </Button>
+          </ModalTrigger>
+        </Group>
       </Group>
       <Table>
         <tbody>
