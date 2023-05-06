@@ -18,7 +18,7 @@ import {
   utils,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { IconEdit, IconTrash, IconUser } from '@tabler/icons-react';
 
 import { TaskResponse, constants, webRoutes, taskApi } from '../../base';
 import { webModule } from '../module';
@@ -42,10 +42,10 @@ function mapColor(status: string) {
 export function TaskInfo({ task }: TaskInfoProps) {
   const { t } = webModule.useTranslation();
   const tCore = coreWebModule.useTranslation().t;
-  const { renderItem } = userService.reference.use(
+  const renderUser = userService.reference.use(
     { ids: [task.userId, task.assignee] },
     { cache: true }
-  );
+  ).renderItem;
 
   return (
     <Card shadow="md" padding="md" radius="md" mb="md" withBorder>
@@ -125,11 +125,35 @@ export function TaskInfo({ task }: TaskInfoProps) {
           </tr>
           <tr>
             <th>{tCore('creator')}</th>
-            <td>{renderItem(task.userId)}</td>
+            <td>{renderUser(task.userId)}</td>
           </tr>
           <tr>
             <th>{t('assignee')}</th>
-            <td>{renderItem(task.assignee)}</td>
+            <td>
+              {task.assignee ? (
+                renderUser(task.assignee)
+              ) : (
+                <Group spacing="md">
+                  <ModalTrigger
+                    title={t('assignMe')}
+                    content={({ navigate, setOpened }) => (
+                      <ApiConfirmFormGroup
+                        api={taskApi.assignMe}
+                        apiParams={{
+                          taskId: task.id,
+                        }}
+                        onCancel={() => setOpened(false)}
+                        onSuccess={() => navigate()}
+                      />
+                    )}
+                  >
+                    <Button leftIcon={<IconUser size={16} />} variant="subtle">
+                      {t('assignMe')}
+                    </Button>
+                  </ModalTrigger>
+                </Group>
+              )}
+            </td>
           </tr>
           <tr>
             <th>{t('progress')}</th>

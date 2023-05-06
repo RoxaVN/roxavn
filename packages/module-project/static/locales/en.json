@@ -16,6 +16,8 @@
   "rejected": "Rejected",
   "assignee": "Assignee",
   "progress": "Progress",
+  "assign": "Assign",
+  "assignMe": "Assign me",
 
   "Error": {
     "InprogressTaskException": "Only task status can be changed from pending to in progress",

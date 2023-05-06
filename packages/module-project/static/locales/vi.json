@@ -16,6 +16,8 @@
   "rejected": "Bị hủy bỏ",
   "assignee": "Người được giao",
   "progress": "Tiến độ",
+  "assign": "Giao việc",
+  "assignMe": "Giao cho tôi",
 
   "Error": {
     "InprogressTaskException": "Chỉ chuyển được trạng thái công việc từ trạng thái đang chờ sang đang thực hiện",
