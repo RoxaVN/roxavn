@@ -59,7 +59,7 @@ export const RoleUsers = ({ scope, scopeId, module }: RoleUsersProps) => {
                     fields={[
                       {
                         name: 'userId',
-                        input: <userService.input label={t('user')} />,
+                        input: <userService.userInput label={t('user')} />,
                       },
                       { name: 'roleId', input: selectInput },
                     ]}

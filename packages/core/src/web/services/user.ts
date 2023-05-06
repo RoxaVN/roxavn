@@ -10,7 +10,15 @@ class UserService {
   reference = new Reference();
 
   @utils.Component.lazy()
-  input!: ComponentType<Omit<SelectProps, 'data'>>;
+  userInput!: ComponentType<Omit<SelectProps, 'data'>>;
+
+  @utils.Component.lazy()
+  roleUserInput!: ComponentType<
+    Omit<SelectProps, 'data'> & {
+      scope: string;
+      scopeId: string;
+    }
+  >;
 
   @utils.Component.lazy()
   roleUsers!: ComponentType<{

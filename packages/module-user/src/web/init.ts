@@ -7,7 +7,7 @@ export default function () {
   authService.logoutApi = accessTokenApi.delete;
 
   userService.reference.update(userApi.search, (item) => item.username);
-  userService.input = lazy(() => import('./components/UserInput'));
+  userService.userInput = lazy(() => import('./components/UserInput'));
   userService.roleUsers = lazy(() => import('./components/RoleUsers'));
   userService.roleUsersAccessApi = roleApi.getMany;
   userService.getUserRolesApi = userRoleApi.getAll;
