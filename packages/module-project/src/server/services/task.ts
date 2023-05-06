@@ -48,7 +48,7 @@ export class CreateSubtaskApiService extends ApiService {
     subTask.expiryDate = request.expiryDate;
     subTask.projectId = task.projectId;
     subTask.parentId = task.id;
-    subTask.weight = request.weight || 1;
+    subTask.weight = request.weight;
     subTask.parents = [...(task.parents || []), task.id];
     await this.dbSession.save(subTask);
 
@@ -126,13 +126,11 @@ export class UpdateTaskApiService extends ApiService {
       }
     );
 
-    if (request.weight) {
-      const deltaWeight = request.weight - task.weight;
-      if (deltaWeight && task.parentId) {
-        await this.dbSession
-          .getRepository(Task)
-          .increment({ id: task.parentId }, 'childrenWeight', deltaWeight);
-      }
+    const deltaWeight = request.weight - task.weight;
+    if (deltaWeight && task.parentId) {
+      await this.dbSession
+        .getRepository(Task)
+        .increment({ id: task.parentId }, 'childrenWeight', deltaWeight);
     }
     return {};
   }

@@ -49,8 +49,7 @@ class CreateSubtaskRequest extends ExactProps<CreateSubtaskRequest> {
   public readonly expiryDate!: Date;
 
   @IsPositive()
-  @IsOptional()
-  public readonly weight?: number;
+  public readonly weight: number;
 }
 
 const UpdateTaskRequest = CreateSubtaskRequest;

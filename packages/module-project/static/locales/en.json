@@ -18,6 +18,7 @@
   "progress": "Progress",
   "assign": "Assign",
   "assignMe": "Assign me",
+  "taskWeight": "Task weight",
 
   "Error": {
     "InprogressTaskException": "Only task status can be changed from pending to in progress",

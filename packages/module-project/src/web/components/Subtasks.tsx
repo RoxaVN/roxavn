@@ -1,4 +1,11 @@
-import { Button, Card, Group, Text, TextInput } from '@mantine/core';
+import {
+  Button,
+  Card,
+  Group,
+  NumberInput,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { InferApiResponse } from '@roxavn/core/base';
 import {
@@ -31,7 +38,7 @@ export function Subtasks({ subtasks, task }: SubtasksProps) {
           content={({ navigate }) => (
             <ApiFormGroup
               api={taskApi.createSubtask}
-              apiParams={{ taskId: task.id }}
+              apiParams={{ taskId: task.id, weight: 10 }}
               fields={[
                 { name: 'title', input: <TextInput label={tCore('title')} /> },
                 {
@@ -43,6 +50,10 @@ export function Subtasks({ subtasks, task }: SubtasksProps) {
                       popoverProps={{ withinPortal: true }}
                     />
                   ),
+                },
+                {
+                  name: 'weight',
+                  input: <NumberInput label={t('taskWeight')} />,
                 },
               ]}
               onSuccess={() => navigate()}

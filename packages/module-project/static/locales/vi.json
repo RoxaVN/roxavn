@@ -18,6 +18,7 @@
   "progress": "Tiến độ",
   "assign": "Giao việc",
   "assignMe": "Giao cho tôi",
+  "taskWeight": "Khối lượng công việc",
 
   "Error": {
     "InprogressTaskException": "Chỉ chuyển được trạng thái công việc từ trạng thái đang chờ sang đang thực hiện",

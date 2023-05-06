@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   Group,
+  NumberInput,
   Table,
   Text,
   TextInput,
@@ -60,6 +61,7 @@ export function TaskInfo({ task }: TaskInfoProps) {
                 apiParams={{
                   taskId: task.id,
                   title: task.title,
+                  weight: task.weight,
                   expiryDate: task.expiryDate,
                 }}
                 fields={[
@@ -76,6 +78,10 @@ export function TaskInfo({ task }: TaskInfoProps) {
                       />
                     ),
                   },
+                  {
+                    name: 'weight',
+                    input: <NumberInput label={t('taskWeight')} />,
+                  },
                 ]}
                 onSuccess={() => navigate()}
               />
@@ -90,9 +96,7 @@ export function TaskInfo({ task }: TaskInfoProps) {
             content={({ navigate, setOpened }) => (
               <ApiConfirmFormGroup
                 api={taskApi.delete}
-                apiParams={{
-                  taskId: task.id,
-                }}
+                apiParams={{ taskId: task.id }}
                 onCancel={() => setOpened(false)}
                 onSuccess={() =>
                   navigate(
@@ -157,7 +161,14 @@ export function TaskInfo({ task }: TaskInfoProps) {
           </tr>
           <tr>
             <th>{t('progress')}</th>
-            <td>{utils.Render.percent(task.progress)}</td>
+            <td>
+              {task.childrenWeight &&
+                utils.Render.percent(task.progress / task.childrenWeight)}
+            </td>
+          </tr>
+          <tr>
+            <th>{t('taskWeight')}</th>
+            <td>{task.weight}</td>
           </tr>
           <tr>
             <th>{tCore('createdDate')}</th>
