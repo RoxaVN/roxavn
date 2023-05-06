@@ -18,7 +18,7 @@ import { IconPlus } from '@tabler/icons-react';
 
 import { TaskResponse, taskApi } from '../../base';
 import { webModule } from '../module';
-import { TaskPreview } from './Task';
+import { TaskPreview } from './TaskPreview';
 
 export interface SubtasksProps {
   task: TaskResponse;

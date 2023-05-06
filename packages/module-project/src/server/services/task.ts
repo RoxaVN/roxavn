@@ -15,6 +15,7 @@ import {
   FinishSubtaskException,
   InprogressTaskException,
   InvalidExpiryDateSubtaskException,
+  InvalidTaskStatusForUpdateException,
   RejectTaskException,
   scopes,
   taskApi,
@@ -23,6 +24,11 @@ import {
 } from '../../base';
 import { Task } from '../entities';
 import { serverModule } from '../module';
+
+const statusForUpdate = [
+  constants.TaskStatus.PENDING,
+  constants.TaskStatus.INPROGRESS,
+];
 
 @serverModule.useApi(taskApi.createSubtask)
 export class CreateSubtaskApiService extends ApiService {
@@ -40,6 +46,9 @@ export class CreateSubtaskApiService extends ApiService {
     }
     if (!task.assignee) {
       throw new UnassignedTaskException();
+    }
+    if (!statusForUpdate.includes(task.status)) {
+      throw new InvalidTaskStatusForUpdateException();
     }
 
     const subTask = new Task();
@@ -103,6 +112,9 @@ export class UpdateTaskApiService extends ApiService {
     });
     if (!task) {
       throw new NotFoundException();
+    }
+    if (!statusForUpdate.includes(task.status)) {
+      throw new InvalidTaskStatusForUpdateException();
     }
     if (task.parentId) {
       const parentTask = await this.dbSession.getRepository(Task).findOne({

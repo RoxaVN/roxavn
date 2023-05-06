@@ -1,5 +1,4 @@
 import {
-  Anchor,
   Badge,
   Button,
   Card,
@@ -10,7 +9,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { Link } from '@remix-run/react';
+import { Api } from '@roxavn/core/base';
 import {
   ApiConfirmFormGroup,
   ApiFormGroup,
@@ -19,7 +18,14 @@ import {
   utils,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
-import { IconEdit, IconTrash, IconUser } from '@tabler/icons-react';
+import {
+  IconBan,
+  IconCheck,
+  IconEdit,
+  IconHammer,
+  IconTrash,
+  IconUser,
+} from '@tabler/icons-react';
 
 import { TaskResponse, constants, webRoutes, taskApi } from '../../base';
 import { webModule } from '../module';
@@ -28,7 +34,7 @@ export interface TaskInfoProps {
   task: TaskResponse;
 }
 
-function mapColor(status: string) {
+export function mapColor(status: string) {
   switch (status) {
     case constants.TaskStatus.FINISHED:
       return 'green';
@@ -47,6 +53,56 @@ export function TaskInfo({ task }: TaskInfoProps) {
     { ids: [task.userId, task.assignee] },
     { cache: true }
   ).renderItem;
+
+  const renderAction = (
+    status: string,
+    api: Api,
+    Icon: React.ComponentType<{ size: number }>
+  ) => (
+    <ModalTrigger
+      key={status}
+      title={t(status + 'Task')}
+      content={({ navigate, setOpened }) => (
+        <ApiConfirmFormGroup
+          api={api}
+          apiParams={{ taskId: task.id }}
+          onCancel={() => setOpened(false)}
+          onSuccess={() => navigate()}
+        />
+      )}
+    >
+      <Button
+        leftIcon={<Icon size={16} />}
+        color={mapColor(status)}
+        variant="subtle"
+      >
+        {t(status)}
+      </Button>
+    </ModalTrigger>
+  );
+  const renderActions = () => {
+    const result = [];
+    if (task.status === constants.TaskStatus.PENDING) {
+      result.push(
+        renderAction(
+          constants.TaskStatus.INPROGRESS,
+          taskApi.inprogress,
+          IconHammer
+        )
+      );
+    } else if (task.status === constants.TaskStatus.INPROGRESS) {
+      result.push(
+        renderAction(constants.TaskStatus.FINISHED, taskApi.finish, IconCheck)
+      );
+    }
+    if (result.length && task.childrenCount < 1) {
+      // only reject subtask
+      result.push(
+        renderAction(constants.TaskStatus.REJECTED, taskApi.reject, IconBan)
+      );
+    }
+    return result;
+  };
 
   return (
     <Card shadow="md" padding="md" radius="md" mb="md" withBorder>
@@ -122,9 +178,12 @@ export function TaskInfo({ task }: TaskInfoProps) {
           <tr>
             <th>{tCore('status')}</th>
             <td>
-              <Badge color={mapColor(task.status)} variant="light">
-                {t(task.status)}
-              </Badge>
+              <Group spacing="md">
+                <Badge color={mapColor(task.status)} variant="light">
+                  {t(task.status)}
+                </Badge>
+                {renderActions()}
+              </Group>
             </td>
           </tr>
           <tr>
@@ -181,29 +240,5 @@ export function TaskInfo({ task }: TaskInfoProps) {
         </tbody>
       </Table>
     </Card>
-  );
-}
-
-export interface TaskPreviewProps {
-  task: TaskResponse;
-}
-
-export function TaskPreview({ task }: TaskPreviewProps) {
-  const { t } = webModule.useTranslation();
-
-  return (
-    <Group position="apart">
-      <Anchor
-        component={Link}
-        to={webRoutes.Task.generate({ taskId: task.id })}
-      >
-        <Text weight={500}>{task.title}</Text>
-      </Anchor>
-      <Badge color={mapColor(task.status)} variant="light">
-        {task.status === constants.TaskStatus.INPROGRESS
-          ? utils.Render.percent(task.progress)
-          : t(task.status)}
-      </Badge>
-    </Group>
   );
 }

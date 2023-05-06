@@ -24,6 +24,15 @@ export class UnassignedTaskException extends BadRequestException {
   };
 }
 
+export class InvalidTaskStatusForUpdateException extends BadRequestException {
+  i18n = {
+    default: {
+      key: 'Error.InvalidTaskStatusForUpdateException',
+      ns: baseModule.escapedName,
+    },
+  };
+}
+
 export class AlreadyAssignedTaskException extends BadRequestException {
   i18n = {
     default: {

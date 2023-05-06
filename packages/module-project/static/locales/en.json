@@ -14,6 +14,9 @@
   "inprogress": "In progress",
   "finished": "Finished",
   "rejected": "Rejected",
+  "inprogressTask": "In progress task",
+  "finishedTask": "Finish task",
+  "rejectedTask": "Reject task",
   "assignee": "Assignee",
   "progress": "Progress",
   "assign": "Assign",
@@ -21,6 +24,7 @@
   "taskWeight": "Task weight",
 
   "Error": {
+    "InvalidTaskStatusForUpdateException": "This action can only be performed when the task is pending or in progress",
     "InprogressTaskException": "Only task status can be changed from pending to in progress",
     "RejectTaskException": "only reject the subtask from pending staus or in progress status",
     "FinishSubtaskException": "Only complete subtask from in progress status",

@@ -89,7 +89,7 @@ authorizationManager.middlewares.push({
           resource
         );
         if (relatedResource) {
-          const isValid = resource.condition(state, relatedResource);
+          const isValid = resource.condition(state.request, relatedResource);
           if (isValid) {
             return true;
           }

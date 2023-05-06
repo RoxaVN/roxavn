@@ -3,7 +3,7 @@ import { InferApiResponse } from '@roxavn/core/base';
 import { Fragment } from 'react';
 
 import { projectTaskApi } from '../../base';
-import { TaskPreview } from './Task';
+import { TaskPreview } from './TaskPreview';
 
 export interface ParentTasksProps {
   parentTasks: InferApiResponse<typeof projectTaskApi.getSome>;
