@@ -9,6 +9,7 @@ export default function () {
   userService.reference.update(userApi.search, (item) => item.username);
   userService.userInput = lazy(() => import('./components/UserInput'));
   userService.roleUsers = lazy(() => import('./components/RoleUsers'));
+  userService.roleUserInput = lazy(() => import('./components/RoleUserInput'));
   userService.roleUsersAccessApi = roleApi.getMany;
   userService.getUserRolesApi = userRoleApi.getAll;
 

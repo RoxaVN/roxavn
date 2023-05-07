@@ -1,6 +1,6 @@
 import { InferApiRequest } from '@roxavn/core/base';
 import { ApiService, serviceManager } from '@roxavn/core/server';
-import { In } from 'typeorm';
+import { ILike, In } from 'typeorm';
 
 import { roleUserApi } from '../../base';
 import { UserRole } from '../entities';
@@ -33,6 +33,43 @@ export class GetRoleUsersApiService extends ApiService {
           scopeId: request.scopeId || '',
           scope: request.scope,
           role: filterRole,
+        },
+        take: pageSize,
+        skip: (page - 1) * pageSize,
+      });
+    return {
+      items: items.map((i) => i.user),
+      pagination: { page, pageSize, totalItems },
+    };
+  }
+}
+
+@serverModule.useApi(roleUserApi.search)
+export class SearchRoleUsersApiService extends ApiService {
+  async handle(request: InferApiRequest<typeof roleUserApi.search>) {
+    const page = request.page || 1;
+    const pageSize = 10;
+
+    const [items, totalItems] = await this.dbSession
+      .getRepository(UserRole)
+      .findAndCount({
+        relations: { user: true },
+        select: {
+          user: {
+            id: true,
+            username: true,
+            createdDate: true,
+            updatedDate: true,
+          },
+        },
+        where: {
+          user: request.usernameText
+            ? {
+                username: ILike(request.usernameText + '%'),
+              }
+            : undefined,
+          scopeId: request.scopeId || '',
+          scope: request.scope,
         },
         take: pageSize,
         skip: (page - 1) * pageSize,

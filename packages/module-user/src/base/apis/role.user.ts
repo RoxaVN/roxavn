@@ -39,9 +39,31 @@ class GetRoleUsersRequest extends ExactProps<GetRoleUsersRequest> {
   public readonly page?: number;
 }
 
+class SearchRoleUsersRequest extends ExactProps<SearchRoleUsersRequest> {
+  @IsOptional()
+  public readonly usernameText?: string;
+
+  @MinLength(1)
+  @IsOptional()
+  public readonly scopeId: string;
+
+  @IsOptional()
+  public readonly scope: string;
+
+  @Min(1)
+  @TransformNumber()
+  @IsOptional()
+  public readonly page?: number;
+}
+
 export const roleUserApi = {
   getMany: roleUserSource.getMany({
     validator: GetRoleUsersRequest,
+    permission: permissions.ReadRoleUsers,
+  }),
+  search: roleUserSource.getMany({
+    path: baseModule.apiPath('/roleUsers'),
+    validator: SearchRoleUsersRequest,
     permission: permissions.ReadRoleUsers,
   }),
 };
