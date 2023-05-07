@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Api, ApiRequest, Collection, SuggestString } from '../../base';
 import { useApi, UseApiOptions } from './api.fetcher';
 
@@ -25,6 +25,10 @@ export class Reference {
       params,
       options
     );
+
+    useEffect(() => {
+      setParams(apiParams);
+    }, [JSON.stringify(apiParams)]);
 
     return {
       setParams,
