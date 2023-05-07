@@ -92,7 +92,7 @@ function MeComponent() {
                 mr="xl"
               />
             </MediaQuery>
-            <MediaQuery smallerThan="lg" styles={{ display: 'none' }}>
+            <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
               <Text>Application header</Text>
             </MediaQuery>
             <UserMenu />

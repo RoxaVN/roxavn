@@ -29,6 +29,7 @@ export class CreateAdminUserHook extends BaseService {
         const adminRole = new UserRole();
         adminRole.user = user;
         adminRole.role = role;
+        adminRole.scope = role.scope;
         await this.dbSession.save(adminRole);
       }
     }
@@ -55,6 +56,7 @@ export class SetAdminRoleHook extends BaseService {
         const adminRole = new UserRole();
         adminRole.userId = user.userId;
         adminRole.roleId = roleModel.id;
+        adminRole.scope = roleModel.scope;
         return adminRole;
       });
       await this.dbSession

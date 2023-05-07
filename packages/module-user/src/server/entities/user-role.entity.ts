@@ -20,6 +20,10 @@ export class UserRole {
   @ManyToOne(() => User, (user) => user.roles)
   user: User;
 
+  // cache scope value for better query
+  @Column('character varying')
+  scope: string;
+
   @PrimaryColumn('integer')
   roleId: number;
 

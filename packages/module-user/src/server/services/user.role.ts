@@ -13,22 +13,24 @@ import { serverModule } from '../module';
 @serverModule.useApi(userRoleApi.create)
 export class CreateUserRoleApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userRoleApi.create>) {
-    if (request.module || request.scope) {
-      const isValid = await this.dbSession.getRepository(Role).count({
-        where: {
-          module: request.module,
-          scope: request.scope,
-          id: request.roleId,
-        },
-      });
-      if (!isValid) {
-        throw new BadRequestException();
-      }
+    const role = await this.dbSession.getRepository(Role).findOne({
+      where: { id: request.roleId },
+      select: ['scope', 'module'],
+    });
+    if (!role) {
+      throw new NotFoundException();
+    }
+    if (
+      (request.module && role.module !== request.module) ||
+      (request.scope && role.scope !== request.scope)
+    ) {
+      throw new BadRequestException();
     }
 
     const userRole = new UserRole();
     userRole.userId = request.userId;
     userRole.roleId = request.roleId;
+    userRole.scope = role.scope;
     if (request.scopeId) {
       userRole.scopeId = request.scopeId;
     }
@@ -65,13 +67,6 @@ export class DeleteUserRoleApiService extends ApiService {
 @serverModule.useApi(userRoleApi.getAll)
 export class GetUserRolesApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userRoleApi.getAll>) {
-    let roleFilter;
-    if (request.scopes) {
-      roleFilter = { scope: In(request.scopes) };
-    } else if (request.scope) {
-      roleFilter = { scope: request.scope };
-    }
-
     // query must be same in authorization middleware to cache
     const items = await this.dbSession.getRepository(UserRole).find({
       relations: { role: true },
@@ -87,7 +82,7 @@ export class GetUserRolesApiService extends ApiService {
       where: {
         userId: request.userId,
         scopeId: request.scopeId || '',
-        role: roleFilter,
+        scope: request.scopes ? In(request.scopes) : request.scope,
       },
       cache: 30000, // 30 seconds
     });
@@ -124,7 +119,7 @@ export class GetUserScopeIdsApiService extends AbstractGetService {
         select: { scopeId: true, userId: true, roleId: true },
         where: {
           userId: request.userId,
-          role: { scope: request.scope },
+          scope: request.scope,
         },
         take: pageSize,
         skip: (page - 1) * pageSize,
@@ -151,11 +146,12 @@ export class SetUserRoleApiService extends AbstractSetService {
       where: { scope: request.scope, name: request.roleName },
     });
     if (role) {
-      return await this.create(CreateUserRoleApiService).handle({
-        roleId: role.id,
-        userId: request.userId,
-        scopeId: request.scopeId,
-      });
+      const userRole = new UserRole();
+      userRole.userId = request.userId;
+      userRole.roleId = role.id;
+      userRole.scope = request.scope;
+      await this.dbSession.save(userRole);
+      return {};
     }
     throw new NotFoundException();
   }

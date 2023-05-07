@@ -14,8 +14,6 @@ export class GetRoleUsersApiService extends ApiService {
     let filterRole;
     if (request.module) {
       filterRole = { module: request.module };
-    } else if (request.scope) {
-      filterRole = { scope: request.scope };
     }
 
     const [items, totalItems] = await this.dbSession
@@ -33,6 +31,7 @@ export class GetRoleUsersApiService extends ApiService {
         where: {
           roleId: request.roleId,
           scopeId: request.scopeId || '',
+          scope: request.scope,
           role: filterRole,
         },
         take: pageSize,
@@ -52,7 +51,7 @@ export class CheckRoleUsersApiService extends AbstractCheckRoleUsersApiService {
     const count = await this.dbSession.getRepository(UserRole).count({
       where: {
         scopeId: request.scopeId,
-        role: { scope: request.scope },
+        scope: request.scope,
         userId: In(request.userIds),
       },
     });

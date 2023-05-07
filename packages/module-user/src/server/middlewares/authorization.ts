@@ -84,7 +84,7 @@ authorizationManager.middlewares.push({
         where: {
           userId: user.id,
           scopeId: scope.id,
-          role: { scope: scope.name },
+          scope: scope.name,
         },
         cache: 30000, // 30 seconds
       });
