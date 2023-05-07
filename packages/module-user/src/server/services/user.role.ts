@@ -150,6 +150,7 @@ export class SetUserRoleApiService extends AbstractSetService {
       userRole.userId = request.userId;
       userRole.roleId = role.id;
       userRole.scope = request.scope;
+      userRole.scopeId = request.scopeId;
       await this.dbSession.save(userRole);
       return {};
     }
