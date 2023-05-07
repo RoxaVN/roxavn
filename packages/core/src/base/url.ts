@@ -3,7 +3,7 @@ const urlUtils = {
    * Parse Date if key ends with "Date" string
    */
   parseValue: (key: string, value: any) => {
-    if (key.endsWith('Date')) {
+    if (key.endsWith('Date') && value) {
       return new Date(value);
     }
     return value;
