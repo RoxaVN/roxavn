@@ -11,6 +11,7 @@ import {
 import { Link } from '@remix-run/react';
 import {
   ApiFormGroup,
+  IfCanAccessApi,
   ModalTrigger,
   utils,
   webModule as coreWebModule,
@@ -50,35 +51,40 @@ export const ProjectInfo = ({ project }: ProjectInfoProps) => {
       </Text>
 
       <Group position="right">
-        <ModalTrigger
-          title={tCore('edit')}
-          content={({ navigate }) => (
-            <ApiFormGroup
-              api={projectApi.update}
-              apiParams={{
-                projectId: project.id,
-                name: project.name,
-                type: project.type,
-              }}
-              fields={[
-                { name: 'name', input: <TextInput label={tCore('name')} /> },
-                {
-                  name: 'type',
-                  input: (
-                    <Select
-                      withinPortal
-                      label={tCore('type')}
-                      data={Object.values(constants.ProjectTypes)}
-                    />
-                  ),
-                },
-              ]}
-              onSuccess={() => navigate()}
-            />
-          )}
+        <IfCanAccessApi
+          api={projectApi.update}
+          apiParams={{ projectId: project.id }}
         >
-          <Button leftIcon={<IconEdit size={16} />}>{tCore('edit')}</Button>
-        </ModalTrigger>
+          <ModalTrigger
+            title={tCore('edit')}
+            content={({ navigate }) => (
+              <ApiFormGroup
+                api={projectApi.update}
+                apiParams={{
+                  projectId: project.id,
+                  name: project.name,
+                  type: project.type,
+                }}
+                fields={[
+                  { name: 'name', input: <TextInput label={tCore('name')} /> },
+                  {
+                    name: 'type',
+                    input: (
+                      <Select
+                        withinPortal
+                        label={tCore('type')}
+                        data={Object.values(constants.ProjectTypes)}
+                      />
+                    ),
+                  },
+                ]}
+                onSuccess={() => navigate()}
+              />
+            )}
+          >
+            <Button leftIcon={<IconEdit size={16} />}>{tCore('edit')}</Button>
+          </ModalTrigger>
+        </IfCanAccessApi>
       </Group>
     </Card>
   );

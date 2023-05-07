@@ -13,6 +13,7 @@ import { Api } from '@roxavn/core/base';
 import {
   ApiConfirmFormGroup,
   ApiFormGroup,
+  IfCanAccessApi,
   ModalTrigger,
   userService,
   utils,
@@ -116,68 +117,78 @@ export function TaskInfo({ task }: TaskInfoProps) {
       <Group position="apart" mb="xs">
         <Text weight={500}>{task.title}</Text>
         <Group spacing="md">
-          <ModalTrigger
-            title={t('editTask')}
-            content={({ navigate }) => (
-              <ApiFormGroup
-                api={taskApi.update}
-                apiParams={{
-                  taskId: task.id,
-                  title: task.title,
-                  weight: task.weight,
-                  expiryDate: task.expiryDate,
-                }}
-                fields={[
-                  {
-                    name: 'title',
-                    input: <TextInput label={tCore('title')} />,
-                  },
-                  {
-                    name: 'expiryDate',
-                    input: (
-                      <DatePickerInput
-                        label={tCore('expiryDate')}
-                        popoverProps={{ withinPortal: true }}
-                      />
-                    ),
-                  },
-                  {
-                    name: 'weight',
-                    input: <NumberInput label={t('taskWeight')} />,
-                  },
-                ]}
-                onSuccess={() => navigate()}
-              />
-            )}
+          <IfCanAccessApi
+            api={taskApi.update}
+            apiParams={{ projectId: task.projectId }}
           >
-            <Button leftIcon={<IconEdit size={16} />} variant="outline">
-              {tCore('edit')}
-            </Button>
-          </ModalTrigger>
-          <ModalTrigger
-            title={t('deleteTask')}
-            content={({ navigate, setOpened }) => (
-              <ApiConfirmFormGroup
-                api={taskApi.delete}
-                apiParams={{ taskId: task.id }}
-                onCancel={() => setOpened(false)}
-                onSuccess={() =>
-                  navigate(
-                    task.parentId &&
-                      webRoutes.Task.generate({ taskId: task.parentId })
-                  )
-                }
-              />
-            )}
-          >
-            <Button
-              leftIcon={<IconTrash size={16} />}
-              color="red"
-              variant="outline"
+            <ModalTrigger
+              title={t('editTask')}
+              content={({ navigate }) => (
+                <ApiFormGroup
+                  api={taskApi.update}
+                  apiParams={{
+                    taskId: task.id,
+                    title: task.title,
+                    weight: task.weight,
+                    expiryDate: task.expiryDate,
+                  }}
+                  fields={[
+                    {
+                      name: 'title',
+                      input: <TextInput label={tCore('title')} />,
+                    },
+                    {
+                      name: 'expiryDate',
+                      input: (
+                        <DatePickerInput
+                          label={tCore('expiryDate')}
+                          popoverProps={{ withinPortal: true }}
+                        />
+                      ),
+                    },
+                    {
+                      name: 'weight',
+                      input: <NumberInput label={t('taskWeight')} />,
+                    },
+                  ]}
+                  onSuccess={() => navigate()}
+                />
+              )}
             >
-              {tCore('delete')}
-            </Button>
-          </ModalTrigger>
+              <Button leftIcon={<IconEdit size={16} />} variant="outline">
+                {tCore('edit')}
+              </Button>
+            </ModalTrigger>
+          </IfCanAccessApi>
+          <IfCanAccessApi
+            api={taskApi.delete}
+            apiParams={{ projectId: task.projectId }}
+          >
+            <ModalTrigger
+              title={t('deleteTask')}
+              content={({ navigate, setOpened }) => (
+                <ApiConfirmFormGroup
+                  api={taskApi.delete}
+                  apiParams={{ taskId: task.id }}
+                  onCancel={() => setOpened(false)}
+                  onSuccess={() =>
+                    navigate(
+                      task.parentId &&
+                        webRoutes.Task.generate({ taskId: task.parentId })
+                    )
+                  }
+                />
+              )}
+            >
+              <Button
+                leftIcon={<IconTrash size={16} />}
+                color="red"
+                variant="outline"
+              >
+                {tCore('delete')}
+              </Button>
+            </ModalTrigger>
+          </IfCanAccessApi>
         </Group>
       </Group>
       <Table>
@@ -204,50 +215,63 @@ export function TaskInfo({ task }: TaskInfoProps) {
                 renderUser(task.assignee)
               ) : (
                 <Group spacing="md">
-                  <ModalTrigger
-                    title={t('assignMe')}
-                    content={({ navigate, setOpened }) => (
-                      <ApiConfirmFormGroup
-                        api={taskApi.assignMe}
-                        apiParams={{ taskId: task.id }}
-                        onCancel={() => setOpened(false)}
-                        onSuccess={() => navigate()}
-                      />
-                    )}
+                  <IfCanAccessApi
+                    api={taskApi.assignMe}
+                    apiParams={{ projectId: task.projectId }}
                   >
-                    <Button leftIcon={<IconUser size={16} />} variant="subtle">
-                      {t('assignMe')}
-                    </Button>
-                  </ModalTrigger>
-                  <ModalTrigger
-                    title={t('assign')}
-                    content={({ navigate }) => (
-                      <ApiFormGroup
-                        api={taskApi.assign}
-                        apiParams={{ taskId: task.id }}
-                        fields={[
-                          {
-                            name: 'userId',
-                            input: (
-                              <userService.roleUserInput
-                                scope={scopes.Project.name}
-                                scopeId={task.projectId}
-                                label={t('assignee')}
-                              />
-                            ),
-                          },
-                        ]}
-                        onSuccess={() => navigate()}
-                      />
-                    )}
-                  >
-                    <Button
-                      leftIcon={<IconUserSearch size={16} />}
-                      variant="subtle"
+                    <ModalTrigger
+                      title={t('assignMe')}
+                      content={({ navigate, setOpened }) => (
+                        <ApiConfirmFormGroup
+                          api={taskApi.assignMe}
+                          apiParams={{ taskId: task.id }}
+                          onCancel={() => setOpened(false)}
+                          onSuccess={() => navigate()}
+                        />
+                      )}
                     >
-                      {t('assign')}
-                    </Button>
-                  </ModalTrigger>
+                      <Button
+                        leftIcon={<IconUser size={16} />}
+                        variant="subtle"
+                      >
+                        {t('assignMe')}
+                      </Button>
+                    </ModalTrigger>
+                  </IfCanAccessApi>
+                  <IfCanAccessApi
+                    api={taskApi.assign}
+                    apiParams={{ projectId: task.projectId }}
+                  >
+                    <ModalTrigger
+                      title={t('assign')}
+                      content={({ navigate }) => (
+                        <ApiFormGroup
+                          api={taskApi.assign}
+                          apiParams={{ taskId: task.id }}
+                          fields={[
+                            {
+                              name: 'userId',
+                              input: (
+                                <userService.roleUserInput
+                                  scope={scopes.Project.name}
+                                  scopeId={task.projectId}
+                                  label={t('assignee')}
+                                />
+                              ),
+                            },
+                          ]}
+                          onSuccess={() => navigate()}
+                        />
+                      )}
+                    >
+                      <Button
+                        leftIcon={<IconUserSearch size={16} />}
+                        variant="subtle"
+                      >
+                        {t('assign')}
+                      </Button>
+                    </ModalTrigger>
+                  </IfCanAccessApi>
                 </Group>
               )}
             </td>

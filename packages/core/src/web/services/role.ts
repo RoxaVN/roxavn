@@ -22,7 +22,7 @@ export const useRoles = () => useContext(RolesContext).roles;
 export const canAccessApi = <Request extends ApiRequest>(
   roles: Array<RoleItem>,
   api: Api<Request>,
-  apiParams?: Partial<Request>
+  apiParams?: Record<string, any>
 ) => {
   const permission = api?.permission;
   if (permission?.allowedScopes.includes(accessManager.scopes.AuthUser)) {
@@ -57,7 +57,7 @@ export const canAccessApi = <Request extends ApiRequest>(
 
 export const useCanAccessApi = <Request extends ApiRequest>(
   api?: Api<Request>,
-  apiParams?: Partial<Request>
+  apiParams?: Record<string, any>
 ) => {
   return api ? canAccessApi(useRoles(), api, apiParams) : true;
 };

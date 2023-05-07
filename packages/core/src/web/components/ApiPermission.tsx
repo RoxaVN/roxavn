@@ -84,7 +84,7 @@ export const ApiRolesGetter = <Request extends ApiRequest>({
 
 export interface IfCanAccessApiProps<Request extends ApiRequest = ApiRequest> {
   api?: Api<Request>;
-  apiParams?: Partial<Request>;
+  apiParams?: Record<string, any>;
   children: React.ReactElement;
 }
 
