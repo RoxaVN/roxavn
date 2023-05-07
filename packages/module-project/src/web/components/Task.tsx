@@ -25,9 +25,16 @@ import {
   IconHammer,
   IconTrash,
   IconUser,
+  IconUserSearch,
 } from '@tabler/icons-react';
 
-import { TaskResponse, constants, webRoutes, taskApi } from '../../base';
+import {
+  TaskResponse,
+  constants,
+  webRoutes,
+  taskApi,
+  scopes,
+} from '../../base';
 import { webModule } from '../module';
 
 export interface TaskInfoProps {
@@ -202,9 +209,7 @@ export function TaskInfo({ task }: TaskInfoProps) {
                     content={({ navigate, setOpened }) => (
                       <ApiConfirmFormGroup
                         api={taskApi.assignMe}
-                        apiParams={{
-                          taskId: task.id,
-                        }}
+                        apiParams={{ taskId: task.id }}
                         onCancel={() => setOpened(false)}
                         onSuccess={() => navigate()}
                       />
@@ -212,6 +217,35 @@ export function TaskInfo({ task }: TaskInfoProps) {
                   >
                     <Button leftIcon={<IconUser size={16} />} variant="subtle">
                       {t('assignMe')}
+                    </Button>
+                  </ModalTrigger>
+                  <ModalTrigger
+                    title={t('assign')}
+                    content={({ navigate }) => (
+                      <ApiFormGroup
+                        api={taskApi.assign}
+                        apiParams={{ taskId: task.id }}
+                        fields={[
+                          {
+                            name: 'userId',
+                            input: (
+                              <userService.roleUserInput
+                                scope={scopes.Project.name}
+                                scopeId={task.projectId}
+                                label={t('assignee')}
+                              />
+                            ),
+                          },
+                        ]}
+                        onSuccess={() => navigate()}
+                      />
+                    )}
+                  >
+                    <Button
+                      leftIcon={<IconUserSearch size={16} />}
+                      variant="subtle"
+                    >
+                      {t('assign')}
                     </Button>
                   </ModalTrigger>
                 </Group>
@@ -237,6 +271,24 @@ export function TaskInfo({ task }: TaskInfoProps) {
             <th>{tCore('expiryDate')}</th>
             <td>{utils.Render.date(task.expiryDate)}</td>
           </tr>
+          {task.startedDate && (
+            <tr>
+              <th>{t('startedDate')}</th>
+              <td>{utils.Render.datetime(task.startedDate)}</td>
+            </tr>
+          )}
+          {task.finishedDate && (
+            <tr>
+              <th>{t('finishedDate')}</th>
+              <td>{utils.Render.datetime(task.finishedDate)}</td>
+            </tr>
+          )}
+          {task.rejectedDate && (
+            <tr>
+              <th>{t('rejectedDate')}</th>
+              <td>{utils.Render.datetime(task.rejectedDate)}</td>
+            </tr>
+          )}
         </tbody>
       </Table>
     </Card>

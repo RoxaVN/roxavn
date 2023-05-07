@@ -22,6 +22,9 @@
   "assign": "Assign",
   "assignMe": "Assign me",
   "taskWeight": "Task weight",
+  "startedDate": "Started date",
+  "finishedDate": "Finished date",
+  "rejectedDate": "Rejected date",
 
   "Error": {
     "InvalidTaskStatusForUpdateException": "This action can only be performed when the task is pending or in progress",

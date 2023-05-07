@@ -22,6 +22,9 @@
   "assign": "Giao việc",
   "assignMe": "Giao cho tôi",
   "taskWeight": "Khối lượng công việc",
+  "startedDate": "Ngày bắt đầu",
+  "finishedDate": "Ngày hoàn thành",
+  "rejectedDate": "Ngày hủy bỏ",
 
   "Error": {
     "InvalidTaskStatusForUpdateException": "Chỉ thực hiện được hành động này khi công việc đang ở trạng thái chờ hoặc đang thực hiện",
