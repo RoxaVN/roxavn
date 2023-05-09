@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { type MetaFunction } from '@remix-run/node';
 import { Outlet, Link } from 'react-router-dom';
 import {
@@ -19,13 +19,12 @@ import {
   WebModule,
   webModule as coreWebModule,
   ApiRolesGetter,
-  http,
   TasksProgress,
   MenuLinks,
   IsAuthenticatedPage,
 } from '@roxavn/core/web';
 
-import { constants, userRoleApi } from '../../../base';
+import { userRoleApi } from '../../../base';
 import { UserMenu } from '../../components';
 
 const BASE = '/admin/apps';
@@ -35,16 +34,6 @@ function AdminComponent() {
   const [opened, setOpened] = useState(false);
   const [webModule, setWebModule] = useState<WebModule>();
   const tCore = coreWebModule.useTranslation().t;
-
-  useEffect(() => {
-    const subscription = http.preSentObserver.subscribe(({ config }) => {
-      Object.assign(config.headers, {
-        [constants.AUTH_SCOPE_HTTP_HEADER]: constants.ADMIN_AUTH_SCOPE,
-      });
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   return (
     <AppShell
