@@ -9,3 +9,4 @@ export * from './user';
 export * from './page';
 export * from './cookie';
 export * from './role';
+export * from './resources';

@@ -12,4 +12,3 @@ export * from './validation';
 export * from './transform';
 export * from './i18n';
 export * from './cookie';
-export * from './authorization';

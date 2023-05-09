@@ -1,12 +1,12 @@
 import { EntityManager } from 'typeorm';
 import {
   Api,
-  AuthorizationArgs,
   Empty,
   InferApiRequest,
   InferApiResponse,
   PaginatedCollection,
 } from '../base';
+import { AuthorizationArgs } from './middlewares';
 
 export type InferAuthApiRequest<T> = T extends Api<infer U, any, any>
   ? U & {

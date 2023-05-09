@@ -22,6 +22,7 @@ export const RoleInput = (
     searchKey="scopeText"
     onSearchChangeProp="onSearchChange"
     component={Select}
+    withinPortal
     searchable
   />
 );

@@ -1,6 +1,6 @@
 import uniqBy from 'lodash/uniqBy';
-import { Permission, Resource } from './access';
-import { Api } from './api';
+import { Permission, Resource } from '../../base/access';
+import { Api } from '../../base/api';
 
 export type AuthorizationArgs = {
   api: Api;
@@ -22,33 +22,8 @@ type AuthorizationMiddleware = (
   args: AuthorizationArgs & { api: Api & { permission: Permission } }
 ) => Promise<boolean>;
 
-class AuthorizationManager {
-  middlewares: Array<{
-    priority: number;
-    handler: AuthorizationMiddleware;
-  }> = [];
-}
-
-export const authorizationManager = new AuthorizationManager();
-
-export const authorize = async (args: AuthorizationArgs) => {
-  if (args.api?.permission) {
-    for (const middleware of authorizationManager.middlewares
-      .concat()
-      .sort((a, b) => a.priority - b.priority)) {
-      if (await middleware.handler(args as any)) {
-        return true;
-      }
-    }
-    return false;
-  }
-  return true;
-};
-
-// check special resource
-authorizationManager.middlewares.push({
-  priority: 1,
-  handler: async ({ api, request, helper }) => {
+const middlewares: Array<AuthorizationMiddleware> = [
+  async ({ api, request, helper }) => {
     const conditionResources: Resource[] = api.permission.allowedScopes.filter(
       (r) => 'condition' in r
     ) as any;
@@ -67,12 +42,7 @@ authorizationManager.middlewares.push({
     }
     return false;
   },
-});
-
-// check permission
-authorizationManager.middlewares.push({
-  priority: 2,
-  handler: async ({ api, request, helper }) => {
+  async ({ api, request, helper }) => {
     const user = request.$user;
     if (user) {
       const resource = await helper.getResourceInstance();
@@ -92,4 +62,16 @@ authorizationManager.middlewares.push({
     }
     return false;
   },
-});
+];
+
+export const authorize = async (args: AuthorizationArgs) => {
+  if (args.api?.permission) {
+    for (const middleware of middlewares) {
+      if (await middleware(args as any)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  return true;
+};
