@@ -67,7 +67,6 @@ export class DeleteUserRoleApiService extends ApiService {
 @serverModule.useApi(userRoleApi.getAll)
 export class GetUserRolesApiService extends ApiService {
   async handle(request: InferApiRequest<typeof userRoleApi.getAll>) {
-    // query must be same in authorization middleware to cache
     const items = await this.dbSession.getRepository(UserRole).find({
       relations: { role: true },
       select: {
@@ -84,7 +83,6 @@ export class GetUserRolesApiService extends ApiService {
         scopeId: request.scopeId || '',
         scope: request.scopes ? In(request.scopes) : request.scope,
       },
-      cache: 30000, // 30 seconds
     });
     return {
       items: items.map((i) => ({ ...i.role, scopeId: i.scopeId })),

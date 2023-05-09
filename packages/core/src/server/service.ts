@@ -1,6 +1,7 @@
 import { EntityManager } from 'typeorm';
 import {
   Api,
+  AuthorizationArgs,
   Empty,
   InferApiRequest,
   InferApiResponse,
@@ -75,6 +76,15 @@ class CheckRoleUsersApiService extends BaseService {
 }
 
 export const serviceManager = {
+  checkUserPermission: (
+    dbSession: EntityManager,
+    ...args: Parameters<AuthorizationArgs['helper']['hasPermission']>
+  ): Promise<boolean> => {
+    throw new Error(
+      "checkUserPermission isn't implemented " +
+        JSON.stringify({ dbSession, args })
+    );
+  },
   getUserScopeIdsApiService: GetUserScopeIdsApiService,
   setUserRoleApiService: SetUserRoleApiService,
   checkRoleUsersApiService: CheckRoleUsersApiService,

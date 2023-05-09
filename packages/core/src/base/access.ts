@@ -5,10 +5,8 @@ import { BaseModule } from './module';
 export interface Scope {
   name: string;
   idParam?: string;
-  dynamicName?: (
-    request: Record<string, any>,
-    resource?: Record<string, any> | null
-  ) => string;
+  dynamicName?: (request: Record<string, any>) => string;
+  condition?: (request: Record<string, any>) => boolean;
 }
 
 export interface Resource extends Scope {
@@ -38,9 +36,39 @@ type Permissions = { [key: string]: Partial<Permission> };
 
 class AccessManager {
   scopes = {
-    Custom: { name: 'custom' },
-    AuthUser: { name: 'authUser' },
-    Owner: { name: 'owner' },
+    AuthUser: {
+      name: 'authUser',
+      condition: (request) => !!request.$user,
+    } as Scope,
+    Owner: {
+      name: 'owner',
+      condition: (request) => {
+        const user = request.$user;
+        if (user) {
+          const userIdParam = this.scopes.User.idParam;
+          if (request[userIdParam] === user.id) {
+            return true;
+          }
+        }
+        return false;
+      },
+    } as Scope,
+    ResourceOwner: (name: string, idParam?: string) =>
+      ({
+        name,
+        idParam: idParam || name + 'Id',
+        condition: (request, resource) => {
+          const user = request.$user;
+          if (
+            user &&
+            resource &&
+            resource[this.scopes.User.idParam] === user.id
+          ) {
+            return true;
+          }
+          return false;
+        },
+      } as Resource),
     DynamicModule: {
       name: 'dynamicModule',
       dynamicName: (request) => request.module,
@@ -48,13 +76,7 @@ class AccessManager {
     DynamicScope: {
       name: 'dynamicScope',
       idParam: 'scopeId',
-      dynamicName: (request, resource) => {
-        if (request.scope) {
-          return request.scope;
-        } else if (resource) {
-          return resource.scope;
-        }
-      },
+      dynamicName: (request) => request.scope,
     } as Scope,
     Setting: {
       name: 'setting',
