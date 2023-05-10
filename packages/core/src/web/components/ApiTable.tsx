@@ -10,7 +10,7 @@ import { Reference, webModule } from '../services';
 import { ApiFilterButton } from './ApiFilter';
 import { ApiForm } from './ApiForm';
 import { FormGroupField } from './ApiFormGroup';
-import { ActionButton, ActionProps } from './Buttons';
+import { PermissionButton, PermissionButtonProps } from './Buttons';
 import { ModuleT } from './ModuleT';
 
 export type ApiTableColumns<T> = {
@@ -23,7 +23,7 @@ export type ApiTableColumns<T> = {
 
 type ApiPaginationRequest = ApiRequest & { page?: number };
 
-type _ActionProps = Omit<ActionProps, 'modalMiddleware'> & {
+type _ActionProps = Omit<PermissionButtonProps, 'modalMiddleware'> & {
   autoHandleFormSuccess?: boolean;
   refetchAfterSuccess?: boolean;
 };
@@ -114,7 +114,7 @@ export const ApiTable = <
         const parseAction = (
           action: _ActionProps,
           callback: () => void
-        ): ActionProps => {
+        ): PermissionButtonProps => {
           if (action.autoHandleFormSuccess !== false) {
             return {
               ...action,
@@ -168,7 +168,7 @@ export const ApiTable = <
                     ? headerActions(ref)
                     : headerActions
                   ).map((c, index) => (
-                    <ActionButton
+                    <PermissionButton
                       key={index}
                       variant="outline"
                       {...parseAction(c, () => fetcher(apiParams || {}))}
@@ -201,7 +201,7 @@ export const ApiTable = <
                       <td>
                         <Group>
                           {cellActions(item, ref).map((c, index) => (
-                            <ActionButton
+                            <PermissionButton
                               key={index}
                               compact
                               variant="subtle"

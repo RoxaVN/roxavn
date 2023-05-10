@@ -1,18 +1,10 @@
-import {
-  Button,
-  Card,
-  Group,
-  NumberInput,
-  Text,
-  TextInput,
-} from '@mantine/core';
+import { Card, Group, NumberInput, Text, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { InferApiResponse } from '@roxavn/core/base';
 import {
   ApiFormGroup,
-  IfCanAccessApi,
-  ModalTrigger,
   PaginationLinks,
+  PermissionButton,
   webModule as coreWebModule,
 } from '@roxavn/core/web';
 import { IconPlus } from '@tabler/icons-react';
@@ -34,13 +26,12 @@ export function Subtasks({ subtasks, task }: SubtasksProps) {
     <Card shadow="md" padding="md" radius="md" mb="md" withBorder>
       <Group position="apart" mb="xs">
         <Text weight={500}>{t('subtasks')}</Text>
-        <IfCanAccessApi
-          api={taskApi.createSubtask}
-          apiParams={{ projectId: task.projectId }}
-        >
-          <ModalTrigger
-            title={t('addSubtask')}
-            content={({ navigate }) => (
+        <PermissionButton
+          label={tCore('add')}
+          icon={IconPlus}
+          modal={({ navigate }) => ({
+            title: t('addSubtask'),
+            children: (
               <ApiFormGroup
                 api={taskApi.createSubtask}
                 apiParams={{ taskId: task.id, weight: 10 }}
@@ -66,11 +57,9 @@ export function Subtasks({ subtasks, task }: SubtasksProps) {
                 ]}
                 onSuccess={() => navigate()}
               />
-            )}
-          >
-            <Button leftIcon={<IconPlus size={16} />}>{tCore('add')}</Button>
-          </ModalTrigger>
-        </IfCanAccessApi>
+            ),
+          })}
+        />
       </Group>
       <div>
         {subtasks.items.map((item) => (

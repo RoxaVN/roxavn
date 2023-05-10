@@ -1,7 +1,6 @@
 import {
   Anchor,
   Badge,
-  Button,
   Card,
   Group,
   Select,
@@ -11,10 +10,9 @@ import {
 import { Link } from '@remix-run/react';
 import {
   ApiFormGroup,
-  IfCanAccessApi,
-  ModalTrigger,
   utils,
   webModule as coreWebModule,
+  PermissionButton,
 } from '@roxavn/core/web';
 import { IconEdit } from '@tabler/icons-react';
 
@@ -51,13 +49,12 @@ export const ProjectInfo = ({ project }: ProjectInfoProps) => {
       </Text>
 
       <Group position="right">
-        <IfCanAccessApi
-          api={projectApi.update}
-          apiParams={{ projectId: project.id }}
-        >
-          <ModalTrigger
-            title={tCore('edit')}
-            content={({ navigate }) => (
+        <PermissionButton
+          label={tCore('edit')}
+          icon={IconEdit}
+          modal={({ navigate }) => ({
+            title: tCore('edit'),
+            children: (
               <ApiFormGroup
                 api={projectApi.update}
                 apiParams={{
@@ -80,11 +77,9 @@ export const ProjectInfo = ({ project }: ProjectInfoProps) => {
                 ]}
                 onSuccess={() => navigate()}
               />
-            )}
-          >
-            <Button leftIcon={<IconEdit size={16} />}>{tCore('edit')}</Button>
-          </ModalTrigger>
-        </IfCanAccessApi>
+            ),
+          })}
+        />
       </Group>
     </Card>
   );

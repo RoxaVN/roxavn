@@ -87,13 +87,13 @@ const Page = () => {
         {
           label: t('resetPassword'),
           icon: IconKey,
-          modal: (onClose) => ({
+          modal: ({ closeModal }) => ({
             title: t('resetuserPassword', { username: item.username }),
             children: (
               <ApiConfirmFormGroup
                 api={passwordIdentityApi.recovery}
                 apiParams={{ userId: item.id }}
-                onCancel={onClose}
+                onCancel={closeModal}
                 onSuccess={(data) => {
                   const link = webRoutes.ResetPassword.generate({
                     userId: item.id,

@@ -3,9 +3,9 @@ import {
   ApiConfirmFormGroup,
   ApiList,
   authService,
+  ModalTrigger,
   ModuleT,
   PageItem,
-  uiManager,
   utils,
 } from '@roxavn/core/web';
 import { IconCheckbox, IconCookie } from '@tabler/icons-react';
@@ -26,23 +26,6 @@ const Page = () => {
         const parser = new UAParser(item.userAgent);
         const result = parser.getResult();
 
-        const deleteToken = () => {
-          uiManager.modal({
-            title: t('logout'),
-            children: (closeModal) => (
-              <ApiConfirmFormGroup
-                api={accessTokenApi.delete}
-                apiParams={{ accessTokenId: item.id }}
-                onCancel={closeModal}
-                onSuccess={() => {
-                  fetcherRef.fetch(fetcherRef.currentParams);
-                  closeModal();
-                }}
-              />
-            ),
-          });
-        };
-
         return (
           <Card>
             <Group position="apart">
@@ -52,9 +35,22 @@ const Page = () => {
               {tokenData?.id === item.id ? (
                 <IconCheckbox color="green" />
               ) : (
-                <Button variant="subtle" onClick={deleteToken}>
-                  {t('logout')}
-                </Button>
+                <ModalTrigger
+                  title={t('logout')}
+                  content={({ setOpened }) => (
+                    <ApiConfirmFormGroup
+                      api={accessTokenApi.delete}
+                      apiParams={{ accessTokenId: item.id }}
+                      onCancel={() => setOpened(false)}
+                      onSuccess={() => {
+                        fetcherRef.fetch(fetcherRef.currentParams);
+                        setOpened(false);
+                      }}
+                    />
+                  )}
+                >
+                  <Button variant="subtle">{t('logout')}</Button>
+                </ModalTrigger>
               )}
             </Group>
             <Text size="sm" color="dimmed">

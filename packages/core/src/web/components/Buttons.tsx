@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { webModule } from '../services';
 import { IfCanAccessApi, IfCanAccessApiProps } from './ApiPermission';
+import { constants } from '../../base';
 
 type ButtonMantineProps<C = 'button'> = PolymorphicComponentProps<
   C,
@@ -45,7 +46,7 @@ export const CopyButton = ({ value }: { value: string }) => {
 type _ModalProps = Omit<ModalProps, 'opened' | 'onClose'>;
 type _DrawerProps = Omit<DrawerProps, 'opened' | 'onClose'>;
 
-export interface ActionProps {
+export interface PermissionButtonProps {
   label: React.ReactNode;
   icon?: React.ComponentType<{
     size?: number | string;
@@ -53,13 +54,23 @@ export interface ActionProps {
   }>;
   onClick?: () => void;
   access?: Omit<IfCanAccessApiProps, 'children'>;
-  modal?: _ModalProps | ((closeModal: () => void) => _ModalProps);
-  drawer?: _DrawerProps | ((closeDrawer: () => void) => _DrawerProps);
+  modal?:
+    | _ModalProps
+    | ((args: {
+        closeModal: () => void;
+        navigate: (to?: string) => void;
+      }) => _ModalProps);
+  drawer?:
+    | _DrawerProps
+    | ((args: {
+        closeDrawer: () => void;
+        navigate: (to?: string) => void;
+      }) => _DrawerProps);
   modalMiddleware?: (closeModal: () => void, modalProps: _ModalProps) => void;
   link?: { href: string };
 }
 
-export const ActionButton = ({
+export const PermissionButton = ({
   label,
   icon,
   modal,
@@ -69,7 +80,7 @@ export const ActionButton = ({
   onClick,
   modalMiddleware,
   ...props
-}: ActionProps & ButtonMantineProps) => {
+}: PermissionButtonProps & ButtonMantineProps) => {
   const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [modalId, modalProps] = useMemo(() => {
@@ -79,7 +90,19 @@ export const ActionButton = ({
     };
     let _modalProps: _ModalProps | undefined;
     if (modal) {
-      _modalProps = typeof modal === 'function' ? modal(closeFn) : modal;
+      _modalProps =
+        typeof modal === 'function'
+          ? modal({
+              closeModal: closeFn,
+              navigate: (to?: string) => {
+                closeFn();
+                // wait cache is expired
+                setTimeout(() => {
+                  navigate(to || '.');
+                }, constants.QUERY_CACHE_DURATION);
+              },
+            })
+          : modal;
       if (modalMiddleware) {
         modalMiddleware(closeFn, _modalProps);
       }
@@ -88,7 +111,16 @@ export const ActionButton = ({
   }, [modal]);
   const drawerProps = useMemo(() => {
     return typeof drawer === 'function'
-      ? drawer(() => setOpenDrawer(false))
+      ? drawer({
+          closeDrawer: () => setOpenDrawer(false),
+          navigate: (to?: string) => {
+            setOpenDrawer(false);
+            // wait cache is expired
+            setTimeout(() => {
+              navigate(to || '.');
+            }, constants.QUERY_CACHE_DURATION);
+          },
+        })
       : drawer;
   }, [drawer]);
 

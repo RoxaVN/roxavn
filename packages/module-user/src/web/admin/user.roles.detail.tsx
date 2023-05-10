@@ -61,7 +61,7 @@ const Page = () => {
         {
           label: tCore('delete'),
           icon: IconTrash,
-          modal: (closeModal) => ({
+          modal: ({ closeModal }) => ({
             title: t('deleteUserRole', { role: item.name }),
             children: (
               <ApiConfirmFormGroup

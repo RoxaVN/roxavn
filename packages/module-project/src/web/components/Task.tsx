@@ -1,6 +1,5 @@
 import {
   Badge,
-  Button,
   Card,
   Group,
   NumberInput,
@@ -13,11 +12,10 @@ import { Api } from '@roxavn/core/base';
 import {
   ApiConfirmFormGroup,
   ApiFormGroup,
-  IfCanAccessApi,
-  ModalTrigger,
   userService,
   utils,
   webModule as coreWebModule,
+  PermissionButton,
 } from '@roxavn/core/web';
 import {
   IconBan,
@@ -65,28 +63,26 @@ export function TaskInfo({ task }: TaskInfoProps) {
   const renderAction = (
     status: string,
     api: Api,
-    Icon: React.ComponentType<{ size: number }>
+    icon: React.ComponentType<any>
   ) => (
-    <ModalTrigger
+    <PermissionButton
+      label={t(status)}
       key={status}
-      title={t(status + 'Task')}
-      content={({ navigate, setOpened }) => (
-        <ApiConfirmFormGroup
-          api={api}
-          apiParams={{ taskId: task.id }}
-          onCancel={() => setOpened(false)}
-          onSuccess={() => navigate()}
-        />
-      )}
-    >
-      <Button
-        leftIcon={<Icon size={16} />}
-        color={mapColor(status)}
-        variant="subtle"
-      >
-        {t(status)}
-      </Button>
-    </ModalTrigger>
+      icon={icon}
+      color={mapColor(status)}
+      variant="subtle"
+      modal={({ navigate, closeModal }) => ({
+        title: t(status + 'Task'),
+        children: (
+          <ApiConfirmFormGroup
+            api={api}
+            apiParams={{ taskId: task.id }}
+            onCancel={closeModal}
+            onSuccess={() => navigate()}
+          />
+        ),
+      })}
+    />
   );
   const renderActions = () => {
     const result = [];
@@ -117,13 +113,13 @@ export function TaskInfo({ task }: TaskInfoProps) {
       <Group position="apart" mb="xs">
         <Text weight={500}>{task.title}</Text>
         <Group spacing="md">
-          <IfCanAccessApi
-            api={taskApi.update}
-            apiParams={{ projectId: task.projectId }}
-          >
-            <ModalTrigger
-              title={t('editTask')}
-              content={({ navigate }) => (
+          <PermissionButton
+            label={tCore('edit')}
+            variant="outline"
+            icon={IconEdit}
+            modal={({ navigate }) => ({
+              title: t('editTask'),
+              children: (
                 <ApiFormGroup
                   api={taskApi.update}
                   apiParams={{
@@ -153,24 +149,21 @@ export function TaskInfo({ task }: TaskInfoProps) {
                   ]}
                   onSuccess={() => navigate()}
                 />
-              )}
-            >
-              <Button leftIcon={<IconEdit size={16} />} variant="outline">
-                {tCore('edit')}
-              </Button>
-            </ModalTrigger>
-          </IfCanAccessApi>
-          <IfCanAccessApi
-            api={taskApi.delete}
-            apiParams={{ projectId: task.projectId }}
-          >
-            <ModalTrigger
-              title={t('deleteTask')}
-              content={({ navigate, setOpened }) => (
+              ),
+            })}
+          />
+          <PermissionButton
+            label={tCore('delete')}
+            icon={IconTrash}
+            variant="outline"
+            color="red"
+            modal={({ closeModal, navigate }) => ({
+              title: t('deleteTask'),
+              children: (
                 <ApiConfirmFormGroup
                   api={taskApi.delete}
                   apiParams={{ taskId: task.id }}
-                  onCancel={() => setOpened(false)}
+                  onCancel={closeModal}
                   onSuccess={() =>
                     navigate(
                       task.parentId &&
@@ -178,17 +171,9 @@ export function TaskInfo({ task }: TaskInfoProps) {
                     )
                   }
                 />
-              )}
-            >
-              <Button
-                leftIcon={<IconTrash size={16} />}
-                color="red"
-                variant="outline"
-              >
-                {tCore('delete')}
-              </Button>
-            </ModalTrigger>
-          </IfCanAccessApi>
+              ),
+            })}
+          />
         </Group>
       </Group>
       <Table>
@@ -215,36 +200,29 @@ export function TaskInfo({ task }: TaskInfoProps) {
                 renderUser(task.assignee)
               ) : (
                 <Group spacing="md">
-                  <IfCanAccessApi
-                    api={taskApi.assignMe}
-                    apiParams={{ projectId: task.projectId }}
-                  >
-                    <ModalTrigger
-                      title={t('assignMe')}
-                      content={({ navigate, setOpened }) => (
+                  <PermissionButton
+                    label={t('assignMe')}
+                    icon={IconUser}
+                    variant="subtle"
+                    modal={({ closeModal, navigate }) => ({
+                      title: t('assignMe'),
+                      children: (
                         <ApiConfirmFormGroup
                           api={taskApi.assignMe}
                           apiParams={{ taskId: task.id }}
-                          onCancel={() => setOpened(false)}
+                          onCancel={closeModal}
                           onSuccess={() => navigate()}
                         />
-                      )}
-                    >
-                      <Button
-                        leftIcon={<IconUser size={16} />}
-                        variant="subtle"
-                      >
-                        {t('assignMe')}
-                      </Button>
-                    </ModalTrigger>
-                  </IfCanAccessApi>
-                  <IfCanAccessApi
-                    api={taskApi.assign}
-                    apiParams={{ projectId: task.projectId }}
-                  >
-                    <ModalTrigger
-                      title={t('assign')}
-                      content={({ navigate }) => (
+                      ),
+                    })}
+                  />
+                  <PermissionButton
+                    label={t('assign')}
+                    icon={IconUserSearch}
+                    variant="subtle"
+                    modal={({ navigate }) => ({
+                      title: t('assign'),
+                      children: (
                         <ApiFormGroup
                           api={taskApi.assign}
                           apiParams={{ taskId: task.id }}
@@ -262,16 +240,9 @@ export function TaskInfo({ task }: TaskInfoProps) {
                           ]}
                           onSuccess={() => navigate()}
                         />
-                      )}
-                    >
-                      <Button
-                        leftIcon={<IconUserSearch size={16} />}
-                        variant="subtle"
-                      >
-                        {t('assign')}
-                      </Button>
-                    </ModalTrigger>
-                  </IfCanAccessApi>
+                      ),
+                    })}
+                  />
                 </Group>
               )}
             </td>

@@ -80,7 +80,7 @@ export const RoleUsers = ({ scope, scopeId, module }: RoleUsersProps) => {
             {
               label: tCore('delete'),
               icon: IconTrash,
-              modal: (closeModal) => ({
+              modal: ({ closeModal }) => ({
                 title: t('deleteUserRole', {
                   role: data.items.find(
                     (i) => i.id === fetcherRef.currentParams.roleId

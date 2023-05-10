@@ -1,6 +1,6 @@
 import { LoaderArgs } from '@remix-run/node';
 import { servicesLoader } from '@roxavn/core/server';
-import { ApiRolesGetter, useLoaderData } from '@roxavn/core/web';
+import { ApiRolesGetter, useLoaderData, useResource } from '@roxavn/core/web';
 import takeRight from 'lodash/takeRight';
 
 import {
@@ -20,6 +20,7 @@ import { scopes } from '../../../../../base';
 export default function () {
   const data = useLoaderData<typeof loader>();
   const params = scopes.Project.makeScopeParams(data.project.id);
+  useResource(scopes.Task, data.task);
 
   return (
     <div>
