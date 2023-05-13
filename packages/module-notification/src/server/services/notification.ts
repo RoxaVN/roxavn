@@ -2,26 +2,47 @@ import { BaseService } from '@roxavn/core/server';
 import { Notification, UserNotification } from '../entities';
 
 export class CreateNotificationService extends BaseService {
-  async handle(request: {
+  async handle({
+    resource,
+    resourceId,
+    action,
+    actorId,
+    module,
+    metadata,
+    userIds,
+  }: {
     resource: string;
     resourceId: string;
     action: string;
+    actorId?: string;
     module: string;
     metadata?: any;
     userIds: string[];
   }) {
+    if (
+      userIds.length < 1 ||
+      (userIds.length === 1 && userIds[0] === actorId)
+    ) {
+      // not create notice for actor
+      return {};
+    }
+
     const result = await this.dbSession
       .createQueryBuilder()
       .insert()
       .into(Notification)
       .values({
-        module: request.module,
-        action: request.action,
-        metadata: request.metadata,
-        resource: request.resource,
-        resourceId: request.resourceId,
+        module: module,
+        action: action,
+        metadata: metadata,
+        resource: resource,
+        resourceId: resourceId,
+        actorId: actorId,
       })
-      .orUpdate(['metadata'], ['resource', 'resourceId', 'action', 'module'])
+      .orUpdate(
+        ['metadata', 'actorId'],
+        ['resource', 'resourceId', 'action', 'module']
+      )
       .execute();
 
     await this.dbSession
@@ -29,11 +50,13 @@ export class CreateNotificationService extends BaseService {
       .insert()
       .into(UserNotification)
       .values(
-        request.userIds.map((userId) => ({
-          notificationId: result.generatedMaps[0] as any,
-          userId: userId,
-          readDate: undefined,
-        }))
+        userIds
+          .filter((item) => item !== actorId)
+          .map((userId) => ({
+            notificationId: result.generatedMaps[0] as any,
+            userId: userId,
+            readDate: undefined,
+          }))
       )
       .orUpdate(['readDate'], ['notificationId', 'userId'])
       .execute();

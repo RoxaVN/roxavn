@@ -58,6 +58,7 @@ export class CountUnreadUserNotificationApiService extends ApiService {
         userId: request.userId,
         readDate: IsNull(),
       },
+      take: 100, // get max 100 first
     });
     return { count };
   }

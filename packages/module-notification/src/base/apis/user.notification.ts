@@ -17,6 +17,7 @@ const userNotificationSource = new ApiSource<{
   resource: string;
   resourceId: string;
   action: string;
+  actorId?: string;
   module: string;
   metadata?: any;
   createdDate: Date;

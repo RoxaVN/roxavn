@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   Unique,
+  Index,
 } from 'typeorm';
 
 @Entity()
@@ -13,16 +14,20 @@ export class Notification {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('character varying')
+  @Column('text')
   resource: string;
 
-  @Column('character varying')
+  @Column('text')
   resourceId: string;
 
-  @Column('character varying')
+  @Column('text')
   action: string;
 
-  @Column('character varying')
+  @Index()
+  @Column('uuid', { nullable: true })
+  actorId?: string;
+
+  @Column('text')
   module: string;
 
   @Column({ type: 'jsonb', nullable: true })

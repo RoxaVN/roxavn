@@ -12,13 +12,13 @@ export class NotificationToken {
   @PrimaryColumn('uuid')
   id: string;
 
-  @Column('character varying')
+  @Column('text')
   token: string;
 
-  @Column('character varying')
+  @Column('text')
   provider: string;
 
-  @Column('character varying')
+  @Column('text')
   providerId: string;
 
   @Index()
