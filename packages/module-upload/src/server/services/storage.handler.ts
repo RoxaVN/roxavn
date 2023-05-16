@@ -26,7 +26,7 @@ export class GetStorageHandlerService extends BaseService {
     const serviceClass = GetStorageHandlerService.handlerServices[0];
     if (serviceClass) {
       const service = this.create(serviceClass);
-      return service.handle({});
+      return service.handle();
     }
     throw new NotFoundStorageHandlerException();
   }

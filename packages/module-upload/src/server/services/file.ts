@@ -29,7 +29,7 @@ serverModule.useRawApi(fileApi.upload, async (_, args) => {
   const userId = args.state.$user.id;
   const storageHandler = await serverModule
     .createService(GetStorageHandlerService, args)
-    .handle({});
+    .handle();
   const storage = await serverModule
     .createService(GetUserFileStorageService, args)
     .handle({ userId: userId, storageName: storageHandler.name });
