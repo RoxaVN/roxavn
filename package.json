@@ -1,11 +1,25 @@
 {
   "name": "roxavn",
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build:cli": "npm run build --workspace=packages/core --workspace=packages/cli && npm i --workspace=packages/cli",
+    "build": "npm run build:cli && npm run build --workspaces"
   },
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/core",
+    "packages/cli",
+    "packages/dev-web",
+    "packages/module-user",
+    "packages/module-utils",
+    "packages/module-upload",
+    "packages/module-user-info",
+    "packages/module-installer",
+    "packages/module-notification",
+    "packages/module-project",
+    "packages/plugin-firebase",
+    "packages/plugin-firebase-auth",
+    "packages/plugin-upload-seaweedfs"
   ],
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",
