@@ -32,11 +32,9 @@ const middlewares: Array<AuthorizationMiddleware> = [
         const relatedResource = await helper.getRelatedResourceInstance(
           resource
         );
-        if (relatedResource) {
-          const isValid = resource.condition(request, relatedResource);
-          if (isValid) {
-            return true;
-          }
+        const isValid = resource.condition(request, relatedResource);
+        if (isValid) {
+          return true;
         }
       }
     }
