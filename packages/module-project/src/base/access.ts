@@ -38,7 +38,7 @@ export const permissions = accessManager.makePermissions(scopes, {
     allowedScopes: [scopes.Project],
   },
 
-  CreateTask: { allowedScopes: [scopes.Project] },
+  CreateTask: { allowedScopes: [scopes.Project, scopes.TaskAssignee] },
   ReadTask: { allowedScopes: [scopes.Project, scopes.PublicProject] },
   ReadTasks: { allowedScopes: [scopes.Project] },
   UpdateProgress: { allowedScopes: [scopes.Project] },
