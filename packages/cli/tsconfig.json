@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "dist",
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "declaration": true,
     "moduleResolution": "node",

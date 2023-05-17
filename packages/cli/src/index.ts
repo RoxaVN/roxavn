@@ -1,10 +1,10 @@
 import { Command } from 'commander';
 
-import { buildService } from './build';
-import { devService } from './dev';
-import { moduleService } from './module';
-import { templateService } from './template';
-import { hookService } from './hook';
+import { buildService } from './build.js';
+import { devService } from './dev.js';
+import { moduleService } from './module.js';
+import { templateService } from './template.js';
+import { hookService } from './hook.js';
 
 const program = new Command();
 

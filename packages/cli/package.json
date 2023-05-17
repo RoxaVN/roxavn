@@ -1,7 +1,8 @@
 {
   "name": "@roxavn/cli",
   "version": "0.1.0",
-  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
   "scripts": {
     "build": "rimraf dist && tsc -p tsconfig.build.json && chmod +x dist/cli.js",
     "test": "jest --passWithNoTests",

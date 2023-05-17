@@ -6,8 +6,8 @@ import {
   runModuleHooks,
 } from '@roxavn/core/server';
 import { constants } from '@roxavn/core/base';
-import { buildService } from './build';
-import { devService } from './dev';
+import { buildService } from './build.js';
+import { devService } from './dev.js';
 
 class HookService {
   async run(mode: string, module?: string, options?: { plugin: string }) {

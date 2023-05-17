@@ -4,7 +4,7 @@ import path from 'path';
 import { BaseModule, constants } from '@roxavn/core/base';
 import { getPackageRootPath, moduleManager } from '@roxavn/core/server';
 
-import { CodeChanger } from './lib';
+import { CodeChanger } from './lib/index.js';
 
 class ModuleService {
   sync() {

@@ -1,1 +1,1 @@
-export * from './code.changer';
+export * from './code.changer.js';
