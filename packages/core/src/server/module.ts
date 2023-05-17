@@ -17,6 +17,7 @@ import {
   validatorMiddleware,
 } from './middlewares';
 import { ApiService, BaseService } from './service';
+import { eventManager } from './event';
 
 export class ServerModule extends BaseModule {
   static apiRoutes: Array<{
@@ -71,6 +72,10 @@ export class ServerModule extends BaseModule {
           }
           const result = await handler(context.state.request as Req, context);
           await queryRunner.commitTransaction();
+          eventManager.distributor.emit(eventManager.makeApiSuccessEvent(api), {
+            request: context.state.request,
+            response: result,
+          });
           return json({ code: 200, data: result });
         } catch (e) {
           await queryRunner.rollbackTransaction();

@@ -1,1 +1,2 @@
-export * from './event.distributor';
+export * from './manager';
+export * from './decorator';
