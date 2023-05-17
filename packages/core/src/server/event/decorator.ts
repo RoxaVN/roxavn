@@ -1,4 +1,10 @@
-import { Api, ApiRequest, ApiResponse } from '../../base';
+import {
+  Api,
+  ApiRequest,
+  ApiResponse,
+  InferApiRequest,
+  InferApiResponse,
+} from '../../base';
 import { databaseManager } from '../database';
 import { BaseService } from '../service';
 import { eventManager } from './manager';
@@ -25,3 +31,8 @@ export function onApiSuccess<Req extends ApiRequest, Resp extends ApiResponse>(
     );
   };
 }
+
+export type InferOnApiSuccessData<T extends Api> = {
+  request: InferApiRequest<T> & { $user?: { id: string } };
+  response: InferApiResponse<T>;
+};

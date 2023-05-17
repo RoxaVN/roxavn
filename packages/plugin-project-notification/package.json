@@ -20,6 +20,8 @@
     "@remix-run/react": "*",
     "@roxavn/core": "*",
     "@roxavn/module-user": "*",
+    "@roxavn/module-notification": "*",
+    "@roxavn/module-project": "*",
     "@tabler/icons-react": "*",
     "react": "*",
     "react-router-dom": "*",

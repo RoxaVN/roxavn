@@ -1,7 +1,7 @@
 {
-  "myModel": "Model của tôi",
+  "CreateSubTask": "Công việc '{{ task }}' có thêm công việc con '{{ subtask }}'",
   "Meta": {
-    "name": "Module mẫu",
-    "description": "Module mẫu"
+    "name": "Thông báo cho dự án",
+    "description": "Thông báo cho dự án"
   }
 }

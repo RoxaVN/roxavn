@@ -7,3 +7,4 @@ export * from './service';
 export * from './tokens';
 export * from './middlewares';
 export * from './service.loader';
+export * from './event';

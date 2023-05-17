@@ -1,7 +1,7 @@
 {
-  "myModel": "My model",
+  "CreateSubTask": "Task '{{ task }}' has additional subtask '{{ subtask }}'",
   "Meta": {
-    "name": "Sample module",
-    "description": "Sample module"
+    "name": "Project notification",
+    "description": "Project notification"
   }
 }
