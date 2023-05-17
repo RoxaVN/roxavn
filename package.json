@@ -17,6 +17,7 @@
     "packages/module-installer",
     "packages/module-notification",
     "packages/module-project",
+    "packages/plugin-project-notification",
     "packages/plugin-firebase",
     "packages/plugin-firebase-auth",
     "packages/plugin-upload-seaweedfs"
