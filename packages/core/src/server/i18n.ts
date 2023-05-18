@@ -1,8 +1,8 @@
+import { RemixI18Next } from '@roxavn/remix-i18next';
 import Backend from 'i18next-fs-backend';
 import { resolve } from 'path';
-import { RemixI18Next } from 'remix-i18next';
 
-import { i18n } from '../base';
+import { i18n } from '../base/index.js';
 
 export const i18nextServer = new RemixI18Next({
   detection: {

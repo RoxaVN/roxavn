@@ -1,4 +1,4 @@
-import { baseModule } from './module';
+import { baseModule } from './module.js';
 
 export const i18n = {
   // This is the list of languages your application supports

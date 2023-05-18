@@ -1,7 +1,7 @@
-import { ForbiddenException, UnauthorizedException } from '../../base';
-import { serviceManager } from '../service';
-import { authorize } from './authorize';
-import { ServerMiddleware } from './interfaces';
+import { ForbiddenException, UnauthorizedException } from '../../base/index.js';
+import { serviceManager } from '../service.js';
+import { authorize } from './authorize.js';
+import { ServerMiddleware } from './interfaces.js';
 
 export const authorizationMiddleware: ServerMiddleware = async ({
   api,

@@ -1,4 +1,4 @@
-import { WebModule } from '../services';
+import { WebModule } from '../services/index.js';
 
 export interface ModuleTProps {
   module: WebModule;

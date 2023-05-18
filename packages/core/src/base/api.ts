@@ -1,6 +1,6 @@
-import { ErrorResponse } from './errors';
-import { Permission, Resource } from './access';
-import { ExactProps } from './props';
+import { ErrorResponse } from './errors.js';
+import { Permission, Resource } from './access.js';
+import { ExactProps } from './props.js';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Empty {}

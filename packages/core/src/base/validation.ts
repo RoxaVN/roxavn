@@ -54,8 +54,8 @@ import {
   ValidationOptions,
 } from 'class-validator';
 import validator from 'validator';
-import { I18nErrorField } from './errors';
-import { baseModule } from './module';
+import { I18nErrorField } from './errors.js';
+import { baseModule } from './module.js';
 
 const buildContext = (
   key: string,

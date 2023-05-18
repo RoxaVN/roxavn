@@ -1,10 +1,10 @@
 import { Button, Group, Popover, Indicator } from '@mantine/core';
 import { IconCheck, IconFilter, IconX } from '@tabler/icons-react';
 import { useState } from 'react';
-import { ApiRequest } from '../../base';
+import { ApiRequest } from '../../base/index.js';
 
-import { webModule } from '../services';
-import { ApiFormGroup, FormGroupField } from './ApiFormGroup';
+import { webModule } from '../services/index.js';
+import { ApiFormGroup, FormGroupField } from './ApiFormGroup.js';
 
 export interface ApiFilterButtonProps<Request extends ApiRequest> {
   apiParams?: Partial<Request>;

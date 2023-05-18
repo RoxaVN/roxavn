@@ -9,8 +9,8 @@ import {
 } from '@mantine/core';
 import { useCatch, Link, useLocation } from '@remix-run/react';
 
-import { webRoutes } from '../../base';
-import { webModule } from '../services';
+import { webRoutes } from '../../base/index.js';
+import { webModule } from '../services/index.js';
 
 const useStyles = createStyles((theme) => ({
   root: {

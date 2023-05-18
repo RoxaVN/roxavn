@@ -2,11 +2,16 @@ import { Box } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
 import { Fragment } from 'react';
 
-import { Api, ApiRequest, Collection, PaginatedCollection } from '../../base';
-import { useLocationSearch } from '../hooks';
-import { ApiForm } from './ApiForm';
-import { ApiFetcherRef } from './ApiTable';
-import { PaginationLinks } from './PaginationLinks';
+import {
+  Api,
+  ApiRequest,
+  Collection,
+  PaginatedCollection,
+} from '../../base/index.js';
+import { useLocationSearch } from '../hooks/index.js';
+import { ApiForm } from './ApiForm.js';
+import { ApiFetcherRef } from './ApiTable.js';
+import { PaginationLinks } from './PaginationLinks.js';
 
 export interface ApiListProps<
   Request extends ApiRequest,

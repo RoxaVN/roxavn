@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { urlUtils } from '../../base';
+import { urlUtils } from '../../base/index.js';
 
 export interface HttpException {
   message: string;

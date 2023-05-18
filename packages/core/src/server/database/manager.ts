@@ -1,9 +1,9 @@
 import { DataSource } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
-import { constants } from '../../base';
-import { moduleManager } from './../module.manager';
-import { MemoryQueryResultCache } from './cache';
+import { constants } from '../../base/index.js';
+import { moduleManager } from './../module.manager.js';
+import { MemoryQueryResultCache } from './cache.js';
 
 class DatabaseManager {
   dataSource!: DataSource;

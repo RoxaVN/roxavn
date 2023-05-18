@@ -1,8 +1,8 @@
 import type { TypedResponse } from '@remix-run/node';
 import { useLoaderData as useLoaderDataRemix } from '@remix-run/react';
-import cloneDeepWith from 'lodash/cloneDeepWith';
+import { cloneDeepWith } from 'lodash-es';
 
-import { urlUtils } from '../../base';
+import { urlUtils } from '../../base/index.js';
 
 type InferLoaderData<T> = T extends (...args: any[]) => infer Output
   ? Awaited<Output> extends TypedResponse<infer U>

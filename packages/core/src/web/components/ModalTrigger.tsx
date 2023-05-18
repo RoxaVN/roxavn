@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, ModalProps } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import { constants } from '../../base';
+import { constants } from '../../base/index.js';
 
 type ModalTriggerTemplate = (props: {
   opened: boolean;

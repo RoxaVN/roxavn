@@ -1,8 +1,8 @@
 import { Tabs } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
-import { usePageLinks } from '../hooks';
-import { PageItem } from '../services';
+import { usePageLinks } from '../hooks/index.js';
+import { PageItem } from '../services/index.js';
 
 export interface TabLinksProps {
   pageItems: PageItem[];

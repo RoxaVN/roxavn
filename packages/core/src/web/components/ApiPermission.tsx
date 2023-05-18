@@ -1,7 +1,7 @@
 import { useListState } from '@mantine/hooks';
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 
-import { Api, ApiRequest, Collection } from '../../base';
+import { Api, ApiRequest, Collection } from '../../base/index.js';
 import {
   apiFetcher,
   authService,
@@ -9,8 +9,8 @@ import {
   RoleItem,
   RolesContext,
   useCanAccessApi,
-} from '../services';
-import { useAuthUser } from '../hooks';
+} from '../services/index.js';
+import { useAuthUser } from '../hooks/index.js';
 
 export const RolesProvider = ({ children }: { children: React.ReactNode }) => {
   const [roles, handlers] = useListState<RoleItem>([]);

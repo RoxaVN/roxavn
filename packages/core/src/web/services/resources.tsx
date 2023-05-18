@@ -1,7 +1,7 @@
-import remove from 'lodash/remove';
+import { remove } from 'lodash-es';
 import { useEffect } from 'react';
 
-import { Resource } from '../../base';
+import { Resource } from '../../base/index.js';
 
 class ResourceManager {
   store: Record<string, Record<string, any>[]> = {};

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { ServerModule } from './module';
-import { getPackageJson } from './utils';
+import { ServerModule } from './module.js';
+import { getPackageJson } from './utils/index.js';
 
 interface ModuleInfo {
   name: string;

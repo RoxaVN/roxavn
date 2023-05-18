@@ -2,8 +2,8 @@ import { Loader } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 
-import { Api, ApiRequest, Collection } from '../../base';
-import { useApi, webModule } from '../services';
+import { Api, ApiRequest, Collection } from '../../base/index.js';
+import { useApi, webModule } from '../services/index.js';
 
 export type ApiInputProps<
   Request extends ApiRequest,

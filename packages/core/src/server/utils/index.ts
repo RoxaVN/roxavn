@@ -1,3 +1,3 @@
-export * from './fs';
-export * from './register';
-export * from './hook';
+export * from './fs.js';
+export * from './register.js';
+export * from './hook.js';

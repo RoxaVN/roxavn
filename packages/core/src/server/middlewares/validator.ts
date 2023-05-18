@@ -1,8 +1,8 @@
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 
-import { ErrorResponse, ValidationException } from '../../base';
-import { ServerMiddleware } from './interfaces';
+import { ErrorResponse, ValidationException } from '../../base/index.js';
+import { ServerMiddleware } from './interfaces.js';
 
 export const validatorMiddleware: ServerMiddleware = async ({
   helper,

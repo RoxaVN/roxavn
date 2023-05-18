@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { PageItem, canAccessApi, useRoles } from '../services';
+import { PageItem, canAccessApi, useRoles } from '../services/index.js';
 
 export interface PageLink {
   key: string;

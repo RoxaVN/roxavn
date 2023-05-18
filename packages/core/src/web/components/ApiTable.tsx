@@ -4,14 +4,19 @@ import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import React, { MutableRefObject, useState } from 'react';
 
-import { Api, ApiRequest, Collection, PaginatedCollection } from '../../base';
-import { useLocationHash } from '../hooks';
-import { Reference, webModule } from '../services';
-import { ApiFilterButton } from './ApiFilter';
-import { ApiForm } from './ApiForm';
-import { FormGroupField } from './ApiFormGroup';
-import { PermissionButton, PermissionButtonProps } from './Buttons';
-import { ModuleT } from './ModuleT';
+import {
+  Api,
+  ApiRequest,
+  Collection,
+  PaginatedCollection,
+} from '../../base/index.js';
+import { useLocationHash } from '../hooks/index.js';
+import { Reference, webModule } from '../services/index.js';
+import { ApiFilterButton } from './ApiFilter.js';
+import { ApiForm } from './ApiForm.js';
+import { FormGroupField } from './ApiFormGroup.js';
+import { PermissionButton, PermissionButtonProps } from './Buttons.js';
+import { ModuleT } from './ModuleT.js';
 
 export type ApiTableColumns<T> = {
   [k in keyof Partial<T>]: {

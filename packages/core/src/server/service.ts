@@ -5,8 +5,8 @@ import {
   InferApiRequest,
   InferApiResponse,
   PaginatedCollection,
-} from '../base';
-import { AuthorizationArgs } from './middlewares';
+} from '../base/index.js';
+import { AuthorizationArgs } from './middlewares/index.js';
 
 export type InferAuthApiRequest<T> = T extends Api<infer U, any, any>
   ? U & {

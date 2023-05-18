@@ -15,9 +15,9 @@ import { IconCopy, IconCheck } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { webModule } from '../services';
-import { IfCanAccessApi, IfCanAccessApiProps } from './ApiPermission';
-import { constants } from '../../base';
+import { webModule } from '../services/index.js';
+import { IfCanAccessApi, IfCanAccessApiProps } from './ApiPermission.js';
+import { constants } from '../../base/index.js';
 
 type ButtonMantineProps<C = 'button'> = PolymorphicComponentProps<
   C,

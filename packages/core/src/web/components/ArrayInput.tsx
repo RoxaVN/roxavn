@@ -2,9 +2,9 @@ import { ActionIcon, Box, BoxProps, Button, Flex, Input } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { randomId, useListState } from '@mantine/hooks';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
-import get from 'lodash/get';
+import { get } from 'lodash-es';
 import React, { useEffect } from 'react';
-import { webModule } from '../services';
+import { webModule } from '../services/index.js';
 
 export interface ArrayInputProps extends BoxProps {
   fields: Array<React.ReactElement> | React.ReactElement;

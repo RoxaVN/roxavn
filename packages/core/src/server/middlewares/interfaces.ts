@@ -1,6 +1,6 @@
 import { type EntityManager } from 'typeorm';
 
-import { Api, Resource } from '../../base';
+import { Api, Resource } from '../../base/index.js';
 
 export interface RemixLoaderContextHelper {
   getRequestData: () => Record<string, any>;

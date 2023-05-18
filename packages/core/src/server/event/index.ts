@@ -1,2 +1,2 @@
-export * from './manager';
-export * from './decorator';
+export * from './manager.js';
+export * from './decorator.js';

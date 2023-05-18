@@ -1,6 +1,6 @@
-import uniqBy from 'lodash/uniqBy';
-import { Permission, Resource } from '../../base/access';
-import { Api } from '../../base/api';
+import { uniqBy } from 'lodash-es';
+import { Permission, Resource } from '../../base/access.js';
+import { Api } from '../../base/api.js';
 
 export type AuthorizationArgs = {
   api: Api;

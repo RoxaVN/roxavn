@@ -1,10 +1,10 @@
 import { SelectProps } from '@mantine/core';
 import { ComponentType, Fragment, createElement } from 'react';
 
-import { Api, Collection } from '../../base';
-import { Reference } from './reference';
-import { utils } from './utils';
-import { RoleItem, useCanAccessApi } from './role';
+import { Api, Collection } from '../../base/index.js';
+import { Reference } from './reference.js';
+import { utils } from './utils.js';
+import { RoleItem, useCanAccessApi } from './role.js';
 
 class UserService {
   reference = new Reference();

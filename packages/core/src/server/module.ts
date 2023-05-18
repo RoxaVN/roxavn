@@ -6,8 +6,8 @@ import {
   baseModule,
   BaseModule,
   ServerException,
-} from '../base';
-import { databaseManager } from './database';
+} from '../base/index.js';
+import { databaseManager } from './database/index.js';
 import {
   authorizationMiddleware,
   makeContextHelper,
@@ -15,9 +15,9 @@ import {
   ServerLoaderContext,
   ServerMiddleware,
   validatorMiddleware,
-} from './middlewares';
-import { ApiService, BaseService } from './service';
-import { eventManager } from './event';
+} from './middlewares/index.js';
+import { ApiService, BaseService } from './service.js';
+import { eventManager } from './event/index.js';
 
 export class ServerModule extends BaseModule {
   static apiRoutes: Array<{

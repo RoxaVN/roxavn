@@ -3,8 +3,8 @@ import { IconChevronRight } from '@tabler/icons-react';
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
-import { PageLink, usePageLinks } from '../hooks';
-import { PageItem } from '../services';
+import { PageLink, usePageLinks } from '../hooks/index.js';
+import { PageItem } from '../services/index.js';
 
 export interface MenuLinksProps {
   pageItems: PageItem[];

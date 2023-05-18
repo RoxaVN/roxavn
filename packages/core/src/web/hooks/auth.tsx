@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { authService } from '../services';
+import { authService } from '../services/index.js';
 
 export const AuthContext = React.createContext<{
   user?: Record<string, any>;

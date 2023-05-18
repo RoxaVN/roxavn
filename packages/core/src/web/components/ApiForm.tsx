@@ -3,9 +3,14 @@ import { useForm, UseFormReturnType } from '@mantine/form';
 import { IconAlertCircle } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
 
-import { Api, ApiRequest, ApiResponse, ErrorResponse } from '../../base';
-import { webModule, apiFetcher } from '../services';
-import { ApiError } from './ApiError';
+import {
+  Api,
+  ApiRequest,
+  ApiResponse,
+  ErrorResponse,
+} from '../../base/index.js';
+import { webModule, apiFetcher } from '../services/index.js';
+import { ApiError } from './ApiError.js';
 
 export interface ApiFormProps<
   Request extends ApiRequest,

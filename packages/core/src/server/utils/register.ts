@@ -3,9 +3,9 @@ import minimatch from 'minimatch';
 import path from 'path';
 
 import { AppConfig } from '@remix-run/dev';
-import { visitFiles } from '.';
-import { BaseModule } from '../../base';
-import { moduleManager } from '../module.manager';
+import { visitFiles } from './index.js';
+import { BaseModule } from '../../base/index.js';
+import { moduleManager } from '../module.manager.js';
 
 type RoutesConfig = Exclude<AppConfig['routes'], undefined>;
 type RouteManifest = Awaited<ReturnType<RoutesConfig>>;

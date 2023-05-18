@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import { Api } from '../../base';
+import { Api } from '../../base/index.js';
 
 export interface EventDistributor {
   on: (event: string, handler: (data: any) => void) => void;

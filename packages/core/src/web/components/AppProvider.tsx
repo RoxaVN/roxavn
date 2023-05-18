@@ -3,10 +3,10 @@ import { ModalsProvider, ModalsProviderProps } from '@mantine/modals';
 import { Notifications, NotificationsProps } from '@mantine/notifications';
 import { NavigationProgressProps } from '@mantine/nprogress';
 import React, { Fragment } from 'react';
-import { Empty } from '../../base';
-import { AuthProvider } from '../hooks/auth';
-import { RolesProvider } from './ApiPermission';
-import { RouterTransition } from './RouterTransition';
+import { Empty } from '../../base/index.js';
+import { AuthProvider } from '../hooks/auth.js';
+import { RolesProvider } from './ApiPermission.js';
+import { RouterTransition } from './RouterTransition.js';
 
 const NotificationsProvider = ({
   children,

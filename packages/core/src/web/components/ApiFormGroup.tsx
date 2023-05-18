@@ -3,9 +3,9 @@ import { UseFormReturnType } from '@mantine/form';
 import { IconSend, IconX } from '@tabler/icons-react';
 import React from 'react';
 
-import { ApiRequest, ApiResponse } from '../../base';
-import { webModule } from '../services';
-import { ApiForm, ApiFormProps } from './ApiForm';
+import { ApiRequest, ApiResponse } from '../../base/index.js';
+import { webModule } from '../services/index.js';
+import { ApiForm, ApiFormProps } from './ApiForm.js';
 
 export interface FormGroupField<T> {
   name: keyof T;

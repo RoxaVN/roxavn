@@ -1,4 +1,4 @@
-import { ExactProps } from '../../base';
+import { ExactProps } from '../../base/index.js';
 
 export class PageItem extends ExactProps<PageItem> {
   label?: React.ReactNode;

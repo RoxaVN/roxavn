@@ -1,7 +1,7 @@
 import { LoaderArgs } from '@remix-run/node';
 import { servicesLoader } from '@roxavn/core/server';
 import { ApiRolesGetter, useLoaderData, useResource } from '@roxavn/core/web';
-import takeRight from 'lodash/takeRight';
+import { takeRight } from 'lodash-es';
 
 import {
   GetProjectApiService,

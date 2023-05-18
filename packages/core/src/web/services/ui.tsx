@@ -4,9 +4,9 @@ import { openConfirmModal, openModal, closeModal } from '@mantine/modals';
 import React from 'react';
 import { Translation } from 'react-i18next';
 
-import { ErrorResponse } from '../../base';
-import { ApiError } from '../components';
-import { webModule } from './module';
+import { ErrorResponse } from '../../base/index.js';
+import { ApiError } from '../components/index.js';
+import { webModule } from './module.js';
 
 const uiManager = {
   modal({

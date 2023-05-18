@@ -1,3 +1,3 @@
-export * from './token';
-export * from './token-hasher';
-export * from './token-signer';
+export * from './token.js';
+export * from './token-hasher.js';
+export * from './token-signer.js';

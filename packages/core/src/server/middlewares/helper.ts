@@ -1,6 +1,6 @@
-import { Resource } from '../../base';
-import { databaseManager } from '../database';
-import { RemixLoaderContextHelper, ServerLoaderContext } from './interfaces';
+import { Resource } from '../../base/index.js';
+import { databaseManager } from '../database/index.js';
+import { RemixLoaderContextHelper, ServerLoaderContext } from './interfaces.js';
 
 export function makeContextHelper(
   remixContextHelper: RemixLoaderContextHelper,

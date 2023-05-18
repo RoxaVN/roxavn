@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useOutletContext, useRoutes } from 'react-router-dom';
 
-import { baseModule, BaseModule } from '../../base';
-import { PageItem } from './page';
+import { baseModule, BaseModule } from '../../base/index.js';
+import { PageItem } from './page.js';
 
 export interface AdminSettings {
   [name: string]: {

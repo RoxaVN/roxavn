@@ -1,9 +1,9 @@
-import capitalize from 'lodash/capitalize';
+import { capitalize } from 'lodash-es';
 
-import { Role } from '../../base';
-import { databaseManager } from '../database';
-import { moduleManager } from '../module.manager';
-import { BaseService } from '../service';
+import { Role } from '../../base/index.js';
+import { databaseManager } from '../database/index.js';
+import { moduleManager } from '../module.manager.js';
+import { BaseService } from '../service.js';
 
 export async function runModuleHooks(mode: string) {
   for (const m of moduleManager.modules) {

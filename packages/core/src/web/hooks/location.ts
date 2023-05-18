@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { constants, urlUtils } from '../../base';
+import { constants, urlUtils } from '../../base/index.js';
 
 export const useLocationHash = (key: string) => {
   const location = useLocation();

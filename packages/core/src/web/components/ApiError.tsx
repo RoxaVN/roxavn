@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { apiFetcher } from '../services';
+import { apiFetcher } from '../services/index.js';
 
 export const ApiError = ({ error }: { error: any }): React.ReactElement => {
   let message: string;

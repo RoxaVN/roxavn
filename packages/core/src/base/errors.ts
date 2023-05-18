@@ -1,4 +1,4 @@
-import { baseModule } from './module';
+import { baseModule } from './module.js';
 
 export type I18nErrorField = {
   key: string;

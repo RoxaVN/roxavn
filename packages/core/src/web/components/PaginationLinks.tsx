@@ -1,7 +1,7 @@
 import { Pagination, PaginationProps } from '@mantine/core';
 import { Link, useSearchParams } from '@remix-run/react';
 
-import { constants, Pagination as PaginationType } from '../../base';
+import { constants, Pagination as PaginationType } from '../../base/index.js';
 
 export interface PaginationLinksProps
   extends Omit<PaginationProps, 'total' | 'value'> {

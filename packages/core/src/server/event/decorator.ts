@@ -4,10 +4,10 @@ import {
   ApiResponse,
   InferApiRequest,
   InferApiResponse,
-} from '../../base';
-import { databaseManager } from '../database';
-import { BaseService } from '../service';
-import { eventManager } from './manager';
+} from '../../base/index.js';
+import { databaseManager } from '../database/index.js';
+import { BaseService } from '../service.js';
+import { eventManager } from './manager.js';
 
 export function onApiSuccess<Req extends ApiRequest, Resp extends ApiResponse>(
   api: Api<Req, Resp>

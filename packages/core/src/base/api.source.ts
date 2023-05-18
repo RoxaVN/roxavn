@@ -7,13 +7,13 @@ import {
   Empty,
   PaginatedCollection,
   Resources,
-} from './api';
+} from './api.js';
 import {
   NotFoundException,
   ForbiddenException,
   UnauthorizedException,
-} from './errors';
-import { BaseModule } from './module';
+} from './errors.js';
+import { BaseModule } from './module.js';
 
 export type ApiOptions<
   Req extends ApiRequest = ApiRequest,

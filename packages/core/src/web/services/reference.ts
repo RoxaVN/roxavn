@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Api, ApiRequest, Collection, SuggestString } from '../../base';
-import { useApi, UseApiOptions } from './api.fetcher';
+import {
+  Api,
+  ApiRequest,
+  Collection,
+  SuggestString,
+} from '../../base/index.js';
+import { useApi, UseApiOptions } from './api.fetcher.js';
 
 export class Reference {
   private api?: Api;

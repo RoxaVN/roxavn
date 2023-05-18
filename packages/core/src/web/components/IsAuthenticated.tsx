@@ -2,10 +2,10 @@ import { Group, Loader } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
-import { webRoutes } from '../../base';
-import { useAuthUser } from '../hooks';
-import { authService } from '../services';
-import { LoginRequired } from './AppBoundary';
+import { webRoutes } from '../../base/index.js';
+import { useAuthUser } from '../hooks/index.js';
+import { authService } from '../services/index.js';
+import { LoginRequired } from './AppBoundary.js';
 
 export interface IsAuthenticatedProps {
   guestComponent: JSX.Element;

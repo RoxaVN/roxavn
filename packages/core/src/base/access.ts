@@ -1,6 +1,6 @@
-import camelCase from 'lodash/camelCase';
-import { constants } from './constants';
-import { BaseModule } from './module';
+import { camelCase } from 'lodash-es';
+import { constants } from './constants.js';
+import { BaseModule } from './module.js';
 
 export interface Scope {
   name: string;

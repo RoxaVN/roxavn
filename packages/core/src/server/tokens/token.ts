@@ -1,6 +1,6 @@
 import { customAlphabet, nanoid } from 'nanoid/async';
 import { v4 as uuidv4 } from 'uuid';
-import * as AlphabetTypes from './alphabet.constants';
+import * as AlphabetTypes from './alphabet.constants.js';
 
 const DEFAULT_TOKEN_SIZE = 21;
 

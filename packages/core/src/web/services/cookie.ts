@@ -1,4 +1,4 @@
-import { Cookie } from '../../base';
+import { Cookie } from '../../base/index.js';
 
 export const cookieService = {
   set: function (

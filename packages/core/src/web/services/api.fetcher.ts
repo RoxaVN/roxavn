@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Api, ApiRequest, ApiResponse, ErrorResponse } from '../../base';
-import { HttpException, http } from './http';
+import {
+  Api,
+  ApiRequest,
+  ApiResponse,
+  ErrorResponse,
+} from '../../base/index.js';
+import { HttpException, http } from './http.js';
 
 export const apiFetcher = {
   getErrorData(e: HttpException): ErrorResponse | undefined {

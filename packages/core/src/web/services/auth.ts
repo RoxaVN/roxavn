@@ -1,9 +1,9 @@
 import isEmpty from 'lodash/isEmpty';
 import { Subject } from 'rxjs';
 
-import { Api, constants } from '../../base';
-import { apiFetcher } from './api.fetcher';
-import { cookieService } from './cookie';
+import { Api, constants } from '../../base/index.js';
+import { apiFetcher } from './api.fetcher.js';
+import { cookieService } from './cookie.js';
 
 type TokenData = { id: string; accessToken: string; userId: string };
 

@@ -1,10 +1,10 @@
 import { UseListStateHandlers } from '@mantine/hooks';
 import React, { useContext } from 'react';
 
-import { Api, ApiRequest, Resource } from '../../base';
-import { authService } from './auth';
-import { resourceManager } from './resources';
-import { authorize } from './authorize';
+import { Api, ApiRequest, Resource } from '../../base/index.js';
+import { authService } from './auth.js';
+import { resourceManager } from './resources.js';
+import { authorize } from './authorize.js';
 
 export interface RoleItem {
   scope: string;

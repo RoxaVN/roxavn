@@ -1,5 +1,5 @@
-import { Empty } from './api';
-import { urlUtils } from './url';
+import { Empty } from './api.js';
+import { urlUtils } from './url.js';
 
 export class WebRoute<
   Params extends Record<string, any> = Empty,
