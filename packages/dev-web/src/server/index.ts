@@ -1,2 +1,2 @@
-export * from './bootstrap';
-export * from './entry';
+export * from './bootstrap.js';
+export * from './entry.js';

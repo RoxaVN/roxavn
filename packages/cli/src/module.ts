@@ -2,7 +2,11 @@ import fs from 'fs';
 import fse from 'fs-extra';
 import path from 'path';
 import { BaseModule, constants } from '@roxavn/core/base';
-import { getPackageRootPath, moduleManager } from '@roxavn/core/server';
+import {
+  getPackageRootPath,
+  moduleManager,
+  resolveModule,
+} from '@roxavn/core/server';
 
 import { CodeChanger } from './lib/index.js';
 
@@ -20,17 +24,6 @@ class ModuleService {
     }
     this.addInit(module);
     console.log('Sync ' + module);
-  }
-
-  getPackageRootPath(module: string) {
-    let modulePath = require.resolve(module);
-    while (modulePath.length > 1) {
-      modulePath = path.dirname(modulePath);
-      if (fs.existsSync(path.join(modulePath, 'package.json'))) {
-        return modulePath;
-      }
-    }
-    return null;
   }
 
   syncStatic(module: string, staticPath: string) {
@@ -66,7 +59,7 @@ class ModuleService {
     const webPath =
       module === moduleManager.currentModule.name
         ? 'src/web'
-        : path.dirname(require.resolve(module + '/web'));
+        : path.dirname(resolveModule(module + '/web'));
     if (
       fs.existsSync(`${webPath}/init.ts`) ||
       fs.existsSync(`${webPath}/init.tsx`) ||
@@ -110,7 +103,7 @@ class ModuleService {
   getStaticPath(moduleName: string): string | null {
     let staticPath: string | null;
     if (moduleName !== moduleManager.currentModule.name) {
-      staticPath = this.getPackageRootPath(moduleName + '/web');
+      staticPath = getPackageRootPath(moduleName + '/web');
       if (staticPath) {
         staticPath = path.join(staticPath, 'static');
       }

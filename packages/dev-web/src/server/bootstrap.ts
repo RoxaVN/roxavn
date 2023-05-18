@@ -1,3 +1,5 @@
+import { broadcastDevReady, type ServerBuild } from '@remix-run/node';
+import { constants } from '@roxavn/core/base';
 import {
   type RemixLoaderContextHelper,
   ServerModule,
@@ -12,7 +14,7 @@ import {
 import fastify, { type FastifyRequest } from 'fastify';
 import path from 'path';
 
-export async function bootstrap(currentDir: string) {
+export async function bootstrap(serverBuild: ServerBuild) {
   const app = fastify();
 
   registerServerModules();
@@ -28,12 +30,13 @@ export async function bootstrap(currentDir: string) {
       Object.assign({}, request.params, request.query, request.body),
   });
   await app.register(remixFastifyPlugin, {
-    build: path.join(currentDir, '.web/build/index.js'),
-    rootDir: path.join(currentDir, '.web'),
+    build: serverBuild,
+    rootDir: path.join(process.cwd(), '.web'),
     mode: process.env.NODE_ENV,
     getLoadContext: getLoadContext as any,
     purgeRequireCacheInDevelopment: false,
   });
+
   // register api routes
   ServerModule.apiRoutes.forEach((route) => {
     app.route({
@@ -52,5 +55,11 @@ export async function bootstrap(currentDir: string) {
   await databaseManager.createSource();
 
   const port = process.env.PORT ? Number(process.env.PORT) || 3000 : 3000;
-  return app.listen({ port, host: '0.0.0.0' });
+  const address = await app.listen({ port, host: '0.0.0.0' });
+
+  if (process.env.NODE_ENV === constants.ENV_DEVELOPMENT) {
+    broadcastDevReady(serverBuild);
+  }
+
+  return address;
 }

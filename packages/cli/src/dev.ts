@@ -1,4 +1,3 @@
-import nodemon from 'nodemon';
 import { cli } from '@remix-run/dev';
 import { constants } from '@roxavn/core/base';
 
@@ -14,8 +13,7 @@ class DevService {
 
   run() {
     this.initEnv();
-    cli.run(['watch', '.web']);
-    nodemon('.web/server.js');
+    cli.run(['dev', '.web', '-c', 'node .web/server.mjs']);
   }
 }
 

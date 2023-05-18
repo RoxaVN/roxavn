@@ -1,6 +1,13 @@
 import fs from 'fs';
 import fse from 'fs-extra';
+import { createRequire } from 'node:module';
 import path from 'path';
+
+const nodeRequire = createRequire(import.meta.url);
+
+export const resolveModule = (module: string) => {
+  return nodeRequire.resolve(module);
+};
 
 /**
  * Gets `package.json` file content of module
@@ -11,7 +18,7 @@ export const getPackageJson = (module?: string) => {
 };
 
 export const getPackageRootPath = (module: string) => {
-  let modulePath = require.resolve(module);
+  let modulePath = resolveModule(module);
   while (modulePath.length > 1) {
     modulePath = path.dirname(modulePath);
     if (fs.existsSync(path.join(modulePath, 'package.json'))) {

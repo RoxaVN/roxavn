@@ -1,6 +1,6 @@
 import { createEmotionCache } from '@mantine/core';
 import { StylesPlaceholder } from '@mantine/remix';
-import { json, type LoaderArgs, type MetaFunction } from '@remix-run/node';
+import { json, type LoaderArgs, type V2_MetaFunction } from '@remix-run/node';
 import {
   Links,
   LiveReload,
@@ -20,10 +20,15 @@ export const loader = async ({ request }: LoaderArgs) => {
   return json({ locale });
 };
 
-export const meta: MetaFunction = () => ({
-  charset: 'utf-8',
-  viewport: 'width=device-width,initial-scale=1',
-});
+export const meta: V2_MetaFunction = () => [
+  {
+    charSet: 'utf-8',
+  },
+  {
+    name: 'viewport',
+    content: 'width=device-width,initial-scale=1',
+  },
+];
 
 function useChangeLanguage(locale: string) {
   const { i18n } = useTranslation();

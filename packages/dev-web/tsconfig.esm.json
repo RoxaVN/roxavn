@@ -1,7 +1,24 @@
 {
-  "extends": "./tsconfig.cjs.json",
   "compilerOptions": {
     "outDir": "dist/esm",
-    "module": "ESNext"
-  }
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "react-jsx",
+    "declaration": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "esModuleInterop": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "strict": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

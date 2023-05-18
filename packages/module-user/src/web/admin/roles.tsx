@@ -8,7 +8,7 @@ import {
   webModule as coreWebModule,
 } from '@roxavn/core/web';
 import { IconCrown } from '@tabler/icons-react';
-import kebabCase from 'lodash/kebabCase';
+import { kebabCase } from 'lodash-es';
 
 import { roleApi } from '../../base';
 import { webModule } from '../module';

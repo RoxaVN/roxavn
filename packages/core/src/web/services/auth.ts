@@ -1,4 +1,4 @@
-import isEmpty from 'lodash/isEmpty';
+import { isEmpty } from 'lodash-es';
 import { Subject } from 'rxjs';
 
 import { Api, constants } from '../../base/index.js';

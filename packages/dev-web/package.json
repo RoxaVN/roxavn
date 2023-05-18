@@ -1,10 +1,11 @@
 {
   "name": "@roxavn/dev-web",
   "version": "0.1.0",
-  "main": "./dist/cjs/index.js",
+  "main": "./dist/esm/index.js",
+  "type": "module",
   "sideEffects": false,
   "scripts": {
-    "build": "tsc -p tsconfig.cjs.json && tsc -p tsconfig.esm.json",
+    "build": "tsc -p tsconfig.esm.json",
     "dev": "roxavn dev",
     "start": "cross-env NODE_ENV=production node .web/server.js"
   },
@@ -16,40 +17,39 @@
     "@mantine/modals": "^6.0.0",
     "@mantine/notifications": "^6.0.0",
     "@mantine/remix": "^6.0.0",
-    "@remix-run/node": "^1.7.6",
-    "@remix-run/react": "^1.7.6",
+    "@remix-run/node": "^1.16.1",
+    "@remix-run/react": "^1.16.1",
     "@roxavn/core": "^0.1.28",
-    "@roxavn/remix-fastify": "^2.7.1",
+    "@roxavn/remix-fastify": "^2.7.3",
+    "@roxavn/remix-i18next": "^5.1.1",
     "cross-env": "^7.0.3",
     "fastify": "^4.15.0",
     "i18next": "^22.0.3",
     "i18next-browser-languagedetector": "^7.0.1",
     "i18next-fs-backend": "^2.0.0",
     "i18next-http-backend": "^2.0.1",
+    "isbot": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-i18next": "^12.2.0",
-    "remix-i18next": "^5.1.0"
+    "react-i18next": "^12.2.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "^1.7.6",
-    "@remix-run/eslint-config": "^1.7.6",
+    "@remix-run/dev": "^1.16.1",
+    "@remix-run/eslint-config": "^1.16.1",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "dotenv": "^16.0.3",
     "eslint": "^8.27.0",
     "nodemon": "^2.0.20",
     "npm-run-all": "^4.1.5",
-    "typescript": "^4.8.4"
+    "typescript": "^5.0.4"
   },
   "exports": {
-    ".": "./dist/cjs/index.js",
+    ".": "./dist/esm/index.js",
     "./web": {
-      "require": "./dist/cjs/web/index.js",
       "import": "./dist/esm/web/index.js"
     },
     "./server": {
-      "require": "./dist/cjs/server/index.js",
       "import": "./dist/esm/server/index.js"
     }
   },

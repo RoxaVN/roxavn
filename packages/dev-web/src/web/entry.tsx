@@ -7,7 +7,7 @@ import Backend from 'i18next-http-backend';
 import { startTransition } from 'react';
 import { hydrateRoot } from 'react-dom/client';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
-import { getInitialNamespaces } from 'remix-i18next';
+import { getInitialNamespaces } from '@roxavn/remix-i18next';
 
 export function hydrate() {
   i18next

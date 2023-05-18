@@ -1,6 +1,8 @@
-const { bootstrap } = require('@roxavn/dev-web/server');
+import { bootstrap } from '@roxavn/dev-web/server';
 
-bootstrap(process.cwd())
+import * as serverBuild from './build/index.mjs';
+
+bootstrap(serverBuild)
   .then((address) => console.log(`✅ App ready: ${address}`))
   .catch((error) => {
     console.error(error);

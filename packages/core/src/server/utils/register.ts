@@ -3,7 +3,7 @@ import minimatch from 'minimatch';
 import path from 'path';
 
 import { AppConfig } from '@remix-run/dev';
-import { visitFiles } from './index.js';
+import { resolveModule, visitFiles } from './index.js';
 import { BaseModule } from '../../base/index.js';
 import { moduleManager } from '../module.manager.js';
 
@@ -50,7 +50,7 @@ function definePageRoutes(
         module === moduleManager.currentModule.name
           ? '../../src/web'
           : path
-              .dirname(require.resolve(module + '/web'))
+              .dirname(resolveModule(module + '/web'))
               .replace('/cjs/', '/esm/'); // simple get esm path, should use import.meta if posible
       const pagesFolder = path.join(pathToModule, 'pages');
       if (fs.existsSync(pagesFolder)) {
