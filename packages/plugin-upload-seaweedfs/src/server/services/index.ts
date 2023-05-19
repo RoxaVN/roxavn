@@ -1,3 +1,3 @@
-export * from './setting';
-export * from './seaweedfs.client';
-export * from './storage.handler';
+export * from './setting.js';
+export * from './seaweedfs.client.js';
+export * from './storage.handler.js';

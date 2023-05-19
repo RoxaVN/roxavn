@@ -3,9 +3,9 @@ import { ApiService } from '@roxavn/core/server';
 import { serverModule as uploadServerModule } from '@roxavn/module-upload/server';
 import { UpdateSettingService } from '@roxavn/module-utils/server';
 
-import { constants, settingApi } from '../../base';
-import { serverModule } from '../module';
-import { SeaweedFSStorageHandlerService } from './storage.handler';
+import { constants, settingApi } from '../../base/index.js';
+import { serverModule } from '../module.js';
+import { SeaweedFSStorageHandlerService } from './storage.handler.js';
 
 @serverModule.useApi(settingApi.updateSeaweedFSSetting)
 export class UpdateSeaweedFSSettingApiService extends ApiService {

@@ -1,5 +1,5 @@
 import { GetStorageHandlerService } from '@roxavn/module-upload/server';
 
-import { SeaweedFSStorageHandlerService } from './services';
+import { SeaweedFSStorageHandlerService } from './services/index.js';
 
 GetStorageHandlerService.handlerServices.push(SeaweedFSStorageHandlerService);

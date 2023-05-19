@@ -6,8 +6,8 @@ import {
 import { GetSettingService } from '@roxavn/module-utils/server';
 import { type ReadStream } from 'fs';
 
-import { SeaweedFSClient } from './seaweedfs.client';
-import { constants } from '../../base';
+import { SeaweedFSClient } from './seaweedfs.client.js';
+import { constants } from '../../base/index.js';
 
 export class SeaweedFSStorageHandler implements StorageHandler {
   name = 'SeaweedFS';

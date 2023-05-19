@@ -2,8 +2,8 @@ import { TextInput } from '@mantine/core';
 import { ApiFormGroup, ModuleT } from '@roxavn/core/web';
 import { webModule as uploadWebModule } from '@roxavn/module-upload/web';
 
-import { constants, settingApi } from '../base';
-import { webModule } from './module';
+import { constants, settingApi } from '../base/index.js';
+import { webModule } from './module.js';
 
 export default function () {
   uploadWebModule.adminSettings[constants.SEAWEEDFS_SETTING] = {
