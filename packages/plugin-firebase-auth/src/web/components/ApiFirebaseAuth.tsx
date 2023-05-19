@@ -3,8 +3,8 @@ import { InferApiResponse } from '@roxavn/core/base';
 import { authService, useApi } from '@roxavn/core/web';
 import firebase from 'firebase/compat/app';
 import { Fragment, useEffect, useState } from 'react';
-import { identityApi } from '../../base';
-import { FirebaseAuth, FirebaseAuthProps } from './FirebaseAuth';
+import { identityApi } from '../../base/index.js';
+import { FirebaseAuth, FirebaseAuthProps } from './FirebaseAuth.js';
 
 export interface ApiFirebaseAuthProps {
   firebaseConfig: {

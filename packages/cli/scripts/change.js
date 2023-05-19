@@ -51,7 +51,7 @@ function parseFile(filePath) {
 // visitFiles(process.argv[2], parseFile);
 
 visitFiles(
-  '/home/woody/Documents/noop/packages/module-upload/src',
+  '/home/woody/Documents/noop/packages/plugin-firebase-auth/src',
   parseFile,
   process.cwd()
 );

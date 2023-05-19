@@ -8,7 +8,7 @@ import {
 } from '@roxavn/core/base';
 import { SettingResponse, permissions } from '@roxavn/module-utils/base';
 
-import { baseModule } from '../module';
+import { baseModule } from '../module.js';
 
 const settingSource = new ApiSource<SettingResponse>(
   [accessManager.scopes.Setting],

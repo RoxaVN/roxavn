@@ -5,8 +5,8 @@ import {
   serverModule as utilsServerModule,
 } from '@roxavn/module-utils/server';
 
-import { constants, settingApi } from '../../base';
-import { serverModule } from '../module';
+import { constants, settingApi } from '../../base/index.js';
+import { serverModule } from '../module.js';
 
 @serverModule.useApi(settingApi.updateFirbaseServerSetting)
 export class UpdateFirbaseServerSettingApiService extends ApiService {

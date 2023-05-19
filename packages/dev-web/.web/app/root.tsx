@@ -1,6 +1,7 @@
 import { json, type LoaderArgs, type V2_MetaFunction } from '@remix-run/node';
 import { i18nextServer } from '@roxavn/core/server';
 import { createRoot } from '@roxavn/dev-web/web';
+import * as initModules from './init.modules.js';
 
 export const loader = async ({ request }: LoaderArgs) => {
   const locale = await i18nextServer.getLocale(request);
@@ -16,7 +17,5 @@ export const meta: V2_MetaFunction = () => [
     content: 'width=device-width,initial-scale=1',
   },
 ];
-
-import * as initModules from './init.modules.js';
 
 export default createRoot({ initModules });

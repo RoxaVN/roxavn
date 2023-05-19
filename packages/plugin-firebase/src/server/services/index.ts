@@ -1,2 +1,2 @@
-export * from './setting';
-export * from './firebase';
+export * from './setting.js';
+export * from './firebase.js';

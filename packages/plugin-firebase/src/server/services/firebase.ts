@@ -6,7 +6,7 @@ import {
 } from '@roxavn/module-utils/server';
 import firebaseAdmin from 'firebase-admin';
 
-import { constants } from '../../base';
+import { constants } from '../../base/index.js';
 
 export class GetFirebaseAppService extends BaseService {
   async handle(request: { projectId: string }) {

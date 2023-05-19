@@ -6,7 +6,7 @@ import {
 } from '@roxavn/core/base';
 import { scopes } from '@roxavn/module-user/base';
 
-import { baseModule } from '../module';
+import { baseModule } from '../module.js';
 
 const identitySource = new ApiSource([scopes.Identity], baseModule);
 

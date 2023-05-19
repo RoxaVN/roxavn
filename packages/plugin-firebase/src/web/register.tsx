@@ -6,8 +6,8 @@ import {
 } from '@roxavn/core/web';
 import { webModule as utilsWebModule } from '@roxavn/module-utils/web';
 
-import { constants, settingApi } from '../base';
-import { webModule } from './module';
+import { constants, settingApi } from '../base/index.js';
+import { webModule } from './module.js';
 
 export default function () {
   utilsWebModule.adminSettings[constants.FIREBASE_SERVER_SETTING] = {

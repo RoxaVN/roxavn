@@ -3,8 +3,8 @@ import { IdentityService } from '@roxavn/module-user/server';
 import { GetFirebaseAppService } from '@roxavn/plugin-firebase/server';
 import firebaseAdmin from 'firebase-admin';
 
-import { identityApi } from '../../base';
-import { serverModule } from '../module';
+import { identityApi } from '../../base/index.js';
+import { serverModule } from '../module.js';
 
 serverModule.useRawApi(identityApi.verifyToken, async (request, context) => {
   const firebaseApp = await serverModule

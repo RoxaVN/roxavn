@@ -1,2 +1,2 @@
-export * from './FirebaseAuth';
-export * from './ApiFirebaseAuth';
+export * from './FirebaseAuth.js';
+export * from './ApiFirebaseAuth.js';
