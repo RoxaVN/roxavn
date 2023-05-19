@@ -1,3 +1,3 @@
-export * from './module';
-export * from './apis';
-export * from './access';
+export * from './module.js';
+export * from './apis/index.js';
+export * from './access.js';

@@ -51,7 +51,7 @@ function parseFile(filePath) {
 // visitFiles(process.argv[2], parseFile);
 
 visitFiles(
-  '/home/woody/Documents/noop/packages/plugin-upload-seaweedfs/src',
+  '/home/woody/Documents/noop/packages/module-notification/src',
   parseFile,
   process.cwd()
 );

@@ -1,3 +1,3 @@
-export * from './module';
-export * from './services';
-export * from './entities';
+export * from './module.js';
+export * from './services/index.js';
+export * from './entities/index.js';

@@ -6,7 +6,7 @@ import {
   type Relation,
 } from 'typeorm';
 
-import { Notification } from './notification.entity';
+import { Notification } from './notification.entity.js';
 
 @Entity()
 export class UserNotification {

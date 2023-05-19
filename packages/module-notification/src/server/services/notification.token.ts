@@ -1,8 +1,8 @@
 import { ApiService, InferAuthApiRequest } from '@roxavn/core/server';
 
-import { notificationTokenApi } from '../../base';
-import { NotificationToken } from '../entities';
-import { serverModule } from '../module';
+import { notificationTokenApi } from '../../base/index.js';
+import { NotificationToken } from '../entities/index.js';
+import { serverModule } from '../module.js';
 
 @serverModule.useApi(notificationTokenApi.create)
 export class CreateNotificationTokenApiService extends ApiService {

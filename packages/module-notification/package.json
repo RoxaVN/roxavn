@@ -8,6 +8,7 @@
   "license": "UNLICENSED",
   "author": "",
   "roxavn": {},
+  "type": "module",
   "sideEffects": false,
   "devDependencies": {
     "@roxavn/cli": "^0.1.0",
@@ -26,18 +27,9 @@
   },
   "exports": {
     ".": "./dist/cjs/index.js",
-    "./web": {
-      "require": "./dist/cjs/web/index.js",
-      "import": "./dist/esm/web/index.js"
-    },
-    "./base": {
-      "require": "./dist/cjs/base/index.js",
-      "import": "./dist/esm/base/index.js"
-    },
-    "./server": {
-      "require": "./dist/cjs/server/index.js",
-      "import": "./dist/esm/server/index.js"
-    }
+    "./web": "./dist/esm/web/index.js",
+    "./base": "./dist/esm/base/index.js",
+    "./server": "./dist/esm/server/index.js"
   },
   "typesVersions": {
     "*": {

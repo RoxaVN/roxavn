@@ -1,2 +1,2 @@
-export * from './user.notification';
-export * from './notification.token';
+export * from './user.notification.js';
+export * from './notification.token.js';

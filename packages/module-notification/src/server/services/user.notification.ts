@@ -2,9 +2,9 @@ import { InferApiRequest } from '@roxavn/core/base';
 import { ApiService } from '@roxavn/core/server';
 import { IsNull } from 'typeorm';
 
-import { userNotificationApi } from '../../base';
-import { UserNotification } from '../entities';
-import { serverModule } from '../module';
+import { userNotificationApi } from '../../base/index.js';
+import { UserNotification } from '../entities/index.js';
+import { serverModule } from '../module.js';
 
 @serverModule.useApi(userNotificationApi.getMany)
 export class GetUserNotificationsApiService extends ApiService {

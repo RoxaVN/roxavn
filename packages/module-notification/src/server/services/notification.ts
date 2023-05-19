@@ -1,5 +1,5 @@
 import { BaseService } from '@roxavn/core/server';
-import { Notification, UserNotification } from '../entities';
+import { Notification, UserNotification } from '../entities/index.js';
 
 export class CreateNotificationService extends BaseService {
   async handle({
