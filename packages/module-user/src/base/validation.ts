@@ -1,7 +1,7 @@
 import { I18nErrorField } from '@roxavn/core/base';
 import { Matches, ValidationOptions } from 'class-validator';
 
-import { baseModule } from './module';
+import { baseModule } from './module.js';
 
 export const IsUsername = (
   validationOptions?: ValidationOptions

@@ -1,6 +1,11 @@
 import { authService, http, uiManager, userService } from '@roxavn/core/web';
 import { lazy } from 'react';
-import { accessTokenApi, roleApi, userApi, userRoleApi } from '../base';
+import {
+  accessTokenApi,
+  roleApi,
+  userApi,
+  userRoleApi,
+} from '../base/index.js';
 
 export default function () {
   authService.authenticateApi = userApi.getOne;

@@ -7,9 +7,9 @@ import {
   MinLength,
   TransformNumber,
 } from '@roxavn/core/base';
-import { permissions, scopes } from '../access';
-import { baseModule } from '../module';
-import { UserResponse } from './user';
+import { permissions, scopes } from '../access.js';
+import { baseModule } from '../module.js';
+import { UserResponse } from './user.js';
 
 const roleUserSource = new ApiSource<UserResponse>(
   [scopes.Role, accessManager.scopes.User],

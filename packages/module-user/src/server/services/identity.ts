@@ -1,8 +1,8 @@
 import { BaseService } from '@roxavn/core/server';
-import { Identity } from '../entities';
-import { CreateAccessTokenService } from './access.token';
-import { tokenService } from './token';
-import { CreateUserApiService } from './user';
+import { Identity } from '../entities/index.js';
+import { CreateAccessTokenService } from './access.token.js';
+import { tokenService } from './token.js';
+import { CreateUserApiService } from './user.js';
 
 export class IdentityService extends BaseService {
   async handle(request: {

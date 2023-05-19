@@ -2,7 +2,7 @@ import { Card, Container } from '@mantine/core';
 import { webRoutes } from '@roxavn/core/base';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { ResetPasswordForm } from '../components';
+import { ResetPasswordForm } from '../components/index.js';
 
 const ResetPasswordPage = (): JSX.Element => {
   const navigate = useNavigate();

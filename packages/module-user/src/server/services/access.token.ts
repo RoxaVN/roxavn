@@ -1,11 +1,11 @@
 import { ApiService, BaseService } from '@roxavn/core/server';
 import { InferApiRequest } from '@roxavn/core/base';
 
-import { accessTokenApi } from '../../base';
-import { AccessToken } from '../entities';
-import { serverModule } from '../module';
-import { tokenService } from './token';
-import { Env } from '../config';
+import { accessTokenApi } from '../../base/index.js';
+import { AccessToken } from '../entities/index.js';
+import { serverModule } from '../module.js';
+import { tokenService } from './token.js';
+import { Env } from '../config.js';
 
 @serverModule.useApi(accessTokenApi.getMany)
 export class GetAccessTokensApiService extends ApiService {

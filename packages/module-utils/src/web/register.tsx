@@ -1,6 +1,6 @@
 import { WebModule } from '@roxavn/core/web';
-import { settingApi } from '../base';
-import { ModuleSettings } from './components';
+import { settingApi } from '../base/index.js';
+import { ModuleSettings } from './components/index.js';
 
 WebModule.settingsPageRender = (module) => {
   return (

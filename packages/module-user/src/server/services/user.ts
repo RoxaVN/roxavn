@@ -5,9 +5,9 @@ import {
 } from '@roxavn/core/base';
 import { And, ILike, In, LessThan, MoreThan } from 'typeorm';
 
-import { userApi } from '../../base';
-import { User } from '../entities';
-import { serverModule } from '../module';
+import { userApi } from '../../base/index.js';
+import { User } from '../entities/index.js';
+import { serverModule } from '../module.js';
 import { ApiService } from '@roxavn/core/server';
 
 @serverModule.useApi(userApi.getOne)

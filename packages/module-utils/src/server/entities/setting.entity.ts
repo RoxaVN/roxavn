@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { UpdateSettingRequest } from '../../base';
+import { UpdateSettingRequest } from '../../base/index.js';
 
 @Entity()
 @Index(['module', 'name'], { unique: true })

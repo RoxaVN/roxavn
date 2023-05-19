@@ -1,6 +1,6 @@
 import { serviceManager } from '@roxavn/core/server';
 
-import { Role, UserRole } from '../entities';
+import { Role, UserRole } from '../entities/index.js';
 import { Brackets } from 'typeorm';
 
 serviceManager.checkUserPermission = async (

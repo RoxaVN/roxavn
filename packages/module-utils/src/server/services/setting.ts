@@ -1,10 +1,10 @@
 import { Empty, InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { ApiService, BaseService } from '@roxavn/core/server';
 
-import { UpdateSettingRequest } from '../../base';
-import { Setting } from '../entities';
-import { serverModule } from '../module';
-import { settingApi } from '../../base/apis';
+import { UpdateSettingRequest } from '../../base/index.js';
+import { Setting } from '../entities/index.js';
+import { serverModule } from '../module.js';
+import { settingApi } from '../../base/apis/index.js';
 
 @serverModule.useApi(settingApi.getPublic)
 export class GetPublicSettingService extends ApiService {

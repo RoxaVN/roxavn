@@ -2,9 +2,9 @@ import { InferApiRequest } from '@roxavn/core/base';
 import { ApiService } from '@roxavn/core/server';
 import { ILike, In } from 'typeorm';
 
-import { roleApi } from '../../base';
-import { Role, UserRole } from '../entities';
-import { serverModule } from '../module';
+import { roleApi } from '../../base/index.js';
+import { Role, UserRole } from '../entities/index.js';
+import { serverModule } from '../module.js';
 
 @serverModule.useApi(roleApi.getMany)
 export class GetRolesApiService extends ApiService {

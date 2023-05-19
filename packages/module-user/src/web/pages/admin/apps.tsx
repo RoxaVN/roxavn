@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { type MetaFunction } from '@remix-run/node';
+import { type V2_MetaFunction } from '@remix-run/node';
 import { Outlet, Link } from 'react-router-dom';
 import {
   AppShell,
@@ -24,8 +24,8 @@ import {
   IsAuthenticatedPage,
 } from '@roxavn/core/web';
 
-import { userRoleApi } from '../../../base';
-import { UserMenu } from '../../components';
+import { userRoleApi } from '../../../base/index.js';
+import { UserMenu } from '../../components/index.js';
 
 const BASE = '/admin/apps';
 
@@ -113,8 +113,10 @@ export default function () {
   );
 }
 
-export const meta: MetaFunction = () => ({
-  title: 'Web Erp',
-});
+export const meta: V2_MetaFunction = () => [
+  {
+    title: 'Web Erp',
+  },
+];
 
 export { CatchBoundary, ErrorBoundary };

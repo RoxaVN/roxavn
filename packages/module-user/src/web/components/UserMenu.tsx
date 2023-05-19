@@ -3,7 +3,7 @@ import { authService, useAuthUser, userService } from '@roxavn/core/web';
 import { IconLogout, IconUserCircle } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
-import { webModule } from '../module';
+import { webModule } from '../module.js';
 
 export const UserMenu = () => {
   const { t } = webModule.useTranslation();

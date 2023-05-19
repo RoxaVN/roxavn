@@ -10,8 +10,8 @@ import {
 import { IconCrown } from '@tabler/icons-react';
 import { kebabCase } from 'lodash-es';
 
-import { roleApi } from '../../base';
-import { webModule } from '../module';
+import { roleApi } from '../../base/index.js';
+import { webModule } from '../module.js';
 
 const Page = () => {
   const { t } = webModule.useTranslation();

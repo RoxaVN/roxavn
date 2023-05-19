@@ -103,7 +103,7 @@ class ModuleService {
   getStaticPath(moduleName: string): string | null {
     let staticPath: string | null;
     if (moduleName !== moduleManager.currentModule.name) {
-      staticPath = getPackageRootPath(moduleName + '/web');
+      staticPath = getPackageRootPath(moduleName);
       if (staticPath) {
         staticPath = path.join(staticPath, 'static');
       }

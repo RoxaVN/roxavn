@@ -11,9 +11,9 @@ import {
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { useParams } from 'react-router-dom';
 
-import { userRoleApi } from '../../base';
-import { RoleInput } from '../components';
-import { webModule } from '../module';
+import { userRoleApi } from '../../base/index.js';
+import { RoleInput } from '../components/index.js';
+import { webModule } from '../module.js';
 
 const Page = () => {
   const id = useParams().id as any;

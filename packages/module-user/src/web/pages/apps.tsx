@@ -22,8 +22,8 @@ import { IconApps } from '@tabler/icons-react';
 import { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 
-import { UserMenu } from '../components';
-import { webModule as userWebModule } from '../module';
+import { UserMenu } from '../components/index.js';
+import { webModule as userWebModule } from '../module.js';
 
 const BASE = '/apps';
 

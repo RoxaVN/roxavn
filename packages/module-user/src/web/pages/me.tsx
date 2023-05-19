@@ -27,7 +27,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Outlet } from 'react-router-dom';
 
-import { UserMenu } from '../components';
+import { UserMenu } from '../components/index.js';
 
 const BASE = '/me';
 

@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Identity } from './identity.entity';
-import { User } from './user.entity';
+import { Identity } from './identity.entity.js';
+import { User } from './user.entity.js';
 
 @Entity()
 export class AccessToken {

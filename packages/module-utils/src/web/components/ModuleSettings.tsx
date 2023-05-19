@@ -5,7 +5,7 @@ import { ApiForm, webModule as coreWebModule } from '@roxavn/core/web';
 import { IconCheck } from '@tabler/icons-react';
 import React from 'react';
 
-import { settingApi } from '../../base';
+import { settingApi } from '../../base/index.js';
 
 export interface ModuleSettingsProps {
   api: typeof settingApi.getAll;

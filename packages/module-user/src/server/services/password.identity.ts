@@ -5,12 +5,12 @@ import {
 } from '@roxavn/core/base';
 import { ApiService } from '@roxavn/core/server';
 
-import { constants, passwordIdentityApi } from '../../base';
-import { Env } from '../config';
-import { Identity } from '../entities';
-import { serverModule } from '../module';
-import { CreateAccessTokenService } from './access.token';
-import { tokenService } from './token';
+import { constants, passwordIdentityApi } from '../../base/index.js';
+import { Env } from '../config.js';
+import { Identity } from '../entities/index.js';
+import { serverModule } from '../module.js';
+import { CreateAccessTokenService } from './access.token.js';
+import { tokenService } from './token.js';
 
 serverModule.useRawApi(passwordIdentityApi.auth, async (request, context) => {
   const identity = await context.dbSession.getRepository(Identity).findOne({

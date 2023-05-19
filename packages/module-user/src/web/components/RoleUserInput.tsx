@@ -1,7 +1,7 @@
 import { Select, SelectProps } from '@mantine/core';
 import { ApiInput } from '@roxavn/core/web';
 
-import { roleUserApi } from '../../base';
+import { roleUserApi } from '../../base/index.js';
 
 export const RoleUserInput = ({
   scope,

@@ -19,8 +19,8 @@ import {
   userApi,
   userRoleApi,
   webRoutes,
-} from '../../base';
-import { webModule } from '../module';
+} from '../../base/index.js';
+import { webModule } from '../module.js';
 
 const Page = () => {
   const { t } = webModule.useTranslation();

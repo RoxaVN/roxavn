@@ -6,9 +6,9 @@ import {
 import { ApiService, moduleManager, serviceManager } from '@roxavn/core/server';
 import { In } from 'typeorm';
 
-import { userRoleApi } from '../../base';
-import { Role, UserRole } from '../entities';
-import { serverModule } from '../module';
+import { userRoleApi } from '../../base/index.js';
+import { Role, UserRole } from '../entities/index.js';
+import { serverModule } from '../module.js';
 
 @serverModule.useApi(userRoleApi.create)
 export class CreateUserRoleApiService extends ApiService {

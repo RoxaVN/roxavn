@@ -5,10 +5,10 @@ import {
   MinLength,
   NotFoundException,
 } from '@roxavn/core/base';
-import { permissions } from '../access';
+import { permissions } from '../access.js';
 
-import { SettingResponse } from '../interfaces';
-import { baseModule } from '../module';
+import { SettingResponse } from '../interfaces/index.js';
+import { baseModule } from '../module.js';
 
 const settingSource = new ApiSource<SettingResponse>(
   [accessManager.scopes.Setting],

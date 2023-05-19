@@ -1,5 +1,5 @@
 import { Token, TokenHasher, TokenSigner } from '@roxavn/core/server';
-import { Env } from '../config';
+import { Env } from '../config.js';
 
 export class TokenService {
   private readonly tokenCreator = Token;

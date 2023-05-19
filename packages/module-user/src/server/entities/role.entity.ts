@@ -7,7 +7,7 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserRole } from './user-role.entity';
+import { UserRole } from './user-role.entity.js';
 
 @Entity()
 @Unique(['scope', 'name'])

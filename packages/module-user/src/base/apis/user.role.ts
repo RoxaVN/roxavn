@@ -11,9 +11,9 @@ import {
   TransformArray,
   TransformNumber,
 } from '@roxavn/core/base';
-import { baseModule } from '../module';
-import { permissions, scopes } from '../access';
-import { RoleResponse } from './role';
+import { baseModule } from '../module.js';
+import { permissions, scopes } from '../access.js';
+import { RoleResponse } from './role.js';
 
 const userRoleSource = new ApiSource<RoleResponse & { scopeId?: string }>(
   [accessManager.scopes.User, scopes.Role],

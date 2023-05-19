@@ -7,8 +7,8 @@ import {
   webModule as coreWebModule,
 } from '@roxavn/core/web';
 import { IconEye, IconShieldChevron } from '@tabler/icons-react';
-import { userRoleApi, roleApi } from '../../base';
-import { webModule } from '../module';
+import { userRoleApi, roleApi } from '../../base/index.js';
+import { webModule } from '../module.js';
 
 const Page = () => {
   const { t } = webModule.useTranslation();

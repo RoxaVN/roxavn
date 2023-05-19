@@ -15,9 +15,9 @@ import {
   TransformArray,
   TransformNumber,
 } from '@roxavn/core/base';
-import { baseModule } from '../module';
-import { permissions } from '../access';
-import { IsUsername } from '../validation';
+import { baseModule } from '../module.js';
+import { permissions } from '../access.js';
+import { IsUsername } from '../validation.js';
 
 export interface UserResponse {
   id: string;

@@ -1,8 +1,8 @@
 import { ServerLoaderContext, ServerModule } from '@roxavn/core/server';
 import { Cookie, constants } from '@roxavn/core/base';
 import { Raw } from 'typeorm';
-import { AccessToken } from '../entities';
-import { tokenService } from '../services';
+import { AccessToken } from '../entities/index.js';
+import { tokenService } from '../services/index.js';
 
 // authenticate access token
 ServerModule.authenticatorMiddleware = async ({

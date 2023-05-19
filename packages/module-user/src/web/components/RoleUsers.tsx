@@ -11,8 +11,8 @@ import { ApiTable, useApi } from '@roxavn/core/web';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { Fragment } from 'react';
 
-import { roleApi, roleUserApi, userRoleApi } from '../../base';
-import { webModule } from '../module';
+import { roleApi, roleUserApi, userRoleApi } from '../../base/index.js';
+import { webModule } from '../module.js';
 
 export interface RoleUsersProps {
   module?: string;

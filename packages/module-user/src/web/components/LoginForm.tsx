@@ -2,8 +2,8 @@ import { TextInput, PasswordInput, Title } from '@mantine/core';
 import { InferApiResponse } from '@roxavn/core/base';
 import { ApiFormGroup, authService } from '@roxavn/core/web';
 
-import { passwordIdentityApi } from '../../base';
-import { webModule } from '../module';
+import { passwordIdentityApi } from '../../base/index.js';
+import { webModule } from '../module.js';
 
 interface LoginFormProps {
   onSuccess?: (data: InferApiResponse<typeof passwordIdentityApi.auth>) => void;

@@ -8,8 +8,8 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { AccessToken } from './access-token.entity';
-import { User } from './user.entity';
+import { AccessToken } from './access-token.entity.js';
+import { User } from './user.entity.js';
 
 @Entity()
 @Unique(['subject', 'type'])

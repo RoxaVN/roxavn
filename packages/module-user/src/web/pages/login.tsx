@@ -2,7 +2,7 @@ import { Card, Container } from '@mantine/core';
 import { webRoutes } from '@roxavn/core/base';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { LoginForm } from '../components';
+import { LoginForm } from '../components/index.js';
 
 const LoginPage = (): JSX.Element => {
   const navigate = useNavigate();

@@ -1,1 +1,1 @@
-export * from './ModuleSettings';
+export * from './ModuleSettings.js';

@@ -6,8 +6,8 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Role } from './role.entity';
-import { User } from './user.entity';
+import { Role } from './role.entity.js';
+import { User } from './user.entity.js';
 
 @Entity()
 export class UserRole {
