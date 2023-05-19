@@ -1,7 +1,7 @@
 import { accessManager, constants as coreConstants } from '@roxavn/core/base';
 
-import { baseModule } from './module';
-import { constants } from './constants';
+import { baseModule } from './module.js';
+import { constants } from './constants.js';
 
 export const scopes = accessManager.makeScopes(baseModule, {
   Project: { name: 'project' },

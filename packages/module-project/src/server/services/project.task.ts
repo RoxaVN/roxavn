@@ -2,9 +2,9 @@ import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { ApiService } from '@roxavn/core/server';
 import { In, IsNull } from 'typeorm';
 
-import { projectTaskApi } from '../../base';
-import { Task } from '../entities';
-import { serverModule } from '../module';
+import { projectTaskApi } from '../../base/index.js';
+import { Task } from '../entities/index.js';
+import { serverModule } from '../module.js';
 
 @serverModule.useApi(projectTaskApi.getRoot)
 export class GetProjectRootTaskApiService extends ApiService {

@@ -10,8 +10,8 @@ import {
   TransformNumber,
 } from '@roxavn/core/base';
 
-import { baseModule } from '../module';
-import { permissions, scopes } from '../access';
+import { baseModule } from '../module.js';
+import { permissions, scopes } from '../access.js';
 
 export interface TaskResponse {
   id: string;

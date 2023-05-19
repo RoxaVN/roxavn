@@ -12,10 +12,10 @@ import { IconSubtask, IconUsers } from '@tabler/icons-react';
 import {
   GetProjectApiService,
   GetProjectRootTaskApiService,
-} from '../../../../server';
-import { ProjectInfo, TaskPreview } from '../../../components';
-import { webModule } from '../../../module';
-import { scopes } from '../../../../base';
+} from '../../../../server/index.js';
+import { ProjectInfo, TaskPreview } from '../../../components/index.js';
+import { webModule } from '../../../module.js';
+import { scopes } from '../../../../base/index.js';
 
 export default function () {
   const data = useLoaderData<typeof loader>();

@@ -2,9 +2,9 @@ import { Anchor, Badge, Group, Text } from '@mantine/core';
 import { Link } from '@remix-run/react';
 import { utils } from '@roxavn/core/web';
 
-import { TaskResponse, webRoutes } from '../../base';
-import { webModule } from '../module';
-import { mapColor } from './Task';
+import { TaskResponse, webRoutes } from '../../base/index.js';
+import { webModule } from '../module.js';
+import { mapColor } from './Task.js';
 
 export interface TaskPreviewProps {
   task: TaskResponse;

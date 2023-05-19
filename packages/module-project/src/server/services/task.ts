@@ -21,9 +21,9 @@ import {
   taskApi,
   UnassignedTaskException,
   UserNotInProjectException,
-} from '../../base';
-import { Task } from '../entities';
-import { serverModule } from '../module';
+} from '../../base/index.js';
+import { Task } from '../entities/index.js';
+import { serverModule } from '../module.js';
 
 const statusForUpdate = [
   constants.TaskStatus.PENDING,

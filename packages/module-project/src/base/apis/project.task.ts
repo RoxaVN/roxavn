@@ -6,9 +6,9 @@ import {
   TransformArray,
 } from '@roxavn/core/base';
 
-import { baseModule } from '../module';
-import { permissions, scopes } from '../access';
-import { TaskResponse } from './task';
+import { baseModule } from '../module.js';
+import { permissions, scopes } from '../access.js';
+import { TaskResponse } from './task.js';
 
 const projectTaskSource = new ApiSource<TaskResponse>(
   [scopes.Project],

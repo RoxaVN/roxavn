@@ -33,8 +33,8 @@ import {
   webRoutes,
   taskApi,
   scopes,
-} from '../../base';
-import { webModule } from '../module';
+} from '../../base/index.js';
+import { webModule } from '../module.js';
 
 export interface TaskInfoProps {
   task: TaskResponse;

@@ -8,14 +8,14 @@ import {
   GetProjectTasksApiService,
   GetSubtasksApiService,
   GetTaskApiService,
-} from '../../../../../server';
+} from '../../../../../server/index.js';
 import {
   ParentTasks,
   ProjectInfo,
   Subtasks,
   TaskInfo,
-} from '../../../../components';
-import { scopes } from '../../../../../base';
+} from '../../../../components/index.js';
+import { scopes } from '../../../../../base/index.js';
 
 export default function () {
   const data = useLoaderData<typeof loader>();

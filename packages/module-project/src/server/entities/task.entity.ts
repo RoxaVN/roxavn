@@ -8,9 +8,9 @@ import {
   type Relation,
   UpdateDateColumn,
 } from 'typeorm';
-import { constants } from '../../base';
+import { constants } from '../../base/index.js';
 
-import { Project } from './project.entity';
+import { Project } from './project.entity.js';
 
 @Entity()
 export class Task {

@@ -1,7 +1,7 @@
 import { ModuleT } from '@roxavn/core/web';
 import { IconInbox, IconUser } from '@tabler/icons-react';
 
-import { webModule } from '../../module';
+import { webModule } from '../../module.js';
 
 export default webModule.makeAppPages([
   {

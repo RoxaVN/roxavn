@@ -7,9 +7,9 @@ import {
 import dayjs from 'dayjs';
 import { In } from 'typeorm';
 
-import { projectApi, roles, scopes } from '../../base';
-import { Project, Task } from '../entities';
-import { serverModule } from '../module';
+import { projectApi, roles, scopes } from '../../base/index.js';
+import { Project, Task } from '../entities/index.js';
+import { serverModule } from '../module.js';
 
 @serverModule.useApi(projectApi.getOne)
 export class GetProjectApiService extends ApiService {

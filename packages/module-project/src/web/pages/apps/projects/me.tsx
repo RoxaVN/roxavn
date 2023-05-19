@@ -11,8 +11,8 @@ import {
 import { IconPlus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
-import { constants, projectApi, webRoutes } from '../../../../base';
-import { webModule } from '../../../module';
+import { constants, projectApi, webRoutes } from '../../../../base/index.js';
+import { webModule } from '../../../module.js';
 
 function MePage() {
   const { t } = webModule.useTranslation();

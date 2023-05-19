@@ -1,3 +1,3 @@
-export * from './project';
-export * from './project.task';
-export * from './task';
+export * from './project.js';
+export * from './project.task.js';
+export * from './task.js';

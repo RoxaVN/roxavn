@@ -9,9 +9,9 @@ import {
 } from '@roxavn/core/web';
 import { IconPlus } from '@tabler/icons-react';
 
-import { TaskResponse, taskApi } from '../../base';
-import { webModule } from '../module';
-import { TaskPreview } from './TaskPreview';
+import { TaskResponse, taskApi } from '../../base/index.js';
+import { webModule } from '../module.js';
+import { TaskPreview } from './TaskPreview.js';
 
 export interface SubtasksProps {
   task: TaskResponse;

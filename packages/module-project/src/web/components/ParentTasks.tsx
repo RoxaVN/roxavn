@@ -2,8 +2,8 @@ import { Card, List } from '@mantine/core';
 import { InferApiResponse } from '@roxavn/core/base';
 import { Fragment } from 'react';
 
-import { projectTaskApi } from '../../base';
-import { TaskPreview } from './TaskPreview';
+import { projectTaskApi } from '../../base/index.js';
+import { TaskPreview } from './TaskPreview.js';
 
 export interface ParentTasksProps {
   parentTasks: InferApiResponse<typeof projectTaskApi.getSome>;

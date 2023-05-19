@@ -1,5 +1,5 @@
 import { BadRequestException, I18nErrorField } from '@roxavn/core/base';
-import { baseModule } from './module';
+import { baseModule } from './module.js';
 
 export class InvalidExpiryDateSubtaskException extends BadRequestException {
   i18n = {

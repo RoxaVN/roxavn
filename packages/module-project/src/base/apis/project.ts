@@ -13,9 +13,9 @@ import {
   TransformNumber,
 } from '@roxavn/core/base';
 
-import { baseModule } from '../module';
-import { permissions, scopes } from '../access';
-import { constants } from '../constants';
+import { baseModule } from '../module.js';
+import { permissions, scopes } from '../access.js';
+import { constants } from '../constants.js';
 
 export interface ProjectResponse {
   id: string;

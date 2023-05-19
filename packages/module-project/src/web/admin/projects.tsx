@@ -18,8 +18,8 @@ import {
   IconUsers,
 } from '@tabler/icons-react';
 
-import { constants, projectApi, scopes } from '../../base';
-import { webModule } from '../module';
+import { constants, projectApi, scopes } from '../../base/index.js';
+import { webModule } from '../module.js';
 
 const Page = () => {
   const { t } = webModule.useTranslation();

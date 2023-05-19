@@ -16,7 +16,12 @@ import {
 } from '@roxavn/core/web';
 import { IconEdit } from '@tabler/icons-react';
 
-import { constants, projectApi, ProjectResponse, webRoutes } from '../../base';
+import {
+  constants,
+  projectApi,
+  ProjectResponse,
+  webRoutes,
+} from '../../base/index.js';
 
 export interface ProjectInfoProps {
   project: ProjectResponse;

@@ -4,8 +4,8 @@ import { Link } from '@remix-run/react';
 import { servicesLoader } from '@roxavn/core/server';
 import { PaginationLinks, useLoaderData, utils } from '@roxavn/core/web';
 
-import { constants } from '../../../../base';
-import { GetProjectsApiService } from '../../../../server';
+import { constants } from '../../../../base/index.js';
+import { GetProjectsApiService } from '../../../../server/index.js';
 
 export default function () {
   const data = useLoaderData<typeof loader>();
