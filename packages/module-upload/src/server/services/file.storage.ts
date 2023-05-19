@@ -6,10 +6,13 @@ import {
 } from '@roxavn/core/server';
 import { Raw } from 'typeorm';
 
-import { NotFoundUserStorageException, fileStoageApi } from '../../base';
-import { FileStorage } from '../entities';
-import { serverModule } from '../module';
-import { GetStorageHandlerService } from './storage.handler';
+import {
+  NotFoundUserStorageException,
+  fileStoageApi,
+} from '../../base/index.js';
+import { FileStorage } from '../entities/index.js';
+import { serverModule } from '../module.js';
+import { GetStorageHandlerService } from './storage.handler.js';
 
 @serverModule.useApi(fileStoageApi.getMany)
 export class GetFileStoragesApiService extends ApiService {

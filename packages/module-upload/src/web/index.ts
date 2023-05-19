@@ -1,3 +1,3 @@
-export * from './module';
-export * from './hooks';
-export * from './components';
+export * from './module.js';
+export * from './hooks/index.js';
+export * from './components/index.js';

@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@roxavn/core/base';
 
-import { baseModule } from './module';
+import { baseModule } from './module.js';
 
 export class ExceedsStorageLimitException extends BadRequestException {
   i18n = {

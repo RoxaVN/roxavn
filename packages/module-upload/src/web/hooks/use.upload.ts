@@ -5,7 +5,7 @@ import {
   NotFoundUserStorageException,
   fileApi,
   fileStoageApi,
-} from '../../base';
+} from '../../base/index.js';
 
 export const useUpload = (file: File) => {
   const [refeth, setRefetch] = useState(1);

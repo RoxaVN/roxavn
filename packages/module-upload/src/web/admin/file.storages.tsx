@@ -8,8 +8,8 @@ import {
 } from '@roxavn/core/web';
 import { IconUsers } from '@tabler/icons-react';
 
-import { fileStoageApi } from '../../base';
-import { webModule } from '../module';
+import { fileStoageApi } from '../../base/index.js';
+import { webModule } from '../module.js';
 
 const Page = () => {
   const { t } = webModule.useTranslation();

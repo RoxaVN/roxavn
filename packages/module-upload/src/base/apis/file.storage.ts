@@ -5,8 +5,8 @@ import {
   TransformNumber,
 } from '@roxavn/core/base';
 
-import { baseModule } from '../module';
-import { permissions, scopes } from '../access';
+import { baseModule } from '../module.js';
+import { permissions, scopes } from '../access.js';
 
 const fileStoageSource = new ApiSource<{
   userId: string;

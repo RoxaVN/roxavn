@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { File } from './file.entity';
+import { File } from './file.entity.js';
 
 @Entity()
 @Index(['userId', 'name'])

@@ -3,9 +3,9 @@ import { ApiService } from '@roxavn/core/server';
 import { GetFileApiService } from '@roxavn/module-upload/server';
 import { In } from 'typeorm';
 
-import { userInfoApi } from '../../base';
-import { UserInfo } from '../entities';
-import { serverModule } from '../module';
+import { userInfoApi } from '../../base/index.js';
+import { UserInfo } from '../entities/index.js';
+import { serverModule } from '../module.js';
 
 @serverModule.useApi(userInfoApi.getMany)
 export class GetUsersInfoApiService extends ApiService {

@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { FileStorage } from './file.storage.entity';
+import { FileStorage } from './file.storage.entity.js';
 
 @Entity()
 export class File {

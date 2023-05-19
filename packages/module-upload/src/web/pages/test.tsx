@@ -1,4 +1,4 @@
-import { ApiFileInput, ApiImageUploader } from '../components';
+import { ApiFileInput, ApiImageUploader } from '../components/index.js';
 
 export default function () {
   return (

@@ -1,2 +1,2 @@
-export * from './file.storage.entity';
-export * from './file.entity';
+export * from './file.storage.entity.js';
+export * from './file.entity.js';

@@ -1,1 +1,1 @@
-export * from './file.storages';
+export * from './file.storages.js';

@@ -16,14 +16,14 @@ import {
   ExceedsStorageLimitException,
   ExceedsUploadLimitException,
   fileApi,
-} from '../../base';
-import { File as FileEntity } from '../entities';
-import { serverModule } from '../module';
+} from '../../base/index.js';
+import { File as FileEntity } from '../entities/index.js';
+import { serverModule } from '../module.js';
 import {
   GetUserFileStorageService,
   UpdateFileStorageService,
-} from './file.storage';
-import { GetStorageHandlerService } from './storage.handler';
+} from './file.storage.js';
+import { GetStorageHandlerService } from './storage.handler.js';
 
 serverModule.useRawApi(fileApi.upload, async (_, args) => {
   const userId = args.state.$user.id;

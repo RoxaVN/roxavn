@@ -5,8 +5,8 @@ import { ApiImageUploader } from '@roxavn/module-upload/web';
 import { webModule as userWebModule } from '@roxavn/module-user/web';
 import { IconInfoCircle } from '@tabler/icons-react';
 
-import { constants, userInfoApi } from '../base';
-import { webModule } from './module';
+import { constants, userInfoApi } from '../base/index.js';
+import { webModule } from './module.js';
 
 const Page = () => {
   const user = useAuthUser();

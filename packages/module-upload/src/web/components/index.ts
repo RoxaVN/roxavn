@@ -1,3 +1,3 @@
-export * from './ApiAvatar';
-export * from './ApiFileInput';
-export * from './ApiImageUploader';
+export * from './ApiAvatar.js';
+export * from './ApiFileInput.js';
+export * from './ApiImageUploader.js';

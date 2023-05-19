@@ -9,8 +9,8 @@ import {
 import { ApiAvatar } from '@roxavn/module-upload/web';
 import { IconUserCircle } from '@tabler/icons-react';
 
-import { userInfoApi } from '../../base';
-import { webModule } from '../module';
+import { userInfoApi } from '../../base/index.js';
+import { webModule } from '../module.js';
 
 const Page = () => {
   const { t } = webModule.useTranslation();

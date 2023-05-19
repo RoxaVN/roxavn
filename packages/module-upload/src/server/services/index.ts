@@ -1,3 +1,3 @@
-export * from './file';
-export * from './file.storage';
-export * from './storage.handler';
+export * from './file.js';
+export * from './file.storage.js';
+export * from './storage.handler.js';

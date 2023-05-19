@@ -1,7 +1,7 @@
 import { BaseService } from '@roxavn/core/server';
 import { ReadStream } from 'fs';
 
-import { NotFoundStorageHandlerException } from '../../base';
+import { NotFoundStorageHandlerException } from '../../base/index.js';
 
 export interface StorageHandler {
   name: string;

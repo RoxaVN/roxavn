@@ -1,2 +1,2 @@
-export * from './file';
-export * from './file.storage';
+export * from './file.js';
+export * from './file.storage.js';

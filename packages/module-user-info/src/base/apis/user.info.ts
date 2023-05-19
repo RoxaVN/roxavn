@@ -12,9 +12,9 @@ import {
 import { FileInfo } from '@roxavn/module-upload/base';
 import { Type } from 'class-transformer';
 
-import { permissions, scopes } from '../access';
-import { constants } from '../constants';
-import { baseModule } from '../module';
+import { permissions, scopes } from '../access.js';
+import { constants } from '../constants.js';
+import { baseModule } from '../module.js';
 
 const userInfoSource = new ApiSource<{
   id: string;

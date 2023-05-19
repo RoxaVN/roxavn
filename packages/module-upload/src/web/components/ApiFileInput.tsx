@@ -13,10 +13,10 @@ import { ApiError, uiManager } from '@roxavn/core/web';
 import { IconUpload, IconFileCheck } from '@tabler/icons-react';
 import { Fragment, useEffect } from 'react';
 
-import { fileApi } from '../../base';
-import { useUpload } from '../hooks';
-import { webModule } from '../module';
-import { useApiFileInputStyles } from './ApiFileInput.styles';
+import { fileApi } from '../../base/index.js';
+import { useUpload } from '../hooks/index.js';
+import { webModule } from '../module.js';
+import { useApiFileInputStyles } from './ApiFileInput.styles.js';
 
 type UploadedFile = InferApiResponse<typeof fileApi.upload>;
 

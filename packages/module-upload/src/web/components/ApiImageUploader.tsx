@@ -8,9 +8,9 @@ import {
   ApiFileInputProps,
   UploadeditemProps,
   UploaditemProps,
-} from './ApiFileInput';
-import { useUpload } from '../hooks';
-import { useApiFileInputStyles } from './ApiFileInput.styles';
+} from './ApiFileInput.js';
+import { useUpload } from '../hooks/index.js';
+import { useApiFileInputStyles } from './ApiFileInput.styles.js';
 
 const UploadedImageitem = ({ value, onRemove }: UploadeditemProps) => {
   const { classes } = useApiFileInputStyles();

@@ -51,7 +51,7 @@ function parseFile(filePath) {
 // visitFiles(process.argv[2], parseFile);
 
 visitFiles(
-  '/home/woody/Documents/noop/packages/module-utils/src',
+  '/home/woody/Documents/noop/packages/module-upload/src',
   parseFile,
   process.cwd()
 );
