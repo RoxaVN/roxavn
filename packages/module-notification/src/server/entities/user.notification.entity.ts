@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryColumn,
+  ManyToOne,
+  type Relation,
+} from 'typeorm';
 
 import { Notification } from './notification.entity';
 
@@ -11,7 +17,7 @@ export class UserNotification {
   notificationId: string;
 
   @ManyToOne(() => Notification)
-  notification: Notification;
+  notification: Relation<Notification>;
 
   @Column({ type: 'timestamptz', nullable: true })
   readDate?: Date;

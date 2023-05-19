@@ -5,6 +5,7 @@ import {
   Index,
   OneToMany,
   PrimaryGeneratedColumn,
+  Relation,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -29,7 +30,7 @@ export class Project {
   metadata?: any;
 
   @OneToMany(() => Task, (task) => task.project)
-  tasks: Task[];
+  tasks: Relation<Task>[];
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;

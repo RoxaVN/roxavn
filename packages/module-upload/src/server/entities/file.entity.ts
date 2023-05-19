@@ -5,6 +5,7 @@ import {
   Index,
   ManyToOne,
   PrimaryColumn,
+  type Relation,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -38,7 +39,7 @@ export class File {
   fileStorageId: string;
 
   @ManyToOne(() => FileStorage, (fileStorage) => fileStorage.files)
-  fileStorage: FileStorage;
+  fileStorage: Relation<FileStorage>;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: any;

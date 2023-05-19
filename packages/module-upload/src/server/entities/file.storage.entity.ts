@@ -5,6 +5,7 @@ import {
   Index,
   OneToMany,
   PrimaryGeneratedColumn,
+  Relation,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -24,7 +25,7 @@ export class FileStorage {
   name: string;
 
   @OneToMany(() => File, (file) => file.fileStorage)
-  files: File[];
+  files: Relation<File>[];
 
   @Column('bigint', { default: 0 })
   currentSize: number = 0;

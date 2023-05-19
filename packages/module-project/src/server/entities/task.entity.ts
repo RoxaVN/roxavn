@@ -5,6 +5,7 @@ import {
   Index,
   ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { constants } from '../../base';
@@ -53,7 +54,7 @@ export class Task {
   projectId: string;
 
   @ManyToOne(() => Project, (project) => project.tasks)
-  project: Project;
+  project: Relation<Project>;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: any;
