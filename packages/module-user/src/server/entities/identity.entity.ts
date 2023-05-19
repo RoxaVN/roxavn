@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Relation,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
@@ -27,10 +28,10 @@ export class Identity {
   userId: string;
 
   @ManyToOne(() => User, (user) => user.identities)
-  user: User;
+  user: Relation<User>;
 
   @OneToMany(() => AccessToken, (accessToken) => accessToken.identity)
-  accessTokens: Identity[];
+  accessTokens: Relation<Identity>[];
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: any;

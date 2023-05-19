@@ -4,6 +4,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryColumn,
+  Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { Role } from './role.entity.js';
@@ -18,7 +19,7 @@ export class UserRole {
   userId: string;
 
   @ManyToOne(() => User, (user) => user.roles)
-  user: User;
+  user: Relation<User>;
 
   // cache scope value for better query
   @Column('character varying')
@@ -28,7 +29,7 @@ export class UserRole {
   roleId: number;
 
   @ManyToOne(() => Role, (role) => role.users)
-  role: Role;
+  role: Relation<Role>;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: any;

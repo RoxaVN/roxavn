@@ -3,7 +3,7 @@ import minimatch from 'minimatch';
 import path from 'path';
 
 import { AppConfig } from '@remix-run/dev';
-import { resolveModule, visitFiles } from './index.js';
+import { resolveModule, visitFiles } from './fs.js';
 import { BaseModule } from '../../base/index.js';
 import { moduleManager } from '../module.manager.js';
 
@@ -18,15 +18,21 @@ function isRouteModuleFile(filename: string): boolean {
   return routeModuleExts.includes(path.extname(filename));
 }
 
-export function registerServerModules() {
-  moduleManager.modules.map((module) => {
-    try {
-      if (module.name !== moduleManager.currentModule.name) {
-        const m = require(module.name + '/server').serverModule;
-        moduleManager.serverModules.push(m);
+export async function registerServerModules() {
+  return Promise.all(
+    moduleManager.modules.map(async (module) => {
+      try {
+        if (module.name !== moduleManager.currentModule.name) {
+          const m = (await import(module.name + '/server')).serverModule;
+          moduleManager.serverModules.push(m);
+        }
+      } catch (e: any) {
+        if (e?.code !== 'MODULE_NOT_FOUND') {
+          console.log(e);
+        }
       }
-    } catch (e) {}
-  });
+    })
+  );
 }
 
 export function registerWebRoutes(defineRoutes: DefineRoutes) {

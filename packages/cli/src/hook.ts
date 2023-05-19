@@ -18,17 +18,17 @@ class HookService {
     // must build to update lastest entities
     buildService.compile();
 
-    registerServerModules();
+    await registerServerModules();
     // load current module
-    const m = require(moduleManager.currentModule.name +
-      '/server').serverModule;
+    const m = (await import(moduleManager.currentModule.name + '/server'))
+      .serverModule;
     moduleManager.serverModules.push(m);
 
     await databaseManager.createSource({ synchronize: true });
 
     if (options?.plugin) {
       // load plugin
-      require(options.plugin);
+      await import(options.plugin);
     }
 
     if (module) {

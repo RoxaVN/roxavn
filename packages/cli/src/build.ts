@@ -65,11 +65,11 @@ class BuildService {
   }
 
   compile() {
-    const cjsConfig = {
+    const esmConfig = {
       compilerOptions: {
-        outDir: 'dist/cjs',
-        target: 'es6',
-        module: 'commonjs',
+        outDir: 'dist/esm',
+        target: 'esnext',
+        module: 'esnext',
         lib: ['dom', 'dom.iterable', 'esnext'],
         jsx: 'react-jsx',
         declaration: true,
@@ -90,16 +90,7 @@ class BuildService {
       include: ['src'],
       exclude: ['node_modules', 'dist'],
     };
-    console.log('Build commonjs');
-    this.compileWithConfig(cjsConfig);
-    this.removeOldFiles(cjsConfig.compilerOptions.outDir);
-
     console.log('Build es module');
-    const esmConfig = { ...cjsConfig };
-    Object.assign(esmConfig.compilerOptions, {
-      outDir: 'dist/esm',
-      module: 'esnext',
-    });
     this.compileWithConfig(esmConfig);
     this.removeOldFiles(esmConfig.compilerOptions.outDir);
   }

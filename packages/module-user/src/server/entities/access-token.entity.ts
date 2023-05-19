@@ -4,6 +4,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { Identity } from './identity.entity.js';
@@ -30,13 +31,13 @@ export class AccessToken {
   identityId: string;
 
   @ManyToOne(() => Identity, (identity) => identity.accessTokens)
-  identity: Identity;
+  identity: Relation<Identity>;
 
   @Column('uuid')
   userId: string;
 
   @ManyToOne(() => User, (user) => user.accessTokens)
-  user: User;
+  user: Relation<User>;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: any;

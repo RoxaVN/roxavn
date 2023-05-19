@@ -14,7 +14,7 @@ export async function runModuleHooks(mode: string) {
 export async function runModuleHook(module: string, mode: string) {
   let hook;
   try {
-    hook = require(module + '/hook');
+    hook = await import(module + '/hook');
   } catch (e) {}
   if (hook) {
     const queryRunner = databaseManager.dataSource.createQueryRunner();

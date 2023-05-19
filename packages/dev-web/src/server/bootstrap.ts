@@ -17,7 +17,7 @@ import path from 'path';
 export async function bootstrap(serverBuild: ServerBuild) {
   const app = fastify();
 
-  registerServerModules();
+  await registerServerModules();
   app.setErrorHandler(function (error, request, reply) {
     const resp: any = ServerModule.handleError(error);
     sendRemixResponse(reply, resp);

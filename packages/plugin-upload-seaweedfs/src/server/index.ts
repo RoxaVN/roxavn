@@ -1,4 +1,4 @@
 export * from './module';
 export * from './services';
 
-require('./register');
+import './register.js';

@@ -4,6 +4,7 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  Relation,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
@@ -43,5 +44,5 @@ export class Role {
   updatedDate: Date;
 
   @OneToMany(() => UserRole, (role) => role.user)
-  users: UserRole[];
+  users: Relation<UserRole>[];
 }

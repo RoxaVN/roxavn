@@ -1,4 +1,4 @@
-require('./authenticator');
-require('./authorization');
+import './authenticator.js';
+import './authorization.js';
 
 export {};

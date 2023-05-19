@@ -5,6 +5,7 @@ import {
   Index,
   OneToMany,
   PrimaryGeneratedColumn,
+  Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { AccessToken } from './access-token.entity.js';
@@ -30,11 +31,11 @@ export class User {
   updatedDate: Date;
 
   @OneToMany(() => Identity, (identity) => identity.user)
-  identities: Identity[];
+  identities: Relation<Identity>[];
 
   @OneToMany(() => AccessToken, (accessToken) => accessToken.user)
-  accessTokens: Identity[];
+  accessTokens: Relation<Identity>[];
 
   @OneToMany(() => UserRole, (role) => role.user)
-  roles: UserRole[];
+  roles: Relation<UserRole>[];
 }
