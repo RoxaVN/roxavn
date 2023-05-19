@@ -78,28 +78,31 @@ function defineConventionsRoutes(
   const files: { [routeId: string]: string } = {};
 
   modulePages.map((modulePage) => {
-    visitFiles(modulePage.path, (file) => {
-      if (
-        file.endsWith('.d.ts') ||
-        (ignoredFilePatterns &&
-          ignoredFilePatterns.some((pattern) => minimatch(file, pattern)))
-      ) {
-        return;
-      }
+    visitFiles(
+      modulePage.path,
+      (file) => {
+        if (
+          file.endsWith('.d.ts') ||
+          (ignoredFilePatterns &&
+            ignoredFilePatterns.some((pattern) => minimatch(file, pattern)))
+        ) {
+          return;
+        }
 
-      if (isRouteModuleFile(file)) {
-        const routeId = createRouteId(path.join(modulePage.path, file)).replace(
-          '{moduleName}',
-          BaseModule.escapeName(modulePage.name)
+        if (isRouteModuleFile(file)) {
+          const routeId = createRouteId(
+            path.join(modulePage.path, file)
+          ).replace('{moduleName}', BaseModule.escapeName(modulePage.name));
+          files[routeId] = path.join(modulePage.path, file);
+          return;
+        }
+
+        throw new Error(
+          `Invalid route module file: ${path.join(modulePage.path, file)}`
         );
-        files[routeId] = path.join(modulePage.path, file);
-        return;
-      }
-
-      throw new Error(
-        `Invalid route module file: ${path.join(modulePage.path, file)}`
-      );
-    });
+      },
+      modulePage.path
+    );
   });
 
   const routeIds = Object.keys(files).sort(

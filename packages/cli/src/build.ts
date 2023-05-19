@@ -1,5 +1,6 @@
-import { visitFiles } from '@roxavn/core/server';
+import { visitFiles, getPackageJson } from '@roxavn/core/server';
 import fs from 'fs';
+import fse from 'fs-extra';
 import path from 'path';
 import ts from 'typescript';
 
@@ -64,10 +65,61 @@ class BuildService {
     );
   }
 
+  parseRelativeImports(buildPath: string) {
+    const regex = /from \'(?<importFile>.*)\'\;$/;
+    const modules = [
+      { path: 'base/index.js', module: 'base' },
+      { path: 'server/index.js', module: 'server' },
+    ].map((item) => ({
+      path: item.path,
+      module: item.module,
+      fullPath: path.resolve(buildPath, item.path),
+    }));
+    const packageJson = getPackageJson();
+
+    visitFiles(path.join(buildPath, 'web/pages'), (filePath: string) => {
+      const data = fse.readFileSync(filePath, { encoding: 'utf-8' });
+      const lines = data.split('\n');
+      let parsed = false;
+
+      for (let i = 0; i < lines.length; i += 1) {
+        const line = lines[i];
+        const match = line.match(regex);
+        if (match && match.groups) {
+          const importFile = match.groups.importFile;
+          if (importFile.startsWith('..')) {
+            modules.find((item) => {
+              if (
+                importFile.endsWith(item.path) &&
+                path.resolve(path.dirname(filePath), importFile) ===
+                  item.fullPath
+              ) {
+                if (!parsed) {
+                  console.log(filePath);
+                }
+                const newImport = packageJson.name + '/' + item.module;
+                console.log(`  ${importFile} >>> ${newImport}`);
+                lines[i] = lines[i].replace(regex, `from '${newImport}';`);
+                parsed = true;
+                return true;
+              }
+              return false;
+            });
+          }
+        }
+      }
+
+      if (parsed) {
+        fse.writeFileSync(filePath, lines.join('\n'), { encoding: 'utf-8' });
+      }
+    });
+  }
+
   compile() {
+    const outDir = 'dist/esm';
     const esmConfig = {
       compilerOptions: {
-        outDir: 'dist/esm',
+        outDir,
         target: 'esnext',
         module: 'esnext',
         lib: ['dom', 'dom.iterable', 'esnext'],
@@ -92,7 +144,8 @@ class BuildService {
     };
     console.log('Build es module');
     this.compileWithConfig(esmConfig);
-    this.removeOldFiles(esmConfig.compilerOptions.outDir);
+    this.removeOldFiles(outDir);
+    this.parseRelativeImports(outDir);
   }
 }
 

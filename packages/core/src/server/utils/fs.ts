@@ -31,8 +31,9 @@ export const getPackageRootPath = (module: string) => {
 export const visitFiles = (
   dir: string,
   visitor: (file: string) => void,
-  baseDir = dir
+  baseDir?: string
 ) => {
+  const baseFullPath = baseDir && path.resolve(baseDir);
   for (const filename of fs.readdirSync(dir)) {
     const file = path.resolve(dir, filename);
     const stat = fs.lstatSync(file);
@@ -40,7 +41,7 @@ export const visitFiles = (
     if (stat.isDirectory()) {
       visitFiles(file, visitor, baseDir);
     } else if (stat.isFile()) {
-      visitor(path.relative(baseDir, file));
+      visitor(baseFullPath ? path.relative(baseFullPath, file) : file);
     }
   }
 };
