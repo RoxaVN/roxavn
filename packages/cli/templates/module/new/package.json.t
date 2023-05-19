@@ -14,7 +14,7 @@ to: package.json
   "sideEffects": false,
   "devDependencies": {
     "@roxavn/cli": "^0.1.0",
-    "typescript": "^4.3.5"
+    "typescript": "^5.0.4"
   },
   "dependencies": {},
   "peerDependencies": {
