@@ -26,7 +26,7 @@
     "typeorm": "*"
   },
   "exports": {
-    ".": "./dist/cjs/index.js",
+    ".": "./dist/esm/index.js",
     "./web": "./dist/esm/web/index.js",
     "./base": "./dist/esm/base/index.js",
     "./server": "./dist/esm/server/index.js"

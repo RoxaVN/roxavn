@@ -7,7 +7,7 @@ import { CreateNotificationService } from '@roxavn/module-notification/server';
 import { scopes, taskApi } from '@roxavn/module-project/base';
 import { GetTaskApiService } from '@roxavn/module-project/server';
 
-import { baseModule } from '../../base';
+import { baseModule } from '../../base/index.js';
 
 @onApiSuccess(taskApi.createSubtask)
 export class CreateSubTaskNoticeService extends BaseService {
