@@ -1,6 +1,5 @@
 import { createEmotionCache } from '@mantine/core';
 import { StylesPlaceholder } from '@mantine/remix';
-import { json, type LoaderArgs, type V2_MetaFunction } from '@remix-run/node';
 import {
   Links,
   LiveReload,
@@ -10,25 +9,9 @@ import {
   useLoaderData,
   Outlet,
 } from '@remix-run/react';
-import { i18nextServer } from '@roxavn/core/server';
 import { AppProvider } from '@roxavn/core/web';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
-
-export const loader = async ({ request }: LoaderArgs) => {
-  const locale = await i18nextServer.getLocale(request);
-  return json({ locale });
-};
-
-export const meta: V2_MetaFunction = () => [
-  {
-    charSet: 'utf-8',
-  },
-  {
-    name: 'viewport',
-    content: 'width=device-width,initial-scale=1',
-  },
-];
 
 function useChangeLanguage(locale: string) {
   const { i18n } = useTranslation();
@@ -49,7 +32,7 @@ export function createRoot({
 
   return function Root() {
     // Get the locale from the loader
-    const { locale } = useLoaderData<typeof loader>();
+    const { locale } = useLoaderData();
 
     const { i18n } = useTranslation();
 
