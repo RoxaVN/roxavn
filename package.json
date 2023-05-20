@@ -6,6 +6,8 @@
     "build": "npm run build:cli && npm run build --workspaces"
   },
   "private": true,
+  "license": "MIT",
+  "author": "roxavn",
   "workspaces": [
     "packages/core",
     "packages/cli",

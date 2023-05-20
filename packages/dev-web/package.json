@@ -1,6 +1,8 @@
 {
   "name": "@roxavn/dev-web",
   "version": "0.1.0",
+  "license": "MIT",
+  "author": "roxavn",
   "main": "./dist/esm/index.js",
   "type": "module",
   "sideEffects": false,

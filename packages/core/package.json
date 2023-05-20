@@ -9,8 +9,8 @@
     "test:watch": "jest --passWithNoTests --watch",
     "test:cov": "rimraf coverage && jest --passWithNoTests --coverage"
   },
-  "license": "UNLICENSED",
-  "author": "",
+  "license": "MIT",
+  "author": "roxavn",
   "roxavn": {},
   "sideEffects": false,
   "devDependencies": {

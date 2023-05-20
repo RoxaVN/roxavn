@@ -5,8 +5,8 @@
     "build": "roxavn build",
     "dev": "roxavn dev"
   },
-  "license": "UNLICENSED",
-  "author": "",
+  "license": "MIT",
+  "author": "roxavn",
   "roxavn": {},
   "type": "module",
   "sideEffects": false,

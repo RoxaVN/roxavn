@@ -8,8 +8,8 @@ to: package.json
     "build": "roxavn build",
     "dev": "roxavn dev"
   },
-  "license": "UNLICENSED",
-  "author": "",
+  "license": "MIT",
+  "author": "roxavn",
   "roxavn": {},
   "sideEffects": false,
   "devDependencies": {
