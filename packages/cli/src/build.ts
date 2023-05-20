@@ -76,8 +76,12 @@ class BuildService {
       fullPath: path.resolve(buildPath, item.path),
     }));
     const packageJson = getPackageJson();
+    const webPagesPath = path.join(buildPath, 'web/pages');
+    if (!fs.existsSync(webPagesPath)) {
+      return;
+    }
 
-    visitFiles(path.join(buildPath, 'web/pages'), (filePath: string) => {
+    visitFiles(webPagesPath, (filePath: string) => {
       const data = fse.readFileSync(filePath, { encoding: 'utf-8' });
       const lines = data.split('\n');
       let parsed = false;
