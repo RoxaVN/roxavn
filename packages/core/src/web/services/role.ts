@@ -1,5 +1,5 @@
 import { UseListStateHandlers } from '@mantine/hooks';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { Api, ApiRequest, Resource } from '../../base/index.js';
 import { authService } from './auth.js';
@@ -106,5 +106,15 @@ export const useCanAccessApi = <Request extends ApiRequest>(
   api?: Api<Request>,
   apiParams?: Record<string, any>
 ) => {
-  return api ? canAccessApi(useRoles(), api, apiParams) : true;
+  const [allow, setAllow] = useState(!api);
+  const roles = useRoles();
+
+  useEffect(() => {
+    // must check in useEffect because client side gets data from localStorage
+    const check = api ? canAccessApi(roles, api, apiParams) : true;
+    if (check !== allow) {
+      setAllow(check);
+    }
+  }, [api, apiParams, roles]);
+  return allow;
 };

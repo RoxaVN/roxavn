@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { PageItem, canAccessApi, useRoles } from '../services/index.js';
@@ -23,6 +23,8 @@ export const usePageLinks = (
   const location = useLocation();
   const navigate = useNavigate();
   const roles = useRoles();
+  const [pageLinks, setPageLinks] = useState<Array<PageLink>>([]);
+  const goToFirstLink = useRef(false);
 
   const parseItems = (items: PageItem[]) => {
     const result: Array<PageLink> = [];
@@ -55,10 +57,13 @@ export const usePageLinks = (
     return result;
   };
 
-  const result = parseItems(pageItems);
+  useEffect(() => {
+    const result = parseItems(pageItems);
+    setPageLinks(result);
+  }, [pageItems, location, roles]);
 
   useEffect(() => {
-    if (options?.goToFirstLink !== false) {
+    if (options?.goToFirstLink !== false && !goToFirstLink.current) {
       if (location.pathname === basePath) {
         const findFirst = (pageLinks: PageLink[]): string | undefined => {
           let firstPath: string | undefined;
@@ -76,13 +81,14 @@ export const usePageLinks = (
           }
           return firstPath;
         };
-        const firstPath = findFirst(result);
-        if (firstPath && location.pathname !== firstPath) {
+        const firstPath = findFirst(pageLinks);
+        if (firstPath) {
+          goToFirstLink.current = true;
           navigate(firstPath);
         }
       }
     }
-  }, []);
+  }, [pageLinks]);
 
-  return result;
+  return pageLinks;
 };
