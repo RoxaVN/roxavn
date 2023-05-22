@@ -1,13 +1,12 @@
 import { Card, SimpleGrid, Image, Text } from '@mantine/core';
-import { BaseModule, constants } from '@roxavn/core/base';
-import { RolesContext, WebModule } from '@roxavn/core/web';
+import { BaseModule } from '@roxavn/core/base';
+import { RolesContext, WebModule, useMetaTranslation } from '@roxavn/core/web';
 import { useContext, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link, useOutletContext } from 'react-router-dom';
 
 export const Page = () => {
   const { roles } = useContext(RolesContext);
-  const { t } = useTranslation(constants.META_I18N_NAMESPACE);
+  const { t } = useMetaTranslation();
   const { setWebModule } = useOutletContext<any>();
 
   useEffect(() => {

@@ -14,7 +14,6 @@ import {
 } from '@mantine/core';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { constants } from '@roxavn/core/base';
 import { moduleManager } from '@roxavn/core/server';
 import {
   CatchBoundary,
@@ -22,9 +21,9 @@ import {
   IsAuthenticatedPage,
   TabLinks,
   WebModule,
+  useMetaTranslation,
 } from '@roxavn/core/web';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link, Outlet } from 'react-router-dom';
 
 import { UserMenu } from '../components/index.js';
@@ -32,7 +31,7 @@ import { UserMenu } from '../components/index.js';
 const BASE = '/me';
 
 function MeComponent() {
-  const tMeta = useTranslation(constants.META_I18N_NAMESPACE).t;
+  const tMeta = useMetaTranslation().t;
   const data = useLoaderData<typeof loader>();
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);

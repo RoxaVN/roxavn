@@ -1,16 +1,14 @@
 import { Card, SimpleGrid, Image, Text } from '@mantine/core';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { constants } from '@roxavn/core/base';
 import { moduleManager } from '@roxavn/core/server';
-import { WebModule } from '@roxavn/core/web';
+import { WebModule, useMetaTranslation } from '@roxavn/core/web';
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link, useOutletContext } from 'react-router-dom';
 
 export default function () {
   const data = useLoaderData<typeof loader>();
-  const { t } = useTranslation(constants.META_I18N_NAMESPACE);
+  const { t } = useMetaTranslation();
   const { setWebModule } = useOutletContext<any>();
 
   useEffect(() => {
