@@ -19,9 +19,9 @@ export function onApiSuccess<Req extends ApiRequest, Resp extends ApiResponse>(
       eventManager.makeApiSuccessEvent(api),
       async (data) => {
         try {
-          await databaseManager.dataSource.manager.transaction(
+          await databaseManager.dataSource.transaction(
             async (entityManager) => {
-              new serviceClass(entityManager).handle(data);
+              return new serviceClass(entityManager).handle(data);
             }
           );
         } catch (e) {
