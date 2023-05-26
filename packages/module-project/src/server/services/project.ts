@@ -1,8 +1,13 @@
-import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
+import { type InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import {
-  ApiService,
-  InferAuthApiRequest,
-  serviceManager,
+  AuthUser,
+  BaseService,
+  DatabaseService,
+  type InferContext,
+  InjectDatabaseService,
+  SetUserRoleApiService,
+  inject,
+  GetUserScopeIdsApiService,
 } from '@roxavn/core/server';
 import dayjs from 'dayjs';
 import { In } from 'typeorm';
@@ -12,9 +17,9 @@ import { Project, Task } from '../entities/index.js';
 import { serverModule } from '../module.js';
 
 @serverModule.useApi(projectApi.getOne)
-export class GetProjectApiService extends ApiService {
+export class GetProjectApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof projectApi.getOne>) {
-    const result = await this.dbSession.getRepository(Project).findOne({
+    const result = await this.entityManager.getRepository(Project).findOne({
       where: { id: request.projectId },
       cache: true,
     });
@@ -26,12 +31,12 @@ export class GetProjectApiService extends ApiService {
 }
 
 @serverModule.useApi(projectApi.getMany)
-export class GetProjectsApiService extends ApiService {
+export class GetProjectsApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof projectApi.getMany>) {
     const page = request.page || 1;
     const pageSize = 10;
 
-    const [items, totalItems] = await this.dbSession
+    const [items, totalItems] = await this.entityManager
       .getRepository(Project)
       .findAndCount({
         where: { type: request.type },
@@ -47,14 +52,20 @@ export class GetProjectsApiService extends ApiService {
 }
 
 @serverModule.useApi(projectApi.getManyJoined)
-export class GetJoinedProjectsApiService extends ApiService {
+export class GetJoinedProjectsApiService extends BaseService {
+  constructor(
+    @inject(DatabaseService) private databaseService: DatabaseService,
+    @inject(GetUserScopeIdsApiService)
+    private getUserScopeIdsApiService: GetUserScopeIdsApiService
+  ) {
+    super();
+  }
+
   async handle(request: InferApiRequest<typeof projectApi.getManyJoined>) {
     const page = request.page || 1;
     const pageSize = 10;
 
-    const result = await this.create(
-      serviceManager.getUserScopeIdsApiService
-    ).handle({
+    const result = await this.getUserScopeIdsApiService.handle({
       scope: scopes.Project.name,
       userId: request.userId,
       pageSize,
@@ -62,7 +73,7 @@ export class GetJoinedProjectsApiService extends ApiService {
     });
 
     const items = result.items.length
-      ? await this.dbSession
+      ? await this.databaseService.manager
           .getRepository(Project)
           .find({ where: { id: In(result.items.map((item) => item.scopeId)) } })
       : [];
@@ -75,16 +86,27 @@ export class GetJoinedProjectsApiService extends ApiService {
 }
 
 @serverModule.useApi(projectApi.create)
-export class CreateProjectApiService extends ApiService {
-  async handle(request: InferAuthApiRequest<typeof projectApi.create>) {
+export class CreateProjectApiService extends BaseService {
+  constructor(
+    @inject(DatabaseService) private databaseService: DatabaseService,
+    @inject(SetUserRoleApiService)
+    private setUserRoleApiService: SetUserRoleApiService
+  ) {
+    super();
+  }
+
+  async handle(
+    request: InferApiRequest<typeof projectApi.create>,
+    @AuthUser authUser: InferContext<typeof AuthUser>
+  ) {
     const project = new Project();
     project.name = request.name;
     project.type = request.type;
-    project.userId = request.$user.id;
-    await this.dbSession.save(project);
+    project.userId = authUser.id;
+    await this.databaseService.manager.save(project);
 
     // auto set creator as admin
-    await this.create(serviceManager.setUserRoleApiService).handle({
+    await this.setUserRoleApiService.handle({
       scope: scopes.Project.name,
       scopeId: project.id,
       roleName: roles.ProjectAdmin.name,
@@ -93,19 +115,19 @@ export class CreateProjectApiService extends ApiService {
 
     const task = new Task();
     task.projectId = project.id;
-    task.userId = request.$user.id;
+    task.userId = authUser.id;
     task.title = request.name;
     task.expiryDate = dayjs().add(request.duration, 'day').toDate();
-    await this.dbSession.save(task);
+    await this.databaseService.manager.save(task);
 
     return { id: project.id };
   }
 }
 
 @serverModule.useApi(projectApi.update)
-export class UpdateProjectApiService extends ApiService {
+export class UpdateProjectApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof projectApi.update>) {
-    await this.dbSession.update(
+    await this.entityManager.update(
       Project,
       { id: request.projectId },
       { name: request.name, type: request.type }
@@ -115,9 +137,9 @@ export class UpdateProjectApiService extends ApiService {
 }
 
 @serverModule.useApi(projectApi.delete)
-export class DeleteProjectApiService extends ApiService {
+export class DeleteProjectApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof projectApi.delete>) {
-    await this.dbSession.getRepository(Project).delete({
+    await this.entityManager.getRepository(Project).delete({
       id: request.projectId,
     });
     return {};

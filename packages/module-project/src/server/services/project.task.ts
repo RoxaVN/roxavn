@@ -1,5 +1,5 @@
 import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
-import { ApiService } from '@roxavn/core/server';
+import { InjectDatabaseService } from '@roxavn/core/server';
 import { In, IsNull } from 'typeorm';
 
 import { projectTaskApi } from '../../base/index.js';
@@ -7,9 +7,9 @@ import { Task } from '../entities/index.js';
 import { serverModule } from '../module.js';
 
 @serverModule.useApi(projectTaskApi.getRoot)
-export class GetProjectRootTaskApiService extends ApiService {
+export class GetProjectRootTaskApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof projectTaskApi.getRoot>) {
-    const result = await this.dbSession.getRepository(Task).findOne({
+    const result = await this.entityManager.getRepository(Task).findOne({
       where: {
         projectId: request.projectId,
         parents: IsNull(),
@@ -23,10 +23,10 @@ export class GetProjectRootTaskApiService extends ApiService {
 }
 
 @serverModule.useApi(projectTaskApi.getSome)
-export class GetProjectTasksApiService extends ApiService {
+export class GetProjectTasksApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof projectTaskApi.getSome>) {
     if (request.ids?.length > 0) {
-      const items = await this.dbSession.getRepository(Task).find({
+      const items = await this.entityManager.getRepository(Task).find({
         where: {
           projectId: request.projectId,
           id: In(request.ids),

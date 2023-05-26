@@ -1,8 +1,12 @@
-import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
+import { type InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import {
-  ApiService,
-  InferAuthApiRequest,
-  serviceManager,
+  AuthUser,
+  BaseService,
+  CheckRoleUsersApiService,
+  DatabaseService,
+  type InferContext,
+  inject,
+  InjectDatabaseService,
 } from '@roxavn/core/server';
 import dayjs from 'dayjs';
 import { In, IsNull } from 'typeorm';
@@ -31,9 +35,12 @@ const statusForUpdate = [
 ];
 
 @serverModule.useApi(taskApi.createSubtask)
-export class CreateSubtaskApiService extends ApiService {
-  async handle(request: InferAuthApiRequest<typeof taskApi.createSubtask>) {
-    const task = await this.dbSession.getRepository(Task).findOne({
+export class CreateSubtaskApiService extends InjectDatabaseService {
+  async handle(
+    request: InferApiRequest<typeof taskApi.createSubtask>,
+    @AuthUser authUser: InferContext<typeof AuthUser>
+  ) {
+    const task = await this.entityManager.getRepository(Task).findOne({
       where: { id: request.taskId },
       cache: true,
     });
@@ -52,16 +59,16 @@ export class CreateSubtaskApiService extends ApiService {
     }
 
     const subTask = new Task();
-    subTask.userId = request.$user.id;
+    subTask.userId = authUser.id;
     subTask.title = request.title;
     subTask.expiryDate = request.expiryDate;
     subTask.projectId = task.projectId;
     subTask.parentId = task.id;
     subTask.weight = request.weight;
     subTask.parents = [...(task.parents || []), task.id];
-    await this.dbSession.save(subTask);
+    await this.entityManager.save(subTask);
 
-    await this.dbSession
+    await this.entityManager
       .createQueryBuilder()
       .update(Task)
       .whereInIds([request.taskId])
@@ -76,9 +83,9 @@ export class CreateSubtaskApiService extends ApiService {
 }
 
 @serverModule.useApi(taskApi.getSubtasks)
-export class GetSubtasksApiService extends ApiService {
-  async handle(request: InferAuthApiRequest<typeof taskApi.getSubtasks>) {
-    const task = await this.dbSession.getRepository(Task).findOne({
+export class GetSubtasksApiService extends InjectDatabaseService {
+  async handle(request: InferApiRequest<typeof taskApi.getSubtasks>) {
+    const task = await this.entityManager.getRepository(Task).findOne({
       where: { id: request.taskId },
       cache: true,
     });
@@ -89,7 +96,7 @@ export class GetSubtasksApiService extends ApiService {
     const page = request.page || 1;
     const pageSize = 10;
     const totalItems = task.childrenCount;
-    const items = await this.dbSession.getRepository(Task).find({
+    const items = await this.entityManager.getRepository(Task).find({
       where: { parentId: task.id },
       take: pageSize,
       skip: (page - 1) * pageSize,
@@ -103,9 +110,9 @@ export class GetSubtasksApiService extends ApiService {
 }
 
 @serverModule.useApi(taskApi.update)
-export class UpdateTaskApiService extends ApiService {
+export class UpdateTaskApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof taskApi.update>) {
-    const task = await this.dbSession.getRepository(Task).findOne({
+    const task = await this.entityManager.getRepository(Task).findOne({
       where: { id: request.taskId },
       lock: { mode: 'pessimistic_write' },
       cache: true,
@@ -117,7 +124,7 @@ export class UpdateTaskApiService extends ApiService {
       throw new InvalidTaskStatusForUpdateException();
     }
     if (task.parentId) {
-      const parentTask = await this.dbSession.getRepository(Task).findOne({
+      const parentTask = await this.entityManager.getRepository(Task).findOne({
         where: { id: task.parentId },
         select: ['expiryDate'],
       });
@@ -129,7 +136,7 @@ export class UpdateTaskApiService extends ApiService {
       }
     }
 
-    await this.dbSession.getRepository(Task).update(
+    await this.entityManager.getRepository(Task).update(
       { id: request.taskId },
       {
         title: request.title,
@@ -140,7 +147,7 @@ export class UpdateTaskApiService extends ApiService {
 
     const deltaWeight = request.weight - task.weight;
     if (deltaWeight && task.parentId) {
-      await this.dbSession
+      await this.entityManager
         .getRepository(Task)
         .increment({ id: task.parentId }, 'childrenWeight', deltaWeight);
     }
@@ -149,9 +156,9 @@ export class UpdateTaskApiService extends ApiService {
 }
 
 @serverModule.useApi(taskApi.getOne)
-export class GetTaskApiService extends ApiService {
+export class GetTaskApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof taskApi.getOne>) {
-    const result = await this.dbSession.getRepository(Task).findOne({
+    const result = await this.entityManager.getRepository(Task).findOne({
       where: { id: request.taskId },
       cache: true,
     });
@@ -163,9 +170,9 @@ export class GetTaskApiService extends ApiService {
 }
 
 @serverModule.useApi(taskApi.delete)
-export class DeleteTaskApiService extends ApiService {
+export class DeleteTaskApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof taskApi.delete>) {
-    const task = await this.dbSession.getRepository(Task).findOne({
+    const task = await this.entityManager.getRepository(Task).findOne({
       where: { id: request.taskId },
       cache: true,
       lock: { mode: 'pessimistic_write' },
@@ -181,8 +188,8 @@ export class DeleteTaskApiService extends ApiService {
       throw new DeleteTaskException();
     }
 
-    await this.dbSession.getRepository(Task).delete({ id: task.id });
-    await this.dbSession
+    await this.entityManager.getRepository(Task).delete({ id: task.id });
+    await this.entityManager
       .createQueryBuilder()
       .update(Task)
       .whereInIds([task.parentId])
@@ -196,17 +203,23 @@ export class DeleteTaskApiService extends ApiService {
 }
 
 @serverModule.useApi(taskApi.assign)
-export class AssignTaskApiService extends ApiService {
+export class AssignTaskApiService extends BaseService {
+  constructor(
+    @inject(DatabaseService) private databaseService: DatabaseService,
+    @inject(CheckRoleUsersApiService)
+    private checkRoleUsersApiService: CheckRoleUsersApiService
+  ) {
+    super();
+  }
+
   async handle(request: InferApiRequest<typeof taskApi.assign>) {
-    const task = await this.dbSession
+    const task = await this.databaseService.manager
       .getRepository(Task)
       .findOne({ where: { id: request.taskId }, cache: true });
     if (!task) {
       throw new NotFoundException();
     }
-    const resultCheck = await this.create(
-      serviceManager.checkRoleUsersApiService
-    ).handle({
+    const resultCheck = await this.checkRoleUsersApiService.handle({
       scopeId: task.projectId,
       scope: scopes.Project.name,
       userIds: [request.userId],
@@ -214,7 +227,7 @@ export class AssignTaskApiService extends ApiService {
     if (!resultCheck.success) {
       throw new UserNotInProjectException();
     }
-    const result = await this.dbSession
+    const result = await this.databaseService.manager
       .getRepository(Task)
       .update(
         { id: request.taskId, assignee: IsNull() },
@@ -228,19 +241,29 @@ export class AssignTaskApiService extends ApiService {
 }
 
 @serverModule.useApi(taskApi.assignMe)
-export class AssignMeTaskApiService extends ApiService {
-  async handle(request: InferAuthApiRequest<typeof taskApi.assignMe>) {
-    return this.create(AssignTaskApiService).handle({
+export class AssignMeTaskApiService extends BaseService {
+  constructor(
+    @inject(AssignTaskApiService)
+    private assignTaskApiService: AssignTaskApiService
+  ) {
+    super();
+  }
+
+  async handle(
+    request: InferApiRequest<typeof taskApi.assignMe>,
+    @AuthUser authUser: InferContext<typeof AuthUser>
+  ) {
+    return this.assignTaskApiService.handle({
       taskId: request.taskId,
-      userId: request.$user.id,
+      userId: authUser.id,
     });
   }
 }
 
 @serverModule.useApi(taskApi.inprogress)
-export class InprogressTaskApiService extends ApiService {
+export class InprogressTaskApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof taskApi.inprogress>) {
-    const result = await this.dbSession
+    const result = await this.entityManager
       .getRepository(Task)
       .update(
         { id: request.taskId, status: constants.TaskStatus.PENDING },
@@ -254,9 +277,9 @@ export class InprogressTaskApiService extends ApiService {
 }
 
 @serverModule.useApi(taskApi.reject)
-export class RejectTaskApiService extends ApiService {
+export class RejectTaskApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof taskApi.reject>) {
-    const task = await this.dbSession.getRepository(Task).findOne({
+    const task = await this.entityManager.getRepository(Task).findOne({
       where: { id: request.taskId },
       cache: true,
       lock: { mode: 'pessimistic_write' },
@@ -264,7 +287,7 @@ export class RejectTaskApiService extends ApiService {
     if (!task) {
       throw new NotFoundException();
     }
-    const result = await this.dbSession.getRepository(Task).update(
+    const result = await this.entityManager.getRepository(Task).update(
       {
         id: request.taskId,
         status: In([
@@ -281,7 +304,7 @@ export class RejectTaskApiService extends ApiService {
     );
     if (result.affected) {
       if (task.parentId) {
-        await this.dbSession
+        await this.entityManager
           .getRepository(Task)
           .decrement({ id: task.parentId }, 'childrenWeight', task.weight);
       }
@@ -292,9 +315,9 @@ export class RejectTaskApiService extends ApiService {
 }
 
 @serverModule.useApi(taskApi.finish)
-export class FinishTaskApiService extends ApiService {
+export class FinishTaskApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof taskApi.finish>) {
-    const task = await this.dbSession.getRepository(Task).findOne({
+    const task = await this.entityManager.getRepository(Task).findOne({
       where: { id: request.taskId },
       cache: true,
       lock: { mode: 'pessimistic_write' },
@@ -307,7 +330,7 @@ export class FinishTaskApiService extends ApiService {
       finishedDate: new Date(),
     };
     if (task.childrenCount) {
-      const result = await this.dbSession
+      const result = await this.entityManager
         .getRepository(Task)
         .update(
           { id: request.taskId, progress: task.childrenWeight },
@@ -317,7 +340,7 @@ export class FinishTaskApiService extends ApiService {
         throw new FinishParenttaskException();
       }
     } else {
-      const result = await this.dbSession.getRepository(Task).update(
+      const result = await this.entityManager.getRepository(Task).update(
         {
           id: request.taskId,
           status: constants.TaskStatus.INPROGRESS,
@@ -330,7 +353,7 @@ export class FinishTaskApiService extends ApiService {
       }
     }
     if (task.parentId) {
-      await this.dbSession
+      await this.entityManager
         .getRepository(Task)
         .increment({ id: task.parentId }, 'progress', task.weight);
     }
