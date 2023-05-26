@@ -5,7 +5,9 @@ import {
 } from '@roxavn/core/base';
 import {
   BaseService,
+  GetUserScopeIdsApiService,
   InjectDatabaseService,
+  SetUserRoleApiService,
   inject,
   moduleManager,
 } from '@roxavn/core/server';
@@ -112,9 +114,11 @@ export class GetUserRoleModulesApiService extends BaseService {
   }
 }
 
-/** 
-const AbstractGetService = serviceManager.getUserScopeIdsApiService;
-export class GetUserScopeIdsApiService extends AbstractGetService {
+@serverModule.rebind(GetUserScopeIdsApiService)
+export class GetUserScopeIdsApiServiceEx
+  extends InjectDatabaseService
+  implements GetUserScopeIdsApiService
+{
   async handle(request: {
     scope: string;
     userId: string;
@@ -124,7 +128,7 @@ export class GetUserScopeIdsApiService extends AbstractGetService {
     const page = request.page || 1;
     const pageSize = request.pageSize || 10;
 
-    const [items, totalItems] = await this.dbSession
+    const [items, totalItems] = await this.entityManager
       .getRepository(UserRole)
       .findAndCount({
         select: { scopeId: true, userId: true, roleId: true },
@@ -142,17 +146,19 @@ export class GetUserScopeIdsApiService extends AbstractGetService {
     };
   }
 }
-serviceManager.getUserScopeIdsApiService = GetUserScopeIdsApiService;
 
-const AbstractSetService = serviceManager.setUserRoleApiService;
-export class SetUserRoleApiService extends AbstractSetService {
+@serverModule.rebind(SetUserRoleApiService)
+export class SetUserRoleApiServiceEx
+  extends InjectDatabaseService
+  implements SetUserRoleApiService
+{
   async handle(request: {
     scope: string;
     scopeId: string;
     userId: string;
     roleName: string;
   }) {
-    const role = await this.dbSession.getRepository(Role).findOne({
+    const role = await this.entityManager.getRepository(Role).findOne({
       select: ['id'],
       where: { scope: request.scope, name: request.roleName },
     });
@@ -162,11 +168,9 @@ export class SetUserRoleApiService extends AbstractSetService {
       userRole.roleId = role.id;
       userRole.scope = request.scope;
       userRole.scopeId = request.scopeId;
-      await this.dbSession.save(userRole);
+      await this.entityManager.save(userRole);
       return {};
     }
     throw new NotFoundException();
   }
 }
-serviceManager.setUserRoleApiService = SetUserRoleApiService;
-*/

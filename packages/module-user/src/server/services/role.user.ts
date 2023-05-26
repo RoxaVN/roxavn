@@ -1,6 +1,9 @@
 import { InferApiRequest } from '@roxavn/core/base';
-import { InjectDatabaseService } from '@roxavn/core/server';
-import { ILike } from 'typeorm';
+import {
+  CheckRoleUsersApiService,
+  InjectDatabaseService,
+} from '@roxavn/core/server';
+import { ILike, In } from 'typeorm';
 
 import { roleUserApi } from '../../base/index.js';
 import { UserRole } from '../entities/index.js';
@@ -81,12 +84,13 @@ export class SearchRoleUsersApiService extends InjectDatabaseService {
   }
 }
 
-/** 
-const AbstractCheckRoleUsersApiService =
-  serviceManager.checkRoleUsersApiService;
-export class CheckRoleUsersApiService extends AbstractCheckRoleUsersApiService {
+@serverModule.rebind(CheckRoleUsersApiService)
+export class CheckRoleUsersApiServiceEx
+  extends InjectDatabaseService
+  implements CheckRoleUsersApiService
+{
   async handle(request: { scope: string; scopeId: string; userIds: string[] }) {
-    const count = await this.dbSession.getRepository(UserRole).count({
+    const count = await this.entityManager.getRepository(UserRole).count({
       where: {
         scopeId: request.scopeId,
         scope: request.scope,
@@ -99,5 +103,3 @@ export class CheckRoleUsersApiService extends AbstractCheckRoleUsersApiService {
     };
   }
 }
-serviceManager.checkRoleUsersApiService = CheckRoleUsersApiService;
-*/

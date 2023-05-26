@@ -1,12 +1,24 @@
 import { type Role as RoleType } from '@roxavn/core/base';
-import { TokenHasher, BaseService } from '@roxavn/core/server';
-import { Identity, Role, User, UserRole } from '../server/index.js';
+import {
+  TokenHasher,
+  InjectDatabaseService,
+  CreateRoleService,
+  SetAdminRoleService,
+} from '@roxavn/core/server';
+import {
+  Identity,
+  Role,
+  User,
+  UserRole,
+  serverModule,
+} from '../server/index.js';
 import { roles } from '../base/access.js';
 import { constants } from '../base/index.js';
 
-export class CreateAdminUserHook extends BaseService {
+@serverModule.injectable()
+export class CreateAdminUserHook extends InjectDatabaseService {
   async handle() {
-    const count = await this.dbSession.getRepository(User).count();
+    const count = await this.entityManager.getRepository(User).count();
     if (count < 1) {
       const identity = new Identity();
       const tokenHasher = new TokenHasher();
@@ -15,13 +27,13 @@ export class CreateAdminUserHook extends BaseService {
       };
       const user = new User();
       user.username = 'admin';
-      await this.dbSession.save(user);
+      await this.entityManager.save(user);
       identity.user = user;
       identity.subject = user.id;
       identity.type = constants.identityTypes.PASSWORD;
-      await this.dbSession.save(identity);
+      await this.entityManager.save(identity);
 
-      const role = await this.dbSession.findOneBy(Role, {
+      const role = await this.entityManager.findOneBy(Role, {
         name: roles.Admin.name,
         scope: roles.Admin.scope.name,
       });
@@ -30,15 +42,19 @@ export class CreateAdminUserHook extends BaseService {
         adminRole.user = user;
         adminRole.role = role;
         adminRole.scope = role.scope;
-        await this.dbSession.save(adminRole);
+        await this.entityManager.save(adminRole);
       }
     }
   }
 }
 
-export class SetAdminRoleHook extends BaseService {
+@serverModule.rebind(SetAdminRoleService)
+export class SetAdminRoleHook
+  extends InjectDatabaseService
+  implements SetAdminRoleService
+{
   async handle(role: RoleType) {
-    const users = await this.dbSession.getRepository(UserRole).find({
+    const users = await this.entityManager.getRepository(UserRole).find({
       select: { userId: true },
       where: {
         role: {
@@ -47,7 +63,7 @@ export class SetAdminRoleHook extends BaseService {
         },
       },
     });
-    const roleModel = await this.dbSession.getRepository(Role).findOneBy({
+    const roleModel = await this.entityManager.getRepository(Role).findOneBy({
       name: role.name,
       scope: role.scope.name,
     });
@@ -59,7 +75,7 @@ export class SetAdminRoleHook extends BaseService {
         adminRole.scope = roleModel.scope;
         return adminRole;
       });
-      await this.dbSession
+      await this.entityManager
         .createQueryBuilder()
         .insert()
         .into(UserRole)
@@ -70,9 +86,13 @@ export class SetAdminRoleHook extends BaseService {
   }
 }
 
-export class CreateRolesHook extends BaseService {
+@serverModule.rebind(CreateRoleService)
+export class CreateRolesHook
+  extends InjectDatabaseService
+  implements CreateRoleService
+{
   async handle(roles: Record<string, RoleType>) {
-    const roleRepository = this.dbSession.getRepository(Role);
+    const roleRepository = this.entityManager.getRepository(Role);
     for (const role of Object.values(roles)) {
       let mess = `[${role.scope.name}] `;
       let roleModel = await roleRepository.findOne({

@@ -1,6 +1,5 @@
 import { capitalize } from 'lodash-es';
 
-import { Role } from '../../base/index.js';
 import { databaseManager } from '../database/index.js';
 import { moduleManager } from '../module.manager.js';
 import { BaseService } from '../service/base.js';
@@ -33,24 +32,3 @@ export async function runModuleHook(module: string, mode: string) {
     }
   }
 }
-
-class CreateRoleService extends BaseService {
-  handle(request: Record<string, Role>): Promise<void> {
-    throw new Error(
-      'CreateRoleService not implement ' + JSON.stringify(request)
-    );
-  }
-}
-
-class SetAdminRoleService extends BaseService {
-  handle(request: Role): Promise<void> {
-    throw new Error(
-      'SetAdminRoleService not implement ' + JSON.stringify(request)
-    );
-  }
-}
-
-export const hookManager = {
-  createRoleService: CreateRoleService,
-  setAdminRoleService: SetAdminRoleService,
-};

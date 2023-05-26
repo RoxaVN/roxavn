@@ -17,7 +17,7 @@ import {
   validatorMiddleware,
 } from './middlewares/index.js';
 import { eventManager } from './event/index.js';
-import { autoBind, BaseService } from './service/base.js';
+import { autoBind, BaseService, rebind } from './service/base.js';
 import { serviceContainer } from './service/container.js';
 import { constants } from './constants.js';
 
@@ -112,6 +112,7 @@ export class ServerModule extends BaseModule {
   }
 
   injectable = autoBind;
+  rebind = rebind;
 
   bindFactory() {
     return (target: any, propertyKey: string) => {

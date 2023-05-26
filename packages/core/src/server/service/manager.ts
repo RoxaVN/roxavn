@@ -1,43 +1,56 @@
 import { EntityManager } from 'typeorm';
 import { AuthorizationArgs } from '../middlewares/authorize.js';
-import { BaseService } from './base.js';
-import { Empty, PaginatedCollection } from '../../base/api.js';
+import { BaseService, autoBind } from './base.js';
+import { Role, Empty, PaginatedCollection } from '../../base/index.js';
+import { inject } from 'inversify';
 
-class GetUserScopeIdsApiService extends BaseService {
-  handle(request: {
+@autoBind()
+export abstract class GetUserScopeIdsApiService extends BaseService {
+  abstract handle(request: {
     scope: string;
     userId: string;
     page?: number;
     pageSize?: number;
-  }): Promise<PaginatedCollection<{ scopeId: string }>> {
-    throw new Error(
-      "GetUserScopeIdsApiService isn't implemented " + JSON.stringify(request)
-    );
-  }
+  }): Promise<PaginatedCollection<{ scopeId: string }>>;
 }
 
-class SetUserRoleApiService extends BaseService {
-  handle(request: {
+@autoBind()
+export abstract class SetUserRoleApiService extends BaseService {
+  abstract handle(request: {
     scope: string;
     scopeId: string;
     userId: string;
     roleName: string;
-  }): Promise<Empty> {
-    throw new Error(
-      "SetUserRoleApiService isn't implemented " + JSON.stringify(request)
-    );
-  }
+  }): Promise<Empty>;
 }
 
-class CheckRoleUsersApiService extends BaseService {
-  handle(request: {
+@autoBind()
+export abstract class CheckRoleUsersApiService extends BaseService {
+  abstract handle(request: {
     scope: string;
     scopeId: string;
     userIds: string[];
-  }): Promise<{ success: boolean }> {
-    throw new Error(
-      "CheckRoleUsersApiService isn't implemented " + JSON.stringify(request)
-    );
+  }): Promise<{ success: boolean }>;
+}
+
+@autoBind()
+export abstract class CreateRoleService extends BaseService {
+  abstract handle(request: Record<string, Role>): Promise<void>;
+}
+
+@autoBind()
+export abstract class SetAdminRoleService extends BaseService {
+  abstract handle(request: Role): Promise<void>;
+}
+
+@autoBind()
+export abstract class BaseInstallHook extends BaseService {
+  constructor(
+    @inject(CreateRoleService) protected createRoleService: CreateRoleService,
+    @inject(SetAdminRoleService)
+    protected setAdminRoleService: SetAdminRoleService
+  ) {
+    super();
   }
 }
 
@@ -51,7 +64,4 @@ export const serviceManager = {
         JSON.stringify({ dbSession, args })
     );
   },
-  getUserScopeIdsApiService: GetUserScopeIdsApiService,
-  setUserRoleApiService: SetUserRoleApiService,
-  checkRoleUsersApiService: CheckRoleUsersApiService,
 };
