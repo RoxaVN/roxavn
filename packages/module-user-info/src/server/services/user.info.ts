@@ -1,5 +1,10 @@
 import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
-import { ApiService } from '@roxavn/core/server';
+import {
+  BaseService,
+  DatabaseService,
+  InjectDatabaseService,
+  inject,
+} from '@roxavn/core/server';
 import { GetFileApiService } from '@roxavn/module-upload/server';
 import { In } from 'typeorm';
 
@@ -8,12 +13,12 @@ import { UserInfo } from '../entities/index.js';
 import { serverModule } from '../module.js';
 
 @serverModule.useApi(userInfoApi.getMany)
-export class GetUsersInfoApiService extends ApiService {
+export class GetUsersInfoApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof userInfoApi.getMany>) {
     const page = request.page || 1;
     const pageSize = 10;
 
-    const [users, totalItems] = await this.dbSession
+    const [users, totalItems] = await this.entityManager
       .getRepository(UserInfo)
       .findAndCount({
         where: {
@@ -31,9 +36,9 @@ export class GetUsersInfoApiService extends ApiService {
 }
 
 @serverModule.useApi(userInfoApi.getOne)
-export class GetUserInfoApiService extends ApiService {
+export class GetUserInfoApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof userInfoApi.getOne>) {
-    const user = await this.dbSession.getRepository(UserInfo).findOne({
+    const user = await this.entityManager.getRepository(UserInfo).findOne({
       where: { id: request.userId },
     });
     if (!user) {
@@ -44,14 +49,21 @@ export class GetUserInfoApiService extends ApiService {
 }
 
 @serverModule.useApi(userInfoApi.update)
-export class UpdateUserInfoApiService extends ApiService {
+export class UpdateUserInfoApiService extends BaseService {
+  constructor(
+    @inject(DatabaseService) private databaseService: DatabaseService,
+    @inject(GetFileApiService) private getFileApiService: GetFileApiService
+  ) {
+    super();
+  }
+
   async handle(request: InferApiRequest<typeof userInfoApi.update>) {
     const avatar =
       request.avatar &&
-      (await this.create(GetFileApiService).handle({
+      (await this.getFileApiService.handle({
         fileId: request.avatar.id,
       }));
-    await this.dbSession
+    await this.databaseService.manager
       .createQueryBuilder()
       .insert()
       .into(UserInfo)
