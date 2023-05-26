@@ -1,5 +1,5 @@
 import { InferApiRequest } from '@roxavn/core/base';
-import { ApiService } from '@roxavn/core/server';
+import { InjectDatabaseService } from '@roxavn/core/server';
 import { IsNull } from 'typeorm';
 
 import { userNotificationApi } from '../../base/index.js';
@@ -7,12 +7,12 @@ import { UserNotification } from '../entities/index.js';
 import { serverModule } from '../module.js';
 
 @serverModule.useApi(userNotificationApi.getMany)
-export class GetUserNotificationsApiService extends ApiService {
+export class GetUserNotificationsApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof userNotificationApi.getMany>) {
     const page = request.page || 1;
     const pageSize = 10;
 
-    const [items, totalItems] = await this.dbSession
+    const [items, totalItems] = await this.entityManager
       .getRepository(UserNotification)
       .findAndCount({
         relations: ['notification'],
@@ -34,9 +34,9 @@ export class GetUserNotificationsApiService extends ApiService {
 }
 
 @serverModule.useApi(userNotificationApi.update)
-export class UpdateUserNotificationApiService extends ApiService {
+export class UpdateUserNotificationApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof userNotificationApi.update>) {
-    await this.dbSession.update(
+    await this.entityManager.update(
       UserNotification,
       {
         userId: request.userId,
@@ -49,17 +49,19 @@ export class UpdateUserNotificationApiService extends ApiService {
 }
 
 @serverModule.useApi(userNotificationApi.countUnread)
-export class CountUnreadUserNotificationApiService extends ApiService {
+export class CountUnreadUserNotificationApiService extends InjectDatabaseService {
   async handle(
     request: InferApiRequest<typeof userNotificationApi.countUnread>
   ) {
-    const count = await this.dbSession.getRepository(UserNotification).count({
-      where: {
-        userId: request.userId,
-        readDate: IsNull(),
-      },
-      take: 100, // get max 100 first
-    });
+    const count = await this.entityManager
+      .getRepository(UserNotification)
+      .count({
+        where: {
+          userId: request.userId,
+          readDate: IsNull(),
+        },
+        take: 100, // get max 100 first
+      });
     return { count };
   }
 }

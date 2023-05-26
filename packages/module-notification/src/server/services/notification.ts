@@ -1,7 +1,9 @@
-import { BaseService } from '@roxavn/core/server';
+import { InjectDatabaseService } from '@roxavn/core/server';
 import { Notification, UserNotification } from '../entities/index.js';
+import { serverModule } from '../module.js';
 
-export class CreateNotificationService extends BaseService {
+@serverModule.injectable()
+export class CreateNotificationService extends InjectDatabaseService {
   async handle({
     resource,
     resourceId,
@@ -27,7 +29,7 @@ export class CreateNotificationService extends BaseService {
       return {};
     }
 
-    const result = await this.dbSession
+    const result = await this.entityManager
       .createQueryBuilder()
       .insert()
       .into(Notification)
@@ -45,7 +47,7 @@ export class CreateNotificationService extends BaseService {
       )
       .execute();
 
-    await this.dbSession
+    await this.entityManager
       .createQueryBuilder()
       .insert()
       .into(UserNotification)

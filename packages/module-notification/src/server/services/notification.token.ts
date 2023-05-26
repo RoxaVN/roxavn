@@ -1,16 +1,24 @@
-import { ApiService, InferAuthApiRequest } from '@roxavn/core/server';
+import { type InferApiRequest } from '@roxavn/core';
+import {
+  AuthUser,
+  type InferContext,
+  InjectDatabaseService,
+  AuthAcesstoken,
+} from '@roxavn/core/server';
 
 import { notificationTokenApi } from '../../base/index.js';
 import { NotificationToken } from '../entities/index.js';
 import { serverModule } from '../module.js';
 
 @serverModule.useApi(notificationTokenApi.create)
-export class CreateNotificationTokenApiService extends ApiService {
+export class CreateNotificationTokenApiService extends InjectDatabaseService {
   async handle(
-    request: InferAuthApiRequest<typeof notificationTokenApi.create>
+    request: InferApiRequest<typeof notificationTokenApi.create>,
+    @AuthUser authUser: InferContext<typeof AuthUser>,
+    @AuthAcesstoken authToken: InferContext<typeof AuthAcesstoken>
   ) {
-    const id = request.$accessToken.id;
-    await this.dbSession
+    const id = authToken.id;
+    await this.entityManager
       .createQueryBuilder()
       .insert()
       .into(NotificationToken)
@@ -20,7 +28,7 @@ export class CreateNotificationTokenApiService extends ApiService {
         token: request.token,
         provider: request.provider,
         providerId: request.providerId,
-        userId: request.$user.id,
+        userId: authUser.id,
         tags: request.tags,
       })
       .orUpdate(
