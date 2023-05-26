@@ -78,7 +78,7 @@ async function checkToken(
     return;
   }
 
-  Object.assign(state.request, {
+  Object.assign(state, {
     $user: { id: accessToken.userId },
     $accessToken: { id: accessToken.id },
   });
