@@ -1,5 +1,5 @@
 import { InferApiRequest } from '@roxavn/core/base';
-import { ApiService } from '@roxavn/core/server';
+import { InjectDatabaseService } from '@roxavn/core/server';
 import { ILike, In } from 'typeorm';
 
 import { roleApi } from '../../base/index.js';
@@ -7,12 +7,12 @@ import { Role, UserRole } from '../entities/index.js';
 import { serverModule } from '../module.js';
 
 @serverModule.useApi(roleApi.getMany)
-export class GetRolesApiService extends ApiService {
+export class GetRolesApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof roleApi.getMany>) {
     const page = request.page || 1;
     const pageSize = request.pageSize || 10;
 
-    const [roles, totalItems] = await this.dbSession
+    const [roles, totalItems] = await this.entityManager
       .getRepository(Role)
       .findAndCount({
         where: {
@@ -37,14 +37,14 @@ export class GetRolesApiService extends ApiService {
 }
 
 @serverModule.useApi(roleApi.moduleStats)
-export class GetModuleRoleStatsApiService extends ApiService {
+export class GetModuleRoleStatsApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof roleApi.moduleStats>) {
     const page = request.page || 1;
     const pageSize = 10;
 
     const totalItems = parseInt(
       (
-        await this.dbSession
+        await this.entityManager
           .createQueryBuilder(UserRole, 'userRole')
           .select('COUNT(DISTINCT("userId"))', 'count')
           .where('userRole.scopeId = :scopeId', { scopeId: '' })
@@ -52,7 +52,7 @@ export class GetModuleRoleStatsApiService extends ApiService {
       ).count
     );
 
-    const users: any = await this.dbSession
+    const users: any = await this.entityManager
       .createQueryBuilder(UserRole, 'userRole')
       .select('userRole.userId', 'userId')
       .addSelect('COUNT(userRole.userId)', 'rolesCount')

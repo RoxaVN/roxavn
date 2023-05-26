@@ -6,7 +6,7 @@ import {
   InferApiResponse,
 } from '../../base/index.js';
 import { databaseManager } from '../database/index.js';
-import { BaseService } from '../service.js';
+import { BaseService } from '../service/index.js';
 import { eventManager } from './manager.js';
 
 export function onApiSuccess<Req extends ApiRequest, Resp extends ApiResponse>(

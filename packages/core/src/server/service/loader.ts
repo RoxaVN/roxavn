@@ -6,11 +6,11 @@ import {
   ApiResponse,
   constants,
   LogicException,
-} from '../base/index.js';
-import { databaseManager } from './database/index.js';
-import { BaseService } from './service.js';
-import { ServerModule } from './module.js';
-import { makeContextHelper } from './middlewares/index.js';
+} from '../../base/index.js';
+import { databaseManager } from '.././database/index.js';
+import { BaseService } from '../service/index.js';
+import { ServerModule } from '../module.js';
+import { makeContextHelper } from '../middlewares/index.js';
 
 export interface ServiceLoaderItem<
   Req extends ApiRequest = ApiRequest,

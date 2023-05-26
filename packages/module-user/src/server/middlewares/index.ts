@@ -1,4 +1,2 @@
-import './authenticator.js';
-import './authorization.js';
-
-export {};
+export * from './authenticator.js';
+export * from './authorization.js';

@@ -4,8 +4,8 @@ import { QueryResultCacheOptions } from 'typeorm/cache/QueryResultCacheOptions';
 export class MemoryQueryResultCache implements QueryResultCache {
   cache: Record<string, any> = {};
 
-  private getKey(query: string, identifier?: string) {
-    return identifier ? identifier + '__' + query : query;
+  private getKey(query?: string, identifier?: string) {
+    return identifier ? identifier + '__' + query : query || '';
   }
 
   async connect() {

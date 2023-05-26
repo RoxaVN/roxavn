@@ -1,13 +1,13 @@
 import { InferApiRequest } from '@roxavn/core/base';
-import { ApiService, serviceManager } from '@roxavn/core/server';
-import { ILike, In } from 'typeorm';
+import { InjectDatabaseService } from '@roxavn/core/server';
+import { ILike } from 'typeorm';
 
 import { roleUserApi } from '../../base/index.js';
 import { UserRole } from '../entities/index.js';
 import { serverModule } from '../module.js';
 
 @serverModule.useApi(roleUserApi.getMany)
-export class GetRoleUsersApiService extends ApiService {
+export class GetRoleUsersApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof roleUserApi.getMany>) {
     const page = request.page || 1;
     const pageSize = 10;
@@ -16,7 +16,7 @@ export class GetRoleUsersApiService extends ApiService {
       filterRole = { module: request.module };
     }
 
-    const [items, totalItems] = await this.dbSession
+    const [items, totalItems] = await this.entityManager
       .getRepository(UserRole)
       .findAndCount({
         relations: { user: true },
@@ -45,12 +45,12 @@ export class GetRoleUsersApiService extends ApiService {
 }
 
 @serverModule.useApi(roleUserApi.search)
-export class SearchRoleUsersApiService extends ApiService {
+export class SearchRoleUsersApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof roleUserApi.search>) {
     const page = request.page || 1;
     const pageSize = 10;
 
-    const [items, totalItems] = await this.dbSession
+    const [items, totalItems] = await this.entityManager
       .getRepository(UserRole)
       .findAndCount({
         relations: { user: true },
@@ -81,6 +81,7 @@ export class SearchRoleUsersApiService extends ApiService {
   }
 }
 
+/** 
 const AbstractCheckRoleUsersApiService =
   serviceManager.checkRoleUsersApiService;
 export class CheckRoleUsersApiService extends AbstractCheckRoleUsersApiService {
@@ -99,3 +100,4 @@ export class CheckRoleUsersApiService extends AbstractCheckRoleUsersApiService {
   }
 }
 serviceManager.checkRoleUsersApiService = CheckRoleUsersApiService;
+*/

@@ -8,12 +8,12 @@ import { And, ILike, In, LessThan, MoreThan } from 'typeorm';
 import { userApi } from '../../base/index.js';
 import { User } from '../entities/index.js';
 import { serverModule } from '../module.js';
-import { ApiService } from '@roxavn/core/server';
+import { InjectDatabaseService } from '@roxavn/core/server';
 
 @serverModule.useApi(userApi.getOne)
-export class GetMyUserApiService extends ApiService {
+export class GetMyUserApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof userApi.getOne>) {
-    const user = await this.dbSession.getRepository(User).findOne({
+    const user = await this.entityManager.getRepository(User).findOne({
       where: { id: request.userId },
     });
 
@@ -26,12 +26,12 @@ export class GetMyUserApiService extends ApiService {
 }
 
 @serverModule.useApi(userApi.getMany)
-export class GetUsersApiService extends ApiService {
+export class GetUsersApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof userApi.getMany>) {
     const page = request.page || 1;
     const pageSize = 10;
 
-    const [users, totalItems] = await this.dbSession
+    const [users, totalItems] = await this.entityManager
       .getRepository(User)
       .findAndCount({
         where: {
@@ -55,9 +55,9 @@ export class GetUsersApiService extends ApiService {
 }
 
 @serverModule.useApi(userApi.search)
-export class SearchUsersApiService extends ApiService {
+export class SearchUsersApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof userApi.search>) {
-    const users = await this.dbSession.getRepository(User).find({
+    const users = await this.entityManager.getRepository(User).find({
       select: ['id', 'username'],
       where: {
         id: request.ids && In(request.ids),
@@ -72,12 +72,12 @@ export class SearchUsersApiService extends ApiService {
 }
 
 @serverModule.useApi(userApi.create)
-export class CreateUserApiService extends ApiService {
+export class CreateUserApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof userApi.create>) {
     const user = new User();
     user.username = request.username;
     try {
-      await this.dbSession.save(user);
+      await this.entityManager.save(user);
     } catch (e) {
       throw new AlreadyExistsException();
     }

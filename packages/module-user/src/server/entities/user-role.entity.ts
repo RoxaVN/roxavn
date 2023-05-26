@@ -4,7 +4,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryColumn,
-  Relation,
+  type Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { Role } from './role.entity.js';

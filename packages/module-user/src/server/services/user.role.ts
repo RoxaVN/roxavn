@@ -3,7 +3,12 @@ import {
   InferApiRequest,
   NotFoundException,
 } from '@roxavn/core/base';
-import { ApiService, moduleManager, serviceManager } from '@roxavn/core/server';
+import {
+  BaseService,
+  InjectDatabaseService,
+  inject,
+  moduleManager,
+} from '@roxavn/core/server';
 import { In } from 'typeorm';
 
 import { userRoleApi } from '../../base/index.js';
@@ -11,9 +16,9 @@ import { Role, UserRole } from '../entities/index.js';
 import { serverModule } from '../module.js';
 
 @serverModule.useApi(userRoleApi.create)
-export class CreateUserRoleApiService extends ApiService {
+export class CreateUserRoleApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof userRoleApi.create>) {
-    const role = await this.dbSession.getRepository(Role).findOne({
+    const role = await this.entityManager.getRepository(Role).findOne({
       where: { id: request.roleId },
       select: ['scope', 'module'],
     });
@@ -34,16 +39,16 @@ export class CreateUserRoleApiService extends ApiService {
     if (request.scopeId) {
       userRole.scopeId = request.scopeId;
     }
-    await this.dbSession.save(userRole);
+    await this.entityManager.save(userRole);
     return {};
   }
 }
 
 @serverModule.useApi(userRoleApi.delete)
-export class DeleteUserRoleApiService extends ApiService {
+export class DeleteUserRoleApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof userRoleApi.delete>) {
     if (request.module || request.scope) {
-      const isValid = await this.dbSession.getRepository(Role).count({
+      const isValid = await this.entityManager.getRepository(Role).count({
         where: {
           module: request.module,
           scope: request.scope,
@@ -55,7 +60,7 @@ export class DeleteUserRoleApiService extends ApiService {
       }
     }
 
-    await this.dbSession.getRepository(UserRole).delete({
+    await this.entityManager.getRepository(UserRole).delete({
       scopeId: request.scopeId || '',
       userId: request.userId,
       roleId: request.roleId,
@@ -65,9 +70,9 @@ export class DeleteUserRoleApiService extends ApiService {
 }
 
 @serverModule.useApi(userRoleApi.getAll)
-export class GetUserRolesApiService extends ApiService {
+export class GetUserRolesApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof userRoleApi.getAll>) {
-    const items = await this.dbSession.getRepository(UserRole).find({
+    const items = await this.entityManager.getRepository(UserRole).find({
       relations: { role: true },
       select: {
         scopeId: true,
@@ -91,15 +96,23 @@ export class GetUserRolesApiService extends ApiService {
 }
 
 @serverModule.useApi(userRoleApi.modules)
-export class GetUserRoleModulesApiService extends ApiService {
+export class GetUserRoleModulesApiService extends BaseService {
+  constructor(
+    @inject(GetUserRolesApiService)
+    protected getUserRolesApiService: GetUserRolesApiService
+  ) {
+    super();
+  }
+
   handle(request: InferApiRequest<typeof userRoleApi.modules>) {
-    return this.create(GetUserRolesApiService).handle({
+    return this.getUserRolesApiService.handle({
       userId: request.userId,
       scopes: moduleManager.modules.map((m) => m.name),
     });
   }
 }
 
+/** 
 const AbstractGetService = serviceManager.getUserScopeIdsApiService;
 export class GetUserScopeIdsApiService extends AbstractGetService {
   async handle(request: {
@@ -156,3 +169,4 @@ export class SetUserRoleApiService extends AbstractSetService {
   }
 }
 serviceManager.setUserRoleApiService = SetUserRoleApiService;
+*/

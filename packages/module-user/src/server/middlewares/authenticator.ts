@@ -1,11 +1,11 @@
-import { ServerLoaderContext, ServerModule } from '@roxavn/core/server';
+import { ServerLoaderContext, ServerMiddleware } from '@roxavn/core/server';
 import { Cookie, constants } from '@roxavn/core/base';
 import { Raw } from 'typeorm';
 import { AccessToken } from '../entities/index.js';
-import { tokenService } from '../services/index.js';
+import { tokenService } from '../services/token.js';
 
 // authenticate access token
-ServerModule.authenticatorMiddleware = async ({
+export const authenticatorMiddleware: ServerMiddleware = async ({
   dbSession,
   state,
   request,
@@ -21,7 +21,7 @@ ServerModule.authenticatorMiddleware = async ({
   }
 };
 
-ServerModule.authenticatorLoaderMiddleware = async ({
+export const authenticatorLoaderMiddleware: ServerMiddleware = async ({
   dbSession,
   request,
   state,

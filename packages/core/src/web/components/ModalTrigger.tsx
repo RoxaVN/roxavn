@@ -10,7 +10,7 @@ type ModalTriggerTemplate = (props: {
 }) => React.ReactElement<any>;
 
 export interface ModalTriggerProps
-  extends Omit<ModalProps, 'children' | 'opened' | 'onClose'> {
+  extends Omit<ModalProps, 'children' | 'opened' | 'onClose' | 'content'> {
   children: React.ReactElement<any> | ModalTriggerTemplate;
   content: React.ReactNode | ModalTriggerTemplate;
 }

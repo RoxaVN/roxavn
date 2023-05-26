@@ -1,10 +1,22 @@
-import { BaseService } from '@roxavn/core/server';
+import { BaseService, DatabaseService, inject } from '@roxavn/core/server';
 import { Identity } from '../entities/index.js';
 import { CreateAccessTokenService } from './access.token.js';
 import { tokenService } from './token.js';
 import { CreateUserApiService } from './user.js';
+import { serverModule } from '../module.js';
 
+@serverModule.injectable()
 export class IdentityService extends BaseService {
+  constructor(
+    @inject(DatabaseService) protected databaseService: DatabaseService,
+    @inject(CreateUserApiService)
+    protected createUserApiService: CreateUserApiService,
+    @inject(CreateAccessTokenService)
+    protected createAccessTokenService: CreateAccessTokenService
+  ) {
+    super();
+  }
+
   async handle(request: {
     subject: string;
     type: string;
@@ -12,10 +24,12 @@ export class IdentityService extends BaseService {
     userAgent?: string | null;
     ipAddress: string;
   }) {
-    let identity = await this.dbSession.getRepository(Identity).findOne({
-      select: ['id', 'userId'],
-      where: { subject: request.subject, type: request.type },
-    });
+    let identity = await this.databaseService.manager
+      .getRepository(Identity)
+      .findOne({
+        select: ['id', 'userId'],
+        where: { subject: request.subject, type: request.type },
+      });
 
     if (!identity) {
       // random username
@@ -28,17 +42,17 @@ export class IdentityService extends BaseService {
           alphabetType: 'LOWERCASE_ALPHA_NUM',
           size: 15,
         }));
-      const user = await this.create(CreateUserApiService).handle({
+      const user = await this.createUserApiService.handle({
         username: username,
       });
       identity = new Identity();
       identity.type = request.type;
       identity.subject = request.subject;
       identity.userId = user.id;
-      await this.dbSession.save(identity);
+      await this.databaseService.manager.save(identity);
     }
 
-    return this.create(CreateAccessTokenService).handle({
+    return this.createAccessTokenService.handle({
       identityid: identity.id,
       userId: identity.userId,
       authenticator: request.authenticator,

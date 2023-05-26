@@ -1,4 +1,4 @@
-import { ApiService, BaseService } from '@roxavn/core/server';
+import { InjectDatabaseService } from '@roxavn/core/server';
 import { InferApiRequest } from '@roxavn/core/base';
 
 import { accessTokenApi } from '../../base/index.js';
@@ -8,12 +8,12 @@ import { tokenService } from './token.js';
 import { Env } from '../config.js';
 
 @serverModule.useApi(accessTokenApi.getMany)
-export class GetAccessTokensApiService extends ApiService {
+export class GetAccessTokensApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof accessTokenApi.getMany>) {
     const page = request.page || 1;
     const pageSize = 10;
 
-    const [users, totalItems] = await this.dbSession
+    const [users, totalItems] = await this.entityManager
       .getRepository(AccessToken)
       .findAndCount({
         where: {
@@ -31,16 +31,17 @@ export class GetAccessTokensApiService extends ApiService {
 }
 
 @serverModule.useApi(accessTokenApi.delete)
-export class DeleteAccessTokenApiService extends ApiService {
+export class DeleteAccessTokenApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof accessTokenApi.delete>) {
-    await this.dbSession
+    await this.entityManager
       .getRepository(AccessToken)
       .delete({ id: request.accessTokenId });
     return {};
   }
 }
 
-export class CreateAccessTokenService extends BaseService {
+@serverModule.injectable()
+export class CreateAccessTokenService extends InjectDatabaseService {
   async handle(request: {
     userId: string;
     identityid: string;
@@ -65,7 +66,7 @@ export class CreateAccessTokenService extends BaseService {
     accessToken.expiryDate = expiredAt;
     accessToken.ipAddress = request.ipAddress;
     accessToken.userAgent = request.userAgent || undefined;
-    await this.dbSession.getRepository(AccessToken).save(accessToken);
+    await this.entityManager.getRepository(AccessToken).save(accessToken);
 
     return {
       id: accessToken.id,

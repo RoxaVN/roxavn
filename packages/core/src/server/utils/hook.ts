@@ -3,7 +3,7 @@ import { capitalize } from 'lodash-es';
 import { Role } from '../../base/index.js';
 import { databaseManager } from '../database/index.js';
 import { moduleManager } from '../module.manager.js';
-import { BaseService } from '../service.js';
+import { BaseService } from '../service/base.js';
 
 export async function runModuleHooks(mode: string) {
   for (const m of moduleManager.modules) {

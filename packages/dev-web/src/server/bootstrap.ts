@@ -5,6 +5,7 @@ import {
   ServerModule,
   databaseManager,
   registerServerModules,
+  moduleManager,
 } from '@roxavn/core/server';
 import {
   createRemixRequest,
@@ -18,6 +19,13 @@ export async function bootstrap(serverBuild: ServerBuild) {
   const app = fastify();
 
   await registerServerModules();
+
+  await Promise.all(
+    moduleManager.serverModules.map((m) => {
+      return m.onBeforeServerStart && m.onBeforeServerStart();
+    })
+  );
+
   app.setErrorHandler(function (error, request, reply) {
     const resp: any = ServerModule.handleError(error);
     sendRemixResponse(reply, resp);
@@ -60,6 +68,10 @@ export async function bootstrap(serverBuild: ServerBuild) {
   if (process.env.NODE_ENV === constants.ENV_DEVELOPMENT) {
     broadcastDevReady(serverBuild);
   }
+
+  moduleManager.serverModules.map((m) => {
+    return m.onAfterServerStart && m.onAfterServerStart();
+  });
 
   return address;
 }

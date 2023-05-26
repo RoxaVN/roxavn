@@ -1,5 +1,5 @@
 import { ForbiddenException, UnauthorizedException } from '../../base/index.js';
-import { serviceManager } from '../service.js';
+import { serviceManager } from '../service/manager.js';
 import { authorize } from './authorize.js';
 import { ServerMiddleware } from './interfaces.js';
 
