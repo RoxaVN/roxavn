@@ -1,3 +1,4 @@
+import { type InferApiRequest } from '@roxavn/core';
 import { constants as userConstants } from '@roxavn/module-user/base';
 import { IdentityService } from '@roxavn/module-user/server';
 import { GetFirebaseAppService } from '@roxavn/plugin-firebase/server';
@@ -5,38 +6,60 @@ import firebaseAdmin from 'firebase-admin';
 
 import { identityApi } from '../../base/index.js';
 import { serverModule } from '../module.js';
+import {
+  BaseService,
+  type InferContext,
+  Ip,
+  inject,
+  UserAgent,
+} from '@roxavn/core/server';
 
-serverModule.useRawApi(identityApi.verifyToken, async (request, context) => {
-  const firebaseApp = await serverModule
-    .createService(GetFirebaseAppService, context)
-    .handle({ projectId: request.projectId });
-
-  const user = await firebaseAdmin
-    .auth(firebaseApp)
-    .verifyIdToken(request.token);
-  const data = {
-    authenticator: 'firebase',
-    ipAddress: context.helper.getClientIp(),
-    userAgent: context.request.headers.get('user-agent'),
-  };
-  const service = serverModule.createService(IdentityService, context);
-  if (user.email_verified && user.email) {
-    return service.handle({
-      ...data,
-      subject: user.email,
-      type: userConstants.identityTypes.EMAIL,
-    });
-  } else if (user.phone_number) {
-    return service.handle({
-      ...data,
-      subject: user.phone_number,
-      type: userConstants.identityTypes.PHONE,
-    });
-  } else {
-    return service.handle({
-      ...data,
-      subject: user.uid,
-      type: 'firebase uid',
-    });
+@serverModule.useApi(identityApi.verifyToken)
+export class VerifytokenFirebaseService extends BaseService {
+  constructor(
+    @inject(GetFirebaseAppService)
+    private getFirebaseAppService: GetFirebaseAppService,
+    @inject(IdentityService)
+    private identityService: IdentityService
+  ) {
+    super();
   }
-});
+
+  async handle(
+    request: InferApiRequest<typeof identityApi.verifyToken>,
+    @Ip ipAddress: InferContext<typeof Ip>,
+    @UserAgent userAgent: InferContext<typeof UserAgent>
+  ) {
+    const firebaseApp = await this.getFirebaseAppService.handle({
+      projectId: request.projectId,
+    });
+
+    const user = await firebaseAdmin
+      .auth(firebaseApp)
+      .verifyIdToken(request.token);
+    const data = {
+      authenticator: 'firebase',
+      ipAddress,
+      userAgent,
+    };
+    if (user.email_verified && user.email) {
+      return this.identityService.handle({
+        ...data,
+        subject: user.email,
+        type: userConstants.identityTypes.EMAIL,
+      });
+    } else if (user.phone_number) {
+      return this.identityService.handle({
+        ...data,
+        subject: user.phone_number,
+        type: userConstants.identityTypes.PHONE,
+      });
+    } else {
+      return this.identityService.handle({
+        ...data,
+        subject: user.uid,
+        type: 'firebase uid',
+      });
+    }
+  }
+}

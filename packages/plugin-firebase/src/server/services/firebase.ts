@@ -1,5 +1,5 @@
 import { NotFoundException } from '@roxavn/core/base';
-import { BaseService } from '@roxavn/core/server';
+import { BaseService, inject } from '@roxavn/core/server';
 import {
   GetSettingService,
   serverModule as utilsServerModule,
@@ -7,8 +7,16 @@ import {
 import firebaseAdmin from 'firebase-admin';
 
 import { constants } from '../../base/index.js';
+import { serverModule } from '../module.js';
 
+@serverModule.injectable()
 export class GetFirebaseAppService extends BaseService {
+  constructor(
+    @inject(GetSettingService) private getSettingService: GetSettingService
+  ) {
+    super();
+  }
+
   async handle(request: { projectId: string }) {
     const existsApp = firebaseAdmin.apps.find(
       (a) => a?.name === request.projectId
@@ -16,7 +24,7 @@ export class GetFirebaseAppService extends BaseService {
     if (existsApp) {
       return existsApp;
     }
-    const settings = await this.create(GetSettingService).handle({
+    const settings = await this.getSettingService.handle({
       module: utilsServerModule.name,
       name: constants.FIREBASE_SERVER_SETTING,
     });
