@@ -1,5 +1,5 @@
-import { Empty, InferApiRequest, NotFoundException } from '@roxavn/core/base';
-import { ApiService, BaseService } from '@roxavn/core/server';
+import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
+import { InjectDatabaseService } from '@roxavn/core/server';
 
 import { UpdateSettingRequest } from '../../base/index.js';
 import { Setting } from '../entities/index.js';
@@ -7,9 +7,9 @@ import { serverModule } from '../module.js';
 import { settingApi } from '../../base/apis/index.js';
 
 @serverModule.useApi(settingApi.getPublic)
-export class GetPublicSettingService extends ApiService {
+export class GetPublicSettingService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof settingApi.getPublic>) {
-    const result = await this.dbSession.getRepository(Setting).findOne({
+    const result = await this.entityManager.getRepository(Setting).findOne({
       select: ['metadata'],
       where: { module: request.module, name: request.name, type: 'public' },
     });
@@ -21,18 +21,19 @@ export class GetPublicSettingService extends ApiService {
 }
 
 @serverModule.useApi(settingApi.getAll)
-export class GetModuleSettingsService extends ApiService {
+export class GetModuleSettingsService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof settingApi.getAll>) {
-    const items = await this.dbSession.getRepository(Setting).find({
+    const items = await this.entityManager.getRepository(Setting).find({
       where: { module: request.module },
     });
     return { items };
   }
 }
 
-export class GetSettingService extends BaseService {
+@serverModule.injectable()
+export class GetSettingService extends InjectDatabaseService {
   async handle(request: { module: string; name: string }) {
-    const result = await this.dbSession.getRepository(Setting).findOne({
+    const result = await this.entityManager.getRepository(Setting).findOne({
       where: {
         name: request.name,
         module: request.module,
@@ -42,12 +43,10 @@ export class GetSettingService extends BaseService {
   }
 }
 
-export class UpdateSettingService extends BaseService<
-  UpdateSettingRequest,
-  Empty
-> {
+@serverModule.injectable()
+export class UpdateSettingService extends InjectDatabaseService {
   async handle(request: UpdateSettingRequest) {
-    await this.dbSession
+    await this.entityManager
       .createQueryBuilder()
       .insert()
       .into(Setting)
