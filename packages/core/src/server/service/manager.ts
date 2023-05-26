@@ -2,7 +2,9 @@ import { EntityManager } from 'typeorm';
 import { AuthorizationArgs } from '../middlewares/authorize.js';
 import { BaseService, autoBind } from './base.js';
 import { Role, Empty, PaginatedCollection } from '../../base/index.js';
-import { inject } from 'inversify';
+import { inject, interfaces } from 'inversify';
+
+export type ServiceFactory = (context: interfaces.Context) => Promise<any>;
 
 @autoBind()
 export abstract class GetUserScopeIdsApiService extends BaseService {

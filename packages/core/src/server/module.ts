@@ -116,8 +116,8 @@ export class ServerModule extends BaseModule {
 
   bindFactory() {
     return (target: any, propertyKey: string) => {
-      serviceContainer.bind(target).toDynamicValue(() => {
-        return target[propertyKey]();
+      serviceContainer.bind(target).toDynamicValue((context) => {
+        return target[propertyKey](context);
       });
     };
   }

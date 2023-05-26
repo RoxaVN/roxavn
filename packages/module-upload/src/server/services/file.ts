@@ -6,10 +6,17 @@ import {
 } from '@remix-run/node';
 import {
   BadRequestException,
-  InferApiRequest,
+  type InferApiRequest,
   NotFoundException,
 } from '@roxavn/core/base';
-import { ApiService, BaseService } from '@roxavn/core/server';
+import {
+  BaseService,
+  type InferContext,
+  InjectDatabaseService,
+  RequestObject,
+  inject,
+  AuthUser,
+} from '@roxavn/core/server';
 import { createReadStream } from 'fs';
 
 import {
@@ -25,80 +32,97 @@ import {
 } from './file.storage.js';
 import { GetStorageHandlerService } from './storage.handler.js';
 
-serverModule.useRawApi(fileApi.upload, async (_, args) => {
-  const userId = args.state.$user.id;
-  const storageHandler = await serverModule
-    .createService(GetStorageHandlerService, args)
-    .handle();
-  const storage = await serverModule
-    .createService(GetUserFileStorageService, args)
-    .handle({ userId: userId, storageName: storageHandler.name });
-  const remainSize =
-    storage.maxSize > 0 ? storage.maxSize - storage.currentSize : undefined;
-
-  const uploadHandler = unstable_createFileUploadHandler({
-    maxPartSize: remainSize,
-  });
-  let formData: FormData;
-  try {
-    formData = await unstable_parseMultipartFormData(
-      args.request,
-      uploadHandler
-    );
-  } catch (e) {
-    if (e instanceof MaxPartSizeExceededError) {
-      throw new ExceedsStorageLimitException(storage.maxSize);
-    } else {
-      throw e;
-    }
+@serverModule.useApi(fileApi.upload)
+export class UploadFileService extends BaseService {
+  constructor(
+    @inject(GetStorageHandlerService)
+    private getStorageHandlerService: GetStorageHandlerService,
+    @inject(GetUserFileStorageService)
+    private getUserFileStorageService: GetUserFileStorageService,
+    @inject(UpdateFileStorageService)
+    private updateFileStorageService: UpdateFileStorageService,
+    @inject(CreateFileService)
+    private createFileService: CreateFileService
+  ) {
+    super();
   }
-  const file: NodeOnDiskFile = formData.get('file') as any;
-  if (file) {
-    const filesize = file.size;
-    const mime = file.type;
-    const name = file.name;
 
-    if (storage.maxFileSize > 0 && storage.maxFileSize < filesize) {
-      throw new ExceedsUploadLimitException(storage.maxFileSize);
+  async handle(
+    data: InferApiRequest<typeof fileApi.upload>,
+    @AuthUser authUser: InferContext<typeof AuthUser>,
+    @RequestObject requestObject: InferContext<typeof RequestObject>
+  ) {
+    const userId = authUser.id;
+    const storageHandler = await this.getStorageHandlerService.handle();
+    const storage = await this.getUserFileStorageService.handle({
+      userId: userId,
+      storageName: storageHandler.name,
+    });
+    const remainSize =
+      storage.maxSize > 0 ? storage.maxSize - storage.currentSize : undefined;
+
+    const uploadHandler = unstable_createFileUploadHandler({
+      maxPartSize: remainSize,
+    });
+    let formData: FormData;
+    try {
+      formData = await unstable_parseMultipartFormData(
+        requestObject,
+        uploadHandler
+      );
+    } catch (e) {
+      if (e instanceof MaxPartSizeExceededError) {
+        throw new ExceedsStorageLimitException(storage.maxSize);
+      } else {
+        throw e;
+      }
     }
+    const file: NodeOnDiskFile = formData.get('file') as any;
+    if (file) {
+      const filesize = file.size;
+      const mime = file.type;
+      const name = file.name;
 
-    const uploadResult = await storageHandler.upload(
-      createReadStream(file.getFilePath())
-    );
+      if (storage.maxFileSize > 0 && storage.maxFileSize < filesize) {
+        throw new ExceedsUploadLimitException(storage.maxFileSize);
+      }
 
-    // update storage later because avoid wait lock for update
-    const update = await serverModule
-      .createService(UpdateFileStorageService, args)
-      .handle({
+      const uploadResult = await storageHandler.upload(
+        createReadStream(file.getFilePath())
+      );
+
+      // update storage later because avoid wait lock for update
+      const update = await this.updateFileStorageService.handle({
         userId: userId,
         storageName: storageHandler.name,
         fileSize: filesize,
       });
-    if (update.error) {
-      await storageHandler.remove(uploadResult.id);
-      throw new ExceedsStorageLimitException(storage.maxSize);
+      if (update.error) {
+        await storageHandler.remove(uploadResult.id);
+        throw new ExceedsStorageLimitException(storage.maxSize);
+      }
+
+      await this.createFileService.handle({
+        id: uploadResult.id,
+        url: uploadResult.url,
+        size: filesize,
+        eTag: uploadResult.eTag,
+        fileStorageId: storage.id,
+        mime,
+        name,
+        userId,
+      });
+
+      return { id: uploadResult.id, mime, name, url: uploadResult.url };
     }
-
-    await serverModule.createService(CreateFileService, args).handle({
-      id: uploadResult.id,
-      url: uploadResult.url,
-      size: filesize,
-      eTag: uploadResult.eTag,
-      fileStorageId: storage.id,
-      mime,
-      name,
-      userId,
-    });
-
-    return { id: uploadResult.id, mime, name, url: uploadResult.url };
+    throw new BadRequestException();
   }
-  throw new BadRequestException();
-});
+}
 
 @serverModule.useApi(fileApi.getOne)
-export class GetFileApiService extends ApiService {
+export class GetFileApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof fileApi.getOne>) {
-    const result = await this.dbSession.getRepository(FileEntity).findOne({
+    const result = await this.entityManager.getRepository(FileEntity).findOne({
       where: { id: request.fileId },
     });
     if (result) {
@@ -113,7 +137,8 @@ export class GetFileApiService extends ApiService {
   }
 }
 
-export class CreateFileService extends BaseService {
+@serverModule.injectable()
+export class CreateFileService extends InjectDatabaseService {
   handle(request: {
     id: string;
     size: number;
@@ -126,6 +151,6 @@ export class CreateFileService extends BaseService {
   }) {
     const file = new FileEntity();
     Object.assign(file, request);
-    return this.dbSession.save(file);
+    return this.entityManager.save(file);
   }
 }

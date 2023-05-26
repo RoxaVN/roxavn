@@ -1,26 +1,30 @@
 import { InferApiRequest } from '@roxavn/core/base';
-import { ApiService } from '@roxavn/core/server';
+import { BaseService, inject } from '@roxavn/core/server';
 import { serverModule as uploadServerModule } from '@roxavn/module-upload/server';
 import { UpdateSettingService } from '@roxavn/module-utils/server';
 
 import { constants, settingApi } from '../../base/index.js';
 import { serverModule } from '../module.js';
-import { SeaweedFSStorageHandlerService } from './storage.handler.js';
 
 @serverModule.useApi(settingApi.updateSeaweedFSSetting)
-export class UpdateSeaweedFSSettingApiService extends ApiService {
+export class UpdateSeaweedFSSettingApiService extends BaseService {
+  constructor(
+    @inject(UpdateSettingService)
+    private updateSettingService: UpdateSettingService
+  ) {
+    super();
+  }
+
   async handle(
     request: InferApiRequest<typeof settingApi.updateSeaweedFSSetting>
   ) {
-    const result = await this.create(UpdateSettingService).handle({
+    const result = await this.updateSettingService.handle({
       module: uploadServerModule.name,
       name: constants.SEAWEEDFS_SETTING,
       metadata: { masterUrl: request.masterUrl },
       type: 'private',
     });
 
-    // reset handler cache
-    SeaweedFSStorageHandlerService.handler = undefined;
     return result;
   }
 }
