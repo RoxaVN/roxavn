@@ -8,8 +8,10 @@ export abstract class BaseService<Request = any, Response = any> {
 
 export function autoBind() {
   return (constructor: any) => {
-    injectable()(constructor);
-    serviceContainer.bind(constructor).toSelf();
+    if (!serviceContainer.isBound(constructor)) {
+      injectable()(constructor);
+      serviceContainer.bind(constructor).toSelf();
+    }
   };
 }
 

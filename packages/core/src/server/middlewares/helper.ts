@@ -1,19 +1,18 @@
-import { Resource } from '../../base/index.js';
-import { databaseManager } from '../database/index.js';
-import { RemixLoaderContextHelper, ServerLoaderContext } from './interfaces.js';
+import { inject } from 'inversify';
+import { Api, Resource } from '../../base/index.js';
+import { databaseManager, DatabaseService } from '../database/index.js';
+import { autoBind } from '../service/base.js';
 
-export function makeContextHelper(
-  remixContextHelper: RemixLoaderContextHelper,
-  {
-    dbSession,
-    api,
-    state,
-  }: Pick<ServerLoaderContext, 'dbSession' | 'api' | 'state'>
-) {
-  const getActiveResource = () => {
+@autoBind()
+export class ResourceService {
+  constructor(
+    @inject(DatabaseService) private databaseService: DatabaseService
+  ) {}
+
+  getActiveResource = (api: Api, state: Record<string, any>) => {
     if (api) {
       for (const r of api.resources.reverse()) {
-        if (state.request[r.idParam]) {
+        if (state.request?.[r.idParam]) {
           return r;
         }
       }
@@ -21,12 +20,15 @@ export function makeContextHelper(
     return null;
   };
 
-  const getResourceInstance = async (): Promise<Record<string, any> | null> => {
-    const resource = getActiveResource();
+  getResourceInstance = async (
+    api: Api,
+    state: Record<string, any>
+  ): Promise<Record<string, any> | null> => {
+    const resource = this.getActiveResource(api, state);
     if (resource) {
       const entity = databaseManager.getEntity(resource.name);
       const resourceId = state.request[resource.idParam];
-      return await dbSession.getRepository(entity).findOne({
+      return await this.databaseService.manager.getRepository(entity).findOne({
         where: { id: resourceId },
         cache: true,
       });
@@ -34,29 +36,29 @@ export function makeContextHelper(
     return null;
   };
 
-  const getRelatedResourceInstance = async (resource: Resource) => {
-    const activeResource = getActiveResource();
+  getRelatedResourceInstance = async (
+    api: Api,
+    state: Record<string, any>,
+    resource: Resource
+  ) => {
+    const activeResource = this.getActiveResource(api, state);
     if (activeResource?.name === resource.name) {
-      return await getResourceInstance();
+      return await this.getResourceInstance(api, state);
     } else {
-      const activeResourceData = await getResourceInstance();
+      const activeResourceData = await this.getResourceInstance(api, state);
       if (activeResourceData) {
         const relateResourceid = activeResourceData[resource.idParam];
         if (relateResourceid) {
           const entity = databaseManager.getEntity(resource.name);
-          return await dbSession.getRepository(entity).findOne({
-            where: { id: relateResourceid },
-            cache: true,
-          });
+          return await this.databaseService.manager
+            .getRepository(entity)
+            .findOne({
+              where: { id: relateResourceid },
+              cache: true,
+            });
         }
       }
     }
     return null;
-  };
-
-  return {
-    ...remixContextHelper,
-    getResourceInstance,
-    getRelatedResourceInstance,
   };
 }

@@ -1,5 +1,3 @@
-import { EntityManager } from 'typeorm';
-import { AuthorizationArgs } from '../middlewares/authorize.js';
 import { BaseService, autoBind } from './base.js';
 import { Role, Empty, PaginatedCollection } from '../../base/index.js';
 import { inject, interfaces } from 'inversify';
@@ -56,14 +54,11 @@ export abstract class BaseInstallHook extends BaseService {
   }
 }
 
-export const serviceManager = {
-  checkUserPermission: (
-    dbSession: EntityManager,
-    ...args: Parameters<AuthorizationArgs['helper']['hasPermission']>
-  ): Promise<boolean> => {
-    throw new Error(
-      "checkUserPermission isn't implemented " +
-        JSON.stringify({ dbSession, args })
-    );
-  },
-};
+@autoBind()
+export abstract class CheckUserPermissionService extends BaseService {
+  abstract handle(request: {
+    userId: string;
+    permission: string;
+    scopes: Array<{ name: string; id?: string }>;
+  }): Promise<boolean>;
+}

@@ -4,13 +4,14 @@ import {
   Api,
   ApiRequest,
   ApiResponse,
-  constants,
   LogicException,
 } from '../../base/index.js';
-import { databaseManager } from '.././database/index.js';
-import { BaseService } from '../service/index.js';
-import { ServerModule } from '../module.js';
-import { makeContextHelper } from '../middlewares/index.js';
+import {
+  BaseService,
+  handleService,
+  serviceContainer,
+} from '../service/index.js';
+import { compose, MiddlewareManager } from '../middlewares/manager.js';
 
 export interface ServiceLoaderItem<
   Req extends ApiRequest = ApiRequest,
@@ -18,77 +19,57 @@ export interface ServiceLoaderItem<
 > {
   service: {
     new (...args: any[]): BaseService<Req, Resp>;
-    $api?: Api;
   };
   params?: Partial<Req> | { (data: any): Partial<Req> };
-  checkPermission?: boolean;
 }
 
 class ServicesLoader {
   async load<S extends Record<string, ServiceLoaderItem>>(
     args: LoaderArgs,
-    services: S
+    services: S,
+    options?: {
+      /**
+       * Api to check permission
+       */
+      api?: Api;
+    }
   ): Promise<
     TypedResponse<{
       [k in keyof S]: S[k] extends ServiceLoaderItem<any, infer U> ? U : never;
     }>
   > {
-    const queryRunner = databaseManager.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
     try {
-      const result: any = {};
-      const requestData = (args.context as any).getRequestData();
-      for (const key of Object.keys(services)) {
-        const serviceClass = services[key].service;
-        const serviceParams = services[key].params;
-        let state = {
-          request: {
+      const state: any = { request: {}, response: {} };
+      const middlewareManager = await serviceContainer.getAsync(
+        MiddlewareManager
+      );
+      const middlewares = await middlewareManager.getLoaderMiddlewares();
+      const context: any = {
+        api: options?.api,
+        request: args.request,
+        state,
+        helper: args.context,
+      };
+      await compose(middlewares)(context, async () => {
+        const request = state.request;
+        for (const key of Object.keys(services)) {
+          const serviceClass = services[key].service;
+          const serviceParams = services[key].params;
+          state.request = {
             ...(typeof serviceParams === 'function'
-              ? serviceParams(result)
+              ? serviceParams(state.response)
               : serviceParams),
-            ...args.params,
-          },
-        };
-        if (serviceClass.$api) {
-          const middlewareContext = {
-            api: serviceClass.$api,
-            request: args.request,
-            state,
-            helper: makeContextHelper(args.context as any, {
-              dbSession: queryRunner.manager,
-              api: serviceClass.$api,
-              state: state,
-            }),
-            dbSession: queryRunner.manager,
+            ...request,
           };
-          const middlewares = [...ServerModule.loaderMiddlewares];
-          if (services[key].checkPermission) {
-            middlewares.unshift(ServerModule.authorizationMiddleware);
-            middlewares.unshift(ServerModule.authenticatorLoaderMiddleware);
-          }
-          if (requestData[constants.LOCATION_SEARCH_KEY] === key) {
-            Object.assign(state.request, requestData);
-            middlewares.unshift(ServerModule.validatorMiddleware);
-          }
-          for (const middleware of middlewares) {
-            await middleware(middlewareContext);
-          }
-          state = middlewareContext.state;
+          state.response[key] = await handleService(serviceClass, context);
         }
-
-        const service = new serviceClass(queryRunner.manager);
-        result[key] = await service.handle(state.request);
-      }
-      return json(result as any);
+      });
+      return json(state.response as any);
     } catch (e) {
-      await queryRunner.rollbackTransaction();
       if (e instanceof LogicException) {
         throw new Response(e.type, { status: e.code });
       }
       throw e;
-    } finally {
-      await queryRunner.release();
     }
   }
 }
