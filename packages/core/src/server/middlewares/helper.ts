@@ -1,6 +1,6 @@
 import { inject } from 'inversify';
 import { Api, Resource } from '../../base/index.js';
-import { databaseManager, DatabaseService } from '../database/index.js';
+import { DatabaseService } from '../database/index.js';
 import { autoBind } from '../service/base.js';
 
 @autoBind()
@@ -26,7 +26,7 @@ export class ResourceService {
   ): Promise<Record<string, any> | null> => {
     const resource = this.getActiveResource(api, state);
     if (resource) {
-      const entity = databaseManager.getEntity(resource.name);
+      const entity = this.databaseService.getEntity(resource.name);
       const resourceId = state.request[resource.idParam];
       return await this.databaseService.manager.getRepository(entity).findOne({
         where: { id: resourceId },
@@ -49,7 +49,7 @@ export class ResourceService {
       if (activeResourceData) {
         const relateResourceid = activeResourceData[resource.idParam];
         if (relateResourceid) {
-          const entity = databaseManager.getEntity(resource.name);
+          const entity = this.databaseService.getEntity(resource.name);
           return await this.databaseService.manager
             .getRepository(entity)
             .findOne({

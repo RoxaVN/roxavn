@@ -5,8 +5,7 @@ import {
   InferApiRequest,
   InferApiResponse,
 } from '../../base/index.js';
-import { databaseManager } from '../database/index.js';
-import { BaseService } from '../service/index.js';
+import { BaseService, serviceContainer } from '../service/index.js';
 import { eventManager } from './manager.js';
 
 export function onApiSuccess<Req extends ApiRequest, Resp extends ApiResponse>(
@@ -19,11 +18,8 @@ export function onApiSuccess<Req extends ApiRequest, Resp extends ApiResponse>(
       eventManager.makeApiSuccessEvent(api),
       async (data) => {
         try {
-          await databaseManager.dataSource.transaction(
-            async (entityManager) => {
-              return new serviceClass(entityManager).handle(data);
-            }
-          );
+          const service = await serviceContainer.getAsync(serviceClass);
+          service.handle(data);
         } catch (e) {
           console.log(e);
         }
