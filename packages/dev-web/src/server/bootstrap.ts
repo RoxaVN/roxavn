@@ -3,7 +3,6 @@ import { constants } from '@roxavn/core/base';
 import {
   type RemixLoaderContextHelper,
   ServerModule,
-  databaseManager,
   registerServerModules,
   moduleManager,
 } from '@roxavn/core/server';
@@ -60,7 +59,6 @@ export async function bootstrap(serverBuild: ServerBuild) {
       },
     });
   });
-  await databaseManager.createSource();
 
   const port = process.env.PORT ? Number(process.env.PORT) || 3000 : 3000;
   const address = await app.listen({ port, host: '0.0.0.0' });

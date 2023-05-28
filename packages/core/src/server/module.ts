@@ -8,7 +8,7 @@ import {
   ServerException,
 } from '../base/index.js';
 import { compose, MiddlewareManager } from './middlewares/index.js';
-import { autoBind, BaseService, rebind } from './service/base.js';
+import { autoBind, BaseService, bindFactory, rebind } from './service/base.js';
 import { serviceContainer } from './service/container.js';
 import { handleService, RemixLoaderContextHelper } from './service/context.js';
 
@@ -54,14 +54,7 @@ export class ServerModule extends BaseModule {
 
   injectable = autoBind;
   rebind = rebind;
-
-  bindFactory() {
-    return (target: any, propertyKey: string) => {
-      serviceContainer.bind(target).toDynamicValue((context) => {
-        return target[propertyKey](context);
-      });
-    };
-  }
+  bindFactory = bindFactory;
 
   static handleError(error: any) {
     console.error(error);

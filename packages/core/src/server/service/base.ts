@@ -20,3 +20,11 @@ export function rebind(source: any) {
     serviceContainer.rebind(source).toConstructor(constructor);
   };
 }
+
+export function bindFactory() {
+  return (target: any, propertyKey: string) => {
+    serviceContainer.bind(target).toDynamicValue((context) => {
+      return target[propertyKey](context);
+    });
+  };
+}

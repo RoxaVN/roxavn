@@ -1,9 +1,10 @@
 import { DataSource, EntityManager } from 'typeorm';
+import { inject } from 'inversify';
 
-import { serverModule } from '../module.js';
 import { constants } from '../../base/index.js';
 import { moduleManager } from '../module.manager.js';
 import { MemoryQueryResultCache } from './cache.js';
+import { autoBind, BaseService, bindFactory } from '../service/base.js';
 
 export class DatabaseService {
   manager: EntityManager;
@@ -17,7 +18,7 @@ export class DatabaseService {
     return this.entities.find((e) => e.name === capitalName);
   }
 
-  @serverModule.bindFactory()
+  @bindFactory()
   static async create() {
     const isDev = process.env.NODE_ENV === constants.ENV_DEVELOPMENT;
     const entities = moduleManager.serverModules.map((m) => m.entities).flat();
@@ -38,5 +39,17 @@ export class DatabaseService {
     await dataSource.initialize();
 
     return new DatabaseService(dataSource, entities);
+  }
+}
+
+@autoBind()
+export abstract class InjectDatabaseService extends BaseService {
+  entityManager: EntityManager;
+
+  constructor(
+    @inject(DatabaseService) protected databaseService: DatabaseService
+  ) {
+    super();
+    this.entityManager = databaseService.manager;
   }
 }

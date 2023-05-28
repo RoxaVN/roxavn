@@ -4,7 +4,6 @@ import { buildService } from './build.js';
 import { devService } from './dev.js';
 import { moduleService } from './module.js';
 import { templateService } from './template.js';
-import { hookService } from './hook.js';
 
 const program = new Command();
 
@@ -29,14 +28,6 @@ program
   .command('dev')
   .description('Run dev server')
   .action(() => devService.run());
-
-program
-  .command('hook <mode> [module]')
-  .description('Run hook script, or all if no module supplied')
-  .option('-p, --plugin <type>', 'plugin service', '@roxavn/module-user/hook')
-  .action((mode: string, module: string, options) =>
-    hookService.run(mode, module, options)
-  );
 
 program
   .command('build')
