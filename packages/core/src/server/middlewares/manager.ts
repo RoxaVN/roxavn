@@ -63,7 +63,10 @@ export class MiddlewareManager {
       middlewareServices.map((service) => serviceContainer.getAsync(service))
     );
     middlewares.sort((a, b) => {
-      if (a.dependencies?.includes(b.constructor as any)) {
+      if (
+        a.after?.includes(b.constructor as any) ||
+        b.before?.includes(a.constructor as any)
+      ) {
         return -1;
       }
       return 1;

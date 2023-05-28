@@ -18,7 +18,7 @@ import { useApiMiddleware, useLoaderMiddleware } from './manager.js';
 @useApiMiddleware()
 @useLoaderMiddleware()
 export class AuthorizationMiddleware implements MiddlewareService {
-  dependencies = [ApiAuthenticatorMiddleware, LoaderAuthenticatorMiddleware];
+  after = [ApiAuthenticatorMiddleware, LoaderAuthenticatorMiddleware];
 
   constructor(
     @inject(ResourceService) private resourceService: ResourceService,

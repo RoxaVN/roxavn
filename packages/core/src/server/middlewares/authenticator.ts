@@ -4,7 +4,7 @@ import { ValidatorMiddleware } from './validator.js';
 
 @useApiMiddleware()
 export class ApiAuthenticatorMiddleware implements MiddlewareService {
-  dependencies = [ValidatorMiddleware];
+  after = [ValidatorMiddleware];
 
   async handle() {
     throw new Error('ApiAuthenticatorMiddleware is not implement');
@@ -13,7 +13,7 @@ export class ApiAuthenticatorMiddleware implements MiddlewareService {
 
 @useLoaderMiddleware()
 export class LoaderAuthenticatorMiddleware implements MiddlewareService {
-  dependencies = [ValidatorMiddleware];
+  after = [ValidatorMiddleware];
 
   async handle() {
     throw new Error('LoaderAuthenticatorMiddleware is not implement');
