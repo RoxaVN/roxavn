@@ -32,6 +32,6 @@ export class ValidatorMiddleware implements MiddlewareService {
 
       Object.assign(state.request, parsedData);
     }
-    next();
+    return next();
   }
 }

@@ -1,44 +1,60 @@
-import { ServerLoaderContext, ServerMiddleware } from '@roxavn/core/server';
+import {
+  ApiAuthenticatorMiddleware,
+  InjectDatabaseService,
+  LoaderAuthenticatorMiddleware,
+  MiddlewareService,
+  RouterContext,
+} from '@roxavn/core/server';
 import { Cookie, constants } from '@roxavn/core/base';
-import { Raw } from 'typeorm';
+import { EntityManager, Raw } from 'typeorm';
 import { AccessToken } from '../entities/index.js';
 import { tokenService } from '../services/token.js';
+import { serverModule } from '../module.js';
 
-// authenticate access token
-export const authenticatorMiddleware: ServerMiddleware = async ({
-  dbSession,
-  state,
-  request,
-  api,
-}) => {
-  if (api?.permission) {
-    const authorizationHeader = request.headers.get('authorization');
-    const token =
-      authorizationHeader && authorizationHeader.startsWith('Bearer ')
-        ? authorizationHeader.slice(7)
+@serverModule.rebind(ApiAuthenticatorMiddleware)
+export class ApiAuthenticatorMiddlewareEx
+  extends InjectDatabaseService
+  implements MiddlewareService
+{
+  async handle(
+    { api, state, request }: RouterContext,
+    next: () => Promise<void>
+  ) {
+    if (api?.permission) {
+      const authorizationHeader = request.headers.get('authorization');
+      const token =
+        authorizationHeader && authorizationHeader.startsWith('Bearer ')
+          ? authorizationHeader.slice(7)
+          : null;
+      await checkToken(token, this.databaseService.manager, state);
+    }
+    return next();
+  }
+}
+
+@serverModule.rebind(LoaderAuthenticatorMiddleware)
+export class LoaderAuthenticatorMiddlewareEx
+  extends InjectDatabaseService
+  implements MiddlewareService
+{
+  async handle(
+    { api, state, request }: RouterContext,
+    next: () => Promise<void>
+  ) {
+    if (api?.permission) {
+      const cookie = request.headers.get('cookie');
+      const token = cookie
+        ? new Cookie(cookie).get(constants.Cookie.TOKEN)
         : null;
-    await checkToken(token, dbSession, state);
+      await checkToken(token, this.databaseService.manager, state);
+    }
+    return next();
   }
-};
-
-export const authenticatorLoaderMiddleware: ServerMiddleware = async ({
-  dbSession,
-  request,
-  state,
-  api,
-}) => {
-  if (api?.permission) {
-    const cookie = request.headers.get('cookie');
-    const token = cookie
-      ? new Cookie(cookie).get(constants.Cookie.TOKEN)
-      : null;
-    await checkToken(token, dbSession, state);
-  }
-};
+}
 
 async function checkToken(
   token: string | null,
-  dbSession: ServerLoaderContext['dbSession'],
+  dbSession: EntityManager,
   state: Record<string, any>
 ) {
   if (!token) {

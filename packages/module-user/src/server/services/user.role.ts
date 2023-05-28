@@ -10,8 +10,9 @@ import {
   SetUserRoleApiService,
   inject,
   moduleManager,
+  CheckUserPermissionService,
 } from '@roxavn/core/server';
-import { In } from 'typeorm';
+import { Brackets, In } from 'typeorm';
 
 import { userRoleApi } from '../../base/index.js';
 import { Role, UserRole } from '../entities/index.js';
@@ -172,5 +173,47 @@ export class SetUserRoleApiServiceEx
       return {};
     }
     throw new NotFoundException();
+  }
+}
+
+@serverModule.rebind(CheckUserPermissionService)
+export class CheckUserPermissionServiceEx
+  extends InjectDatabaseService
+  implements CheckUserPermissionService
+{
+  async handle({
+    userId,
+    permission,
+    scopes,
+  }: {
+    userId: string;
+    permission: string;
+    scopes: { name: string; id?: string }[];
+  }) {
+    const item = await this.databaseService.manager
+      .getRepository(UserRole)
+      .createQueryBuilder('userRole')
+      .leftJoin(Role, 'role', 'userRole.roleId = role.id')
+      .select('userRole.userId')
+      .where('userRole.userId = :userId', { userId })
+      .andWhere(':permission = ANY(role.permissions)', { permission })
+      .andWhere(
+        new Brackets((qb) => {
+          scopes.map((scope) => {
+            qb.orWhere(
+              new Brackets((qb1) => {
+                qb1
+                  .where('userRole.scope = :scope', { scope: scope.name })
+                  .andWhere('userRole.scopeId = :scopeId', {
+                    scopeId: scope.id || '',
+                  });
+              })
+            );
+          });
+        })
+      )
+      .getRawOne();
+
+    return !!item;
   }
 }

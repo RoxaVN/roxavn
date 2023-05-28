@@ -43,8 +43,9 @@ export class ServerModule extends BaseModule {
           );
           const middlewares = await middlewareManager.getApiMiddlewares();
           const context = { api, request, state, helper };
-          await compose(middlewares)(context, async () => {
-            state.response = await handleService(serviceClass, context);
+          await compose(middlewares)(context, async (ctx, next) => {
+            state.response = await handleService(serviceClass, ctx);
+            return next();
           });
           return json({ code: 200, data: state.response });
         },

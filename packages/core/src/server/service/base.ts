@@ -17,7 +17,10 @@ export function autoBind() {
 
 export function rebind(source: any) {
   return (constructor: any) => {
-    serviceContainer.rebind(source).toConstructor(constructor);
+    autoBind()(constructor);
+    serviceContainer
+      .rebind(source)
+      .toDynamicValue(() => serviceContainer.getAsync(constructor));
   };
 }
 

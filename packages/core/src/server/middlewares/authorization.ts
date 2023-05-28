@@ -86,7 +86,7 @@ export class AuthorizationMiddleware implements MiddlewareService {
       (await this.checkcondition(context)) ||
       (await this.checkPermission(context))
     ) {
-      next();
+      return next();
     }
     if (context.state.$user) {
       throw new ForbiddenException();

@@ -3,23 +3,30 @@ import { serviceContainer } from '../service/container.js';
 import { MiddlewareService } from './interfaces.js';
 
 export function compose(middlewares: Array<MiddlewareService['handle']>) {
-  return function (context, next) {
+  return function (context: any, next?: MiddlewareService['handle']) {
     // last called middleware #
     let index = -1;
     return dispatch(0);
 
-    async function dispatch(i: number): Promise<any> {
+    function dispatch(i: number): any {
       if (i <= index) {
-        throw new Error('next() called multiple times');
+        return Promise.reject(new Error('next() called multiple times'));
       }
       index = i;
-      const fn = middlewares[i];
+      let fn: any = middlewares[i];
       if (i === middlewares.length) {
-        return await next();
+        fn = next;
       }
-      return await fn(context, dispatch.bind(null, i + 1));
+      if (!fn) {
+        return Promise.resolve();
+      }
+      try {
+        return Promise.resolve(fn(context, dispatch.bind(null, i + 1)));
+      } catch (err) {
+        return Promise.reject(err);
+      }
     }
-  } as MiddlewareService['handle'];
+  };
 }
 
 @autoBind()
