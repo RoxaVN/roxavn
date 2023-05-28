@@ -3,7 +3,6 @@ import { constants } from '@roxavn/core/base';
 import {
   type RemixLoaderContextHelper,
   ServerModule,
-  registerServerModules,
   moduleManager,
 } from '@roxavn/core/server';
 import {
@@ -15,9 +14,7 @@ import fastify, { type FastifyRequest } from 'fastify';
 import path from 'path';
 
 export async function bootstrap(serverBuild: ServerBuild) {
-  const app = fastify();
-
-  await registerServerModules();
+  await moduleManager.importServerModules();
 
   await Promise.all(
     moduleManager.serverModules.map((m) => {
@@ -25,6 +22,7 @@ export async function bootstrap(serverBuild: ServerBuild) {
     })
   );
 
+  const app = fastify();
   app.setErrorHandler(function (error, request, reply) {
     const resp: any = ServerModule.handleError(error);
     sendRemixResponse(reply, resp);

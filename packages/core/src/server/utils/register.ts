@@ -18,23 +18,6 @@ function isRouteModuleFile(filename: string): boolean {
   return routeModuleExts.includes(path.extname(filename));
 }
 
-export async function registerServerModules() {
-  return Promise.all(
-    moduleManager.modules.map(async (module) => {
-      try {
-        if (module.name !== moduleManager.currentModule.name) {
-          const m = (await import(module.name + '/server')).serverModule;
-          moduleManager.serverModules.push(m);
-        }
-      } catch (e: any) {
-        if (e?.code !== 'MODULE_NOT_FOUND') {
-          console.log(e);
-        }
-      }
-    })
-  );
-}
-
 export function registerWebRoutes(defineRoutes: DefineRoutes) {
   const modules = moduleManager.modules.map((m) => m.name);
   const result: RouteManifest = {};

@@ -94,6 +94,30 @@ class ModuleManager {
     }
     return result;
   }
+
+  async importServerModules() {
+    await Promise.all(
+      this.modules.map(async (module) => {
+        try {
+          if (module.name !== this.currentModule.name) {
+            const m = (await import(module.name + '/server')).serverModule;
+            this.serverModules.push(m);
+          }
+        } catch (e: any) {
+          if (e?.code !== 'MODULE_NOT_FOUND') {
+            console.log(e);
+          }
+        }
+      })
+    );
+    // resort by modules order
+    this.serverModules.sort((a, b) => {
+      return (
+        this.modules.findIndex((m) => m.name === a.name) -
+        this.modules.findIndex((m) => m.name === b.name)
+      );
+    });
+  }
 }
 
 export const moduleManager = new ModuleManager();
