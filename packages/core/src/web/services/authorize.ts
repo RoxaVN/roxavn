@@ -1,5 +1,6 @@
 import { uniqBy } from 'lodash-es';
 import { Permission, Resource, Api } from '../../base/index.js';
+import { authService } from './auth.js';
 
 export type AuthorizationArgs = {
   api: Api;
@@ -26,10 +27,14 @@ const middlewares: Array<AuthorizationMiddleware> = [
     const conditionResources: Resource[] = api.permission.allowedScopes.filter(
       (r) => 'condition' in r
     ) as any;
+    const tokenData = authService.getTokenData();
     for (const resource of conditionResources) {
       if (resource.condition) {
         const relatedResource = helper.getRelatedResourceInstance(resource);
-        const isValid = resource.condition(request, relatedResource);
+        const isValid = resource.condition(request, {
+          user: tokenData && { id: tokenData.userId },
+          resource: relatedResource,
+        });
         if (isValid) {
           return true;
         }
@@ -38,8 +43,8 @@ const middlewares: Array<AuthorizationMiddleware> = [
     return false;
   },
   ({ api, request, helper }) => {
-    const user = request.$user;
-    if (user) {
+    const tokenData = authService.getTokenData();
+    if (tokenData) {
       const resource = helper.getResourceInstance();
       let scopes = api.permission.allowedScopes
         .filter((s) => !s.condition)
@@ -52,7 +57,11 @@ const middlewares: Array<AuthorizationMiddleware> = [
 
       if (scopes.length) {
         scopes = uniqBy(scopes, (item) => item.name);
-        return helper.hasPermission(user.id, api.permission.name, scopes);
+        return helper.hasPermission(
+          tokenData.userId,
+          api.permission.name,
+          scopes
+        );
       }
     }
     return false;

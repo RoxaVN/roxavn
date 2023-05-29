@@ -6,16 +6,18 @@ export interface Scope {
   name: string;
   idParam?: string;
   dynamicName?: (request: Record<string, any>) => string;
-  condition?: (request: Record<string, any>) => boolean;
+  condition?: (
+    request: Record<string, any>,
+    context: {
+      user?: { id: string };
+      resource?: Record<string, any> | null;
+    }
+  ) => boolean;
 }
 
 export interface Resource extends Scope {
   idParam: string;
   pluralName: string;
-  condition?: (
-    request: Record<string, any>,
-    resource?: Record<string, any> | null
-  ) => boolean;
   makeScopeParams: (scopeId: string) => { scope: string; scopeId: string };
 }
 
@@ -38,12 +40,12 @@ class AccessManager {
   scopes = {
     AuthUser: {
       name: 'authUser',
-      condition: (request) => !!request.$user,
+      condition: (request, context) => !!context.user,
     } as Scope,
     Owner: {
       name: 'owner',
-      condition: (request) => {
-        const user = request.$user;
+      condition: (request, context) => {
+        const user = context.user;
         if (user) {
           const userIdParam = this.scopes.User.idParam;
           if (request[userIdParam] === user.id) {
@@ -57,12 +59,12 @@ class AccessManager {
       ({
         name,
         idParam: idParam || name + 'Id',
-        condition: (request, resource) => {
-          const user = request.$user;
+        condition: (request, context) => {
+          const user = context.user;
           if (
             user &&
-            resource &&
-            resource[this.scopes.User.idParam] === user.id
+            context.resource &&
+            context.resource[this.scopes.User.idParam] === user.id
           ) {
             return true;
           }

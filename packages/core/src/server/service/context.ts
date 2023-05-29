@@ -96,7 +96,7 @@ export const AuthUser: ContextDecorator<{ id: string }> = (
   parameterIndex
 ) => {
   makeServerContextDecorator(target, propertyKey, parameterIndex, (context) => {
-    return context.state.$user;
+    return context.state.user;
   });
 };
 
@@ -106,6 +106,6 @@ export const AuthAcesstoken: ContextDecorator<{ id: string }> = (
   parameterIndex
 ) => {
   makeServerContextDecorator(target, propertyKey, parameterIndex, (context) => {
-    return context.state.$accessToken;
+    return context.state.accessToken;
   });
 };

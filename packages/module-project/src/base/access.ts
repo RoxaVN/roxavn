@@ -7,12 +7,14 @@ export const scopes = accessManager.makeScopes(baseModule, {
   Project: { name: 'project' },
   PublicProject: {
     name: 'project',
-    condition: (_, project) => project?.type === constants.ProjectTypes.PUBLIC,
+    condition: (_, context) =>
+      context.resource?.type === constants.ProjectTypes.PUBLIC,
   },
   Task: { name: 'task' },
   TaskAssignee: {
     name: 'task',
-    condition: (request, task) => task?.assignee === request.$user?.id,
+    condition: (request, context) =>
+      context.resource?.assignee === context.user?.id,
   },
 });
 

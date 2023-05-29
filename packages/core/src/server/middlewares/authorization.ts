@@ -38,7 +38,10 @@ export class AuthorizationMiddleware implements MiddlewareService {
               state,
               resource
             );
-          const isValid = resource.condition(state.request, relatedResource);
+          const isValid = resource.condition(state.request, {
+            user: state.user,
+            resource: relatedResource,
+          });
           if (isValid) {
             return true;
           }
@@ -51,7 +54,7 @@ export class AuthorizationMiddleware implements MiddlewareService {
 
   async checkPermission({ api, state }: RouterContext) {
     if (api && api.permission) {
-      const user = state.$user;
+      const user = state.user;
       const request = state.request;
       if (user) {
         const resource = await this.resourceService.getResourceInstance(
@@ -88,7 +91,7 @@ export class AuthorizationMiddleware implements MiddlewareService {
     ) {
       return next();
     }
-    if (context.state.$user) {
+    if (context.state.user) {
       throw new ForbiddenException();
     }
     throw new UnauthorizedException();

@@ -29,6 +29,6 @@ export function onApiSuccess<Req extends ApiRequest, Resp extends ApiResponse>(
 }
 
 export type InferOnApiSuccessData<T extends Api> = {
-  request: InferApiRequest<T> & { $user?: { id: string } };
+  request: InferApiRequest<T>;
   response: InferApiResponse<T>;
 };

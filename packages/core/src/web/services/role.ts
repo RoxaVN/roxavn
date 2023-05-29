@@ -2,7 +2,6 @@ import { UseListStateHandlers } from '@mantine/hooks';
 import React, { useContext, useEffect, useState } from 'react';
 
 import { Api, ApiRequest, Resource } from '../../base/index.js';
-import { authService } from './auth.js';
 import { resourceManager } from './resources.js';
 import { authorize } from './authorize.js';
 
@@ -87,11 +86,7 @@ export const canAccessApi = <Request extends ApiRequest>(
 ): boolean => {
   const permission = api?.permission;
   if (permission) {
-    let request = apiParams || {};
-    const tokenData = authService.getTokenData();
-    if (tokenData) {
-      request = { ...request, $user: { id: tokenData.userId } };
-    }
+    const request = apiParams || {};
 
     return authorize({
       api: api,

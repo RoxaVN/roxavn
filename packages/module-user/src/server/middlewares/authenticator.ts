@@ -95,7 +95,7 @@ async function checkToken(
   }
 
   Object.assign(state, {
-    $user: { id: accessToken.userId },
-    $accessToken: { id: accessToken.id },
+    user: { id: accessToken.userId },
+    accessToken: { id: accessToken.id },
   });
 }
