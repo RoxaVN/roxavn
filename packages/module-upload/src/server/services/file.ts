@@ -13,7 +13,7 @@ import {
   BaseService,
   type InferContext,
   InjectDatabaseService,
-  RequestObject,
+  RawRequest,
   inject,
   AuthUser,
 } from '@roxavn/core/server';
@@ -50,7 +50,7 @@ export class UploadFileService extends BaseService {
   async handle(
     data: InferApiRequest<typeof fileApi.upload>,
     @AuthUser authUser: InferContext<typeof AuthUser>,
-    @RequestObject requestObject: InferContext<typeof RequestObject>
+    @RawRequest rawRequest: InferContext<typeof RawRequest>
   ) {
     const userId = authUser.id;
     const storageHandler = await this.getStorageHandlerService.handle();
@@ -67,7 +67,7 @@ export class UploadFileService extends BaseService {
     let formData: FormData;
     try {
       formData = await unstable_parseMultipartFormData(
-        requestObject,
+        rawRequest,
         uploadHandler
       );
     } catch (e) {
