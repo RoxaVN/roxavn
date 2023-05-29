@@ -14,8 +14,8 @@ export class ValidatorMiddleware implements MiddlewareService {
     next: () => Promise<void>
   ) {
     if (api?.validator) {
-      const rawData = helper.getRequestData();
-      const parsedData = plainToInstance(api.validator, rawData);
+      Object.assign(state.request, helper.getRequestData());
+      const parsedData = plainToInstance(api.validator, state.request);
 
       const errors = validateSync(parsedData, {
         stopAtFirstError: true,
@@ -30,7 +30,7 @@ export class ValidatorMiddleware implements MiddlewareService {
         throw new ValidationException(i18n);
       }
 
-      Object.assign(state.request, parsedData);
+      state.request = parsedData;
     }
     return next();
   }

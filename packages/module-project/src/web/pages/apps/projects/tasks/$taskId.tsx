@@ -15,7 +15,7 @@ import {
   Subtasks,
   TaskInfo,
 } from '../../../../components/index.js';
-import { scopes } from '../../../../../base/index.js';
+import { scopes, taskApi } from '../../../../../base/index.js';
 
 export default function () {
   const data = useLoaderData<typeof loader>();
@@ -34,26 +34,31 @@ export default function () {
 }
 
 export function loader(args: LoaderArgs) {
-  return servicesLoader.load(args, {
-    task: {
-      service: GetTaskApiService,
-      checkPermission: true,
+  return servicesLoader.load(
+    args,
+    {
+      task: {
+        service: GetTaskApiService,
+      },
+      project: {
+        service: GetProjectApiService,
+        params: (data) => ({
+          projectId: data.task.projectId,
+        }),
+      },
+      parentTasks: {
+        service: GetProjectTasksApiService,
+        params: (data) => ({
+          projectId: data.task.projectId,
+          ids: takeRight(data.task.parents, 10) || [],
+        }),
+      },
+      subtasks: {
+        service: GetSubtasksApiService,
+      },
     },
-    project: {
-      service: GetProjectApiService,
-      params: (data) => ({
-        projectId: data.task.projectId,
-      }),
-    },
-    parentTasks: {
-      service: GetProjectTasksApiService,
-      params: (data) => ({
-        projectId: data.task.projectId,
-        ids: takeRight(data.task.parents, 10) || [],
-      }),
-    },
-    subtasks: {
-      service: GetSubtasksApiService,
-    },
-  });
+    {
+      api: taskApi.getOne,
+    }
+  );
 }

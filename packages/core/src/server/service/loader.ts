@@ -39,7 +39,7 @@ class ServicesLoader {
     }>
   > {
     try {
-      const state: any = { request: {}, response: {} };
+      const state: any = { request: { ...args.params }, response: {} };
       const middlewareManager = await serviceContainer.getAsync(
         MiddlewareManager
       );
