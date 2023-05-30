@@ -14,7 +14,7 @@ import {
   RouterContextState,
   serviceContainer,
 } from './index.js';
-import { compose, MiddlewareManager } from '../middlewares/manager.js';
+import { compose, LoaderMiddlewareManager } from '../middlewares/manager.js';
 
 export interface ServiceLoaderItem<
   Req extends ApiRequest = ApiRequest,
@@ -43,9 +43,9 @@ class ServicesLoader {
   > {
     try {
       const middlewareManager = await serviceContainer.getAsync(
-        MiddlewareManager
+        LoaderMiddlewareManager
       );
-      const middlewares = await middlewareManager.getLoaderMiddlewares();
+      const middlewares = await middlewareManager.getMiddlewares();
       const helper: RemixLoaderContextHelper = args.context as any;
       const state: RouterContextState = {
         request: { ...args.params, ...helper.getRequestData() },

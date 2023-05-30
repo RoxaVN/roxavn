@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 export * from './i18n.js';
 export * from './module.js';
 export * from './constants.js';

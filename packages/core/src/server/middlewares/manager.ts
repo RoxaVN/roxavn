@@ -1,6 +1,6 @@
 import { autoBind } from '../services/base.js';
 import { serviceContainer } from '../services/container.js';
-import { MiddlewareService } from './interfaces.js';
+import { MiddlewareService, MiddlewareServiceClass } from './interfaces.js';
 
 export function compose(middlewares: Array<MiddlewareService['handle']>) {
   return function (context: any, next?: MiddlewareService['handle']) {
@@ -30,41 +30,24 @@ export function compose(middlewares: Array<MiddlewareService['handle']>) {
 }
 
 @autoBind()
-export class MiddlewareManager {
-  static apiMiddlewareServices: Array<{
-    new (...args: any[]): MiddlewareService;
-  }> = [];
-  static loaderMiddlewareServices: Array<{
-    new (...args: any[]): MiddlewareService;
-  }> = [];
+class BaseMiddlewareManager {
+  static middlewareServices: Array<MiddlewareServiceClass> = [];
 
-  apiMiddlewares?: Array<MiddlewareService['handle']>;
-  loaderMiddlewares?: Array<MiddlewareService['handle']>;
+  middlewares?: Array<MiddlewareService['handle']>;
 
-  async getApiMiddlewares() {
-    if (this.apiMiddlewares) {
-      return this.apiMiddlewares;
+  async getMiddlewares() {
+    if (this.middlewares) {
+      return this.middlewares;
     }
     const middlewares = await this.loadMiddlewares(
-      MiddlewareManager.apiMiddlewareServices
+      (this.constructor as any).middlewareServices
     );
-    this.apiMiddlewares = middlewares;
-    return middlewares;
-  }
-
-  async getLoaderMiddlewares() {
-    if (this.loaderMiddlewares) {
-      return this.loaderMiddlewares;
-    }
-    const middlewares = await this.loadMiddlewares(
-      MiddlewareManager.loaderMiddlewareServices
-    );
-    this.loaderMiddlewares = middlewares;
+    this.middlewares = middlewares;
     return middlewares;
   }
 
   private async loadMiddlewares(
-    middlewareServices: Array<{ new (...args: any[]): MiddlewareService }>
+    middlewareServices: Array<MiddlewareServiceClass>
   ) {
     const middlewares: Array<MiddlewareService> = await Promise.all(
       middlewareServices.map((service) => serviceContainer.getAsync(service))
@@ -82,16 +65,26 @@ export class MiddlewareManager {
   }
 }
 
+@autoBind()
+export class ApiMiddlewareManager extends BaseMiddlewareManager {
+  static middlewareServices: Array<MiddlewareServiceClass> = [];
+}
+
+@autoBind()
+export class LoaderMiddlewareManager extends BaseMiddlewareManager {
+  static middlewareServices: Array<MiddlewareServiceClass> = [];
+}
+
 export function useApiMiddleware() {
-  return (serviceClass: { new (...args: any[]): MiddlewareService }) => {
+  return (serviceClass: MiddlewareServiceClass) => {
     autoBind()(serviceClass);
-    MiddlewareManager.apiMiddlewareServices.push(serviceClass);
+    ApiMiddlewareManager.middlewareServices.push(serviceClass);
   };
 }
 
 export function useLoaderMiddleware() {
-  return (serviceClass: { new (...args: any[]): MiddlewareService }) => {
+  return (serviceClass: MiddlewareServiceClass) => {
     autoBind()(serviceClass);
-    MiddlewareManager.loaderMiddlewareServices.push(serviceClass);
+    LoaderMiddlewareManager.middlewareServices.push(serviceClass);
   };
 }

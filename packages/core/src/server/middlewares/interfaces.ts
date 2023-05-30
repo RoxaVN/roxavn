@@ -9,3 +9,7 @@ export interface MiddlewareService {
   }>;
   handle: (context: RouterContext, next: () => Promise<void>) => Promise<void>;
 }
+
+export type MiddlewareServiceClass = {
+  new (...args: any[]): MiddlewareService;
+};

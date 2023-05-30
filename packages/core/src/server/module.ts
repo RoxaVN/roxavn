@@ -7,7 +7,7 @@ import {
   BaseModule,
   ServerException,
 } from '../base/index.js';
-import { compose, MiddlewareManager } from './middlewares/index.js';
+import { ApiMiddlewareManager, compose } from './middlewares/index.js';
 import { autoBind, BaseService, bindFactory, rebind } from './services/base.js';
 import {
   handleService,
@@ -48,9 +48,9 @@ export class ServerModule extends BaseModule {
             headers: request.headers,
           };
           const middlewareManager = await serviceContainer.getAsync(
-            MiddlewareManager
+            ApiMiddlewareManager
           );
-          const middlewares = await middlewareManager.getApiMiddlewares();
+          const middlewares = await middlewareManager.getMiddlewares();
           const context: RouterContext = { api, request, state };
           await compose(middlewares)(context, async (ctx) => {
             state.response = await handleService(serviceClass, ctx);
