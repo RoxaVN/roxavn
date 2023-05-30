@@ -4,6 +4,8 @@ import {
   type RemixLoaderContextHelper,
   ServerModule,
   moduleManager,
+  serviceContainer,
+  EventJobManager,
 } from '@roxavn/core/server';
 import {
   createRemixRequest,
@@ -21,6 +23,9 @@ export async function bootstrap(serverBuild: ServerBuild) {
       return m.onBeforeServerStart && m.onBeforeServerStart();
     })
   );
+  if (process.env.RUN_JOBS_CONSUMER) {
+    await serviceContainer.get(EventJobManager).registerServices();
+  }
 
   const app = fastify();
   app.setErrorHandler(function (error, request, reply) {
