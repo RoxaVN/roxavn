@@ -8,14 +8,14 @@ import {
   ServerException,
 } from '../base/index.js';
 import { compose, MiddlewareManager } from './middlewares/index.js';
-import { autoBind, BaseService, bindFactory, rebind } from './service/base.js';
-import { serviceContainer } from './service/container.js';
+import { autoBind, BaseService, bindFactory, rebind } from './services/base.js';
 import {
   handleService,
   RemixLoaderContextHelper,
   RouterContext,
   RouterContextState,
-} from './service/context.js';
+  serviceContainer,
+} from './services/index.js';
 
 export class ServerModule extends BaseModule {
   static apiRoutes: Array<{

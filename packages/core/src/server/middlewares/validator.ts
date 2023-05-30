@@ -2,7 +2,7 @@ import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 
 import { ErrorResponse, ValidationException } from '../../base/index.js';
-import { RouterContext } from '../service/context.js';
+import { RouterContext } from '../services/context.js';
 import { MiddlewareService } from './interfaces.js';
 import { useApiMiddleware, useLoaderMiddleware } from './manager.js';
 

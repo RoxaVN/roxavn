@@ -1,7 +1,7 @@
 import { inject } from 'inversify';
 import { Api, Resource } from '../../base/index.js';
 import { DatabaseService } from '../database/index.js';
-import { autoBind } from '../service/base.js';
+import { autoBind } from '../services/base.js';
 
 @autoBind()
 export class ResourceService {

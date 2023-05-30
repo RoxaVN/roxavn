@@ -5,7 +5,10 @@ import {
   Resource,
   UnauthorizedException,
 } from '../../base/index.js';
-import { CheckUserPermissionService, RouterContext } from '../service/index.js';
+import {
+  CheckUserPermissionService,
+  RouterContext,
+} from '../services/index.js';
 
 import {
   ApiAuthenticatorMiddleware,

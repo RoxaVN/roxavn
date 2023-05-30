@@ -1,8 +1,8 @@
 import EventEmitter from 'events';
 import { Api } from '../../base/index.js';
-import { autoBind } from '../service/base.js';
+import { autoBind } from '../services/base.js';
 import { useApiMiddleware, MiddlewareService } from '../middlewares/index.js';
-import { RouterContext, serviceContainer } from '../service/index.js';
+import { RouterContext, serviceContainer } from '../services/index.js';
 
 @autoBind()
 export class EventDistributor {

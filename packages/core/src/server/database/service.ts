@@ -4,7 +4,7 @@ import { inject } from 'inversify';
 import { constants } from '../../base/index.js';
 import { moduleManager } from '../module.manager.js';
 import { MemoryQueryResultCache } from './cache.js';
-import { autoBind, BaseService, bindFactory } from '../service/base.js';
+import { autoBind, BaseService, bindFactory } from '../services/base.js';
 
 export class DatabaseService {
   manager: EntityManager;

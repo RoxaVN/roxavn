@@ -13,7 +13,7 @@ import {
   RouterContext,
   RouterContextState,
   serviceContainer,
-} from '../service/index.js';
+} from './index.js';
 import { compose, MiddlewareManager } from '../middlewares/manager.js';
 
 export interface ServiceLoaderItem<

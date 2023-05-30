@@ -1,5 +1,5 @@
 import { Api, ApiRequest, ApiResponse } from '../../base/index.js';
-import { RouterContextState, serviceContainer } from '../service/index.js';
+import { RouterContextState, serviceContainer } from '../services/index.js';
 import { EventDistributor, makeApiSuccessEvent } from './distributor.js';
 
 export function onApiSuccess<Req extends ApiRequest, Resp extends ApiResponse>(

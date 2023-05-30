@@ -1,5 +1,5 @@
-import { autoBind } from '../service/base.js';
-import { serviceContainer } from '../service/container.js';
+import { autoBind } from '../services/base.js';
+import { serviceContainer } from '../services/container.js';
 import { MiddlewareService } from './interfaces.js';
 
 export function compose(middlewares: Array<MiddlewareService['handle']>) {

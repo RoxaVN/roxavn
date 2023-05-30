@@ -1,4 +1,4 @@
-import { RouterContext } from '../service/context.js';
+import { RouterContext } from '../services/context.js';
 
 export interface MiddlewareService {
   after?: Array<{
