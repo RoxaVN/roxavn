@@ -1,6 +1,7 @@
 import { Api, InferApiRequest, InferApiResponse } from '../../base/api.js';
-import { constants } from '../constants.js';
 import { serviceContainer } from './container.js';
+
+const API_CONTEXT_METADATA_KEY = Symbol('apicontext');
 
 export interface RemixLoaderContextHelper {
   getRequestData: () => Record<string, any>;
@@ -26,15 +27,13 @@ export interface RouterContext {
 export async function handleService(serviceClass: any, context: RouterContext) {
   const service: any = await serviceContainer.getAsync(serviceClass);
   const params = [context.state.request];
-  Reflect.getOwnMetadata(
-    constants.API_CONTEXT_METADATA_KEY,
-    serviceClass,
-    'handle'
-  )?.map((handler: any, index: number) => {
-    if (handler) {
-      params[index] = handler(context);
+  Reflect.getOwnMetadata(API_CONTEXT_METADATA_KEY, serviceClass, 'handle')?.map(
+    (handler: any, index: number) => {
+      if (handler) {
+        params[index] = handler(context);
+      }
     }
-  });
+  );
   return await service.handle(...params);
 }
 
@@ -46,14 +45,14 @@ export function makeServerContextDecorator(
 ) {
   const existingParameters: any[] =
     Reflect.getOwnMetadata(
-      constants.API_CONTEXT_METADATA_KEY,
+      API_CONTEXT_METADATA_KEY,
       target.constructor,
       propertyKey
     ) || [];
   existingParameters[parameterIndex] = handler;
 
   Reflect.defineMetadata(
-    constants.API_CONTEXT_METADATA_KEY,
+    API_CONTEXT_METADATA_KEY,
     existingParameters,
     target.constructor,
     propertyKey
