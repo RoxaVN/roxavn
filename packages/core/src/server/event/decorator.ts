@@ -1,34 +1,24 @@
-import {
-  Api,
-  ApiRequest,
-  ApiResponse,
-  InferApiRequest,
-  InferApiResponse,
-} from '../../base/index.js';
-import { BaseService, serviceContainer } from '../service/index.js';
-import { eventManager } from './manager.js';
+import { Api, ApiRequest, ApiResponse } from '../../base/index.js';
+import { RouterContextState, serviceContainer } from '../service/index.js';
+import { EventDistributor, makeApiSuccessEvent } from './distributor.js';
 
 export function onApiSuccess<Req extends ApiRequest, Resp extends ApiResponse>(
   api: Api<Req, Resp>
 ) {
-  return (serviceClass: {
-    new (...args: any[]): BaseService<{ request: Req; response: Resp }, any>;
-  }) => {
-    eventManager.distributor.on(
-      eventManager.makeApiSuccessEvent(api),
-      async (data) => {
+  return (target: any, propertyKey: string) => {
+    setTimeout(async () => {
+      const eventDistributor = await serviceContainer.getAsync(
+        EventDistributor
+      );
+      eventDistributor.on(makeApiSuccessEvent(api), async (data) => {
         try {
-          const service = await serviceContainer.getAsync(serviceClass);
-          service.handle(data);
+          target[propertyKey](data);
         } catch (e) {
           console.log(e);
         }
-      }
-    );
+      });
+    });
   };
 }
 
-export type InferOnApiSuccessData<T extends Api> = {
-  request: InferApiRequest<T>;
-  response: InferApiResponse<T>;
-};
+export type InferOnApiSuccessData<T extends Api> = RouterContextState<T>;
