@@ -10,7 +10,12 @@ import {
 import { compose, MiddlewareManager } from './middlewares/index.js';
 import { autoBind, BaseService, bindFactory, rebind } from './service/base.js';
 import { serviceContainer } from './service/container.js';
-import { handleService, RemixLoaderContextHelper } from './service/context.js';
+import {
+  handleService,
+  RemixLoaderContextHelper,
+  RouterContext,
+  RouterContextState,
+} from './service/context.js';
 
 export class ServerModule extends BaseModule {
   static apiRoutes: Array<{
@@ -37,15 +42,18 @@ export class ServerModule extends BaseModule {
       ServerModule.apiRoutes.push({
         api: api,
         handler: async (request, helper) => {
-          const state: any = { request: {} };
+          const state: RouterContextState = {
+            request: helper.getRequestData(),
+            ip: helper.getClientIp(),
+            headers: request.headers,
+          };
           const middlewareManager = await serviceContainer.getAsync(
             MiddlewareManager
           );
           const middlewares = await middlewareManager.getApiMiddlewares();
-          const context = { api, request, state, helper };
-          await compose(middlewares)(context, async (ctx, next) => {
+          const context: RouterContext = { api, request, state };
+          await compose(middlewares)(context, async (ctx) => {
             state.response = await handleService(serviceClass, ctx);
-            return next();
           });
           return json({ code: 200, data: state.response });
         },

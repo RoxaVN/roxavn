@@ -9,6 +9,9 @@ import {
 import {
   BaseService,
   handleService,
+  RemixLoaderContextHelper,
+  RouterContext,
+  RouterContextState,
   serviceContainer,
 } from '../service/index.js';
 import { compose, MiddlewareManager } from '../middlewares/manager.js';
@@ -39,16 +42,20 @@ class ServicesLoader {
     }>
   > {
     try {
-      const state: any = { request: { ...args.params }, response: {} };
       const middlewareManager = await serviceContainer.getAsync(
         MiddlewareManager
       );
       const middlewares = await middlewareManager.getLoaderMiddlewares();
-      const context: any = {
+      const helper: RemixLoaderContextHelper = args.context as any;
+      const state: RouterContextState = {
+        request: { ...args.params, ...helper.getRequestData() },
+        ip: helper.getClientIp(),
+        headers: args.request.headers,
+      };
+      const context: RouterContext = {
         api: options?.api,
         request: args.request,
         state,
-        helper: args.context,
       };
       await compose(middlewares)(context, async () => {
         const request = state.request;
@@ -61,8 +68,12 @@ class ServicesLoader {
               : serviceParams),
             ...request,
           };
+          if (!state.response) {
+            state.response = {};
+          }
           state.response[key] = await handleService(serviceClass, context);
         }
+        state.request = request;
       });
       return json(state.response as any);
     } catch (e) {

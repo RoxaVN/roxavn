@@ -1,4 +1,4 @@
-import { Api } from '../../base/api.js';
+import { Api, InferApiRequest, InferApiResponse } from '../../base/api.js';
 import { constants } from '../constants.js';
 import { serviceContainer } from './container.js';
 
@@ -7,11 +7,20 @@ export interface RemixLoaderContextHelper {
   getClientIp: () => string;
 }
 
+export interface RouterContextState<T extends Api = Api> {
+  request: InferApiRequest<T>;
+  response?: InferApiResponse<T>;
+  headers: Record<string, any>;
+  ip: string;
+  user?: { id: string };
+  accessToken?: { id: string };
+  [key: string]: any;
+}
+
 export interface RouterContext {
   request: Request;
-  state: Record<string, any>;
+  state: RouterContextState;
   api?: Api;
-  helper: RemixLoaderContextHelper;
 }
 
 export async function handleService(serviceClass: any, context: RouterContext) {
@@ -66,7 +75,7 @@ export const Ip: ContextDecorator<string> = (
   parameterIndex
 ) => {
   makeServerContextDecorator(target, propertyKey, parameterIndex, (context) => {
-    return context.helper.getClientIp();
+    return context.state.ip;
   });
 };
 

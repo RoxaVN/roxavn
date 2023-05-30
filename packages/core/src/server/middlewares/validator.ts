@@ -9,12 +9,8 @@ import { useApiMiddleware, useLoaderMiddleware } from './manager.js';
 @useApiMiddleware()
 @useLoaderMiddleware()
 export class ValidatorMiddleware implements MiddlewareService {
-  async handle(
-    { api, state, helper }: RouterContext,
-    next: () => Promise<void>
-  ) {
+  async handle({ api, state }: RouterContext, next: () => Promise<void>) {
     if (api?.validator) {
-      Object.assign(state.request, helper.getRequestData());
       const parsedData = plainToInstance(api.validator, state.request);
 
       const errors = validateSync(parsedData, {

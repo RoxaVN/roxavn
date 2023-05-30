@@ -1,11 +1,4 @@
-import { type InferApiRequest } from '@roxavn/core';
-import { constants as userConstants } from '@roxavn/module-user/base';
-import { IdentityService } from '@roxavn/module-user/server';
-import { GetFirebaseAppService } from '@roxavn/plugin-firebase/server';
-import firebaseAdmin from 'firebase-admin';
-
-import { identityApi } from '../../base/index.js';
-import { serverModule } from '../module.js';
+import { type InferApiRequest } from '@roxavn/core/base';
 import {
   BaseService,
   type InferContext,
@@ -13,6 +6,13 @@ import {
   inject,
   UserAgent,
 } from '@roxavn/core/server';
+import { constants as userConstants } from '@roxavn/module-user/base';
+import { IdentityService } from '@roxavn/module-user/server';
+import { GetFirebaseAppService } from '@roxavn/plugin-firebase/server';
+import firebaseAdmin from 'firebase-admin';
+
+import { identityApi } from '../../base/index.js';
+import { serverModule } from '../module.js';
 
 @serverModule.useApi(identityApi.verifyToken)
 export class VerifytokenFirebaseService extends BaseService {
