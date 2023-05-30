@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 import { camelCase } from 'lodash-es';
 import { constants } from './constants.js';
 import { BaseModule } from './module.js';
