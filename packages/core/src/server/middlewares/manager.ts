@@ -58,6 +58,11 @@ class BaseMiddlewareManager {
         b.before?.includes(a.constructor as any)
       ) {
         return 1;
+      } else if (
+        b.after?.includes(a.constructor as any) ||
+        a.before?.includes(b.constructor as any)
+      ) {
+        return 1;
       }
       return 0;
     });
