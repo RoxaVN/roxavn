@@ -15,6 +15,10 @@ interface ModuleInfo {
 class ModuleManager {
   readonly serverModules: ServerModule[] = [];
 
+  currentServerModuleImporter = async () => {
+    return await import(this.currentModule.name + '/server');
+  };
+
   private _modules?: ModuleInfo[];
   private _currentModule?: ModuleInfo;
 
@@ -99,10 +103,13 @@ class ModuleManager {
     await Promise.all(
       this.modules.map(async (module) => {
         try {
+          let m;
           if (module.name !== this.currentModule.name) {
-            const m = (await import(module.name + '/server')).serverModule;
-            this.serverModules.push(m);
+            m = await import(module.name + '/server');
+          } else {
+            m = await this.currentServerModuleImporter();
           }
+          this.serverModules.push(m.serverModule);
         } catch (e: any) {
           if (e?.code !== 'MODULE_NOT_FOUND') {
             console.log(e);
@@ -110,13 +117,6 @@ class ModuleManager {
         }
       })
     );
-    // resort by modules order
-    this.serverModules.sort((a, b) => {
-      return (
-        this.modules.findIndex((m) => m.name === a.name) -
-        this.modules.findIndex((m) => m.name === b.name)
-      );
-    });
   }
 }
 
