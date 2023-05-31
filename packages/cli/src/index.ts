@@ -4,6 +4,7 @@ import { buildService } from './build.js';
 import { devService } from './dev.js';
 import { moduleService } from './module.js';
 import { templateService } from './template.js';
+import { replService } from './repl.js';
 
 const program = new Command();
 
@@ -28,6 +29,12 @@ program
   .command('dev')
   .description('Run dev server')
   .action(() => devService.run());
+
+program
+  .command('repl')
+  .description('Run repl server')
+  .option('-p, --plugin <type>', 'plugin service', '@roxavn/module-user/hook')
+  .action((options) => replService.run(options));
 
 program
   .command('build')
