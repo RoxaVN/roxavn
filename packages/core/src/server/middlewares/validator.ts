@@ -5,10 +5,13 @@ import { ErrorResponse, ValidationException } from '../../base/index.js';
 import { RouterContext } from '../services/context.js';
 import { MiddlewareService } from './interfaces.js';
 import { useApiMiddleware, useLoaderMiddleware } from './manager.js';
+import { TransactionalMiddleware } from './transactional.js';
 
 @useApiMiddleware()
 @useLoaderMiddleware()
 export class ValidatorMiddleware implements MiddlewareService {
+  after = [TransactionalMiddleware];
+
   async handle({ api, state }: RouterContext, next: () => Promise<void>) {
     if (api?.validator) {
       const parsedData = plainToInstance(api.validator, state.request);

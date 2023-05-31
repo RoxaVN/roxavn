@@ -57,9 +57,9 @@ class BaseMiddlewareManager {
         a.after?.includes(b.constructor as any) ||
         b.before?.includes(a.constructor as any)
       ) {
-        return -1;
+        return 1;
       }
-      return 1;
+      return 0;
     });
     return middlewares.map((m) => m.handle.bind(m));
   }

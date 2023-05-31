@@ -1,5 +1,9 @@
 import { DataSource, EntityManager } from 'typeorm';
 import { inject } from 'inversify';
+import {
+  addTransactionalDataSource,
+  initializeTransactionalContext,
+} from 'typeorm-transactional';
 
 import { constants } from '../../base/index.js';
 import { moduleManager } from '../module.manager.js';
@@ -36,8 +40,10 @@ export class DatabaseService {
         },
       },
     });
-    await dataSource.initialize();
+    initializeTransactionalContext();
+    addTransactionalDataSource(dataSource);
 
+    await dataSource.initialize();
     return new DatabaseService(dataSource, entities);
   }
 }

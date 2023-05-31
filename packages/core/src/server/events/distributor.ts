@@ -9,7 +9,13 @@ export class EventDistributor {
   private emiter = new EventEmitter();
 
   on(event: string, handler: (data: any) => void) {
-    this.emiter.on(event, handler);
+    this.emiter.on(event, (data: any) => {
+      try {
+        handler(data);
+      } catch (e) {
+        console.error(e);
+      }
+    });
   }
   emit(event: string, data: any) {
     this.emiter.emit(event, data);

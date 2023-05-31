@@ -1,4 +1,5 @@
 export * from './interfaces.js';
+export * from './transactional.js';
 export * from './validator.js';
 export * from './authorization.js';
 export * from './helper.js';

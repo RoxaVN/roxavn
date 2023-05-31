@@ -1,3 +1,4 @@
+import { runInTransaction } from 'typeorm-transactional';
 import { Api, ApiRequest, ApiResponse } from '../../base/index.js';
 import { RouterContextState, serviceContainer } from '../services/index.js';
 import { EventDistributor, makeApiSuccessEvent } from './distributor.js';
@@ -11,11 +12,9 @@ export function onApiSuccess<Req extends ApiRequest, Resp extends ApiResponse>(
         EventDistributor
       );
       eventDistributor.on(makeApiSuccessEvent(api), async (data) => {
-        try {
+        runInTransaction(() => {
           target[propertyKey](data);
-        } catch (e) {
-          console.log(e);
-        }
+        });
       });
     });
   };
