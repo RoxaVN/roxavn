@@ -5,4 +5,4 @@ after: '"baseUrl"'
 skip_if: '"module"'
 sh: npx roxavn sync
 ---
-    "module": "CommonJS",
+    "module": "ESNext",

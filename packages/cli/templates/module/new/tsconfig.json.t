@@ -19,7 +19,6 @@ to: tsconfig.json
     "strictPropertyInitialization": false,
     "emitDecoratorMetadata": true,
     "baseUrl": ".",
-    "module": "CommonJS",
 
     // Remix takes care of building everything in `remix build`.
     "noEmit": true

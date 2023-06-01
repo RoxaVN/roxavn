@@ -10,6 +10,7 @@ to: package.json
   },
   "license": "MIT",
   "author": "roxavn",
+  "type": "module",
   "roxavn": {},
   "sideEffects": false,
   "devDependencies": {
@@ -30,19 +31,10 @@ to: package.json
     "typeorm": "*"
   },
   "exports": {
-    ".": "./dist/cjs/index.js",
-    "./web": {
-      "require": "./dist/cjs/web/index.js",
-      "import": "./dist/esm/web/index.js"
-    },
-    "./base": {
-      "require": "./dist/cjs/base/index.js",
-      "import": "./dist/esm/base/index.js"
-    },
-    "./server": {
-      "require": "./dist/cjs/server/index.js",
-      "import": "./dist/esm/server/index.js"
-    }
+    ".": "./dist/esm/index.js",
+    "./web": "./dist/esm/web/index.js",
+    "./base": "./dist/esm/base/index.js",
+    "./server": "./dist/esm/server/index.js"
   },
   "typesVersions": {
     "*": {

@@ -1,4 +1,4 @@
 ---
 to: src/web/index.ts
 ---
-export * from './module';
+export * from './module.js';

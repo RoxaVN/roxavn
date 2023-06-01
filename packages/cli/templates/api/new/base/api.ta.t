@@ -3,8 +3,8 @@ to: src/base/apis/<%= h.changeCase.dot(api_source_name) %>.ts
 ---
 import { ApiSource, ExactProps, MinLength } from '@roxavn/core/base';
 
-import { baseModule } from '../module';
-import { scopes } from '../access';
+import { baseModule } from '../module.js';
+import { scopes } from '../access.js';
 
 const <%= api_source_name %>Source = new ApiSource<{}>(
   [scopes.<%= h.changeCase.pascal(api_source_name) %>],

@@ -1,3 +1,5 @@
+import enquirer from 'enquirer';
+import execa from 'execa';
 import { Logger, runner } from 'hygen';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -14,9 +16,9 @@ class TemplateService {
       logger: new Logger(console.log.bind(console)),
       exec: (action, body) => {
         const opts = body && body.length > 0 ? { input: body } : {};
-        return require('execa').command(action, { ...opts, shell: true });
+        return execa.command(action, { ...opts, shell: true });
       },
-      createPrompter: () => require('enquirer'),
+      createPrompter: () => enquirer as any,
     });
   }
 }

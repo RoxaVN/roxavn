@@ -4,4 +4,4 @@ to: src/base/index.ts
 append: true
 skip_if: apis
 ---
-export * from './apis';
+export * from './apis/index.js';

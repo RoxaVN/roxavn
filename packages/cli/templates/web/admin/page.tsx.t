@@ -11,8 +11,8 @@ import {
 } from '@roxavn/core/web';
 import { IconUsers } from '@tabler/icons-react';
 
-import { getUsersApi } from '../../base';
-import { webModule } from '../module';
+import { getUsersApi } from '../../base/index.js';
+import { webModule } from '../module.js';
 
 const Page = () => {
   const { t } = webModule.useTranslation();

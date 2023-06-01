@@ -1,4 +1,4 @@
 ---
 to: src/index.ts
 ---
-export * from './base';
+export * from './base/index.js';
