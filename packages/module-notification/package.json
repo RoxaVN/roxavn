@@ -21,6 +21,7 @@
     "@roxavn/module-user": "*",
     "@tabler/icons-react": "*",
     "react": "*",
+    "react-i18next": "^12.2.0",
     "react-router-dom": "*",
     "rxjs": "*",
     "typeorm": "*"
