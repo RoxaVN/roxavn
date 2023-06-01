@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { ServerModule } from './module.js';
-import { getPackageJson } from './utils/index.js';
+import { getPackageJson, resolveModule } from './utils/index.js';
 
 interface ModuleInfo {
   name: string;
@@ -69,7 +69,7 @@ class ModuleManager {
           const modulePath =
             m.name === this.currentModule.name
               ? './src/web/index.ts'
-              : require.resolve(m.name + '/web');
+              : resolveModule(m.name + '/web');
           const pagesPath = path.join(
             path.dirname(modulePath),
             'pages/me/{moduleName}'
