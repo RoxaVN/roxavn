@@ -35,10 +35,16 @@ export class EmitApiEventMiddleware implements MiddlewareService {
   async handle({ api, state }: RouterContext, next: () => Promise<void>) {
     await next();
     if (api) {
-      const eventDistributor = await serviceContainer.getAsync(
-        EventDistributor
-      );
-      eventDistributor.emit(makeApiSuccessEvent(api), state);
+      setTimeout(async () => {
+        try {
+          const eventDistributor = await serviceContainer.getAsync(
+            EventDistributor
+          );
+          eventDistributor.emit(makeApiSuccessEvent(api), state);
+        } catch (e) {
+          console.error(e);
+        }
+      }, 50);
     }
   }
 }
