@@ -40,3 +40,84 @@ export class CreateSubTaskNoticeService extends BaseService {
     });
   }
 }
+
+@useApiEventJob(taskApi.inprogress)
+export class InprogressTaskNoticeService extends BaseService {
+  constructor(
+    @inject(GetTaskApiService) private getTaskApiService: GetTaskApiService,
+    @inject(CreateNotificationService)
+    private createNotificationService: CreateNotificationService
+  ) {
+    super();
+  }
+
+  async handle(data: InferOnApiSuccessData<typeof taskApi.inprogress>) {
+    const task = await this.getTaskApiService.handle({
+      taskId: data.request.taskId,
+    });
+
+    await await this.createNotificationService.handle({
+      action: 'UpdateTaskStatus',
+      module: baseModule.name,
+      resource: scopes.Task.name,
+      resourceId: data.request.taskId,
+      userIds: [task.userId],
+      actorId: data.user?.id,
+      metadata: { task: task.title, context: 'inprogress' },
+    });
+  }
+}
+
+@useApiEventJob(taskApi.delete)
+export class DeleteTaskNoticeService extends BaseService {
+  constructor(
+    @inject(GetTaskApiService) private getTaskApiService: GetTaskApiService,
+    @inject(CreateNotificationService)
+    private createNotificationService: CreateNotificationService
+  ) {
+    super();
+  }
+
+  async handle(data: InferOnApiSuccessData<typeof taskApi.inprogress>) {
+    const task = await this.getTaskApiService.handle({
+      taskId: data.request.taskId,
+    });
+
+    await await this.createNotificationService.handle({
+      action: 'UpdateTaskStatus',
+      module: baseModule.name,
+      resource: scopes.Task.name,
+      resourceId: data.request.taskId,
+      userIds: [task.userId],
+      actorId: data.user?.id,
+      metadata: { task: task.title, context: 'delete' },
+    });
+  }
+}
+
+@useApiEventJob(taskApi.reject)
+export class RejectTaskNoticeService extends BaseService {
+  constructor(
+    @inject(GetTaskApiService) private getTaskApiService: GetTaskApiService,
+    @inject(CreateNotificationService)
+    private createNotificationService: CreateNotificationService
+  ) {
+    super();
+  }
+
+  async handle(data: InferOnApiSuccessData<typeof taskApi.inprogress>) {
+    const task = await this.getTaskApiService.handle({
+      taskId: data.request.taskId,
+    });
+
+    await await this.createNotificationService.handle({
+      action: 'UpdateTaskStatus',
+      module: baseModule.name,
+      resource: scopes.Task.name,
+      resourceId: data.request.taskId,
+      userIds: [task.userId],
+      actorId: data.user?.id,
+      metadata: { task: task.title, context: 'reject' },
+    });
+  }
+}
