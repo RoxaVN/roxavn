@@ -16,7 +16,7 @@ const urlUtils = {
     for (let i = 0; i < parts.length; i += 1) {
       if (parts[i].startsWith(':')) {
         const key = parts[i].slice(1);
-        result.push(params[key]);
+        result.push(encodeURIComponent(params[key]));
         delete retParams[key];
       } else {
         result.push(parts[i]);
