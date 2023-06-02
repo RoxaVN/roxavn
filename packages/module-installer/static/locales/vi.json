@@ -1,4 +1,8 @@
 {
+  "modules": "Modules",
+  "version": "Phiên bản",
+  "installHook": "Hook cài đặt",
+  "installHookModule": "Chạy hook cài đặt cho module {{ module }}",
   "Meta": {
     "name": "Quản lý ứng dụng",
     "description": "Quản lý ứng dụng"

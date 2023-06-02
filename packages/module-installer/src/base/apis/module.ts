@@ -3,6 +3,7 @@ import {
   ExactProps,
   IsOptional,
   Min,
+  MinLength,
   TransformNumber,
 } from '@roxavn/core/base';
 
@@ -16,6 +17,7 @@ const moduleSource = new ApiSource<{
   roxavn: Record<string, any>;
   dependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
+  exports?: Record<string, string>;
 }>([scopes.ModuleInfo], baseModule);
 
 class GetModulesRequest extends ExactProps<GetModulesRequest> {
@@ -25,8 +27,16 @@ class GetModulesRequest extends ExactProps<GetModulesRequest> {
   public readonly page?: number;
 }
 
+class RunInstallHookMRequest extends ExactProps<RunInstallHookMRequest> {
+  @MinLength(1)
+  public readonly moduleName: string;
+}
+
 export const moduleApi = {
   getMany: moduleSource.getMany({
     validator: GetModulesRequest,
+  }),
+  runInstallHook: moduleSource.update({
+    validator: RunInstallHookMRequest,
   }),
 };

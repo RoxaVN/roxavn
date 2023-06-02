@@ -1,4 +1,8 @@
 {
+  "modules": "Modules",
+  "version": "Version",
+  "installHook": "Install hook",
+  "installHookModule": "Install hook for {{ module }}",
   "Meta": {
     "name": "Module installer",
     "description": "Module installer"
