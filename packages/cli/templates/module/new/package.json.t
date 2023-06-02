@@ -13,22 +13,22 @@ to: package.json
   "type": "module",
   "roxavn": {},
   "sideEffects": false,
+  "dependencies": {},
   "devDependencies": {
     "@roxavn/cli": "^0.1.0",
+    "@roxavn/module-user": "^0.1.0",
     "typescript": "^5.0.4"
   },
-  "dependencies": {},
   "peerDependencies": {
-    "@mantine/core": "*",
-    "@remix-run/node": "*",
-    "@remix-run/react": "*",
-    "@roxavn/core": "*",
-    "@roxavn/module-user": "*",
-    "@tabler/icons-react": "*",
-    "react": "*",
-    "react-router-dom": "*",
-    "rxjs": "*",
-    "typeorm": "*"
+    "@mantine/core": "^6.0.0",
+    "@remix-run/node": "^1.16.1",
+    "@remix-run/react": "^1.16.1",
+    "@roxavn/core": "^0.1.28",
+    "@tabler/icons-react": "^2.12.0",
+    "react": "^18.2.0",
+    "react-router-dom": "^6.8.0",
+    "rxjs": "^7.2.0",
+    "typeorm": "^0.3.10"
   },
   "exports": {
     ".": "./dist/esm/index.js",

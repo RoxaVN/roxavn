@@ -10,26 +10,24 @@
   "roxavn": {},
   "type": "module",
   "sideEffects": false,
-  "devDependencies": {
-    "@roxavn/cli": "^0.1.0",
-    "typescript": "^5.0.4"
-  },
   "dependencies": {
     "form-data": "^4.0.0"
   },
+  "devDependencies": {
+    "@roxavn/cli": "^0.1.0",
+    "@roxavn/module-user": "^0.1.0",
+    "typescript": "^5.0.4"
+  },
   "peerDependencies": {
-    "@mantine/core": "*",
-    "@remix-run/node": "*",
-    "@remix-run/react": "*",
-    "@roxavn/core": "*",
-    "@roxavn/module-upload": "*",
-    "@roxavn/module-user": "*",
-    "@roxavn/module-utils": "*",
-    "@tabler/icons-react": "*",
-    "react": "*",
-    "react-router-dom": "*",
-    "rxjs": "*",
-    "typeorm": "*"
+    "@mantine/core": "^6.0.0",
+    "@roxavn/core": "^0.1.28",
+    "@roxavn/module-upload": "^0.1.0",
+    "@roxavn/module-utils": "^0.1.0",
+    "@tabler/icons-react": "^2.12.0",
+    "react": "^18.2.0",
+    "react-router-dom": "^6.8.0",
+    "rxjs": "^7.2.0",
+    "typeorm": "^0.3.10"
   },
   "exports": {
     ".": "./dist/esm/index.js",
