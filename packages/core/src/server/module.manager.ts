@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { ServerModule } from './module.js';
 import { getPackageJson, resolveModule } from './utils/index.js';
+import { constants } from '../base/index.js';
 
 interface ModuleInfo {
   name: string;
@@ -9,6 +10,7 @@ interface ModuleInfo {
   author: string;
   roxavn: Record<string, any>;
   dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
 }
 
@@ -32,9 +34,15 @@ class ModuleManager {
         Object.keys({
           ...packageInfo.dependencies,
           ...packageInfo.peerDependencies,
+          ...(process.env.NODE_ENV === constants.ENV_DEVELOPMENT
+            ? packageInfo.devDependencies
+            : {}),
         }).map((m) => {
           if (!visited.includes(m)) {
-            const pkgInfo = getPackageJson(m);
+            let pkgInfo = {};
+            try {
+              pkgInfo = getPackageJson(m);
+            } catch {}
             visited.push(m);
             if ('roxavn' in pkgInfo) {
               visit(pkgInfo);

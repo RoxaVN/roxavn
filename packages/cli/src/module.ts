@@ -12,6 +12,9 @@ import { CodeChanger } from './lib/index.js';
 
 class ModuleService {
   sync() {
+    Object.assign(process.env, {
+      NODE_ENV: constants.ENV_DEVELOPMENT,
+    });
     this.initWebFolder();
     moduleManager.modules.map((module) => this.syncModule(module.name));
   }
