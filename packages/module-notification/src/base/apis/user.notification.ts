@@ -12,7 +12,7 @@ import {
 import { baseModule } from '../module.js';
 import { permissions, scopes } from '../access.js';
 
-const userNotificationSource = new ApiSource<{
+export interface NotificationResponse {
   id: string;
   resource: string;
   resourceId: string;
@@ -23,7 +23,12 @@ const userNotificationSource = new ApiSource<{
   createdDate: Date;
   updatedDate: Date;
   readDate?: Date;
-}>([accessManager.scopes.User, scopes.Notification], baseModule);
+}
+
+const userNotificationSource = new ApiSource<NotificationResponse>(
+  [accessManager.scopes.User, scopes.Notification],
+  baseModule
+);
 
 class GetUserNotificationsRequest extends ExactProps<GetUserNotificationsRequest> {
   @MinLength(1)
