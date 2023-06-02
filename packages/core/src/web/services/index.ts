@@ -10,3 +10,4 @@ export * from './page.js';
 export * from './cookie.js';
 export * from './role.js';
 export * from './resources.js';
+export * from './plugin.js';

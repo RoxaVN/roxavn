@@ -5,6 +5,7 @@ import { Outlet, useOutletContext, useRoutes } from 'react-router-dom';
 
 import { baseModule, BaseModule } from '../../base/index.js';
 import { PageItem } from './page.js';
+import { pluginManager, PluginRegister } from './plugin.js';
 
 export interface AdminSettings {
   [name: string]: {
@@ -13,8 +14,6 @@ export interface AdminSettings {
     form: React.ReactElement;
   };
 }
-
-type PluginRegister = () => Promise<{ default: () => void }>;
 
 export class WebModule extends BaseModule {
   readonly adminPluginRegisters: Array<PluginRegister> = [];
@@ -26,8 +25,6 @@ export class WebModule extends BaseModule {
 
   readonly appPluginRegisters: Array<PluginRegister> = [];
   readonly appPages: Array<PageItem> = [];
-
-  private registerMap = new Map();
 
   resolveStaticPath(path: string) {
     return WebModule.resolveStaticPath(this.name, path);
@@ -48,7 +45,7 @@ export class WebModule extends BaseModule {
       const element = useRoutes(pages);
 
       const load = async () => {
-        await this.loadRegisters(this.adminPluginRegisters);
+        await pluginManager.loadRegisters(this.adminPluginRegisters);
         if (
           !this.adminPages.find((p) => p.path === 'settings') &&
           Object.keys(this.adminSettings).length
@@ -82,7 +79,7 @@ export class WebModule extends BaseModule {
       const element = useRoutes(pages);
 
       const load = async () => {
-        await this.loadRegisters(this.mePluginRegisters);
+        await pluginManager.loadRegisters(this.mePluginRegisters);
         setPages([...this.mePages]);
         setWebModule(this);
       };
@@ -101,7 +98,7 @@ export class WebModule extends BaseModule {
       const { setWebModule } = useOutletContext<any>();
 
       const load = async () => {
-        await this.loadRegisters(this.appPluginRegisters);
+        await pluginManager.loadRegisters(this.appPluginRegisters);
         setWebModule(this);
       };
 
@@ -111,16 +108,6 @@ export class WebModule extends BaseModule {
 
       return <Outlet />;
     };
-  }
-
-  private async loadRegisters(registers: Array<PluginRegister>) {
-    for (const register of registers) {
-      const handler = await register();
-      if (!this.registerMap.get(handler)) {
-        handler.default();
-        this.registerMap.set(handler, true);
-      }
-    }
   }
 
   static resolveStaticPath(moduleName: string, path: string) {
