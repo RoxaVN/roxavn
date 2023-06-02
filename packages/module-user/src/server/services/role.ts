@@ -1,8 +1,12 @@
-import { InferApiRequest } from '@roxavn/core/base';
-import { InjectDatabaseService } from '@roxavn/core/server';
+import { InferApiRequest, type Role as RoleType } from '@roxavn/core/base';
+import {
+  CreateRoleService,
+  InjectDatabaseService,
+  SetAdminRoleService,
+} from '@roxavn/core/server';
 import { ILike, In } from 'typeorm';
 
-import { roleApi } from '../../base/index.js';
+import { roleApi, roles } from '../../base/index.js';
 import { Role, UserRole } from '../entities/index.js';
 import { serverModule } from '../module.js';
 
@@ -66,5 +70,74 @@ export class GetModuleRoleStatsApiService extends InjectDatabaseService {
       items: users,
       pagination: { page, pageSize, totalItems },
     };
+  }
+}
+
+@serverModule.rebind(SetAdminRoleService)
+export class SetAdminRoleHook
+  extends InjectDatabaseService
+  implements SetAdminRoleService
+{
+  async handle(role: RoleType) {
+    const users = await this.entityManager.getRepository(UserRole).find({
+      select: { userId: true },
+      where: {
+        role: {
+          name: roles.Admin.name,
+          scope: roles.Admin.scope.name,
+        },
+      },
+    });
+    const roleModel = await this.entityManager.getRepository(Role).findOneBy({
+      name: role.name,
+      scope: role.scope.name,
+    });
+    if (roleModel) {
+      const adminroles = users.map((user) => {
+        const adminRole = new UserRole();
+        adminRole.userId = user.userId;
+        adminRole.roleId = roleModel.id;
+        adminRole.scope = roleModel.scope;
+        return adminRole;
+      });
+      await this.entityManager
+        .createQueryBuilder()
+        .insert()
+        .into(UserRole)
+        .values(adminroles)
+        .orIgnore()
+        .execute();
+    }
+  }
+}
+
+@serverModule.rebind(CreateRoleService)
+export class CreateRolesHook
+  extends InjectDatabaseService
+  implements CreateRoleService
+{
+  async handle(roles: Record<string, RoleType>) {
+    const roleRepository = this.entityManager.getRepository(Role);
+    for (const role of Object.values(roles)) {
+      let mess = `[${role.scope.name}] `;
+      let roleModel = await roleRepository.findOne({
+        where: { name: role.name, scope: role.scope.name },
+      });
+      if (!roleModel) {
+        roleModel = new Role();
+        roleModel.isPredefined = true;
+        roleModel.name = role.name;
+        roleModel.module = role.module;
+        roleModel.hasId = !!role.scope.idParam;
+        roleModel.scope = role.scope.name;
+        mess += 'add role ';
+      } else {
+        mess += 'update role ';
+      }
+      mess += role.name;
+      roleModel.permissions = role.permissions.map((p) => p.name);
+      await roleRepository.save(roleModel);
+      console.log(mess);
+    }
   }
 }

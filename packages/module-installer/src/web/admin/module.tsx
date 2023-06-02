@@ -30,7 +30,10 @@ const Page = () => {
             label: t('installHook'),
             icon: IconActivity,
             modal: ({ closeModal }: any) => ({
-              title: t('installHookModule', { module: item.name }),
+              title: t('installHookModule', {
+                module: item.name,
+                interpolation: { escapeValue: false },
+              }),
               children: (
                 <ApiConfirmFormGroup
                   api={moduleApi.runInstallHook}

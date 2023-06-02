@@ -33,8 +33,7 @@ program
 program
   .command('repl')
   .description('Run repl server')
-  .option('-p, --plugin <type>', 'plugin service', '@roxavn/module-user/hook')
-  .action((options) => replService.run(options));
+  .action(() => replService.run());
 
 program
   .command('build')

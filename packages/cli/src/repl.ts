@@ -6,7 +6,7 @@ import { buildService } from './build.js';
 import { cliColors } from './lib/index.js';
 
 class ReplService {
-  async run(options: { plugin: string }) {
+  async run() {
     devService.initEnv();
     buildService.compile();
 
@@ -21,10 +21,6 @@ class ReplService {
       moduleHook = await import(packageJson.name + '/hook');
     } catch {}
 
-    if (options?.plugin) {
-      // load plugin
-      await import(options.plugin);
-    }
     Object.assign(replServer.context, coreServer, moduleHook);
   }
 }
