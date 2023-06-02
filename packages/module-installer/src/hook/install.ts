@@ -1,11 +1,12 @@
-import { BaseService } from '@roxavn/core/server';
-import { CreateRolesHook, SetAdminRoleHook } from '@roxavn/module-user/hook';
+import { BaseInstallHook } from '@roxavn/core/server';
 
-import { Roles } from '../base';
+import { roles } from '../base/index.js';
+import { serverModule } from '../server/index.js';
 
-export class InstallHook extends BaseService {
+@serverModule.injectable()
+export class InstallHook extends BaseInstallHook {
   async handle() {
-    await this.create(CreateRolesHook).handle(Roles);
-    await this.create(SetAdminRoleHook).handle(Roles.Admin);
+    await this.createRoleService.handle(roles);
+    await this.setAdminRoleService.handle(roles.Admin);
   }
 }

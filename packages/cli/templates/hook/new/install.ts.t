@@ -13,4 +13,3 @@ export class InstallHook extends BaseInstallHook {
     await this.setAdminRoleService.handle(roles.Admin);
   }
 }
-
