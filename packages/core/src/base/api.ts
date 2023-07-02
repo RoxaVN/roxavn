@@ -63,7 +63,7 @@ export interface Api<
   /**
    * HTTP method.
    */
-  method: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'head';
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS' | 'HEAD';
 
   /**
    * Api path.

@@ -80,7 +80,7 @@ export const roleApi = {
     UnauthorizedException | ForbiddenException
   >({
     path: roleSource.apiPath() + '/module/stats',
-    method: 'get',
+    method: 'GET',
     permission: permissions.ReadUserRoles,
     validator: GetModuleRolStatseRequest,
   }),

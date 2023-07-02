@@ -81,7 +81,7 @@ export const userRoleApi = {
     Collection<RoleResponse>,
     BadRequestException
   >({
-    method: 'get',
+    method: 'GET',
     path: userRoleSource.apiPath() + '/modules',
     validator: GetUserRoleModulesRequest,
     permission: permissions.ReadUserRoles,

@@ -15,7 +15,8 @@ export const apiFetcher = {
     api: Api<Request, Response>,
     data?: Request
   ): Promise<Response> {
-    return apiFetcher[api.method](api.path, data).then((resp: any) => {
+    const method: 'get' | 'post' | 'delete' = api.method.toLowerCase() as any;
+    return apiFetcher[method](api.path, data).then((resp: any) => {
       if (resp?.code === 200) {
         return resp.data;
       }

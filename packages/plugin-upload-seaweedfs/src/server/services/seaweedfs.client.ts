@@ -51,7 +51,7 @@ export class SeaweedFSClient {
     const result = await fetch(
       new URL(finfo.fid, this._urlWithSchema(finfo.url)),
       {
-        method: 'post',
+        method: 'POST',
         body: form as any,
       }
     ).then((resp) => resp.json());

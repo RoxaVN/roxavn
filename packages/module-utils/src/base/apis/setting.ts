@@ -34,7 +34,7 @@ export const settingApi = {
     any,
     NotFoundException
   >({
-    method: 'get',
+    method: 'GET',
     path: settingSource.apiPath() + '/public',
     validator: GetPublicSettingRequest,
   }),

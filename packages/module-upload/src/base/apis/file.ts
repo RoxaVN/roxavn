@@ -42,7 +42,7 @@ class GetFilesRequest extends ExactProps<GetFilesRequest> {
 export const fileApi = {
   upload: fileSource.custom<Empty, FileInfo, UnauthorizedException>({
     path: fileSource.apiPath() + '/upload',
-    method: 'post',
+    method: 'POST',
     permission: permissions.UploadFile,
   }),
   getOne: fileSource.getOne({

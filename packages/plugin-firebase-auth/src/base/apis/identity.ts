@@ -28,7 +28,7 @@ export const identityApi = {
     },
     BadRequestException
   >({
-    method: 'post',
+    method: 'POST',
     path: identitySource.apiPath() + '/verifyToken',
     validator: VerityTokenRequest,
   }),

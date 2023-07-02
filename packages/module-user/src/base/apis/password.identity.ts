@@ -53,7 +53,7 @@ export const passwordIdentityApi = {
     { id: string; userId: string; accessToken: string },
     UnauthorizedException
   >({
-    method: 'post',
+    method: 'POST',
     path: passwordIdentitySource.apiPath() + '/auth',
     validator: AuthRequest,
   }),
@@ -62,7 +62,7 @@ export const passwordIdentityApi = {
     Empty,
     BadRequestException | UnauthorizedException | ForbiddenException
   >({
-    method: 'post',
+    method: 'POST',
     path: passwordIdentitySource.apiPath() + '/reset',
     validator: ResetPasswordRequest,
   }),
@@ -71,7 +71,7 @@ export const passwordIdentityApi = {
     { token: string },
     BadRequestException | UnauthorizedException | ForbiddenException
   >({
-    method: 'post',
+    method: 'POST',
     path: passwordIdentitySource.apiPath() + '/recovery',
     validator: RecoveryPasswordRequest,
     permission: permissions.RecoveryPassword,

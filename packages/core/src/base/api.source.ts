@@ -50,7 +50,7 @@ export class ApiSource<T extends ApiResponse> {
     ...api
   }: ApiOptions<Req>): Api<Req, PaginatedCollection<T>, Error> {
     return {
-      method: method || 'get',
+      method: method || 'GET',
       path: path || this.apiPath(),
       ...api,
       resources: this.resources,
@@ -65,7 +65,7 @@ export class ApiSource<T extends ApiResponse> {
       | UnauthorizedException
   >({ method, path, ...api }: ApiOptions<Req>): Api<Req, Collection<T>, Error> {
     return {
-      method: method || 'get',
+      method: method || 'GET',
       path: path || this.apiPath(),
       ...api,
       resources: this.resources,
@@ -80,7 +80,7 @@ export class ApiSource<T extends ApiResponse> {
       | UnauthorizedException
   >({ method, path, ...api }: ApiOptions<Req>): Api<Req, T, Error> {
     return {
-      method: method || 'get',
+      method: method || 'GET',
       path: path || this.apiPath({ includeId: true }),
       ...api,
       resources: this.resources,
@@ -96,7 +96,7 @@ export class ApiSource<T extends ApiResponse> {
       | UnauthorizedException
   >({ method, path, ...api }: ApiOptions<Req>): Api<Req, Res, Error> {
     return {
-      method: method || 'post',
+      method: method || 'POST',
       path: path || this.apiPath(),
       ...api,
       resources: this.resources,
@@ -113,7 +113,7 @@ export class ApiSource<T extends ApiResponse> {
   >({ method, path, ...api }: ApiOptions<Req>): Api<Req, Res, Error> {
     if (this.resources.length === 2) {
       return {
-        method: method || 'post',
+        method: method || 'POST',
         path: path || this.apiPath({ includeId: true }),
         ...api,
         resources: this.resources,
@@ -131,7 +131,7 @@ export class ApiSource<T extends ApiResponse> {
       | UnauthorizedException
   >({ method, path, ...api }: ApiOptions<Req>): Api<Req, Res, Error> {
     return {
-      method: method || 'put',
+      method: method || 'PUT',
       path: path || this.apiPath({ includeId: true }),
       ...api,
       resources: this.resources,
@@ -147,7 +147,7 @@ export class ApiSource<T extends ApiResponse> {
       | UnauthorizedException
   >({ method, path, ...api }: ApiOptions<Req>): Api<Req, Res, Error> {
     return {
-      method: method || 'delete',
+      method: method || 'DELETE',
       path: path || this.apiPath({ includeId: true }),
       ...api,
       resources: this.resources,

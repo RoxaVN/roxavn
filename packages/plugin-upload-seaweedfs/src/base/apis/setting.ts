@@ -15,7 +15,7 @@ class UpdateSeaweedFSMasterUrlSettingRequest extends ExactProps<UpdateSeaweedFSM
 
 export const settingApi = {
   updateSeaweedFSSetting: settingSource.custom({
-    method: 'post',
+    method: 'POST',
     path: settingSource.apiPath() + '/seaweedfs',
     validator: UpdateSeaweedFSMasterUrlSettingRequest,
     permission: permissions.UpdateSetting,

@@ -65,7 +65,7 @@ export const userNotificationApi = {
     UnauthorizedException
   >({
     path: userNotificationSource.apiPath() + '/unread/count',
-    method: 'get',
+    method: 'GET',
     validator: CountUnreadUserNotificationsRequest,
     permission: permissions.ReadUserNotifications,
   }),
