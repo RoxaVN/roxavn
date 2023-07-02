@@ -3,19 +3,24 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  PrimaryColumn,
   type Relation,
   UpdateDateColumn,
+  PrimaryGeneratedColumn,
+  Index,
 } from 'typeorm';
 import { Role } from './role.entity.js';
 import { User } from './user.entity.js';
 
 @Entity()
+@Index(['scopeId', 'userId', 'scope'], { unique: true })
 export class UserRole {
-  @PrimaryColumn('character varying', { default: '' })
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column('character varying', { default: '' })
   scopeId: string;
 
-  @PrimaryColumn('uuid')
+  @Column('uuid')
   userId: string;
 
   @ManyToOne(() => User, (user) => user.roles)
@@ -25,7 +30,7 @@ export class UserRole {
   @Column('character varying')
   scope: string;
 
-  @PrimaryColumn('integer')
+  @Column('integer')
   roleId: number;
 
   @ManyToOne(() => Role, (role) => role.users)
