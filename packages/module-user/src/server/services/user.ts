@@ -1,8 +1,4 @@
-import {
-  InferApiRequest,
-  NotFoundException,
-  AlreadyExistsException,
-} from '@roxavn/core/base';
+import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { And, ILike, In, LessThan, MoreThan } from 'typeorm';
 
 import { userApi } from '../../base/index.js';
@@ -76,11 +72,7 @@ export class CreateUserApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof userApi.create>) {
     const user = new User();
     user.username = request.username;
-    try {
-      await this.entityManager.save(user);
-    } catch (e) {
-      throw new AlreadyExistsException();
-    }
+    await this.entityManager.save(user);
 
     return {
       id: user.id,
