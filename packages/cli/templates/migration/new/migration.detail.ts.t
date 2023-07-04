@@ -7,8 +7,10 @@ export class <%= h.changeCase.pascal(name) %><%= ts %> implements MigrationInter
   name = '<%= h.changeCase.pascal(name) %><%= ts %>';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+<%- upSqls %>
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+<%- downSqls %>
   }
 }

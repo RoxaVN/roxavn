@@ -26,11 +26,15 @@ export class DatabaseService {
   static async create() {
     const isDev = process.env.NODE_ENV === constants.ENV_DEVELOPMENT;
     const entities = moduleManager.serverModules.map((m) => m.entities).flat();
+    const migrations = moduleManager.serverModules
+      .map((m) => m.migrations)
+      .flat();
 
     const dataSource = new DataSource({
       type: 'postgres',
       url: process.env.DATABASE_URL,
       entities: entities,
+      migrations: migrations,
       logging: isDev ? true : false,
       synchronize: isDev ? true : false,
       cache: {

@@ -1,4 +1,5 @@
 import { json } from '@remix-run/node';
+import { MigrationInterface } from 'typeorm';
 import {
   Api,
   ApiRequest,
@@ -27,6 +28,7 @@ export class ServerModule extends BaseModule {
   }> = [];
 
   readonly entities: any[] = [];
+  readonly migrations: { new (): MigrationInterface }[] = [];
 
   onBeforeServerStart?: () => Promise<void>;
   onAfterServerStart?: () => Promise<void>;
@@ -80,11 +82,15 @@ export class ServerModule extends BaseModule {
     base: BaseModule,
     options?: {
       entities?: Record<string, any>;
+      migrations?: Record<string, { new (): MigrationInterface }>;
     }
   ) {
     const module = new ServerModule(base.name, base.options);
     if (options?.entities) {
       module.entities.push(...Object.values(options.entities));
+    }
+    if (options?.migrations) {
+      module.migrations.push(...Object.values(options.migrations));
     }
     return module;
   }

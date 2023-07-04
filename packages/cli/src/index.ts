@@ -5,6 +5,7 @@ import { devService } from './dev.js';
 import { moduleService } from './module.js';
 import { templateService } from './template.js';
 import { replService } from './repl.js';
+import { migrationService } from './migration.js';
 
 const program = new Command();
 
@@ -24,6 +25,13 @@ program
   .action((generator: string, action?: string) =>
     templateService.generate([generator, action || 'new'])
   );
+
+program
+  .command('migration [mode]')
+  .description('Database migration')
+  .action(() => {
+    migrationService.generate();
+  });
 
 program
   .command('dev')
