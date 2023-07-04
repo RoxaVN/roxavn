@@ -19,8 +19,8 @@
   "peerDependencies": {
     "@mantine/core": "^6.0.0",
     "@mantine/dates": "^6.0.0",
-    "@remix-run/node": "^1.16.1",
-    "@remix-run/react": "^1.16.1",
+    "@remix-run/node": "^1.18.1",
+    "@remix-run/react": "^1.18.1",
     "@roxavn/core": "^0.1.28",
     "@tabler/icons-react": "^2.12.0",
     "react": "^18.2.0",

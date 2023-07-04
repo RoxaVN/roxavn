@@ -28,11 +28,12 @@
     "npm": ">=7.21.1"
   },
   "dependencies": {
-    "@remix-run/dev": "^1.7.6",
+    "@remix-run/dev": "^1.18.1",
+    "@remix-run/serve": "^1.18.1",
     "@roxavn/core": "^0.1.28",
     "@roxavn/dev-web": "^0.1.0",
     "@sqltools/formatter": "^1.2.5",
-    "commander": "^9.4.1",
+    "commander": "^10.0.1",
     "fs-extra": "^11.1.0",
     "hygen": "^6.2.11"
   },
