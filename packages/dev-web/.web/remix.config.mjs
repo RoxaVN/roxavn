@@ -6,7 +6,9 @@ const appConfig = {
   watchPaths: ['./src/**/*'],
   serverModuleFormat: 'esm',
   serverBuildPath: 'build/index.mjs',
+  serverDependenciesToBundle: ['lodash-es'],
   future: {
+    v2_dev: true,
     v2_headers: true,
     v2_routeConvention: true,
     v2_errorBoundary: true,
