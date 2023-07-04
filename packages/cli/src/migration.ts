@@ -1,5 +1,5 @@
-import { format } from '@sqltools/formatter/lib/sqlFormatter.js';
 import { constants } from '@roxavn/core/base';
+import sqlFormatter from '@sqltools/formatter';
 import {
   DatabaseService,
   moduleManager,
@@ -29,7 +29,7 @@ class MigrationService {
   }
 
   protected prettifyQuery(query: string) {
-    const formattedQuery = format(query, { indent: '  ' });
+    const formattedQuery = sqlFormatter.format(query, { indent: '  ' });
     return '\n' + formattedQuery.replace(/^/gm, '      ') + '\n      ';
   }
 
