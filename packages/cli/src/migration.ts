@@ -6,6 +6,7 @@ import {
   serviceContainer,
 } from '@roxavn/core/server';
 import { templateService } from './template.js';
+import { buildService } from './build.js';
 
 class MigrationService {
   async init() {
@@ -78,11 +79,13 @@ class MigrationService {
   }
 
   async run() {
+    buildService.compile();
     const databaseService = await this.init();
     await databaseService.dataSource.runMigrations();
   }
 
   async revert() {
+    buildService.compile();
     const databaseService = await this.init();
     await databaseService.dataSource.undoLastMigration();
   }
