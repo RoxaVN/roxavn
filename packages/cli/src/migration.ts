@@ -79,8 +79,18 @@ class MigrationService {
       '--upSqls',
       upSqls.join('\n'),
       '--downSqls',
-      downSqls.join('\n'),
+      downSqls.reverse().join('\n'),
     ]);
+  }
+
+  async run() {
+    const databaseService = await this.init();
+    await databaseService.dataSource.runMigrations();
+  }
+
+  async revert() {
+    const databaseService = await this.init();
+    await databaseService.dataSource.undoLastMigration();
   }
 }
 

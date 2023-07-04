@@ -29,8 +29,14 @@ program
 program
   .command('migration [mode]')
   .description('Database migration')
-  .action(() => {
-    migrationService.generate();
+  .action((mode: string) => {
+    if (mode === 'run') {
+      migrationService.run();
+    } else if (mode === 'revert') {
+      migrationService.revert();
+    } else {
+      migrationService.generate();
+    }
   });
 
 program
