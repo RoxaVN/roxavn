@@ -6,6 +6,7 @@ import {
   moduleManager,
   serviceContainer,
   EventJobManager,
+  initEnv,
 } from '@roxavn/core/server';
 import {
   createRemixRequest,
@@ -16,6 +17,7 @@ import fastify, { type FastifyRequest } from 'fastify';
 import path from 'path';
 
 export async function bootstrap(serverBuild: ServerBuild) {
+  initEnv();
   await moduleManager.importServerModules();
 
   await Promise.all(

@@ -1,7 +1,7 @@
-import { constants } from '@roxavn/core/base';
 import sqlFormatter from '@sqltools/formatter';
 import {
   DatabaseService,
+  initEnv,
   moduleManager,
   serviceContainer,
 } from '@roxavn/core/server';
@@ -9,14 +9,8 @@ import { templateService } from './template.js';
 
 class MigrationService {
   async init() {
-    Object.assign(process.env, {
-      NODE_ENV: constants.ENV_PRODUCTION,
-      DATABASE_URL: 'postgresql://admin:admin@localhost:5434/example',
-      TOKEN_SIGN_SECRET: 'thisislongtokensecret',
-    });
-
+    initEnv();
     await moduleManager.importServerModules();
-
     return serviceContainer.getAsync(DatabaseService);
   }
 

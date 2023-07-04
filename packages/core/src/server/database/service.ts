@@ -24,7 +24,6 @@ export class DatabaseService {
 
   @bindFactory()
   static async create() {
-    const isDev = process.env.NODE_ENV === constants.ENV_DEVELOPMENT;
     const entities = moduleManager.serverModules.map((m) => m.entities).flat();
     const migrations = moduleManager.serverModules
       .map((m) => m.migrations)
@@ -35,8 +34,8 @@ export class DatabaseService {
       url: process.env.DATABASE_URL,
       entities: entities,
       migrations: migrations,
-      logging: isDev ? true : false,
-      synchronize: isDev ? true : false,
+      logging: !!process.env.DATABASE_LOGGING,
+      synchronize: !!process.env.DATABASE_SYNCHRONIZE,
       cache: {
         duration: constants.QUERY_CACHE_DURATION,
         provider() {
