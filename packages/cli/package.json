@@ -35,7 +35,8 @@
     "@sqltools/formatter": "^1.2.5",
     "commander": "^10.0.1",
     "fs-extra": "^11.1.0",
-    "hygen": "^6.2.11"
+    "hygen": "^6.2.11",
+    "nanoid": "^3.3.6"
   },
   "files": [
     "/dist",
