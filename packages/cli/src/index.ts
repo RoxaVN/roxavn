@@ -7,6 +7,7 @@ import { moduleService } from './module.js';
 import { templateService } from './template.js';
 import { replService } from './repl.js';
 import { migrationService } from './migration.js';
+import { serveService } from './serve.js';
 
 initEnv();
 const program = new Command();
@@ -45,6 +46,11 @@ program
   .command('dev')
   .description('Run dev server')
   .action(() => devService.run());
+
+program
+  .command('serve')
+  .description('Run production server')
+  .action(() => serveService.run());
 
 program
   .command('repl')
