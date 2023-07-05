@@ -1,3 +1,4 @@
+import { initEnv } from '@roxavn/core/server';
 import { Command } from 'commander';
 
 import { buildService } from './build.js';
@@ -7,6 +8,7 @@ import { templateService } from './template.js';
 import { replService } from './repl.js';
 import { migrationService } from './migration.js';
 
+initEnv();
 const program = new Command();
 
 program

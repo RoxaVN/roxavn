@@ -1,4 +1,4 @@
-import { getPackageJson, initEnv, moduleManager } from '@roxavn/core/server';
+import { getPackageJson, moduleManager } from '@roxavn/core/server';
 import repl from 'repl';
 
 import { buildService } from './build.js';
@@ -6,7 +6,6 @@ import { cliColors } from './lib/index.js';
 
 class ReplService {
   async run() {
-    initEnv();
     buildService.compile();
 
     const replServer = repl.start(cliColors.green('> '));

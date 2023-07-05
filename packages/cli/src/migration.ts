@@ -1,7 +1,6 @@
 import sqlFormatter from '@sqltools/formatter';
 import {
   DatabaseService,
-  initEnv,
   moduleManager,
   serviceContainer,
 } from '@roxavn/core/server';
@@ -10,7 +9,6 @@ import { buildService } from './build.js';
 
 class MigrationService {
   async init() {
-    initEnv();
     await moduleManager.importServerModules();
     return serviceContainer.getAsync(DatabaseService);
   }
