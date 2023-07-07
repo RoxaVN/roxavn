@@ -27,7 +27,7 @@ export class EventJobManager {
       const service = await serviceContainer.getAsync(item.serviceClass);
       eventDistributor.on(makeApiSuccessEvent(item.api), (data: any) => {
         runInTransaction(() => {
-          service.handle(data);
+          return service.handle(data);
         });
       });
     }

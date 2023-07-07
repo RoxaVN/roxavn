@@ -13,7 +13,7 @@ export function onApiSuccess<Req extends ApiRequest, Resp extends ApiResponse>(
       );
       eventDistributor.on(makeApiSuccessEvent(api), async (data) => {
         runInTransaction(() => {
-          target[propertyKey](data);
+          return target[propertyKey](data);
         });
       });
     });
