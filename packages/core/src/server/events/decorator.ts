@@ -12,7 +12,7 @@ export function onApiSuccess<Req extends ApiRequest, Resp extends ApiResponse>(
   };
 }
 
-export type InferOnApiSuccessData<T extends Api> = RouterContextState<T>;
+export type InferApiSuccessData<T extends Api> = RouterContextState<T>;
 
 export function onApiError<Req extends ApiRequest, Resp extends ApiResponse>(
   api: Api<Req, Resp>
@@ -23,6 +23,6 @@ export function onApiError<Req extends ApiRequest, Resp extends ApiResponse>(
   };
 }
 
-export type InferOnApiErrorData<T extends Api> = RouterContextState<T> & {
+export type InferApiErrorData<T extends Api> = RouterContextState<T> & {
   error: any;
 };

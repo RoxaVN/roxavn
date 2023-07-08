@@ -2,26 +2,30 @@ import { MiddlewareService } from '../middlewares/interfaces.js';
 import { useApiMiddleware } from '../middlewares/manager.js';
 import { serviceContainer } from '../services/container.js';
 import { RouterContext } from '../services/context.js';
-import { EventDistributor } from './distributor.js';
-import { ApiErrorEventManager, ApiSuccessEventManager } from './manager.js';
+import { JobDistributor } from './distributor.js';
+import { ApiErrorJobManager, ApiSuccessJobManager } from './manager.js';
 
 @useApiMiddleware()
-export class EmitApiEventMiddleware implements MiddlewareService {
+export class EmitApiJobMiddleware implements MiddlewareService {
   async handle({ api, state }: RouterContext, next: () => Promise<void>) {
-    const eventDistributor = await serviceContainer.getAsync(EventDistributor);
+    const jobDistributor = await serviceContainer.getAsync(JobDistributor);
     try {
       await next();
       if (api) {
         setTimeout(() => {
-          eventDistributor.emit(ApiSuccessEventManager.makeEvent(api), state);
+          ApiSuccessJobManager.filter(api).forEach((item) => {
+            jobDistributor.emit(ApiSuccessJobManager.makeEvent(item), state);
+          });
         }, 50);
       }
     } catch (error) {
       if (api) {
         setTimeout(() => {
-          eventDistributor.emit(ApiErrorEventManager.makeEvent(api), {
-            ...state,
-            error,
+          ApiErrorJobManager.filter(api).forEach((item) => {
+            jobDistributor.emit(ApiErrorJobManager.makeEvent(item), {
+              ...state,
+              error,
+            });
           });
         }, 50);
         // re-throw for other middleware
