@@ -3,6 +3,7 @@ import { Api } from '../../base/index.js';
 import { autoBind } from '../services/base.js';
 import { useApiMiddleware, MiddlewareService } from '../middlewares/index.js';
 import { RouterContext, serviceContainer } from '../services/index.js';
+import { ApiErrorEventManager, ApiSuccessEventManager } from './manager.js';
 
 @autoBind()
 export class EventDistributor {
@@ -34,30 +35,33 @@ export function makeApiJobName(api: Api) {
   return `[job][${api.method}]${api.path}`;
 }
 
-export function makeApiSuccessEvent(api: Api) {
-  return `[success][${api.method}]${api.path}`;
-}
-
-export function makeApiErrorEvent(api: Api) {
-  return `[error][${api.method}]${api.path}`;
-}
-
 @useApiMiddleware()
 export class EmitApiEventMiddleware implements MiddlewareService {
   async handle({ api, state }: RouterContext, next: () => Promise<void>) {
-    await next();
-    if (api) {
-      setTimeout(async () => {
-        try {
+    try {
+      await next();
+      if (api) {
+        setTimeout(async () => {
           const eventDistributor = await serviceContainer.getAsync(
             EventDistributor
           );
-          eventDistributor.emit(makeApiSuccessEvent(api), state);
-          eventDistributor.pushJob(makeApiJobName(api), state);
-        } catch (e) {
-          console.error(e);
-        }
-      }, 50);
+          eventDistributor.emit(ApiSuccessEventManager.makeEvent(api), state);
+        }, 50);
+      }
+    } catch (error) {
+      if (api) {
+        setTimeout(async () => {
+          const eventDistributor = await serviceContainer.getAsync(
+            EventDistributor
+          );
+          eventDistributor.emit(ApiErrorEventManager.makeEvent(api), {
+            ...state,
+            error,
+          });
+        }, 50);
+        // re-throw for other middleware
+        throw error;
+      }
     }
   }
 }
