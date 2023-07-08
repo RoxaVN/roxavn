@@ -1,9 +1,6 @@
 import { runInTransaction } from 'typeorm-transactional';
 import { Api } from '../../base/api.js';
-import {
-  EventDistributor,
-  makeApiSuccessEvent,
-} from '../events/distributor.js';
+import { EventDistributor, makeApiJobName } from '../events/distributor.js';
 import { BaseService, autoBind } from '../services/base.js';
 import { serviceContainer } from '../services/container.js';
 
@@ -25,7 +22,7 @@ export class EventJobManager {
     const eventDistributor = await serviceContainer.getAsync(EventDistributor);
     for (const item of EventJobManager.items) {
       const service = await serviceContainer.getAsync(item.serviceClass);
-      eventDistributor.on(makeApiSuccessEvent(item.api), (data: any) => {
+      eventDistributor.handleJob(makeApiJobName(item.api), (data: any) => {
         runInTransaction(() => {
           return service.handle(data);
         });
