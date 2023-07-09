@@ -1,8 +1,8 @@
 import {
   BaseService,
-  InferOnApiSuccessData,
+  InferApiSuccessData,
   inject,
-  useApiEventJob,
+  useApiSuccessJob,
 } from '@roxavn/core/server';
 import { CreateNotificationService } from '@roxavn/module-notification/server';
 import { scopes, taskApi } from '@roxavn/module-project/base';
@@ -10,7 +10,7 @@ import { GetTaskApiService } from '@roxavn/module-project/server';
 
 import { baseModule } from '../../base/index.js';
 
-@useApiEventJob(taskApi.createSubtask)
+@useApiSuccessJob(taskApi.createSubtask)
 export class CreateSubTaskNoticeService extends BaseService {
   constructor(
     @inject(GetTaskApiService) private getTaskApiService: GetTaskApiService,
@@ -20,7 +20,7 @@ export class CreateSubTaskNoticeService extends BaseService {
     super();
   }
 
-  async handle(data: InferOnApiSuccessData<typeof taskApi.createSubtask>) {
+  async handle(data: InferApiSuccessData<typeof taskApi.createSubtask>) {
     const task = await this.getTaskApiService.handle({
       taskId: data.request.taskId,
     });
@@ -29,7 +29,7 @@ export class CreateSubTaskNoticeService extends BaseService {
     if (task.assignee && task.assignee !== task.userId) {
       userIds.push(task.assignee);
     }
-    await await this.createNotificationService.handle({
+    await this.createNotificationService.handle({
       action: 'CreateSubTask',
       module: baseModule.name,
       resource: scopes.Task.name,
@@ -41,7 +41,7 @@ export class CreateSubTaskNoticeService extends BaseService {
   }
 }
 
-@useApiEventJob(taskApi.inprogress)
+@useApiSuccessJob(taskApi.inprogress)
 export class InprogressTaskNoticeService extends BaseService {
   constructor(
     @inject(GetTaskApiService) private getTaskApiService: GetTaskApiService,
@@ -51,12 +51,12 @@ export class InprogressTaskNoticeService extends BaseService {
     super();
   }
 
-  async handle(data: InferOnApiSuccessData<typeof taskApi.inprogress>) {
+  async handle(data: InferApiSuccessData<typeof taskApi.inprogress>) {
     const task = await this.getTaskApiService.handle({
       taskId: data.request.taskId,
     });
 
-    await await this.createNotificationService.handle({
+    await this.createNotificationService.handle({
       action: 'UpdateTaskStatus',
       module: baseModule.name,
       resource: scopes.Task.name,
@@ -68,7 +68,7 @@ export class InprogressTaskNoticeService extends BaseService {
   }
 }
 
-@useApiEventJob(taskApi.delete)
+@useApiSuccessJob(taskApi.delete)
 export class DeleteTaskNoticeService extends BaseService {
   constructor(
     @inject(GetTaskApiService) private getTaskApiService: GetTaskApiService,
@@ -78,12 +78,12 @@ export class DeleteTaskNoticeService extends BaseService {
     super();
   }
 
-  async handle(data: InferOnApiSuccessData<typeof taskApi.inprogress>) {
+  async handle(data: InferApiSuccessData<typeof taskApi.delete>) {
     const task = await this.getTaskApiService.handle({
       taskId: data.request.taskId,
     });
 
-    await await this.createNotificationService.handle({
+    await this.createNotificationService.handle({
       action: 'UpdateTaskStatus',
       module: baseModule.name,
       resource: scopes.Task.name,
@@ -95,7 +95,7 @@ export class DeleteTaskNoticeService extends BaseService {
   }
 }
 
-@useApiEventJob(taskApi.reject)
+@useApiSuccessJob(taskApi.reject)
 export class RejectTaskNoticeService extends BaseService {
   constructor(
     @inject(GetTaskApiService) private getTaskApiService: GetTaskApiService,
@@ -105,12 +105,12 @@ export class RejectTaskNoticeService extends BaseService {
     super();
   }
 
-  async handle(data: InferOnApiSuccessData<typeof taskApi.inprogress>) {
+  async handle(data: InferApiSuccessData<typeof taskApi.reject>) {
     const task = await this.getTaskApiService.handle({
       taskId: data.request.taskId,
     });
 
-    await await this.createNotificationService.handle({
+    await this.createNotificationService.handle({
       action: 'UpdateTaskStatus',
       module: baseModule.name,
       resource: scopes.Task.name,

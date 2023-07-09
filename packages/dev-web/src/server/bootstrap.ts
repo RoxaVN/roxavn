@@ -5,7 +5,8 @@ import {
   ServerModule,
   moduleManager,
   serviceContainer,
-  EventJobManager,
+  ApiSuccessJobManager,
+  ApiErrorJobManager,
 } from '@roxavn/core/server';
 import {
   createRemixRequest,
@@ -24,7 +25,12 @@ export async function bootstrap(serverBuild: ServerBuild) {
     })
   );
   if (process.env.RUN_JOBS_CONSUMER) {
-    await serviceContainer.get(EventJobManager).registerServices();
+    await (
+      await serviceContainer.getAsync(ApiSuccessJobManager)
+    ).registerServices();
+    await (
+      await serviceContainer.getAsync(ApiErrorJobManager)
+    ).registerServices();
   }
 
   const app = fastify();
