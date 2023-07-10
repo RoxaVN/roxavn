@@ -1,14 +1,12 @@
 import {
   ApiSource,
   ArrayMaxSize,
-  Empty,
   ExactProps,
   IsNumberString,
   IsOptional,
   Min,
   MinLength,
   TransformArray,
-  UnauthorizedException,
 } from '@roxavn/core/base';
 import { baseModule } from '../module.js';
 import { permissions, scopes } from '../access.js';
@@ -40,11 +38,6 @@ class GetFilesRequest extends ExactProps<GetFilesRequest> {
 }
 
 export const fileApi = {
-  upload: fileSource.custom<Empty, FileInfo, UnauthorizedException>({
-    path: fileSource.apiPath() + '/upload',
-    method: 'POST',
-    permission: permissions.UploadFile,
-  }),
   getOne: fileSource.getOne({
     validator: GetFileRequest,
     permission: permissions.ReadFile,

@@ -9,6 +9,7 @@ import {
 
 @Entity()
 export class NotificationToken {
+  // accesstoken id
   @PrimaryColumn('uuid')
   id: string;
 

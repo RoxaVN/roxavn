@@ -11,8 +11,15 @@ import {
 
 import { File } from './file.entity.js';
 
+/**
+ * public: anyone can access, can cache in cdn (best for fast response).
+ *
+ * private: must check permission to access (for security)
+ */
+export type StorageHandlerType = 'public' | 'private';
+
 @Entity()
-@Index(['userId', 'name'])
+@Index(['userId', 'name'], { unique: true })
 export class FileStorage {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -23,6 +30,12 @@ export class FileStorage {
 
   @Column('text')
   name: string;
+
+  @Column('text')
+  handler: string;
+
+  @Column('text')
+  type: StorageHandlerType;
 
   @OneToMany(() => File, (file) => file.fileStorage)
   files: Relation<File>[];
@@ -35,6 +48,9 @@ export class FileStorage {
 
   @Column('bigint', { default: 0 })
   maxFileSize: number = 0;
+
+  @Column({ type: 'jsonb', nullable: true })
+  metadata?: any;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;

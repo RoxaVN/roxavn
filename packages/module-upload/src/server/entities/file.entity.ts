@@ -35,6 +35,10 @@ export class File {
   @Column('uuid')
   userId: string;
 
+  @Index()
+  @Column('uuid')
+  parentId?: string;
+
   @Column('uuid')
   fileStorageId: string;
 
