@@ -1,29 +1,24 @@
 import { apiFetcher, useApi } from '@roxavn/core/web';
 import { useEffect, useState } from 'react';
 
-import {
-  NotFoundUserStorageException,
-  fileApi,
-  fileStoageApi,
-} from '../../base/index.js';
+import { fileStorageApi } from '../../base/index.js';
 
-export const useUpload = (file: File) => {
-  const [refeth, setRefetch] = useState(1);
-  const hookData = useApi(fileApi.upload, { file, _: refeth });
+export const useUpload = (file: File, fileStorageid?: string) => {
+  const [storageId, setStorageId] = useState(fileStorageid);
+  const hookData = useApi(
+    fileStorageApi.upload,
+    storageId ? ({ file, fileStorageid: storageId } as any) : undefined
+  );
 
   async function checkError() {
-    if (hookData.error) {
-      const errorResp = apiFetcher.getErrorData(hookData.error);
-      if (errorResp?.type === NotFoundUserStorageException.name) {
-        await apiFetcher.fetch(fileStoageApi.create);
-        setRefetch(new Date().getTime());
-      }
+    if (!fileStorageid) {
+      const resp = await apiFetcher.fetch(fileStorageApi.create);
+      setStorageId(resp.id);
     }
   }
-
   useEffect(() => {
     checkError();
-  }, [hookData.error]);
+  }, [fileStorageid]);
 
   return hookData;
 };

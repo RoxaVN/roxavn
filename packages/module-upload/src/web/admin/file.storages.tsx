@@ -8,7 +8,7 @@ import {
 } from '@roxavn/core/web';
 import { IconUsers } from '@tabler/icons-react';
 
-import { fileStoageApi } from '../../base/index.js';
+import { fileStorageApi } from '../../base/index.js';
 import { webModule } from '../module.js';
 
 const Page = () => {
@@ -16,7 +16,7 @@ const Page = () => {
   const tCore = coreWebModule.useTranslation().t;
   return (
     <ApiTable
-      api={fileStoageApi.getMany}
+      api={fileStorageApi.getMany}
       itemKey="userId"
       columns={{
         userId: { label: tCore('userId') },
@@ -37,7 +37,7 @@ export const fileStoragesPage = new PageItem({
   path: '',
   icon: IconUsers,
   element: (
-    <IfCanAccessApi api={fileStoageApi.getMany}>
+    <IfCanAccessApi api={fileStorageApi.getMany}>
       <Page />
     </IfCanAccessApi>
   ),

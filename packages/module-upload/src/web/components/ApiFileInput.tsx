@@ -13,12 +13,12 @@ import { ApiError, uiManager } from '@roxavn/core/web';
 import { IconUpload, IconFileCheck } from '@tabler/icons-react';
 import { Fragment, useEffect } from 'react';
 
-import { fileApi } from '../../base/index.js';
+import { fileStorageApi } from '../../base/index.js';
 import { useUpload } from '../hooks/index.js';
 import { webModule } from '../module.js';
 import { useApiFileInputStyles } from './ApiFileInput.styles.js';
 
-type UploadedFile = InferApiResponse<typeof fileApi.upload>;
+type UploadedFile = InferApiResponse<typeof fileStorageApi.upload>;
 
 const renderLabel = (fileName: string) => {
   const parts = fileName.split('.');
@@ -53,11 +53,12 @@ const Uploadeditem = ({ value, onRemove }: UploadeditemProps) => {
 
 export interface UploaditemProps {
   value: File;
+  fileStorageid?: string;
   onChange?: (result: UploadedFile | null) => void;
 }
 
-const UploadItem = ({ value, onChange }: UploaditemProps) => {
-  const { data, error, loading } = useUpload(value);
+const UploadItem = ({ value, onChange, fileStorageid }: UploaditemProps) => {
+  const { data, error, loading } = useUpload(value, fileStorageid);
   const { classes } = useApiFileInputStyles();
 
   useEffect(() => {
@@ -90,6 +91,7 @@ export type ApiFileInputProps<Multiple extends boolean = false> = {
   multiple?: Multiple;
   accept?: string | string[];
   maxFiles?: number;
+  fileStorageid?: string;
   containerTemplate?: (props: { children: React.ReactNode }) => JSX.Element;
   inputTemplate?: (props: {
     onChange: (files: File | File[] | null) => void;
@@ -100,6 +102,7 @@ export type ApiFileInputProps<Multiple extends boolean = false> = {
   }) => JSX.Element;
   uploadItemTemplate?: (props: {
     value: File;
+    fileStorageid?: string;
     onChange: (value: UploadedFile | null) => void;
   }) => JSX.Element;
   value?: Multiple extends false ? UploadedFile | null : UploadedFile[];
@@ -114,6 +117,7 @@ export const ApiFileInput = <Multiple extends boolean = false>({
   onChange,
   maxFiles,
   multiple,
+  fileStorageid,
   inputTemplate,
   containerTemplate,
   uploadItemTemplate,
@@ -232,9 +236,17 @@ export const ApiFileInput = <Multiple extends boolean = false>({
         children.push(
           <Fragment key={item.local.name}>
             {uploadItemTemplate ? (
-              uploadItemTemplate({ value: item.local, onChange: itemOnChange })
+              uploadItemTemplate({
+                fileStorageid,
+                value: item.local,
+                onChange: itemOnChange,
+              })
             ) : (
-              <UploadItem value={item.local} onChange={itemOnChange} />
+              <UploadItem
+                value={item.local}
+                onChange={itemOnChange}
+                fileStorageid={fileStorageid}
+              />
             )}
           </Fragment>
         );

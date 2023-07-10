@@ -26,9 +26,13 @@ const UploadedImageitem = ({ value, onRemove }: UploadeditemProps) => {
   ) : null;
 };
 
-const UploadImageItem = ({ value, onChange }: UploaditemProps) => {
+const UploadImageItem = ({
+  value,
+  onChange,
+  fileStorageid,
+}: UploaditemProps) => {
   const [image, setImage] = useState<string>();
-  const { data, error, loading } = useUpload(value);
+  const { data, error, loading } = useUpload(value, fileStorageid);
   const { classes } = useApiFileInputStyles();
 
   useEffect(() => {
