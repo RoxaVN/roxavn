@@ -7,6 +7,8 @@ import {
   serviceContainer,
   ApiSuccessJobManager,
   ApiErrorJobManager,
+  ApiSuccessEventManager,
+  ApiErrorEventManager,
 } from '@roxavn/core/server';
 import {
   createRemixRequest,
@@ -18,6 +20,13 @@ import path from 'path';
 
 export async function bootstrap(serverBuild: ServerBuild) {
   await moduleManager.importServerModules();
+
+  await (
+    await serviceContainer.getAsync(ApiSuccessEventManager)
+  ).registerServices();
+  await (
+    await serviceContainer.getAsync(ApiErrorEventManager)
+  ).registerServices();
 
   await Promise.all(
     moduleManager.serverModules.map((m) => {
