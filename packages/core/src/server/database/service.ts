@@ -8,7 +8,8 @@ import {
 import { constants } from '../../base/index.js';
 import { moduleManager } from '../module.manager.js';
 import { MemoryQueryResultCache } from './cache.js';
-import { autoBind, BaseService, bindFactory } from '../services/base.js';
+import { autoBind, BaseService } from '../services/base.js';
+import { bindFactory } from '../services/utils.js';
 
 export class DatabaseService {
   manager: EntityManager;

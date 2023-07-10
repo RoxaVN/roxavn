@@ -9,7 +9,7 @@ import {
   ServerException,
 } from '../base/index.js';
 import { ApiMiddlewareManager, compose } from './middlewares/index.js';
-import { autoBind, BaseService, bindFactory, rebind } from './services/base.js';
+import { autoBind, BaseService, rebind } from './services/base.js';
 import {
   handleService,
   RemixLoaderContextHelper,
@@ -17,6 +17,7 @@ import {
   RouterContextState,
   serviceContainer,
 } from './services/index.js';
+import { bindFactory } from './services/utils.js';
 
 export class ServerModule extends BaseModule {
   static apiRoutes: Array<{
