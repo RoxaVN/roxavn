@@ -7,7 +7,7 @@ import { GetSettingService } from '@roxavn/module-utils/server';
 import { type ReadStream } from 'fs';
 
 import { SeaweedFSClient } from './seaweedfs.client.js';
-import { constants } from '../../base/index.js';
+import { constants, settingApi } from '../../base/index.js';
 import { serverModule } from '../module.js';
 
 export class SeaweedFSStorageHandler implements StorageHandler {
@@ -25,7 +25,7 @@ export class SeaweedFSStorageHandler implements StorageHandler {
     return this.seaweedFSClient.delete(fileId);
   }
 
-  @serverModule.bindFactory()
+  @serverModule.bindFactory({ api: settingApi.updateSeaweedFSSetting })
   static create: ServiceFactory = async (context) => {
     const service = await context.container.getAsync(GetSettingService);
     const config = await service.handle({
