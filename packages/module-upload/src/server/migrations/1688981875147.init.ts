@@ -13,7 +13,7 @@ export class Init1688981875147 implements MigrationInterface {
         "mime" text NOT NULL,
         "url" text NOT NULL,
         "userId" uuid NOT NULL,
-        "parentId" uuid NOT NULL,
+        "parentId" uuid,
         "fileStorageId" uuid NOT NULL,
         "metadata" jsonb,
         "createdDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),

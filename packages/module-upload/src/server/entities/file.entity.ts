@@ -36,7 +36,7 @@ export class File {
   userId: string;
 
   @Index()
-  @Column('uuid')
+  @Column('uuid', { nullable: true })
   parentId?: string;
 
   @Column('uuid')

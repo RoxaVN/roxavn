@@ -62,7 +62,7 @@ class MigrationService {
     });
 
     if (!upSqls.length) {
-      console.log('No changes in database schema were found');
+      console.log('\nNo changes in database schema were found');
       return;
     }
 
