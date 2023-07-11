@@ -18,23 +18,32 @@ export interface StorageHandler {
 export class GetStorageHandlerService extends BaseService {
   static handlerServices: Array<new (...args: any[]) => StorageHandler> = [];
 
-  async handle(data?: {
-    type?: StorageHandlerType;
-    name?: string;
-  }): Promise<StorageHandler> {
-    const services: StorageHandler[] = await Promise.all(
+  private async getServices(): Promise<StorageHandler[]> {
+    return await Promise.all(
       GetStorageHandlerService.handlerServices.map((s) =>
         serviceContainer.getAsync(s)
       )
     );
+  }
 
-    // get first service
+  async findByName(name: string) {
+    const services = await this.getServices();
+    const result = services.find((s) => s.name === name);
+    if (result) {
+      return result;
+    }
+    throw new NotFoundStorageHandlerException();
+  }
+
+  async handle(data?: { type?: StorageHandlerType }): Promise<StorageHandler> {
+    const services = await this.getServices();
+
     let service;
     if (data?.type) {
       service = services.find((item) => item.type === data.type);
-    } else if (data?.name) {
-      service = services.find((item) => item.name === data.name);
-    } else {
+    }
+    // not found service, get first service
+    if (!service) {
       service = services[0];
     }
     if (service) {

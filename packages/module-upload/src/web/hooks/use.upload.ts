@@ -5,10 +5,10 @@ import { fileStorageApi } from '../../base/index.js';
 
 export const useUpload = (file: File, fileStorageid?: string) => {
   const [storageId, setStorageId] = useState(fileStorageid);
-  const hookData = useApi(
-    fileStorageApi.upload,
-    storageId ? ({ file, fileStorageid: storageId } as any) : undefined
-  );
+  const hookData = useApi(storageId ? fileStorageApi.upload : undefined, {
+    file,
+    fileStorageId: storageId,
+  } as any);
 
   async function checkError() {
     if (!fileStorageid) {

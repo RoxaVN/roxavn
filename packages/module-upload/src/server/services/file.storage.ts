@@ -85,9 +85,10 @@ export class CreateFileStorageApiService extends BaseService {
         maxSize: storageHandler.defaultMaxSize,
         maxFileSize: storageHandler.defaultMaxFileSize,
       })
-      .orIgnore()
+      .orUpdate(['userId'], ['userId', 'name'])
+      .returning('id')
       .execute();
-    return { id: result.raw };
+    return result.raw[0];
   }
 }
 
@@ -169,9 +170,9 @@ export class UploadToFileStorageService extends BaseService {
     const storage = await this.getFileStorageService.handle({
       fileStorageId: request.fileStorageId,
     });
-    const storageHandler = await this.getStorageHandlerService.handle({
-      name: storage.handler,
-    });
+    const storageHandler = await this.getStorageHandlerService.findByName(
+      storage.handler
+    );
     const remainSize =
       storage.maxSize > 0 ? storage.maxSize - storage.currentSize : undefined;
 

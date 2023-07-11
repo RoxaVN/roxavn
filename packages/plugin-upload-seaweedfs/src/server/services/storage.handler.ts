@@ -12,6 +12,7 @@ import { serverModule } from '../module.js';
 
 export class SeaweedFSStorageHandler implements StorageHandler {
   name = 'SeaweedFS';
+  type = 'public' as any;
   defaultMaxFileSize = 0;
   defaultMaxSize = 0;
 
