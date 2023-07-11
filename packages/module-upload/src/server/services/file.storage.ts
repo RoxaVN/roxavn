@@ -108,7 +108,7 @@ export class CreateDefaultFileStorageApiService extends BaseService {
     return this.createFileStorageApiService.handle({
       userid: authUser.id,
       type: 'public',
-      name: '',
+      name: 'default',
     });
   }
 }
@@ -117,6 +117,7 @@ export class CreateDefaultFileStorageApiService extends BaseService {
 export class GetFileStorageService extends InjectDatabaseService {
   async handle(request: { fileStorageId: string }) {
     const result = await this.entityManager.getRepository(FileStorage).findOne({
+      cache: true,
       where: { id: request.fileStorageId },
     });
     if (result) {

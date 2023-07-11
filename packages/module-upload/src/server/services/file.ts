@@ -25,7 +25,7 @@ export class GetFileApiService extends InjectDatabaseService {
 
 @serverModule.injectable()
 export class CreateFileService extends InjectDatabaseService {
-  handle(request: {
+  async handle(request: {
     id: string;
     size: number;
     eTag: string;
@@ -35,8 +35,13 @@ export class CreateFileService extends InjectDatabaseService {
     url: string;
     fileStorageId: string;
   }) {
-    const file = new FileEntity();
-    Object.assign(file, request);
-    return this.entityManager.save(file);
+    await this.entityManager
+      .createQueryBuilder()
+      .insert()
+      .into(FileEntity)
+      .values(request)
+      .execute();
+
+    return { id: request.id };
   }
 }
