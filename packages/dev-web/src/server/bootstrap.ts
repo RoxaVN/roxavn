@@ -52,7 +52,15 @@ export async function bootstrap(serverBuild: ServerBuild) {
   ): RemixLoaderContextHelper => ({
     getClientIp: () => request.ip,
     getRequestData: () =>
-      Object.assign({}, request.params, request.query, request.body),
+      Object.assign(
+        {},
+        request.params,
+        request.query,
+        // if send file, not update body
+        request.body?.constructor.name === 'IncomingMessage'
+          ? undefined
+          : request.body
+      ),
   });
   await app.register(remixFastifyPlugin, {
     build: serverBuild,
