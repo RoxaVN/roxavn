@@ -22,7 +22,8 @@
     "packages/plugin-project-notification",
     "packages/plugin-firebase",
     "packages/plugin-firebase-auth",
-    "packages/plugin-upload-seaweedfs"
+    "packages/plugin-upload-seaweedfs",
+    "packages/module-currency"
   ],
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",
