@@ -108,7 +108,7 @@ export class CreateDefaultFileStorageApiService extends BaseService {
     return this.createFileStorageApiService.handle({
       userid: authUser.id,
       type: 'public',
-      name: 'default',
+      name: FileStorage.NAME_DEFAULT,
     });
   }
 }

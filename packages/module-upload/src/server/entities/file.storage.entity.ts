@@ -21,6 +21,8 @@ export type StorageHandlerType = 'public' | 'private';
 @Entity()
 @Index(['userId', 'name'], { unique: true })
 export class FileStorage {
+  static NAME_DEFAULT = 'default';
+
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
