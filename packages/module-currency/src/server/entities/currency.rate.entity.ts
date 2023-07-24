@@ -8,6 +8,8 @@ import {
 
 @Entity()
 export class CurrencyRate {
+  static TYPE_DEFAULT = 'default';
+
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   id: string;
 
@@ -22,7 +24,7 @@ export class CurrencyRate {
   @Column('decimal')
   rate: number;
 
-  @Column('varchar', { length: 64, default: '' })
+  @Column('varchar', { length: 64, default: CurrencyRate.TYPE_DEFAULT })
   type: string;
 
   @Column({ type: 'jsonb', nullable: true })

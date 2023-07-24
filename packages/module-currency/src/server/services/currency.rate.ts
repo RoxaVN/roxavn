@@ -33,7 +33,7 @@ export class GetLastCurrencyRateService extends InjectDatabaseService {
         where: {
           currency1: request.currency1,
           currency2: request.currency2,
-          type: request.type,
+          type: request.type || CurrencyRate.TYPE_DEFAULT,
         },
         order: { id: 'DESC' },
       });
