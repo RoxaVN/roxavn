@@ -2,5 +2,11 @@
   "Meta": {
     "name": "Currency module",
     "description": "Currency module"
+  },
+  "Error": {
+    "InvalidTotalTransactionAmountException": "Invalid total transaction amount exception",
+    "AccountNotFoundException": "Account {{ accountId }} isn't found",
+    "InsufficientBalanceException": "Account {{ accountId }} doesn't have sufficient balance",
+    "AccountHasInvalidCurrencyException": "Account {{ accountId }} doesn't have currency {{ currencyId }}"
   }
 }

@@ -2,5 +2,11 @@
   "Meta": {
     "name": "Module tiền tệ",
     "description": "Module tiền tệ"
+  },
+  "Error": {
+    "InvalidTotalTransactionAmountException": "Tổng số tiền giao dịch không hợp lệ",
+    "AccountNotFoundException": "Không tìm thấy tài khoản {{ accountId }}",
+    "InsufficientBalanceException": "Tài khoản {{ accountId }} không đủ số dư",
+    "AccountHasInvalidCurrencyException": "Tài khoản {{ accountId }} không thuộc dòng tiền {{ currencyId }}"
   }
 }
