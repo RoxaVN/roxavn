@@ -33,10 +33,10 @@ export class CurrencyAccount {
   @Column('varchar', { length: 64, default: CurrencyAccount.TYPE_DEFAULT })
   type: string;
 
-  @Column({ type: 'decimal', precision: 78, scale: 2, default: 0 })
+  @Column({ type: 'decimal', precision: 78, scale: 0, default: 0 })
   balance: number;
 
-  @Column({ type: 'decimal', precision: 78, scale: 2, default: 0 })
+  @Column({ type: 'decimal', precision: 78, scale: 0, default: 0 })
   minBalance: number;
 
   @Column({ type: 'jsonb', nullable: true })

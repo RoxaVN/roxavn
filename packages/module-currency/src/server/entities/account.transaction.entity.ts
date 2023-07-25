@@ -30,7 +30,7 @@ export class AccountTransaction {
   )
   transaction: Relation<Transaction>;
 
-  @Column({ type: 'decimal', precision: 78, scale: 2, default: 0 })
+  @Column({ type: 'decimal', precision: 78, scale: 0, default: 0 })
   amount: number;
 
   @Column('bigint')
