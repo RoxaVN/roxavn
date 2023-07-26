@@ -23,9 +23,9 @@ export class AccountNotFoundException extends NotFoundException {
     } as I18nErrorField,
   };
 
-  constructor(accountId: string) {
+  constructor(userId: string, type: string) {
     super();
-    this.i18n.default.params = { accountId };
+    this.i18n.default.params = { userId, type };
   }
 }
 
@@ -37,22 +37,8 @@ export class InsufficientBalanceException extends BadRequestException {
     } as I18nErrorField,
   };
 
-  constructor(accountId: string) {
+  constructor(userId: string, type: string) {
     super();
-    this.i18n.default.params = { accountId };
-  }
-}
-
-export class AccountHasInvalidCurrencyException extends BadRequestException {
-  i18n = {
-    default: {
-      key: 'Error.AccountHasInvalidCurrencyException',
-      ns: baseModule.escapedName,
-    } as I18nErrorField,
-  };
-
-  constructor(accountId: string, currencyId: string) {
-    super();
-    this.i18n.default.params = { accountId, currencyId };
+    this.i18n.default.params = { userId, type };
   }
 }

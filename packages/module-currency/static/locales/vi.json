@@ -5,8 +5,7 @@
   },
   "Error": {
     "InvalidTotalTransactionAmountException": "Tổng số tiền giao dịch không hợp lệ",
-    "AccountNotFoundException": "Không tìm thấy tài khoản {{ accountId }}",
-    "InsufficientBalanceException": "Tài khoản {{ accountId }} không đủ số dư",
-    "AccountHasInvalidCurrencyException": "Tài khoản {{ accountId }} không thuộc dòng tiền {{ currencyId }}"
+    "AccountNotFoundException": "Không tìm thấy tài khoản {{ type }} của người dùng {{ userId }}",
+    "InsufficientBalanceException": "Tài khoản {{ type }} của người dùng {{ userId }} không đủ số dư"
   }
 }

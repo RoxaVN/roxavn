@@ -1,6 +1,6 @@
+import { BadRequestException } from '@roxavn/core/base';
 import { InjectDatabaseService } from '@roxavn/core/server';
-import { sum } from 'lodash-es';
-import { In } from 'typeorm';
+import { sum, uniqWith } from 'lodash-es';
 
 import { serverModule } from '../module.js';
 import {
@@ -9,7 +9,6 @@ import {
   Transaction,
 } from '../entities/index.js';
 import {
-  AccountHasInvalidCurrencyException,
   AccountNotFoundException,
   InsufficientBalanceException,
   InvalidTotalTransactionAmountException,
@@ -23,8 +22,9 @@ export class CreateTransactionService extends InjectDatabaseService {
     originalTransactionId?: string;
     metadata?: Record<string, any>;
     accounts: Array<{
-      id: string;
+      userId: string;
       amount: number;
+      type?: string;
     }>;
   }) {
     const total = sum(request.accounts.map((acc) => acc.amount));
@@ -32,29 +32,47 @@ export class CreateTransactionService extends InjectDatabaseService {
       throw new InvalidTotalTransactionAmountException();
     }
 
+    let requestAccounts = request.accounts.map((item) => ({
+      userId: item.userId,
+      amount: item.amount,
+      type: item.type || CurrencyAccount.TYPE_DEFAULT,
+      id: '',
+    }));
+    requestAccounts = uniqWith(
+      requestAccounts,
+      (a, b) => a.userId === b.userId && a.type === b.type
+    );
+    // check for duplicate accounts
+    if (requestAccounts.length !== request.accounts.length) {
+      throw new BadRequestException();
+    }
+
     const accounts = await this.entityManager
       .getRepository(CurrencyAccount)
       .find({
         lock: { mode: 'pessimistic_write' },
-        where: {
-          id: In(request.accounts.map((item) => item.id)),
-        },
+        where: requestAccounts.map((item) => ({
+          userId: item.userId,
+          currencyId: request.currencyId,
+          type: item.type,
+        })),
       });
-    for (const accountInput of request.accounts) {
-      const account = accounts.find((a) => a.id === accountInput.id);
+    for (const requestAccount of requestAccounts) {
+      const account = accounts.find(
+        (a) =>
+          a.userId === requestAccount.userId && a.type === requestAccount.type
+      );
       if (account) {
-        if (account.currencyId !== request.currencyId) {
-          throw new AccountHasInvalidCurrencyException(
-            account.id,
-            request.currencyId
-          );
-        }
-        account.balance += accountInput.amount;
+        account.balance += requestAccount.amount;
         if (account.balance < account.minBalance) {
-          throw new InsufficientBalanceException(accountInput.id);
+          throw new InsufficientBalanceException(account.userId, account.type);
         }
+        requestAccount.id = account.id;
       }
-      throw new AccountNotFoundException(accountInput.id);
+      throw new AccountNotFoundException(
+        requestAccount.userId,
+        requestAccount.type
+      );
     }
     const transaction = new Transaction();
     Object.assign(transaction, request);
@@ -66,7 +84,7 @@ export class CreateTransactionService extends InjectDatabaseService {
       .insert()
       .into(AccountTransaction)
       .values(
-        request.accounts.map((account) => ({
+        requestAccounts.map((account) => ({
           accountId: account.id,
           transactionId: transaction.id,
           amount: account.amount,

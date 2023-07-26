@@ -5,8 +5,7 @@
   },
   "Error": {
     "InvalidTotalTransactionAmountException": "Invalid total transaction amount exception",
-    "AccountNotFoundException": "Account {{ accountId }} isn't found",
-    "InsufficientBalanceException": "Account {{ accountId }} doesn't have sufficient balance",
-    "AccountHasInvalidCurrencyException": "Account {{ accountId }} doesn't have currency {{ currencyId }}"
+    "AccountNotFoundException": "{{ type }} account of user {{ userId }} isn't found",
+    "InsufficientBalanceException": "{{ type }} account of user {{ userId }} doesn't have sufficient balance"
   }
 }
