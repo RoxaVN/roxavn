@@ -20,7 +20,7 @@ export class Transaction {
 
   @Index({ unique: true })
   @Column('varchar', { length: 1024, nullable: true })
-  originalTransactionId: string;
+  originalTransactionId?: string;
 
   @Column('varchar', { length: 64, default: Transaction.TYPE_DEFAULT })
   type: string;
