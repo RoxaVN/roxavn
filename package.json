@@ -23,6 +23,7 @@
     "packages/plugin-firebase",
     "packages/plugin-firebase-auth",
     "packages/plugin-upload-seaweedfs",
+    "packages/module-asset",
     "packages/module-currency"
   ],
   "devDependencies": {
