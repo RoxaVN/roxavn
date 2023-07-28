@@ -48,3 +48,18 @@ export class UpdateCategoryService extends InjectDatabaseService {
     return {};
   }
 }
+
+@serverModule.injectable()
+export class GetCategoryService extends InjectDatabaseService {
+  async handle(request: { categoryId: string }) {
+    const category = await this.entityManager.getRepository(Category).findOne({
+      cache: true,
+      relations: ['categoryAttributes'],
+      where: { id: request.categoryId },
+    });
+    if (category) {
+      return category;
+    }
+    throw new NotFoundException();
+  }
+}
