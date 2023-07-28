@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   OneToMany,
   PrimaryGeneratedColumn,
   Relation,
@@ -16,6 +17,7 @@ export class Attribute {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   id: string;
 
+  @Index({ unique: true })
   @Column('varchar', { length: 256 })
   name: string;
 

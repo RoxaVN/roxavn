@@ -28,20 +28,21 @@ export class CreateCategoryService extends InjectDatabaseService {
     category.parents = parents;
 
     await this.entityManager.save(category);
+    return { id: category.id };
   }
 }
 
 @serverModule.injectable()
 export class UpdateCategoryService extends InjectDatabaseService {
   async handle(request: {
-    id: string;
+    categoryId: string;
     name: string;
     metadate?: Record<string, any>;
   }) {
     await this.entityManager
       .getRepository(Category)
       .update(
-        { id: request.id },
+        { id: request.categoryId },
         { name: request.name, metadata: request.metadate }
       );
     return {};
