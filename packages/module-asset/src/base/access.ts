@@ -3,15 +3,13 @@ import { accessManager } from '@roxavn/core/base';
 import { baseModule } from './module.js';
 
 export const scopes = accessManager.makeScopes(baseModule, {
-  CurrencyAccount: { name: 'currencyAccount' },
-  Transaction: { name: 'transaction' },
+  Store: { name: 'store' },
+  Asset: { name: 'asset' },
 });
 
 export const permissions = accessManager.makePermissions(scopes, {
-  ReadAccountTransactions: {
-    allowedScopes: [
-      accessManager.scopes.ResourceOwner(scopes.CurrencyAccount.name),
-    ],
+  ReadStoreAssets: {
+    allowedScopes: [accessManager.scopes.ResourceOwner(scopes.Store.name)],
   },
 });
 
