@@ -21,7 +21,7 @@ export class Category {
 
   @Index()
   @Column('uuid', { nullable: true })
-  parentId: string;
+  parentId?: string;
 
   @Column('uuid', { array: true, nullable: true })
   parents?: string[];
