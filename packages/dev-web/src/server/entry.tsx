@@ -1,6 +1,6 @@
 import { injectStyles, createStylesServer } from '@mantine/remix';
 import { RemixServer } from '@remix-run/react';
-import type { EntryContext } from '@remix-run/server-runtime';
+import type { EntryContext } from '@remix-run/node';
 import { i18n } from '@roxavn/core/base';
 import { i18nextServer } from '@roxavn/core/server';
 import { createInstance } from 'i18next';

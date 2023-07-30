@@ -12,7 +12,8 @@
   "sideEffects": false,
   "dependencies": {
     "firebase-admin": "^11.5.0",
-    "firebaseui": "^6.0.2"
+    "firebaseui": "^5.0.0",
+    "nodemon": "3.0.1"
   },
   "devDependencies": {
     "@roxavn/cli": "^0.1.0",
