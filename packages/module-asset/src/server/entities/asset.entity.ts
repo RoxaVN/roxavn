@@ -44,9 +44,9 @@ export class Asset {
   @Column('double precision', { default: 1 })
   unitCount: number;
 
-  @Column('bigint')
-  unitId: string;
+  @Column('bigint', { nullable: true })
+  unitId?: string;
 
-  @ManyToOne(() => Unit, (unit) => unit.assets)
-  unit: Relation<Unit>;
+  @ManyToOne(() => Unit, (unit) => unit.assets, { nullable: true })
+  unit?: Relation<Unit>;
 }

@@ -5,10 +5,14 @@ import { Asset } from '../entities/asset.entity.js';
 
 @serverModule.injectable()
 export class CreateAssetService extends InjectDatabaseService {
-  async handle(request: { userId: string; storeId: string }) {
+  async handle(request: {
+    userId: string;
+    storeId: string;
+    unitId?: string;
+    unitcount?: number;
+  }) {
     const asset = new Asset();
-    asset.userId = request.userId;
-    asset.storeId = request.storeId;
+    Object.assign(asset, request);
 
     await this.entityManager.save(asset);
     return { id: asset.id };
