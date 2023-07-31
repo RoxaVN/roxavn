@@ -2,6 +2,7 @@ import { InjectDatabaseService } from '@roxavn/core/server';
 
 import { serverModule } from '../module.js';
 import { Attribute, AttributeType } from '../entities/index.js';
+import { In } from 'typeorm';
 
 @serverModule.injectable()
 export class CreateAttributeService extends InjectDatabaseService {
@@ -30,5 +31,15 @@ export class UpdateAttributeService extends InjectDatabaseService {
         { name: request.name, metadata: request.metadate, type: request.type }
       );
     return {};
+  }
+}
+
+@serverModule.injectable()
+export class GetAttributesService extends InjectDatabaseService {
+  async handle(request: { ids: string[] }) {
+    const items = await this.entityManager
+      .getRepository(Attribute)
+      .find({ where: { id: In(request.ids) } });
+    return items;
   }
 }

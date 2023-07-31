@@ -11,7 +11,7 @@ export class GetAccountTransactionsApiService extends InjectDatabaseService {
     const page = request.page || 1;
     const pageSize = request.pageSize || 10;
 
-    const [users, totalItems] = await this.entityManager
+    const [items, totalItems] = await this.entityManager
       .getRepository(AccountTransaction)
       .findAndCount({
         where: {
@@ -22,7 +22,7 @@ export class GetAccountTransactionsApiService extends InjectDatabaseService {
       });
 
     return {
-      items: users,
+      items: items,
       pagination: { page, pageSize, totalItems },
     };
   }
