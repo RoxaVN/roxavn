@@ -17,7 +17,9 @@ export class AssetAttribute {
   @Column('uuid')
   assetId: string;
 
-  @ManyToOne(() => Asset, (asset) => asset.assetAttributes)
+  @ManyToOne(() => Asset, (asset) => asset.assetAttributes, {
+    onDelete: 'CASCADE',
+  })
   asset: Relation<Asset>;
 
   @Column('bigint')
