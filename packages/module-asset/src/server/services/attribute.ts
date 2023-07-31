@@ -1,3 +1,4 @@
+import { NotFoundException } from '@roxavn/core/base';
 import { InjectDatabaseService } from '@roxavn/core/server';
 
 import { serverModule } from '../module.js';
@@ -41,5 +42,18 @@ export class GetAttributesService extends InjectDatabaseService {
       .getRepository(Attribute)
       .find({ where: { id: In(request.ids) } });
     return items;
+  }
+}
+
+@serverModule.injectable()
+export class GetAttributeService extends InjectDatabaseService {
+  async handle(request: { attributeId: string }) {
+    const item = await this.entityManager
+      .getRepository(Attribute)
+      .findOne({ where: { id: request.attributeId } });
+    if (item) {
+      return item;
+    }
+    throw new NotFoundException();
   }
 }

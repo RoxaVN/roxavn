@@ -1,30 +1,54 @@
-import { InjectDatabaseService } from '@roxavn/core/server';
+import { NotFoundException } from '@roxavn/core/base';
+import {
+  BaseService,
+  DatabaseService,
+  InjectDatabaseService,
+  inject,
+} from '@roxavn/core/server';
 
 import { serverModule } from '../module.js';
-import { AssetAttribute } from '../entities/asset.attribute.entity.js';
+import { AssetAttribute, Attribute } from '../entities/index.js';
+import { GetAttributesService } from './attribute.js';
 
 @serverModule.injectable()
-export class CreateAssetAttributesService extends InjectDatabaseService {
+export class CreateAssetAttributesService extends BaseService {
+  constructor(
+    @inject(DatabaseService) private databaseService: DatabaseService,
+    @inject(GetAttributesService)
+    private getAttributesService: GetAttributesService
+  ) {
+    super();
+  }
+
   async handle(request: {
     assetId: string;
-    attributes: Array<{
+    assetAttributes: Array<{
       attributeId: string;
-      valueDate?: Date;
-      valueInt?: number;
-      valueDecimal?: number;
-      valueText?: string;
-      valueVarchar?: string;
+      value: any;
     }>;
   }) {
-    await this.entityManager
+    const attributeIds = request.assetAttributes.map(
+      (assetAttribute) => assetAttribute.attributeId
+    );
+    const attributes = await this.getAttributesService.handle({
+      ids: attributeIds,
+    });
+
+    await this.databaseService.manager
       .createQueryBuilder()
       .insert()
       .into(AssetAttribute)
       .values(
-        request.attributes.map((attribute) => ({
-          ...attribute,
-          assetId: request.assetId,
-        }))
+        request.assetAttributes.map((assetAttribute) => {
+          const attribute = attributes.find(
+            (attribute) => attribute.id === assetAttribute.attributeId
+          ) as Attribute;
+          return {
+            [`value${attribute.type}`]: assetAttribute.value,
+            assetId: request.assetId,
+            attributeId: assetAttribute.attributeId,
+          };
+        })
       )
       .execute();
   }
@@ -32,21 +56,27 @@ export class CreateAssetAttributesService extends InjectDatabaseService {
 
 @serverModule.injectable()
 export class UpdateAssetAttributesService extends InjectDatabaseService {
-  async handle(request: {
-    id: string;
-    valueDate?: Date;
-    valueInt?: number;
-    valueDecimal?: number;
-    valueText?: string;
-    valueVarchar?: string;
-  }) {
-    const { id, ...values } = request;
-    await this.entityManager
-      .createQueryBuilder()
-      .update(AssetAttribute)
-      .set(values)
-      .where({ id })
-      .execute();
-    return {};
+  async handle(request: { assetAttributeId: string; value: any }) {
+    const assetAttribute = await this.entityManager
+      .getRepository(AssetAttribute)
+      .findOne({
+        relations: ['attribute'],
+        select: ['id', 'attribute'],
+        where: { id: request.assetAttributeId },
+      });
+
+    if (assetAttribute) {
+      await this.entityManager
+        .createQueryBuilder()
+        .update(AssetAttribute)
+        .set({
+          [`value${assetAttribute.attribute.type}`]: request.value,
+        })
+        .where({ id: request.assetAttributeId })
+        .execute();
+      return {};
+    }
+
+    throw new NotFoundException();
   }
 }
