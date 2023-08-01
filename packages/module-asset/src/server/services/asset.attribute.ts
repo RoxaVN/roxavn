@@ -55,7 +55,7 @@ export class CreateAssetAttributesService extends BaseService {
 }
 
 @serverModule.injectable()
-export class UpdateAssetAttributesService extends InjectDatabaseService {
+export class UpdateAssetAttributeService extends InjectDatabaseService {
   async handle(request: { assetAttributeId: string; value: any }) {
     const assetAttribute = await this.entityManager
       .getRepository(AssetAttribute)
@@ -78,5 +78,78 @@ export class UpdateAssetAttributesService extends InjectDatabaseService {
     }
 
     throw new NotFoundException();
+  }
+}
+
+@serverModule.injectable()
+export class GetAssetAttributesService extends BaseService {
+  constructor(
+    @inject(DatabaseService) private databaseService: DatabaseService,
+    @inject(GetAttributesService)
+    private getAttributesService: GetAttributesService
+  ) {
+    super();
+  }
+
+  async handle(request: { assetId: string }) {
+    const items = await this.databaseService.manager
+      .getRepository(AssetAttribute)
+      .find({
+        where: {
+          assetId: request.assetId,
+        },
+      });
+
+    const attributeIds = items.map((item) => item.attributeId);
+    const attributes = await this.getAttributesService.handle({
+      ids: attributeIds,
+    });
+
+    return items.map((item) => {
+      const attribute = attributes.find(
+        (attr) => attr.id === item.attributeId
+      ) as Attribute;
+      return {
+        id: item.id,
+        attributeId: item.attributeId,
+        updatedDate: item.updatedDate,
+        metadata: item.metadata,
+        type: attribute.type,
+        value: item[`value${attribute.type}`],
+      };
+    });
+  }
+}
+
+@serverModule.injectable()
+export class CloneAssetAttributesService extends InjectDatabaseService {
+  async handle(request: { fromAssetId: string; toAssetId: string }) {
+    const items = await this.databaseService.manager
+      .getRepository(AssetAttribute)
+      .find({
+        where: { assetId: request.fromAssetId },
+      });
+
+    await this.databaseService.manager
+      .createQueryBuilder()
+      .insert()
+      .into(AssetAttribute)
+      .values(
+        items.map((item) => {
+          const values: any = {};
+          Object.entries(item).map(([key, value]) => {
+            if (key.startsWith('value') && value !== undefined) {
+              values[key] = value;
+            }
+          });
+
+          return {
+            assetId: request.toAssetId,
+            attributeId: item.attributeId,
+            ...values,
+          };
+        })
+      )
+      .execute();
   }
 }
