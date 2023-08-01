@@ -1,6 +1,6 @@
 {
   "name": "@roxavn/core",
-  "version": "0.1.28",
+  "version": "0.1.29",
   "type": "module",
   "main": "./dist/esm/index.js",
   "scripts": {
@@ -45,6 +45,7 @@
     "i18next-fs-backend": "^2.1.1",
     "inversify": "^6.0.1",
     "lodash-es": "^4.17.21",
+    "minimatch": "^9.0.3",
     "nanoid": "^3.0.0",
     "pg": "^8.8.0",
     "react": "^18.2.0",

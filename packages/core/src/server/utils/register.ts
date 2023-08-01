@@ -1,5 +1,5 @@
 import fs from 'fs';
-import minimatch from 'minimatch';
+import { minimatch } from 'minimatch';
 import path from 'path';
 
 import { AppConfig } from '@remix-run/dev';

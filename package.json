@@ -5,7 +5,6 @@
     "build:cli": "npm run build --workspace=packages/core --workspace=packages/cli && npm i --workspace=packages/cli",
     "build": "npm run build:cli && npm run build --workspaces"
   },
-  "private": true,
   "license": "MIT",
   "author": "roxavn",
   "workspaces": [
