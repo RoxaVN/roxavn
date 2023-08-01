@@ -27,6 +27,28 @@ export class CreateAssetService extends InjectDatabaseService {
 }
 
 @serverModule.injectable()
+export class UpdateAssetService extends InjectDatabaseService {
+  async handle(request: {
+    assetId: string;
+    userId?: string;
+    storeId?: string;
+    unitcount?: number;
+    metadata?: Record<string, any>;
+  }) {
+    await this.entityManager.getRepository(Asset).update(
+      { id: request.assetId },
+      {
+        userId: request.userId,
+        storeId: request.storeId,
+        unitCount: request.unitcount,
+        metadata: request.metadata,
+      }
+    );
+    return {};
+  }
+}
+
+@serverModule.injectable()
 export class SplitAssetService extends BaseService {
   constructor(
     @inject(DatabaseService) private databaseService: DatabaseService,
