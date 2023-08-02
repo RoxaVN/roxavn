@@ -40,7 +40,7 @@ export class AssetAttribute {
   @Column({ type: 'bigint', nullable: true })
   valueInt?: number;
 
-  @Column({ type: 'decimal', length: 12, precision: 4, nullable: true })
+  @Column({ type: 'decimal', precision: 12, scale: 4, nullable: true })
   valueDecimal?: number;
 
   @Column({ type: 'text', nullable: true })
