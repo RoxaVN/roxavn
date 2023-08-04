@@ -9,7 +9,7 @@ import {
 @Entity()
 @Index(['key', 'lang'], { unique: true })
 export class Translation {
-  @PrimaryGeneratedColumn('increment', { type: 'bigint' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar', length: 256 })

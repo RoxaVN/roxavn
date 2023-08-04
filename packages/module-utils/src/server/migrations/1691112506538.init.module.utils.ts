@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitModuleUtils1691110186468 implements MigrationInterface {
-  name = 'InitModuleUtils1691110186468';
+export class InitModuleUtils1691112506538 implements MigrationInterface {
+  name = 'InitModuleUtils1691112506538';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
@@ -20,7 +20,7 @@ export class InitModuleUtils1691110186468 implements MigrationInterface {
       `);
     await queryRunner.query(`
       CREATE TABLE "translation" (
-        "id" BIGSERIAL NOT NULL,
+        "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
         "key" character varying(256) NOT NULL,
         "lang" character varying(16) NOT NULL,
         "content" text NOT NULL,
