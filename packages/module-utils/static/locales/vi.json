@@ -1,4 +1,7 @@
 {
+  "translations": "Bản dịch",
+  "language": "Ngôn ngữ",
+  "deleteTranslation": "Xóa bản dịch {{ key }} of ngôn ngữ {{ lang }}",
   "Meta": {
     "name": "Module utils",
     "description": "Module utils"

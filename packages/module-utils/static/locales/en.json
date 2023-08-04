@@ -1,4 +1,7 @@
 {
+  "translations": "Translations",
+  "language": "Language",
+  "deleteTranslation": "Delete translation {{ key }} of language {{ lang }}",
   "Meta": {
     "name": "Module utils",
     "description": "Module utils"

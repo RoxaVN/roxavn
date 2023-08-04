@@ -80,3 +80,18 @@ export class DeleteTranslationApiService extends InjectDatabaseService {
     return {};
   }
 }
+
+@serverModule.injectable()
+export class GetTranslationsbyKeyService extends InjectDatabaseService {
+  async handle(request: { key: string; lang?: string }) {
+    const translation = await this.entityManager
+      .getRepository(Translation)
+      .findOne({
+        where: { key: request.key, lang: request.lang },
+      });
+    if (translation) {
+      return translation;
+    }
+    throw new NotFoundException();
+  }
+}
