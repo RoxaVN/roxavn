@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Init1688461418769 implements MigrationInterface {
-  name = 'Init1688461418769';
+export class InitModuleUser1691110714063 implements MigrationInterface {
+  name = 'InitModuleUser1691110714063';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
@@ -79,20 +79,6 @@ export class Init1688461418769 implements MigrationInterface {
       )
       `);
     await queryRunner.query(`
-      CREATE TABLE "setting" (
-        "id" SERIAL NOT NULL,
-        "module" character varying NOT NULL,
-        "name" character varying NOT NULL,
-        "type" character varying NOT NULL,
-        "metadata" jsonb NOT NULL,
-        "updatedDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-        CONSTRAINT "PK_fcb21187dc6094e24a48f677bed" PRIMARY KEY ("id")
-      )
-      `);
-    await queryRunner.query(`
-      CREATE UNIQUE INDEX "IDX_7716df862d864580e97a072565" ON "setting" ("module", "name")
-      `);
-    await queryRunner.query(`
       ALTER TABLE "identity"
       ADD CONSTRAINT "FK_12915039d2868ab654567bf5181" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
       `);
@@ -129,12 +115,6 @@ export class Init1688461418769 implements MigrationInterface {
       `);
     await queryRunner.query(`
       ALTER TABLE "identity" DROP CONSTRAINT "FK_12915039d2868ab654567bf5181"
-      `);
-    await queryRunner.query(`
-      DROP INDEX "public"."IDX_7716df862d864580e97a072565"
-      `);
-    await queryRunner.query(`
-      DROP TABLE "setting"
       `);
     await queryRunner.query(`
       DROP TABLE "role"
