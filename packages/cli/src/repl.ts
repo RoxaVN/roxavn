@@ -1,4 +1,4 @@
-import { getPackageJson, moduleManager } from '@roxavn/core/server';
+import { moduleManager, serviceContainer } from '@roxavn/core/server';
 import repl from 'repl';
 
 import { buildService } from './build.js';
@@ -13,13 +13,23 @@ class ReplService {
 
     await moduleManager.importServerModules();
 
-    const packageJson = getPackageJson();
-    let moduleHook = {};
-    try {
-      moduleHook = await import(packageJson.name + '/hook');
-    } catch {}
+    async function runInstallHooks() {
+      for (const moduleInfo of moduleManager.modules) {
+        try {
+          if (moduleInfo.exports['./hook']) {
+            const moduleHook = await import(moduleInfo.name + '/hook');
+            const installHook: any = await serviceContainer.getAsync(
+              moduleHook.InstallHook
+            );
+            await installHook.handle();
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
 
-    Object.assign(replServer.context, coreServer, moduleHook);
+    Object.assign(replServer.context, coreServer, { runInstallHooks });
   }
 }
 

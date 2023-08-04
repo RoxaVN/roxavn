@@ -9,6 +9,7 @@ interface ModuleInfo {
   version: string;
   author: string;
   roxavn: Record<string, any>;
+  exports: Record<string, any>;
   dependencies?: Record<string, string>;
   devDependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
