@@ -8,7 +8,7 @@ import { <%= h.changeCase.camel(api_source_name) %>Api } from '../../base/index.
 import { serverModule } from '../module.js';
 
 @serverModule.useApi(<%= h.changeCase.camel(api_source_name) %>Api.getOne)
-export class <%= api_source_name %>ApiService extends BaseService {
+export class Get<%= h.changeCase.pascal(api_source_name) %>ApiService extends BaseService {
   async handle(request: InferApiRequest<typeof <%= h.changeCase.camel(api_source_name) %>Api.getOne>) {
     
   }

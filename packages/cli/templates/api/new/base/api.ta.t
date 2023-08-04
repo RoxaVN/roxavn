@@ -13,7 +13,7 @@ const <%= api_source_name %>Source = new ApiSource<{}>(
 
 class Get<%= h.changeCase.pascal(api_source_name) %>Request extends ExactProps<Get<%= h.changeCase.pascal(api_source_name) %>Request> {
   @MinLength(1)
-  public readonly name!: string;
+  public readonly <%= api_source_name %>Id: string;
 }
 
 export const <%= api_source_name %>Api = {
