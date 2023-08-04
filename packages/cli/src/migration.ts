@@ -9,6 +9,7 @@ import { buildService } from './build.js';
 
 class MigrationService {
   async init() {
+    buildService.compile();
     await moduleManager.importServerModules();
     return serviceContainer.getAsync(DatabaseService);
   }
@@ -77,13 +78,11 @@ class MigrationService {
   }
 
   async run() {
-    buildService.compile();
     const databaseService = await this.init();
     await databaseService.dataSource.runMigrations();
   }
 
   async revert() {
-    buildService.compile();
     const databaseService = await this.init();
     await databaseService.dataSource.undoLastMigration();
   }
