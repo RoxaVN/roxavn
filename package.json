@@ -18,6 +18,7 @@
     "packages/module-installer",
     "packages/module-notification",
     "packages/module-project",
+    "packages/plugin-email-sender",
     "packages/plugin-project-notification",
     "packages/plugin-firebase",
     "packages/plugin-firebase-auth",
