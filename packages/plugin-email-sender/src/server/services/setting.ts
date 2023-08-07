@@ -23,7 +23,10 @@ export class UpdateEmailSenderSettingApiService extends BaseService {
     return this.updateSettingService.handle({
       module: utilsServerModule.name,
       name: constants.EMAIL_SENDER_SETTING,
-      metadata: { sender: request.sender, settings: request.settings },
+      metadata: {
+        sender: request.sender,
+        transportOptions: request.transportOptions,
+      },
       type: 'private',
     });
   }

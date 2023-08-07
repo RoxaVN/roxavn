@@ -1,4 +1,7 @@
 {
+  "emailsenderSetting": "Cài đặt cho gửi email",
+  "sender": "Người gửi",
+  "transportOptions": "tùy chọn transport",
   "Meta": {
     "name": "Gửi email",
     "description": "Gửi email"

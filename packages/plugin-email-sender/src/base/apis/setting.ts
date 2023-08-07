@@ -16,7 +16,7 @@ const settingSource = new ApiSource<SettingResponse>(
 
 class UpdateEmailSenderSettingRequest extends ExactProps<UpdateEmailSenderSettingRequest> {
   @IsNotEmptyObject()
-  public readonly settings: Record<string, any>;
+  public readonly transportOptions: Record<string, any>;
 
   @MinLength(1)
   public readonly sender: string;
