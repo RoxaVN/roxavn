@@ -1,4 +1,9 @@
-import { BaseService, DatabaseService, inject } from '@roxavn/core/server';
+import {
+  BaseService,
+  DatabaseService,
+  InjectDatabaseService,
+  inject,
+} from '@roxavn/core/server';
 import { Identity } from '../entities/index.js';
 import { CreateAccessTokenService } from './access.token.js';
 import { tokenService } from './token.js';
@@ -59,5 +64,18 @@ export class IdentityService extends BaseService {
       ipAddress: request.ipAddress,
       userAgent: request.userAgent,
     });
+  }
+}
+
+@serverModule.injectable()
+export class AddIdentityService extends InjectDatabaseService {
+  async handle(request: { subject: string; type: string; userId: string }) {
+    const identity = new Identity();
+    identity.type = request.type;
+    identity.subject = request.subject;
+    identity.userId = request.userId;
+
+    await this.databaseService.manager.save(identity);
+    return { id: identity.id };
   }
 }
