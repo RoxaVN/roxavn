@@ -1,7 +1,6 @@
 {
-  "myModel": "My model",
   "Meta": {
-    "name": "Sample module",
-    "description": "Sample module"
+    "name": "Web3 authentication",
+    "description": "Web3 authentication"
   }
 }
