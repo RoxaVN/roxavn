@@ -64,6 +64,7 @@ export class Web3AuthService extends BaseService {
     }
     // delete if auth success
     await this.deleteWeb3AuthService.handle({ web3AuthId: request.web3AuthId });
-    return {};
+
+    return { address };
   }
 }
