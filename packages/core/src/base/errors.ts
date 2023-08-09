@@ -59,6 +59,15 @@ export class AlreadyExistsException extends BadRequestException {
   };
 }
 
+export class ExpiredException extends BadRequestException {
+  i18n = {
+    default: {
+      key: 'Error.ExpiredException',
+      ns: baseModule.escapedName,
+    },
+  };
+}
+
 export class UnauthorizedException extends LogicException {
   code = 401;
   i18n = {

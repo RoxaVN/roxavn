@@ -61,6 +61,7 @@
     "503": "We cannot handle your request right now, please wait for a couple of minutes and refresh the page. Our team is already working on this issue."
   },
   "Error": {
+    "ExpiredException": "Expired exception",
     "BadRequestException": "Bad request exception",
     "UnauthorizedException": "Unauthorized exception",
     "ForbiddenException": "Forbidden exception",

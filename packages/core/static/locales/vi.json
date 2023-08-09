@@ -61,6 +61,7 @@
     "503": "Chúng tôi không thể xử lý yêu cầu của bạn ngay bây giờ, vui lòng đợi trong vài phút và làm mới trang. Nhóm của chúng tôi đã làm việc về vấn đề này."
   },
   "Error": {
+    "ExpiredException": "Đã hết hạn",
     "BadRequestException": "Yêu cầu không hợp lệ",
     "UnauthorizedException": "Lỗi xác thực",
     "ForbiddenException": "Lỗi không có quyền truy cập",
