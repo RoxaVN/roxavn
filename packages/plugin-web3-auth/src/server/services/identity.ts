@@ -5,8 +5,12 @@ import {
   Ip,
   inject,
   UserAgent,
+  AuthUser,
 } from '@roxavn/core/server';
-import { IdentityService } from '@roxavn/module-user/server';
+import {
+  CreateIdentityService,
+  IdentityService,
+} from '@roxavn/module-user/server';
 
 import { constants, identityApi } from '../../base/index.js';
 import { serverModule } from '../module.js';
@@ -32,6 +36,30 @@ export class VerifySignatureService extends BaseService {
       authenticator: 'web3',
       ipAddress,
       userAgent,
+      subject: address,
+      type: constants.identityTypes.WEB3_ADDRESS,
+    });
+  }
+}
+
+@serverModule.useApi(identityApi.create)
+export class CreateIdentityApiService extends BaseService {
+  constructor(
+    @inject(CreateIdentityService)
+    private createIdentityService: CreateIdentityService,
+    @inject(Web3AuthService) private web3AuthService: Web3AuthService
+  ) {
+    super();
+  }
+
+  async handle(
+    request: InferApiRequest<typeof identityApi.create>,
+    @AuthUser authUser: InferContext<typeof AuthUser>
+  ) {
+    const { address } = await this.web3AuthService.handle(request);
+
+    return this.createIdentityService.handle({
+      userId: authUser.id,
       subject: address,
       type: constants.identityTypes.WEB3_ADDRESS,
     });

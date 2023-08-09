@@ -4,7 +4,7 @@ import {
   ExactProps,
   MinLength,
 } from '@roxavn/core/base';
-import { scopes } from '@roxavn/module-user/base';
+import { scopes, permissions } from '@roxavn/module-user/base';
 
 import { baseModule } from '../module.js';
 
@@ -18,7 +18,19 @@ class VeritySignatureRequest extends ExactProps<VeritySignatureRequest> {
   public readonly signature: string;
 }
 
+class CreateIdentityRequest extends ExactProps<CreateIdentityRequest> {
+  @MinLength(1)
+  public readonly web3AuthId: string;
+
+  @MinLength(1)
+  public readonly signature: string;
+}
+
 export const identityApi = {
+  create: identitySource.create({
+    validator: CreateIdentityRequest,
+    permission: permissions.CreateIdentity,
+  }),
   verifySignature: identitySource.custom<
     VeritySignatureRequest,
     {

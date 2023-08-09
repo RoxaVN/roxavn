@@ -68,7 +68,7 @@ export class IdentityService extends BaseService {
 }
 
 @serverModule.injectable()
-export class AddIdentityService extends InjectDatabaseService {
+export class CreateIdentityService extends InjectDatabaseService {
   async handle(request: { subject: string; type: string; userId: string }) {
     const identity = new Identity();
     identity.type = request.type;

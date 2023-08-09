@@ -30,6 +30,9 @@ export const permissions = accessManager.makePermissions(scopes, {
   },
 
   RecoveryPassword: {},
+  CreateIdentity: {
+    allowedScopes: [accessManager.scopes.AuthUser],
+  },
 });
 
 export const roles = accessManager.makeRoles(scopes, permissions, {});
