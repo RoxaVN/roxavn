@@ -17,8 +17,5 @@ export function initEnv() {
     if (!process.env.DATABASE_LOGGING) {
       process.env.DATABASE_LOGGING = '1';
     }
-    if (!process.env.TOKEN_SIGN_SECRET) {
-      process.env.TOKEN_SIGN_SECRET = 'thisislongtokensecret';
-    }
   }
 }
