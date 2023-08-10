@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ExpiredException,
+  InferApiRequest,
   NotFoundException,
 } from '@roxavn/core/base';
 import {
@@ -19,9 +20,10 @@ import {
   LinkedAddressException,
   NotLinkedAddressException,
   constants,
+  web3AuthApi,
 } from '../../base/index.js';
 
-@serverModule.injectable()
+@serverModule.useApi(web3AuthApi.create)
 export class CreateWeb3AuthService extends BaseService {
   constructor(
     @inject(GetIdentityBytypeService)
@@ -32,7 +34,7 @@ export class CreateWeb3AuthService extends BaseService {
     super();
   }
 
-  async handle(request: { address: string; isLinked: boolean }) {
+  async handle(request: InferApiRequest<typeof web3AuthApi.create>) {
     const identity = await this.getIdentityBytypeService.handle({
       subject: request.address.toLowerCase(),
       type: constants.identityTypes.WEB3_ADDRESS,
