@@ -3,6 +3,7 @@ import { InjectDatabaseService } from '@roxavn/core/server';
 
 import {
   NotFoundSettingException,
+  SettingType,
   UpdateSettingRequest,
 } from '../../base/index.js';
 import { Setting } from '../entities/index.js';
@@ -63,6 +64,30 @@ export class UpdateSettingService extends InjectDatabaseService {
         type: request.type,
       })
       .orUpdate(['metadata', 'type'], ['module', 'name'])
+      .execute();
+    return {};
+  }
+}
+
+@serverModule.injectable()
+export class CreateSettingService extends InjectDatabaseService {
+  async handle(request: {
+    module: string;
+    name: string;
+    metadata: Record<string, any>;
+    type: SettingType;
+  }) {
+    await this.entityManager
+      .createQueryBuilder()
+      .insert()
+      .into(Setting)
+      .values({
+        module: request.module,
+        name: request.name,
+        metadata: request.metadata,
+        type: request.type,
+      })
+      .orIgnore()
       .execute();
     return {};
   }

@@ -1,7 +1,9 @@
+export type SettingType = 'public' | 'private';
+
 export interface UpdateSettingRequest {
   module: string;
   name: string;
-  type: 'public' | 'private';
+  type: SettingType;
   metadata: Record<string, any>;
 }
 
@@ -10,5 +12,5 @@ export interface SettingResponse {
   name: string;
   metadata: any;
   updatedDate: Date;
-  type: 'public' | 'private';
+  type: SettingType;
 }
