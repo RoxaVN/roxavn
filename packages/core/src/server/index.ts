@@ -5,7 +5,6 @@ export * from './module.js';
 export * from './env.js';
 export * from './module.manager.js';
 export * from './services/index.js';
-export * from './tokens/index.js';
 export * from './middlewares/index.js';
 export * from './events/index.js';
 export * from './database/index.js';
