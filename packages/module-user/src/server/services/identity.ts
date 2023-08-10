@@ -4,9 +4,10 @@ import {
   InjectDatabaseService,
   inject,
 } from '@roxavn/core/server';
+import { TokenService } from '@roxavn/module-utils/server';
+
 import { Identity } from '../entities/index.js';
 import { CreateAccessTokenService } from './access.token.js';
-import { tokenService } from './token.js';
 import { CreateUserApiService } from './user.js';
 import { serverModule } from '../module.js';
 
@@ -14,6 +15,7 @@ import { serverModule } from '../module.js';
 export class IdentityService extends BaseService {
   constructor(
     @inject(DatabaseService) protected databaseService: DatabaseService,
+    @inject(TokenService) protected tokenService: TokenService,
     @inject(CreateUserApiService)
     protected createUserApiService: CreateUserApiService,
     @inject(CreateAccessTokenService)
@@ -39,11 +41,11 @@ export class IdentityService extends BaseService {
     if (!identity) {
       // random username
       const username =
-        (await tokenService.creator.create({
+        (await this.tokenService.creator.create({
           alphabetType: 'LOWERCASE_ALPHA',
           size: 1,
         })) +
-        (await tokenService.creator.create({
+        (await this.tokenService.creator.create({
           alphabetType: 'LOWERCASE_ALPHA_NUM',
           size: 15,
         }));

@@ -1,4 +1,3 @@
-export * from './token.js';
 export * from './access.token.js';
 export * from './user.js';
 export * from './identity.js';

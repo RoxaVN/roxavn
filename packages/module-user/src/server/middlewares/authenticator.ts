@@ -1,21 +1,82 @@
 import {
   ApiAuthenticatorMiddleware,
-  InjectDatabaseService,
+  BaseService,
+  DatabaseService,
   LoaderAuthenticatorMiddleware,
   MiddlewareService,
   RouterContext,
+  inject,
 } from '@roxavn/core/server';
 import { Cookie, constants } from '@roxavn/core/base';
-import { EntityManager, Raw } from 'typeorm';
+import { Raw } from 'typeorm';
 import { AccessToken } from '../entities/index.js';
-import { tokenService } from '../services/token.js';
 import { serverModule } from '../module.js';
+import { TokenService } from '@roxavn/module-utils/server';
+
+@serverModule.injectable()
+export class CheckTokenService extends BaseService {
+  constructor(
+    @inject(DatabaseService) protected databaseService: DatabaseService,
+    @inject(TokenService) protected tokenService: TokenService
+  ) {
+    super();
+  }
+
+  async handle({ token }: { token: string | null }) {
+    if (!token) {
+      return;
+    }
+
+    const signatureIndex = token.lastIndexOf('.');
+    if (signatureIndex < 0) {
+      return;
+    }
+
+    const signature = token.slice(signatureIndex + 1);
+    const tokenPart = token.slice(0, signatureIndex);
+    const isValid = await this.tokenService.signer.verify(tokenPart, signature);
+    if (!isValid) {
+      return;
+    }
+
+    const userId = tokenPart.split('.')[1];
+
+    const accessToken: { userId: string; id: string } | null =
+      await this.databaseService.manager.getRepository(AccessToken).findOne({
+        select: ['userId', 'id'],
+        where: {
+          userId: userId,
+          token: signature,
+          expiryDate: Raw((alias) => `${alias} > NOW()`),
+        },
+        cache: {
+          id: 'getAccessToken',
+          milliseconds: 60000, // 1 minute
+        },
+      });
+
+    if (!accessToken) {
+      return;
+    }
+
+    return {
+      user: { id: accessToken.userId },
+      accessToken: { id: accessToken.id },
+    };
+  }
+}
 
 @serverModule.rebind(ApiAuthenticatorMiddleware)
 export class ApiAuthenticatorMiddlewareEx
-  extends InjectDatabaseService
+  extends BaseService
   implements MiddlewareService
 {
+  constructor(
+    @inject(CheckTokenService) protected checkTokenService: CheckTokenService
+  ) {
+    super();
+  }
+
   async handle(
     { api, state, request }: RouterContext,
     next: () => Promise<void>
@@ -26,7 +87,8 @@ export class ApiAuthenticatorMiddlewareEx
         authorizationHeader && authorizationHeader.startsWith('Bearer ')
           ? authorizationHeader.slice(7)
           : null;
-      await checkToken(token, this.databaseService.manager, state);
+      const authData = await this.checkTokenService.handle({ token });
+      Object.assign(state, authData);
     }
     return next();
   }
@@ -34,9 +96,15 @@ export class ApiAuthenticatorMiddlewareEx
 
 @serverModule.rebind(LoaderAuthenticatorMiddleware)
 export class LoaderAuthenticatorMiddlewareEx
-  extends InjectDatabaseService
+  extends BaseService
   implements MiddlewareService
 {
+  constructor(
+    @inject(CheckTokenService) protected checkTokenService: CheckTokenService
+  ) {
+    super();
+  }
+
   async handle(
     { api, state, request }: RouterContext,
     next: () => Promise<void>
@@ -46,56 +114,9 @@ export class LoaderAuthenticatorMiddlewareEx
       const token = cookie
         ? new Cookie(cookie).get(constants.Cookie.TOKEN)
         : null;
-      await checkToken(token, this.databaseService.manager, state);
+      const authData = await this.checkTokenService.handle({ token });
+      Object.assign(state, authData);
     }
     return next();
   }
-}
-
-async function checkToken(
-  token: string | null,
-  dbSession: EntityManager,
-  state: Record<string, any>
-) {
-  if (!token) {
-    return;
-  }
-
-  const signatureIndex = token.lastIndexOf('.');
-  if (signatureIndex < 0) {
-    return;
-  }
-
-  const signature = token.slice(signatureIndex + 1);
-  const tokenPart = token.slice(0, signatureIndex);
-  const isValid = await tokenService.signer.verify(tokenPart, signature);
-  if (!isValid) {
-    return;
-  }
-
-  const userId = tokenPart.split('.')[1];
-
-  const accessToken: { userId: string; id: string } | null = await dbSession
-    .getRepository(AccessToken)
-    .findOne({
-      select: ['userId', 'id'],
-      where: {
-        userId: userId,
-        token: signature,
-        expiryDate: Raw((alias) => `${alias} > NOW()`),
-      },
-      cache: {
-        id: 'getAccessToken',
-        milliseconds: 60000, // 1 minute
-      },
-    });
-
-  if (!accessToken) {
-    return;
-  }
-
-  Object.assign(state, {
-    user: { id: accessToken.userId },
-    accessToken: { id: accessToken.id },
-  });
 }

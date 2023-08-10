@@ -1,10 +1,15 @@
-import { InjectDatabaseService } from '@roxavn/core/server';
+import {
+  BaseService,
+  DatabaseService,
+  InjectDatabaseService,
+  inject,
+} from '@roxavn/core/server';
 import { InferApiRequest } from '@roxavn/core/base';
+import { TokenService } from '@roxavn/module-utils/server';
 
 import { accessTokenApi } from '../../base/index.js';
 import { AccessToken } from '../entities/index.js';
 import { serverModule } from '../module.js';
-import { tokenService } from './token.js';
 import { Env } from '../config.js';
 
 @serverModule.useApi(accessTokenApi.getMany)
@@ -41,7 +46,14 @@ export class DeleteAccessTokenApiService extends InjectDatabaseService {
 }
 
 @serverModule.injectable()
-export class CreateAccessTokenService extends InjectDatabaseService {
+export class CreateAccessTokenService extends BaseService {
+  constructor(
+    @inject(DatabaseService) protected databaseService: DatabaseService,
+    @inject(TokenService) protected tokenService: TokenService
+  ) {
+    super();
+  }
+
   async handle(request: {
     userId: string;
     identityid: string;
@@ -49,13 +61,13 @@ export class CreateAccessTokenService extends InjectDatabaseService {
     ipAddress: string;
     userAgent?: string | null;
   }) {
-    const token = await tokenService.creator.create({
+    const token = await this.tokenService.creator.create({
       alphabetType: 'ALPHA_NUM',
       size: 21,
     });
     const expiredAt = new Date(Date.now() + Env.ACCESS_TOKEN_TIME_TO_LIVE);
     const tokenPart = [expiredAt.getTime(), request.userId, token].join('.');
-    const signature = tokenService.signer.sign(tokenPart);
+    const signature = this.tokenService.signer.sign(tokenPart);
     const tokenFinal = [tokenPart, signature].join('.');
 
     const accessToken = new AccessToken();
@@ -66,7 +78,9 @@ export class CreateAccessTokenService extends InjectDatabaseService {
     accessToken.expiryDate = expiredAt;
     accessToken.ipAddress = request.ipAddress;
     accessToken.userAgent = request.userAgent || undefined;
-    await this.entityManager.getRepository(AccessToken).save(accessToken);
+    await this.databaseService.manager
+      .getRepository(AccessToken)
+      .save(accessToken);
 
     return {
       id: accessToken.id,

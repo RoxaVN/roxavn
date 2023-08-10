@@ -13,11 +13,6 @@ type AlphabetType =
   | 'UPPERCASE_ALPHA_NUM'
   | 'LOWERCASE_ALPHA_NUM';
 
-interface CreateTokenOptions {
-  alphabetType?: AlphabetType;
-  size?: number;
-}
-
 const customAlphabetCacheManager: Record<string, () => Promise<string>> = {};
 
 /**
@@ -26,7 +21,10 @@ const customAlphabetCacheManager: Record<string, () => Promise<string>> = {};
  * @param options An option.
  */
 const createToken = async (
-  options: CreateTokenOptions = {}
+  options: {
+    alphabetType?: AlphabetType;
+    size?: number;
+  } = {}
 ): Promise<string> => {
   const { alphabetType, size = DEFAULT_TOKEN_SIZE } = options;
   if (alphabetType) {

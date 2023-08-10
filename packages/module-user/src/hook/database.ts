@@ -1,4 +1,6 @@
-import { TokenHasher, InjectDatabaseService } from '@roxavn/core/server';
+import { BaseService, DatabaseService, inject } from '@roxavn/core/server';
+import { TokenService } from '@roxavn/module-utils/server';
+
 import {
   Identity,
   Role,
@@ -10,24 +12,32 @@ import { roles } from '../base/access.js';
 import { constants } from '../base/index.js';
 
 @serverModule.injectable()
-export class CreateAdminUserHook extends InjectDatabaseService {
+export class CreateAdminUserHook extends BaseService {
+  constructor(
+    @inject(DatabaseService) protected databaseService: DatabaseService,
+    @inject(TokenService) protected tokenService: TokenService
+  ) {
+    super();
+  }
+
   async handle() {
-    const count = await this.entityManager.getRepository(User).count();
+    const count = await this.databaseService.manager
+      .getRepository(User)
+      .count();
     if (count < 1) {
       const identity = new Identity();
-      const tokenHasher = new TokenHasher();
       identity.metadata = {
-        password: await tokenHasher.hash('admin'),
+        password: await this.tokenService.hasher.hash('admin'),
       };
       const user = new User();
       user.username = 'admin';
-      await this.entityManager.save(user);
+      await this.databaseService.manager.save(user);
       identity.user = user;
       identity.subject = user.id;
       identity.type = constants.identityTypes.PASSWORD;
-      await this.entityManager.save(identity);
+      await this.databaseService.manager.save(identity);
 
-      const role = await this.entityManager.findOneBy(Role, {
+      const role = await this.databaseService.manager.findOneBy(Role, {
         name: roles.Admin.name,
         scope: roles.Admin.scope.name,
       });
@@ -36,7 +46,7 @@ export class CreateAdminUserHook extends InjectDatabaseService {
         adminRole.user = user;
         adminRole.role = role;
         adminRole.scope = role.scope;
-        await this.entityManager.save(adminRole);
+        await this.databaseService.manager.save(adminRole);
       }
     }
   }

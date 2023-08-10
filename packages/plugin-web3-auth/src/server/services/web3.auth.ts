@@ -9,10 +9,8 @@ import {
   InjectDatabaseService,
   inject,
 } from '@roxavn/core/server';
-import {
-  GetIdentityBytypeService,
-  tokenService,
-} from '@roxavn/module-user/server';
+import { GetIdentityBytypeService } from '@roxavn/module-user/server';
+import { TokenService } from '@roxavn/module-utils/server';
 import { eth } from 'web3';
 
 import { Web3Auth } from '../entities/web3.auth.entity.js';
@@ -28,7 +26,7 @@ export class CreateWeb3AuthService extends BaseService {
   constructor(
     @inject(GetIdentityBytypeService)
     private getIdentityBytypeService: GetIdentityBytypeService,
-
+    @inject(TokenService) private tokenService: TokenService,
     @inject(DatabaseService) private databaseService: DatabaseService
   ) {
     super();
@@ -45,7 +43,7 @@ export class CreateWeb3AuthService extends BaseService {
       throw new LinkedAddressException();
     }
 
-    const token = await tokenService.creator.create();
+    const token = await this.tokenService.creator.create();
     const message = 'Please sign this message\n' + token;
     const web3auth = new Web3Auth();
     web3auth.address = request.address;
