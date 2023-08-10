@@ -5,13 +5,56 @@ import {
 } from '@roxavn/core/base';
 import {
   BaseService,
+  DatabaseService,
   InjectDatabaseService,
   inject,
 } from '@roxavn/core/server';
+import {
+  GetIdentityBytypeService,
+  tokenService,
+} from '@roxavn/module-user/server';
 import { eth } from 'web3';
 
 import { Web3Auth } from '../entities/web3.auth.entity.js';
 import { serverModule } from '../module.js';
+import {
+  LinkedAddressException,
+  NotLinkedAddressException,
+  constants,
+} from '../../base/index.js';
+
+@serverModule.injectable()
+export class CreateWeb3AuthService extends BaseService {
+  constructor(
+    @inject(GetIdentityBytypeService)
+    private getIdentityBytypeService: GetIdentityBytypeService,
+
+    @inject(DatabaseService) private databaseService: DatabaseService
+  ) {
+    super();
+  }
+
+  async handle(request: { address: string; isLinked: boolean }) {
+    const identity = await this.getIdentityBytypeService.handle({
+      subject: request.address.toLowerCase(),
+      type: constants.identityTypes.WEB3_ADDRESS,
+    });
+    if (request.isLinked && !identity) {
+      throw new NotLinkedAddressException();
+    } else if (!request.isLinked && identity) {
+      throw new LinkedAddressException();
+    }
+
+    const token = await tokenService.creator.create();
+    const message = 'Please sign this message\n' + token;
+    const web3auth = new Web3Auth();
+    web3auth.address = request.address;
+    web3auth.message = message;
+    await this.databaseService.manager.save(web3auth);
+
+    return { id: web3auth.id, message };
+  }
+}
 
 @serverModule.injectable()
 export class GetWeb3AuthService extends InjectDatabaseService {
@@ -48,7 +91,12 @@ export class Web3AuthService extends BaseService {
     super();
   }
 
-  async handle(request: { web3AuthId: string; signature: string }) {
+  async handle(request: { web3AuthId: string; signature: string }): Promise<{
+    /***
+     * Web 3 address in lower case
+     */
+    address: string;
+  }> {
     const web3auth = await this.getWeb3AuthService.handle({
       web3AuthId: request.web3AuthId,
     });
@@ -58,8 +106,10 @@ export class Web3AuthService extends BaseService {
       throw new ExpiredException();
     }
 
-    const address = eth.accounts.recover(web3auth.message, request.signature);
-    if (address.toLowerCase() !== web3auth.address.toLowerCase()) {
+    const address = eth.accounts
+      .recover(web3auth.message, request.signature)
+      .toLowerCase();
+    if (address !== web3auth.address.toLowerCase()) {
       throw new BadRequestException();
     }
     // delete if auth success
