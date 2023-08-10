@@ -1,7 +1,10 @@
 import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { InjectDatabaseService } from '@roxavn/core/server';
 
-import { UpdateSettingRequest } from '../../base/index.js';
+import {
+  NotFoundSettingException,
+  UpdateSettingRequest,
+} from '../../base/index.js';
 import { Setting } from '../entities/index.js';
 import { serverModule } from '../module.js';
 import { settingApi } from '../../base/apis/index.js';
@@ -39,7 +42,10 @@ export class GetSettingService extends InjectDatabaseService {
         module: request.module,
       },
     });
-    return result?.metadata;
+    if (result) {
+      return result.metadata;
+    }
+    throw new NotFoundSettingException(request.name, request.module);
   }
 }
 

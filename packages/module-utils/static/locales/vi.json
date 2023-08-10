@@ -2,6 +2,9 @@
   "translations": "Bản dịch",
   "language": "Ngôn ngữ",
   "deleteTranslation": "Xóa bản dịch {{ key }} of ngôn ngữ {{ lang }}",
+  "Error": {
+    "NotFoundSettingException": "Không tìm thấy cài đặt {{ name }} của {{ module }}"
+  },
   "Meta": {
     "name": "Module utils",
     "description": "Module utils"

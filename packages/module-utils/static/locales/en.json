@@ -2,6 +2,9 @@
   "translations": "Translations",
   "language": "Language",
   "deleteTranslation": "Delete translation {{ key }} of language {{ lang }}",
+  "Error": {
+    "NotFoundSettingException": "Not found setting {{ name }} of {{ module }}"
+  },
   "Meta": {
     "name": "Module utils",
     "description": "Module utils"

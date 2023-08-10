@@ -24,7 +24,7 @@ export class Setting {
   type: UpdateSettingRequest['type'];
 
   @Column({ type: 'jsonb' })
-  metadata: any;
+  metadata: Record<string, any>;
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: Date;
