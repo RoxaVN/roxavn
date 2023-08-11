@@ -15,15 +15,12 @@ export class AuthService {
   authObserver = new Subject<Record<string, any> | undefined>();
 
   getTokenData() {
-    if (this._tokenData) {
-      return this._tokenData;
+    if (!this._tokenData) {
+      try {
+        this._tokenData = JSON.parse(localStorage.getItem('_tk') || 'null');
+      } catch {}
     }
-    try {
-      this._tokenData = JSON.parse(localStorage.getItem('_tk') || 'null');
-    } catch {
-    } finally {
-      return this._tokenData;
-    }
+    return this._tokenData;
   }
   setTokenData(tokenData: TokenAuthData) {
     this._tokenData = tokenData;

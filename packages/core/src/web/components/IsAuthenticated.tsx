@@ -1,10 +1,8 @@
 import { Group, Loader } from '@mantine/core';
-import { useState, useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
 import { webRoutes } from '../../base/index.js';
-import { useAuthUser } from '../hooks/index.js';
-import { authService } from '../services/index.js';
+import { useAuthData } from '../hooks/index.js';
 import { LoginRequired } from './AppBoundary.js';
 
 export interface IsAuthenticatedProps {
@@ -18,31 +16,9 @@ export const IsAuthenticated = ({
   userComponent,
   loadingComponent,
 }: IsAuthenticatedProps): JSX.Element => {
-  const user = useAuthUser();
-  const [loading, setLoading] = useState(!user);
+  const { user, isLoading } = useAuthData();
 
-  useEffect(() => {
-    if (!user) {
-      const token = authService.getTokenData();
-      if (token) {
-        const timeout = setTimeout(async () => {
-          try {
-            await authService.authenticate(token);
-          } catch (e) {
-            console.error(e);
-          } finally {
-            setLoading(false);
-          }
-        }, 100);
-        return () => clearTimeout(timeout);
-      } else {
-        setLoading(false);
-      }
-    }
-    return;
-  }, []);
-
-  return loading
+  return isLoading
     ? loadingComponent || <Loader />
     : user
     ? typeof userComponent === 'function'
