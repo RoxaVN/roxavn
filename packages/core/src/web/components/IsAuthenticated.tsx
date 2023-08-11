@@ -16,9 +16,9 @@ export const IsAuthenticated = ({
   userComponent,
   loadingComponent,
 }: IsAuthenticatedProps): JSX.Element => {
-  const { user, isLoading } = useAuthData();
+  const { user, loading } = useAuthData();
 
-  return isLoading
+  return loading
     ? loadingComponent || <Loader />
     : user
     ? typeof userComponent === 'function'

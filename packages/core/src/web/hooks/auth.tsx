@@ -4,12 +4,12 @@ import { authService } from '../services/index.js';
 
 export const AuthContext = React.createContext<{
   user?: Record<string, any>;
-  isLoading: boolean;
+  loading: boolean;
 }>({} as any);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<Record<string, any>>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const sub = authService.authObserver.subscribe((data) => {
@@ -17,16 +17,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
     const token = authService.getTokenData();
     if (token) {
-      authService.authenticate(token).finally(() => setIsLoading(false));
+      authService.authenticate(token).finally(() => setLoading(false));
     } else {
-      setIsLoading(false);
+      setLoading(false);
     }
 
     return () => sub.unsubscribe();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading }}>
+    <AuthContext.Provider value={{ user, loading }}>
       {children}
     </AuthContext.Provider>
   );
