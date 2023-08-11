@@ -11,12 +11,14 @@ import {
 import { baseModule } from '../module.js';
 import { permissions, scopes } from '../access.js';
 
-type IdentityResponse = {
+export type IdentityResponse = {
   id: string;
+  subject: string;
+  type: string;
   userId: string;
+  metadata?: any;
   createdDate: Date;
   updatedDate: Date;
-  expiryDate: Date;
 };
 
 const passwordIdentitySource = new ApiSource<IdentityResponse>(
