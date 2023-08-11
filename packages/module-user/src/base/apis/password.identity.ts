@@ -5,6 +5,7 @@ import {
   ExactProps,
   ForbiddenException,
   MinLength,
+  TokenAuthData,
   UnauthorizedException,
 } from '@roxavn/core/base';
 import { baseModule } from '../module.js';
@@ -50,7 +51,7 @@ class RecoveryPasswordRequest extends ExactProps<RecoveryPasswordRequest> {
 export const passwordIdentityApi = {
   auth: passwordIdentitySource.custom<
     AuthRequest,
-    { id: string; userId: string; accessToken: string },
+    TokenAuthData,
     UnauthorizedException
   >({
     method: 'POST',

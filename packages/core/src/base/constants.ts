@@ -1,6 +1,3 @@
-/**
- * The API base path.
- */
 export const constants = {
   Role: {
     ADMIN: 'Admin',

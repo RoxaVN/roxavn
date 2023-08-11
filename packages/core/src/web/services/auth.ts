@@ -1,14 +1,12 @@
 import { isEmpty } from 'lodash-es';
 import { Subject } from 'rxjs';
 
-import { Api, constants } from '../../base/index.js';
+import { Api, TokenAuthData, constants } from '../../base/index.js';
 import { apiFetcher } from './api.fetcher.js';
 import { cookieService } from './cookie.js';
 
-type TokenData = { id: string; accessToken: string; userId: string };
-
 export class AuthService {
-  _tokenData?: TokenData;
+  _tokenData?: TokenAuthData;
   _authData?: Record<string, any>;
 
   authenticateApi?: Api;
@@ -27,7 +25,7 @@ export class AuthService {
       return this._tokenData;
     }
   }
-  setTokenData(tokenData: TokenData) {
+  setTokenData(tokenData: TokenAuthData) {
     this._tokenData = tokenData;
     localStorage.setItem('_tk', JSON.stringify(tokenData));
     cookieService.set(constants.Cookie.TOKEN, tokenData.accessToken, {
@@ -48,7 +46,7 @@ export class AuthService {
   setUser(user?: Record<string, any>) {
     this._authData = user;
   }
-  authenticate(token: TokenData): Promise<Record<string, any>> {
+  authenticate(token: TokenAuthData): Promise<Record<string, any>> {
     if (this.authenticateApi) {
       return apiFetcher
         .fetch(this.authenticateApi, { userId: token.userId })
@@ -68,7 +66,7 @@ export class AuthService {
     }
     throw new Error('AuthService.authenticateApi is not set');
   }
-  logout(token: TokenData): Promise<boolean> {
+  logout(token: TokenAuthData): Promise<boolean> {
     if (this.logoutApi) {
       return apiFetcher
         .fetch(this.logoutApi, { accessTokenId: token.id })

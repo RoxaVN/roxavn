@@ -3,6 +3,7 @@ import {
   BadRequestException,
   ExactProps,
   MinLength,
+  TokenAuthData,
 } from '@roxavn/core/base';
 import { scopes, permissions } from '@roxavn/module-user/base';
 
@@ -33,11 +34,7 @@ export const identityApi = {
   }),
   verifySignature: identitySource.custom<
     VeritySignatureRequest,
-    {
-      id: string;
-      userId: string;
-      accessToken: string;
-    },
+    TokenAuthData,
     BadRequestException
   >({
     method: 'POST',

@@ -1,5 +1,6 @@
 export * from './api.js';
 export * from './api.source.js';
+export * from './auth.js';
 export * from './constants.js';
 export * from './errors.js';
 export * from './module.js';

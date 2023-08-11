@@ -3,6 +3,7 @@ import {
   BadRequestException,
   ExactProps,
   MinLength,
+  TokenAuthData,
 } from '@roxavn/core/base';
 import { scopes } from '@roxavn/module-user/base';
 
@@ -21,11 +22,7 @@ class VerityTokenRequest extends ExactProps<VerityTokenRequest> {
 export const identityApi = {
   verifyToken: identitySource.custom<
     VerityTokenRequest,
-    {
-      id: string;
-      userId: string;
-      accessToken: string;
-    },
+    TokenAuthData,
     BadRequestException
   >({
     method: 'POST',
