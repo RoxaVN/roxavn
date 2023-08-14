@@ -23,6 +23,7 @@
     "packages/plugin-firebase",
     "packages/plugin-firebase-auth",
     "packages/plugin-upload-seaweedfs",
+    "packages/plugin-web3",
     "packages/plugin-web3-auth",
     "packages/module-asset",
     "packages/module-currency"
