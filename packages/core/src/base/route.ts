@@ -15,6 +15,7 @@ export class WebRoute<
 
 export const webRoutes = {
   Login: new WebRoute<Empty, { ref?: string }>('/login'),
+  Register: new WebRoute<Empty, { ref?: string }>('/register'),
   Me: new WebRoute('/me'),
   Admin: new WebRoute('/admin/apps'),
   Apps: new WebRoute('/apps'),

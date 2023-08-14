@@ -7,7 +7,7 @@ import {
   UserAgent,
 } from '@roxavn/core/server';
 import { constants as userConstants } from '@roxavn/module-user/base';
-import { IdentityService } from '@roxavn/module-user/server';
+import { IdentityAndRegisterService } from '@roxavn/module-user/server';
 import { GetFirebaseAppService } from '@roxavn/plugin-firebase/server';
 import firebaseAdmin from 'firebase-admin';
 
@@ -19,8 +19,8 @@ export class VerifytokenFirebaseService extends BaseService {
   constructor(
     @inject(GetFirebaseAppService)
     private getFirebaseAppService: GetFirebaseAppService,
-    @inject(IdentityService)
-    private identityService: IdentityService
+    @inject(IdentityAndRegisterService)
+    private identityAndRegisterService: IdentityAndRegisterService
   ) {
     super();
   }
@@ -43,19 +43,19 @@ export class VerifytokenFirebaseService extends BaseService {
       userAgent,
     };
     if (user.email_verified && user.email) {
-      return this.identityService.handle({
+      return this.identityAndRegisterService.handle({
         ...data,
         subject: user.email,
         type: userConstants.identityTypes.EMAIL,
       });
     } else if (user.phone_number) {
-      return this.identityService.handle({
+      return this.identityAndRegisterService.handle({
         ...data,
         subject: user.phone_number,
         type: userConstants.identityTypes.PHONE,
       });
     } else {
-      return this.identityService.handle({
+      return this.identityAndRegisterService.handle({
         ...data,
         subject: user.uid,
         type: 'firebase uid',
