@@ -16,8 +16,8 @@ import { constants, identityApi } from '../../base/index.js';
 import { serverModule } from '../module.js';
 import { Web3AuthService } from './web3.auth.js';
 
-@serverModule.useApi(identityApi.verifySignature)
-export class VerifySignatureService extends BaseService {
+@serverModule.useApi(identityApi.auth)
+export class AuthIdentityService extends BaseService {
   constructor(
     @inject(IdentityService) private identityService: IdentityService,
     @inject(Web3AuthService) private web3AuthService: Web3AuthService
@@ -26,7 +26,7 @@ export class VerifySignatureService extends BaseService {
   }
 
   async handle(
-    request: InferApiRequest<typeof identityApi.verifySignature>,
+    request: InferApiRequest<typeof identityApi.auth>,
     @Ip ipAddress: InferContext<typeof Ip>,
     @UserAgent userAgent: InferContext<typeof UserAgent>
   ) {

@@ -11,7 +11,7 @@ import { baseModule } from '../module.js';
 
 const identitySource = new ApiSource([scopes.Identity], baseModule);
 
-class VeritySignatureRequest extends ExactProps<VeritySignatureRequest> {
+class AuthIdentityRequest extends ExactProps<AuthIdentityRequest> {
   @MinLength(1)
   public readonly web3AuthId: string;
 
@@ -32,13 +32,13 @@ export const identityApi = {
     validator: CreateIdentityRequest,
     permission: permissions.CreateIdentity,
   }),
-  verifySignature: identitySource.custom<
-    VeritySignatureRequest,
+  auth: identitySource.custom<
+    AuthIdentityRequest,
     TokenAuthData,
     BadRequestException
   >({
     method: 'POST',
-    path: identitySource.apiPath() + '/verifySignature',
-    validator: VeritySignatureRequest,
+    path: identitySource.apiPath() + '/auth',
+    validator: AuthIdentityRequest,
   }),
 };
