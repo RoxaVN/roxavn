@@ -14,7 +14,9 @@ export interface ApiFirebaseAuthProps {
     projectId: string;
   };
   uiConfig: FirebaseAuthProps['uiConfig'];
-  onSuccess?: (data: InferApiResponse<typeof identityApi.verifyToken>) => void;
+  onSuccess?: (
+    data: InferApiResponse<typeof identityApi.authAndRegister>
+  ) => void;
 }
 
 export const ApiFirebaseAuth = ({
@@ -25,7 +27,7 @@ export const ApiFirebaseAuth = ({
   const [app, setApp] = useState<firebase.auth.Auth>();
   const [token, setToken] = useState<string>();
   const { data, loading } = useApi(
-    token ? identityApi.verifyToken : undefined,
+    token ? identityApi.authAndRegister : undefined,
     {
       projectId: firebaseConfig.projectId,
       token: token,

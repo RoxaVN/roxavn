@@ -20,13 +20,13 @@ class VerityTokenRequest extends ExactProps<VerityTokenRequest> {
 }
 
 export const identityApi = {
-  verifyToken: identitySource.custom<
+  authAndRegister: identitySource.custom<
     VerityTokenRequest,
     TokenAuthData,
     BadRequestException
   >({
     method: 'POST',
-    path: identitySource.apiPath() + '/verifyToken',
+    path: identitySource.apiPath() + '/authAndRegister',
     validator: VerityTokenRequest,
   }),
 };

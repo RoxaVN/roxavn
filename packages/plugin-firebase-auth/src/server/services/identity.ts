@@ -14,8 +14,8 @@ import firebaseAdmin from 'firebase-admin';
 import { identityApi } from '../../base/index.js';
 import { serverModule } from '../module.js';
 
-@serverModule.useApi(identityApi.verifyToken)
-export class VerifytokenFirebaseService extends BaseService {
+@serverModule.useApi(identityApi.authAndRegister)
+export class AuthTokenFirebaseAndRegisterService extends BaseService {
   constructor(
     @inject(GetFirebaseAppService)
     private getFirebaseAppService: GetFirebaseAppService,
@@ -26,7 +26,7 @@ export class VerifytokenFirebaseService extends BaseService {
   }
 
   async handle(
-    request: InferApiRequest<typeof identityApi.verifyToken>,
+    request: InferApiRequest<typeof identityApi.authAndRegister>,
     @Ip ipAddress: InferContext<typeof Ip>,
     @UserAgent userAgent: InferContext<typeof UserAgent>
   ) {
