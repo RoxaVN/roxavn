@@ -22,10 +22,15 @@
     "@remix-run/react": "^1.19.1",
     "@roxavn/core": "^0.1.28",
     "@tabler/icons-react": "^2.12.0",
+    "@web3modal/ethereum": "^2.7.1",
+    "@web3modal/react": "^2.7.1",
     "react": "^18.2.0",
     "react-router-dom": "^6.8.0",
     "rxjs": "^7.2.0",
-    "typeorm": "^0.3.10"
+    "typeorm": "^0.3.10",
+    "viem": "^1.5.4",
+    "wagmi": "^1.3.10",
+    "web3": "^4.0.3"
   },
   "exports": {
     ".": "./dist/esm/index.js",
