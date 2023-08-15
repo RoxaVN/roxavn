@@ -1,6 +1,6 @@
 {
   "name": "@roxavn/cli",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "module": "dist/index.js",
   "type": "module",
   "scripts": {
@@ -29,8 +29,8 @@
   "dependencies": {
     "@remix-run/dev": "^1.19.1",
     "@remix-run/serve": "^1.19.1",
-    "@roxavn/core": "^0.1.28",
-    "@roxavn/dev-web": "^0.1.0",
+    "@roxavn/core": "^0.2.0",
+    "@roxavn/dev-web": "^0.2.0",
     "@sqltools/formatter": "^1.2.5",
     "commander": "^10.0.1",
     "fs-extra": "^11.1.0",

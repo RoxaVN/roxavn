@@ -1,6 +1,6 @@
 {
   "name": "@roxavn/module-utils",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "scripts": {
     "build": "roxavn build",
     "dev": "roxavn dev"
@@ -12,12 +12,12 @@
   "type": "module",
   "dependencies": {},
   "devDependencies": {
-    "@roxavn/cli": "^0.1.0",
+    "@roxavn/cli": "^0.2.0",
     "typescript": "^5.0.4"
   },
   "peerDependencies": {
     "@mantine/core": "^6.0.0",
-    "@roxavn/core": "^0.1.28",
+    "@roxavn/core": "^0.2.0",
     "@tabler/icons-react": "^2.12.0",
     "react": "^18.2.0",
     "react-router-dom": "^6.8.0",

@@ -1,6 +1,6 @@
 {
   "name": "@roxavn/dev-web",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "author": "roxavn",
   "main": "./dist/esm/index.js",
@@ -21,7 +21,7 @@
     "@mantine/remix": "^6.0.0",
     "@remix-run/node": "^1.19.1",
     "@remix-run/react": "^1.19.1",
-    "@roxavn/core": "^0.1.28",
+    "@roxavn/core": "^0.2.0",
     "@roxavn/remix-fastify": "^2.7.4",
     "@roxavn/remix-i18next": "^5.1.1",
     "cross-env": "^7.0.3",

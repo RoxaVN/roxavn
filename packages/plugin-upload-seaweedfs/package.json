@@ -14,15 +14,15 @@
     "form-data": "^4.0.0"
   },
   "devDependencies": {
-    "@roxavn/cli": "^0.1.0",
-    "@roxavn/module-user": "^0.1.0",
+    "@roxavn/cli": "^0.2.0",
+    "@roxavn/module-user": "^0.2.0",
     "typescript": "^5.0.4"
   },
   "peerDependencies": {
     "@mantine/core": "^6.0.0",
-    "@roxavn/core": "^0.1.28",
+    "@roxavn/core": "^0.2.0",
     "@roxavn/module-upload": "^0.1.0",
-    "@roxavn/module-utils": "^0.1.0",
+    "@roxavn/module-utils": "^0.2.0",
     "@tabler/icons-react": "^2.12.0",
     "react": "^18.2.0",
     "react-router-dom": "^6.8.0",
