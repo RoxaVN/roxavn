@@ -11,9 +11,9 @@ import {
 import { randomId } from '@mantine/hooks';
 import { closeModal, openModal } from '@mantine/modals';
 import { PolymorphicComponentProps } from '@mantine/utils';
+import { useNavigate } from '@remix-run/react';
 import { IconCopy, IconCheck } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { webModule } from '../services/index.js';
 import { IfCanAccessApi, IfCanAccessApiProps } from './ApiPermission.js';

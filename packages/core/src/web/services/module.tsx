@@ -1,7 +1,8 @@
 import { IconSettings } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useOutletContext, useRoutes } from 'react-router-dom';
+import { Outlet, useOutletContext } from '@remix-run/react';
+import { useRoutes } from 'react-router-dom';
 
 import { baseModule, BaseModule } from '../../base/index.js';
 import { PageItem } from './page.js';

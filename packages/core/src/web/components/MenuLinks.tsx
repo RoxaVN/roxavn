@@ -1,7 +1,7 @@
 import { NavLink } from '@mantine/core';
+import { Link } from '@remix-run/react';
 import { IconChevronRight } from '@tabler/icons-react';
 import { Fragment } from 'react';
-import { Link } from 'react-router-dom';
 
 import { PageLink, usePageLinks } from '../hooks/index.js';
 import { PageItem } from '../services/index.js';

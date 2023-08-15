@@ -1,5 +1,6 @@
 import { Group, Loader } from '@mantine/core';
-import { Navigate, useLocation } from 'react-router-dom';
+import { useLocation } from '@remix-run/react';
+import { Navigate } from 'react-router-dom';
 
 import { webRoutes } from '../../base/index.js';
 import { useAuthData } from '../hooks/index.js';

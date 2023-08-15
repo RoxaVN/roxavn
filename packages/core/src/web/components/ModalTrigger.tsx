@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, ModalProps } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@remix-run/react';
 import { constants } from '../../base/index.js';
 
 type ModalTriggerTemplate = (props: {

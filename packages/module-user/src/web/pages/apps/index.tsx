@@ -1,10 +1,9 @@
 import { Card, SimpleGrid, Image, Text } from '@mantine/core';
 import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, useOutletContext, Link } from '@remix-run/react';
 import { moduleManager } from '@roxavn/core/server';
 import { WebModule, useMetaTranslation } from '@roxavn/core/web';
 import { useEffect } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
 
 export default function () {
   const data = useLoaderData<typeof loader>();

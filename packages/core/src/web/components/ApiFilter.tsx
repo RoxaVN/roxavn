@@ -26,7 +26,7 @@ export const ApiFilterButton = <Request extends ApiRequest>({
   const changeCount = Object.entries(filterValue).filter(([k, v]) => {
     if (names.includes(k)) {
       if (Array.isArray(v)) {
-        return v.length && v.every((i) => i);
+        return v.length && v.every((i: any) => i);
       }
       return !!v;
     }

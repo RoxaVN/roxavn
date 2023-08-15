@@ -32,7 +32,7 @@
     "@roxavn/core": "^0.2.0",
     "@roxavn/dev-web": "^0.2.0",
     "@sqltools/formatter": "^1.2.5",
-    "commander": "^10.0.1",
+    "commander": "^11.0.0",
     "fs-extra": "^11.1.0",
     "hygen": "^6.2.11",
     "nodemon": "3.0.1",

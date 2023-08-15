@@ -1,9 +1,9 @@
 import { Anchor, Card, Text } from '@mantine/core';
+import { Link } from '@remix-run/react';
 import { BaseModule } from '@roxavn/core';
 import { ApiList, ModuleT, PageItem, authService } from '@roxavn/core/web';
 import { IconList } from '@tabler/icons-react';
 import { Translation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 import { webModule } from '../module.js';
 import { userNotificationApi } from '../../base/index.js';

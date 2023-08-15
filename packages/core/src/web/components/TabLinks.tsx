@@ -1,5 +1,5 @@
 import { Tabs } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@remix-run/react';
 
 import { usePageLinks } from '../hooks/index.js';
 import { PageItem } from '../services/index.js';

@@ -1,6 +1,6 @@
 import { Card, Container } from '@mantine/core';
+import { useNavigate, useSearchParams } from '@remix-run/react';
 import { webRoutes } from '@roxavn/core/base';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { ResetPasswordForm } from '../components/index.js';
 

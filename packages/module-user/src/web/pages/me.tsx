@@ -13,7 +13,7 @@ import {
   Box,
 } from '@mantine/core';
 import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, Link, Outlet } from '@remix-run/react';
 import { moduleManager } from '@roxavn/core/server';
 import {
   CatchBoundary,
@@ -24,7 +24,6 @@ import {
   useMetaTranslation,
 } from '@roxavn/core/web';
 import { useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
 
 import { UserMenu } from '../components/index.js';
 

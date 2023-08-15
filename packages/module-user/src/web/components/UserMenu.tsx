@@ -1,7 +1,7 @@
 import { Menu } from '@mantine/core';
+import { Link } from '@remix-run/react';
 import { authService, useAuthUser, userService } from '@roxavn/core/web';
 import { IconLogout, IconUserCircle } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
 
 import { webModule } from '../module.js';
 

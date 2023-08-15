@@ -1,8 +1,8 @@
 import { Card, SimpleGrid, Image, Text } from '@mantine/core';
+import { Link, useOutletContext } from '@remix-run/react';
 import { BaseModule } from '@roxavn/core/base';
 import { RolesContext, WebModule, useMetaTranslation } from '@roxavn/core/web';
 import { useContext, useEffect } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
 
 export const Page = () => {
   const { roles } = useContext(RolesContext);

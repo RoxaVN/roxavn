@@ -9,6 +9,7 @@ import {
   Group,
   Button,
 } from '@mantine/core';
+import { Outlet, Link } from '@remix-run/react';
 import { webRoutes } from '@roxavn/core/base';
 import {
   CatchBoundary,
@@ -20,7 +21,6 @@ import {
 } from '@roxavn/core/web';
 import { IconApps } from '@tabler/icons-react';
 import { useState } from 'react';
-import { Outlet, Link } from 'react-router-dom';
 
 import { UserMenu } from '../components/index.js';
 import { webModule as userWebModule } from '../module.js';

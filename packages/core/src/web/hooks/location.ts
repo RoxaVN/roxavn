@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from '@remix-run/react';
 
 import { constants, urlUtils } from '../../base/index.js';
 

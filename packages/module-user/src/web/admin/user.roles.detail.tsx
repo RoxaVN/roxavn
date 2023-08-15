@@ -1,3 +1,4 @@
+import { useParams } from '@remix-run/react';
 import {
   ApiTable,
   webModule as coreWebModule,
@@ -9,7 +10,6 @@ import {
   PageItem,
 } from '@roxavn/core/web';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
-import { useParams } from 'react-router-dom';
 
 import { userRoleApi } from '../../base/index.js';
 import { RoleInput } from '../components/index.js';
