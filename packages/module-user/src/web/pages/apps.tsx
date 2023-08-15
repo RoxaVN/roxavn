@@ -12,7 +12,6 @@ import {
 import { Outlet, Link } from '@remix-run/react';
 import { webRoutes } from '@roxavn/core/base';
 import {
-  CatchBoundary,
   ErrorBoundary,
   WebModule,
   webModule as coreWebModule,
@@ -109,4 +108,4 @@ export default function () {
   );
 }
 
-export { CatchBoundary, ErrorBoundary };
+export { ErrorBoundary };

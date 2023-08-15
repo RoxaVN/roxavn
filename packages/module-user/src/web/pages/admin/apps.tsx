@@ -14,7 +14,6 @@ import {
 } from '@mantine/core';
 import { IconApps } from '@tabler/icons-react';
 import {
-  CatchBoundary,
   ErrorBoundary,
   WebModule,
   webModule as coreWebModule,
@@ -119,4 +118,4 @@ export const meta: V2_MetaFunction = () => [
   },
 ];
 
-export { CatchBoundary, ErrorBoundary };
+export { ErrorBoundary };
