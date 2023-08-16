@@ -1,4 +1,3 @@
-import { type AppProviderComponent } from '@roxavn/core/web';
 import { EthereumClient } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/react';
 import { useMemo } from 'react';
@@ -34,7 +33,7 @@ declare module '@roxavn/core/web' {
   interface AppProviderConfigs {
     web3Provider: {
       options: Omit<Web3ProviderProps, 'children'>;
-      component: AppProviderComponent;
+      component: typeof Web3Provider;
     };
   }
 }

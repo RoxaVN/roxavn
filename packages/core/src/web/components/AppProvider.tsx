@@ -24,46 +24,46 @@ export type AppProviderComponent = React.ComponentType<{
   children: React.ReactElement;
 }>;
 
-export const AppProviderConfigs: {
+export class AppProviderConfigs {
   mantineProvider: {
     options?: Omit<MantineProviderProps, 'children'>;
     component: AppProviderComponent;
+  } = {
+    component: MantineProvider,
+    options: { withGlobalStyles: true, withNormalizeCSS: true },
   };
+
   navigationProgress: {
     options?: Omit<NavigationProgressProps, 'children'>;
     component: AppProviderComponent;
-  };
+  } = { component: RouterTransition };
+
   modalsProvider: {
     options?: Omit<ModalsProviderProps, 'children'>;
     component: AppProviderComponent;
-  };
+  } = { component: ModalsProvider };
+
   notificationsProvider: {
     options?: Omit<NotificationsProps, 'children'>;
     component: AppProviderComponent;
-  };
+  } = { component: NotificationsProvider };
+
   rolesProvider: {
     options?: Empty;
     component: AppProviderComponent;
-  };
+  } = { component: RolesProvider };
+
   authProvider: {
     options?: Empty;
     component: AppProviderComponent;
-  };
-} = {
-  mantineProvider: {
-    component: MantineProvider,
-    options: { withGlobalStyles: true, withNormalizeCSS: true },
-  },
-  navigationProgress: { component: RouterTransition },
-  modalsProvider: { component: ModalsProvider },
-  notificationsProvider: { component: NotificationsProvider },
-  authProvider: { component: AuthProvider },
-  rolesProvider: { component: RolesProvider },
-};
+  } = { component: AuthProvider };
+}
+
+export const appProviderConfigs = new AppProviderConfigs();
 
 export const AppProvider = ({ children }: { children: React.ReactElement }) => {
   let element = children;
-  Object.values(AppProviderConfigs).forEach((item) => {
+  Object.values(appProviderConfigs).forEach((item) => {
     element = React.createElement(item.component, {
       ...item.options,
       children: element,
