@@ -1,5 +1,5 @@
 ---
-to: .eslintrc.js
+to: .eslintrc.cjs
 ---
 module.exports = {
   parser: '@typescript-eslint/parser',
@@ -18,7 +18,7 @@ module.exports = {
     jest: true,
     node: true,
   },
-  ignorePatterns: ['.eslintrc.js', 'jest.config.ts', 'commitlint.config.js'],
+  ignorePatterns: ['.eslintrc.cjs', 'jest.config.ts', 'commitlint.config.js'],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',

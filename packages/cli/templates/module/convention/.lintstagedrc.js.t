@@ -1,5 +1,5 @@
 ---
-to: .lintstagedrc.js
+to: .lintstagedrc.cjs
 ---
 const { ESLint } = require('eslint');
 
