@@ -17,6 +17,8 @@ to: package.json
   "devDependencies": {
     "@roxavn/cli": "^0.2.0",
     "@roxavn/module-user": "^0.2.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "typescript": "^5.0.4"
   },
   "peerDependencies": {
@@ -26,6 +28,7 @@ to: package.json
     "@roxavn/core": "^0.2.0",
     "@tabler/icons-react": "^2.12.0",
     "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "typeorm": "^0.3.10"
   },
   "exports": {
