@@ -18,12 +18,12 @@
     "packages/module-installer",
     "packages/module-notification",
     "packages/module-project",
+    "packages/module-web3",
     "packages/plugin-email-sender",
     "packages/plugin-project-notification",
     "packages/plugin-firebase",
     "packages/plugin-firebase-auth",
     "packages/plugin-upload-seaweedfs",
-    "packages/plugin-web3",
     "packages/plugin-web3-auth",
     "packages/module-asset",
     "packages/module-currency"

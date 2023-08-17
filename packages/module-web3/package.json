@@ -1,5 +1,5 @@
 {
-  "name": "@roxavn/plugin-web3",
+  "name": "@roxavn/module-web3",
   "version": "0.1.1",
   "scripts": {
     "build": "roxavn build",
@@ -28,7 +28,7 @@
     "typeorm": "^0.3.10",
     "viem": "^1.5.4",
     "wagmi": "^1.3.10",
-    "web3": "4.0.3"
+    "web3": "^4.0.3"
   },
   "exports": {
     ".": "./dist/esm/index.js",
