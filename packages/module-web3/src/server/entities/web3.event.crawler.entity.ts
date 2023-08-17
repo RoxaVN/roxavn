@@ -32,7 +32,7 @@ export class Web3EventCrawler {
   delayBlock: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata?: any;
+  metadata?: Record<string, any>;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;
