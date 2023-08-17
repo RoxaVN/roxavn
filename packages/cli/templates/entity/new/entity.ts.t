@@ -20,7 +20,7 @@ export class <%= h.changeCase.pascal(entity_name) %> {
   userId: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata?: any;
+  metadata?: Record<string, any>;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;
