@@ -26,7 +26,7 @@ export class Web3EventCrawler {
   provider: string;
 
   @Column('bigint')
-  lastBlock: string;
+  lastBlockNumber: string;
 
   @Column('int', { default: 10 })
   delayBlock: number;

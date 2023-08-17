@@ -4,6 +4,7 @@ import {
   IsOptional,
   Max,
   Min,
+  MinLength,
   TransformNumber,
 } from '@roxavn/core/base';
 
@@ -16,7 +17,7 @@ const eventCrawlerSource = new ApiSource<{
   contractAddress: string;
   networkId: string;
   provider: string;
-  lastBlock: string;
+  lastBlockNumber: string;
   delayBlock: number;
   metadata?: any;
   createdDate: Date;
@@ -36,9 +37,27 @@ class GetEventCrawlersRequest extends ExactProps<GetEventCrawlersRequest> {
   public readonly pageSize?: number;
 }
 
+class UpdateEventCrawlersRequest extends ExactProps<UpdateEventCrawlersRequest> {
+  @MinLength(1)
+  public readonly eventCrawlerId: string;
+
+  @MinLength(1)
+  @IsOptional()
+  public readonly provider?: string;
+
+  @Min(1)
+  @TransformNumber()
+  @IsOptional()
+  public readonly delayBlock?: number;
+}
+
 export const eventCrawlerApi = {
   getMany: eventCrawlerSource.getMany({
     validator: GetEventCrawlersRequest,
     permission: permissions.ReadEventCrawlers,
+  }),
+  update: eventCrawlerSource.update({
+    validator: UpdateEventCrawlersRequest,
+    permission: permissions.UpdateEventCrawler,
   }),
 };
