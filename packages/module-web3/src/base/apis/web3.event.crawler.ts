@@ -11,7 +11,7 @@ import {
 import { baseModule } from '../module.js';
 import { permissions, scopes } from '../access.js';
 
-const eventCrawlerSource = new ApiSource<{
+const web3EventCrawlerSource = new ApiSource<{
   id: string;
   event: string;
   contractAddress: string;
@@ -19,10 +19,11 @@ const eventCrawlerSource = new ApiSource<{
   provider: string;
   lastBlockNumber: string;
   delayBlock: number;
+  blockRange: number;
   metadata?: any;
   createdDate: Date;
   updatedDate: Date;
-}>([scopes.EventCrawler], baseModule);
+}>([scopes.Web3EventCrawler], baseModule);
 
 class GetEventCrawlersRequest extends ExactProps<GetEventCrawlersRequest> {
   @Min(1)
@@ -39,7 +40,7 @@ class GetEventCrawlersRequest extends ExactProps<GetEventCrawlersRequest> {
 
 class UpdateEventCrawlersRequest extends ExactProps<UpdateEventCrawlersRequest> {
   @MinLength(1)
-  public readonly eventCrawlerId: string;
+  public readonly web3EventCrawlerId: string;
 
   @MinLength(1)
   @IsOptional()
@@ -49,15 +50,20 @@ class UpdateEventCrawlersRequest extends ExactProps<UpdateEventCrawlersRequest> 
   @TransformNumber()
   @IsOptional()
   public readonly delayBlock?: number;
+
+  @Min(1)
+  @TransformNumber()
+  @IsOptional()
+  public readonly blockRange?: number;
 }
 
-export const eventCrawlerApi = {
-  getMany: eventCrawlerSource.getMany({
+export const web3EventCrawlerApi = {
+  getMany: web3EventCrawlerSource.getMany({
     validator: GetEventCrawlersRequest,
-    permission: permissions.ReadEventCrawlers,
+    permission: permissions.ReadWeb3EventCrawlers,
   }),
-  update: eventCrawlerSource.update({
+  update: web3EventCrawlerSource.update({
     validator: UpdateEventCrawlersRequest,
-    permission: permissions.UpdateEventCrawler,
+    permission: permissions.UpdateWeb3EventCrawler,
   }),
 };

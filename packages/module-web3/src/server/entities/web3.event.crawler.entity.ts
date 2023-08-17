@@ -31,6 +31,9 @@ export class Web3EventCrawler {
   @Column('int', { default: 10 })
   delayBlock: number;
 
+  @Column('int', { default: 5000 })
+  blockRange: number;
+
   @Column({ type: 'jsonb', nullable: true })
   metadata?: Record<string, any>;
 

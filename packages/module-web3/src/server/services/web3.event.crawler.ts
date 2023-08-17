@@ -1,13 +1,13 @@
 import { InferApiRequest } from '@roxavn/core/base';
 import { InjectDatabaseService } from '@roxavn/core/server';
 
-import { eventCrawlerApi } from '../../base/index.js';
+import { web3EventCrawlerApi } from '../../base/index.js';
 import { serverModule } from '../module.js';
-import { Web3EventCrawler } from '../entities/web3.event.crawler.entity.js';
+import { Web3EventCrawler } from '../entities/index.js';
 
-@serverModule.useApi(eventCrawlerApi.getMany)
-export class GetEventCrawlersApiService extends InjectDatabaseService {
-  async handle(request: InferApiRequest<typeof eventCrawlerApi.getMany>) {
+@serverModule.useApi(web3EventCrawlerApi.getMany)
+export class GetWeb3EventCrawlersApiService extends InjectDatabaseService {
+  async handle(request: InferApiRequest<typeof web3EventCrawlerApi.getMany>) {
     const page = request.page || 1;
     const pageSize = 10;
 
@@ -25,20 +25,30 @@ export class GetEventCrawlersApiService extends InjectDatabaseService {
   }
 }
 
-@serverModule.useApi(eventCrawlerApi.update)
-export class updateEventCrawlersApiService extends InjectDatabaseService {
-  async handle(request: InferApiRequest<typeof eventCrawlerApi.update>) {
-    await this.entityManager
-      .getRepository(Web3EventCrawler)
-      .update(
-        { id: request.eventCrawlerId },
-        { provider: request.provider, delayBlock: request.delayBlock }
-      );
+@serverModule.useApi(web3EventCrawlerApi.update)
+export class updateWeb3EventCrawlersApiService extends InjectDatabaseService {
+  async handle(request: InferApiRequest<typeof web3EventCrawlerApi.update>) {
+    await this.entityManager.getRepository(Web3EventCrawler).update(
+      { id: request.web3EventCrawlerId },
+      {
+        provider: request.provider,
+        delayBlock: request.delayBlock,
+        blockRange: request.blockRange,
+      }
+    );
     return {};
   }
 }
 
-export class CreateEventCrawlersApiService extends InjectDatabaseService {
+@serverModule.injectable()
+export class GetAllWeb3EventCrawlerApiService extends InjectDatabaseService {
+  handle() {
+    return this.entityManager.getRepository(Web3EventCrawler).find();
+  }
+}
+
+@serverModule.injectable()
+export class CreateWeb3EventCrawlersApiService extends InjectDatabaseService {
   async handle(request: {
     event: string;
     contractAddress: string;
