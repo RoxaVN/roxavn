@@ -1,6 +1,20 @@
-import { autoBind } from '../services/base.js';
-import { serviceContainer } from '../services/container.js';
-import { MiddlewareService, MiddlewareServiceClass } from './interfaces.js';
+import { autoBind } from './services/base.js';
+import { serviceContainer } from './services/container.js';
+import { RouterContext } from './services/context.js';
+
+export interface MiddlewareService {
+  after?: Array<{
+    new (...args: any[]): MiddlewareService;
+  }>;
+  before?: Array<{
+    new (...args: any[]): MiddlewareService;
+  }>;
+  handle: (context: RouterContext, next: () => Promise<void>) => Promise<void>;
+}
+
+export type MiddlewareServiceClass = {
+  new (...args: any[]): MiddlewareService;
+};
 
 export function compose(middlewares: Array<MiddlewareService['handle']>) {
   return function (context: any, next?: MiddlewareService['handle']) {
@@ -78,18 +92,4 @@ export class ApiMiddlewareManager extends BaseMiddlewareManager {
 @autoBind()
 export class LoaderMiddlewareManager extends BaseMiddlewareManager {
   static middlewareServices: Array<MiddlewareServiceClass> = [];
-}
-
-export function useApiMiddleware() {
-  return (serviceClass: MiddlewareServiceClass) => {
-    autoBind()(serviceClass);
-    ApiMiddlewareManager.middlewareServices.push(serviceClass);
-  };
-}
-
-export function useLoaderMiddleware() {
-  return (serviceClass: MiddlewareServiceClass) => {
-    autoBind()(serviceClass);
-    LoaderMiddlewareManager.middlewareServices.push(serviceClass);
-  };
 }

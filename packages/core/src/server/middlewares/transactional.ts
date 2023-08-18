@@ -1,11 +1,11 @@
 import { Transactional } from 'typeorm-transactional';
 import { AlreadyExistsException } from '../../base/index.js';
 import { RouterContext } from '../services/context.js';
-import { MiddlewareService } from './interfaces.js';
-import { useApiMiddleware, useLoaderMiddleware } from './manager.js';
+import { serverModule } from '../module.js';
+import { MiddlewareService } from '../middleware.js';
 
-@useApiMiddleware()
-@useLoaderMiddleware()
+@serverModule.useApiMiddleware()
+@serverModule.useLoaderMiddleware()
 export class TransactionalMiddleware implements MiddlewareService {
   @Transactional()
   async handle(ctx: RouterContext, next: () => Promise<void>) {

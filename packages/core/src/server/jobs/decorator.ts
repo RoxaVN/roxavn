@@ -4,7 +4,7 @@ import { ApiErrorJobManager, ApiSuccessJobManager } from './manager.js';
 
 export function useApiSuccessJob<
   Req extends ApiRequest,
-  Resp extends ApiResponse
+  Resp extends ApiResponse,
 >(api: Api<Req, Resp>) {
   return (serviceClass: any) => {
     autoBind()(serviceClass);
@@ -14,7 +14,7 @@ export function useApiSuccessJob<
 
 export function useApiErrorJob<
   Req extends ApiRequest,
-  Resp extends ApiResponse
+  Resp extends ApiResponse,
 >(api: Api<Req, Resp>) {
   return (serviceClass: any) => {
     autoBind()(serviceClass);

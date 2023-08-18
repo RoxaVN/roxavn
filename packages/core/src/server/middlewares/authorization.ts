@@ -15,11 +15,11 @@ import {
   LoaderAuthenticatorMiddleware,
 } from './authenticator.js';
 import { ResourceService } from './helper.js';
-import { MiddlewareService } from './interfaces.js';
-import { useApiMiddleware, useLoaderMiddleware } from './manager.js';
+import { serverModule } from '../module.js';
+import { MiddlewareService } from '../middleware.js';
 
-@useApiMiddleware()
-@useLoaderMiddleware()
+@serverModule.useApiMiddleware()
+@serverModule.useLoaderMiddleware()
 export class AuthorizationMiddleware implements MiddlewareService {
   after = [ApiAuthenticatorMiddleware, LoaderAuthenticatorMiddleware];
 

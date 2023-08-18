@@ -1,8 +1,8 @@
-import { MiddlewareService } from './interfaces.js';
-import { useApiMiddleware, useLoaderMiddleware } from './manager.js';
+import { MiddlewareService } from '../middleware.js';
+import { serverModule } from '../module.js';
 import { ValidatorMiddleware } from './validator.js';
 
-@useApiMiddleware()
+@serverModule.useApiMiddleware()
 export class ApiAuthenticatorMiddleware implements MiddlewareService {
   after = [ValidatorMiddleware];
 
@@ -11,7 +11,7 @@ export class ApiAuthenticatorMiddleware implements MiddlewareService {
   }
 }
 
-@useLoaderMiddleware()
+@serverModule.useLoaderMiddleware()
 export class LoaderAuthenticatorMiddleware implements MiddlewareService {
   after = [ValidatorMiddleware];
 

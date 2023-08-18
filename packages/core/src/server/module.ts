@@ -8,7 +8,12 @@ import {
   BaseModule,
   ServerException,
 } from '../base/index.js';
-import { ApiMiddlewareManager, compose } from './middlewares/index.js';
+import {
+  ApiMiddlewareManager,
+  compose,
+  LoaderMiddlewareManager,
+  MiddlewareServiceClass,
+} from './middleware.js';
 import { autoBind, BaseService, rebind } from './services/base.js';
 import {
   handleService,
@@ -67,6 +72,20 @@ export class ServerModule extends BaseModule {
   injectable = autoBind;
   rebind = rebind;
   bindFactory = bindFactory;
+
+  useApiMiddleware() {
+    return (serviceClass: MiddlewareServiceClass) => {
+      autoBind()(serviceClass);
+      ApiMiddlewareManager.middlewareServices.push(serviceClass);
+    };
+  }
+
+  useLoaderMiddleware() {
+    return (serviceClass: MiddlewareServiceClass) => {
+      autoBind()(serviceClass);
+      LoaderMiddlewareManager.middlewareServices.push(serviceClass);
+    };
+  }
 
   static handleError(error: any) {
     console.error(error);

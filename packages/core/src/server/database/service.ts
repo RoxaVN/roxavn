@@ -14,7 +14,10 @@ import { bindFactory } from '../services/utils.js';
 export class DatabaseService {
   manager: EntityManager;
 
-  constructor(public dataSource: DataSource, private entities: any[]) {
+  constructor(
+    public dataSource: DataSource,
+    private entities: any[]
+  ) {
     this.manager = dataSource.manager;
   }
 

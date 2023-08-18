@@ -1,11 +1,14 @@
-import { MiddlewareService } from '../middlewares/interfaces.js';
-import { useApiMiddleware } from '../middlewares/manager.js';
 import { serviceContainer } from '../services/container.js';
 import { RouterContext } from '../services/context.js';
-import { JobDistributor } from './distributor.js';
-import { ApiErrorJobManager, ApiSuccessJobManager } from './manager.js';
+import {
+  ApiErrorJobManager,
+  ApiSuccessJobManager,
+  JobDistributor,
+} from '../jobs/index.js';
+import { serverModule } from '../module.js';
+import { MiddlewareService } from '../middleware.js';
 
-@useApiMiddleware()
+@serverModule.useApiMiddleware()
 export class EmitApiJobMiddleware implements MiddlewareService {
   async handle({ api, state }: RouterContext, next: () => Promise<void>) {
     const jobDistributor = await serviceContainer.getAsync(JobDistributor);

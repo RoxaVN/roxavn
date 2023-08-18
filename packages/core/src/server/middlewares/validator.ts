@@ -3,12 +3,12 @@ import { validateSync } from 'class-validator';
 
 import { ErrorResponse, ValidationException } from '../../base/index.js';
 import { RouterContext } from '../services/context.js';
-import { MiddlewareService } from './interfaces.js';
-import { useApiMiddleware, useLoaderMiddleware } from './manager.js';
 import { TransactionalMiddleware } from './transactional.js';
+import { serverModule } from '../module.js';
+import { MiddlewareService } from '../middleware.js';
 
-@useApiMiddleware()
-@useLoaderMiddleware()
+@serverModule.useApiMiddleware()
+@serverModule.useLoaderMiddleware()
 export class ValidatorMiddleware implements MiddlewareService {
   after = [TransactionalMiddleware];
 
