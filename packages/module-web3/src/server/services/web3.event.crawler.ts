@@ -31,7 +31,6 @@ export class updateWeb3EventCrawlersApiService extends InjectDatabaseService {
     await this.entityManager.getRepository(Web3EventCrawler).update(
       { id: request.web3EventCrawlerId },
       {
-        provider: request.provider,
         delayBlock: request.delayBlock,
         blockRange: request.blockRange,
         isActive: request.isActive,
@@ -45,16 +44,12 @@ export class updateWeb3EventCrawlersApiService extends InjectDatabaseService {
 export class CreateWeb3EventCrawlersApiService extends InjectDatabaseService {
   async handle(request: {
     event: string;
-    contractAddress: string;
-    networkId: number;
-    provider: string;
+    contractId: string;
     birthBlockNumber: number;
   }) {
     const eventCrawler = new Web3EventCrawler();
     eventCrawler.event = request.event;
-    eventCrawler.contractAddress = request.contractAddress;
-    eventCrawler.networkId = request.networkId.toString();
-    eventCrawler.provider = request.provider;
+    eventCrawler.contractId = request.contractId;
     eventCrawler.lastBlockNumber = request.birthBlockNumber.toString();
 
     await this.entityManager.save(eventCrawler);

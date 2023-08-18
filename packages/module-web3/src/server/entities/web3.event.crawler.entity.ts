@@ -3,12 +3,15 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
   UpdateDateColumn,
 } from 'typeorm';
+import { Web3Contract } from './web3.contract.entity.js';
 
 @Entity()
-@Index(['event', 'contractAddress', 'networkId'], { unique: true })
+@Index(['event', 'contractId'], { unique: true })
 export class Web3EventCrawler {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -16,14 +19,11 @@ export class Web3EventCrawler {
   @Column('text')
   event: string;
 
-  @Column('text')
-  contractAddress: string;
+  @Column('uuid')
+  contractId: string;
 
-  @Column('bigint')
-  networkId: string;
-
-  @Column('text')
-  provider: string;
+  @ManyToOne(() => Web3Contract, (contract) => contract.eventCrawlers)
+  contract: Relation<Web3Contract>;
 
   @Column('boolean', { default: true })
   isActive: boolean;

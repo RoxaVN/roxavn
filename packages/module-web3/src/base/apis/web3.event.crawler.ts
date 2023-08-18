@@ -15,9 +15,7 @@ import { permissions, scopes } from '../access.js';
 const web3EventCrawlerSource = new ApiSource<{
   id: string;
   event: string;
-  contractAddress: string;
-  networkId: string;
-  provider: string;
+  contractId: string;
   isActive: boolean;
   lastBlockNumber: string;
   delayBlock: number;
@@ -47,10 +45,6 @@ class UpdateEventCrawlersRequest extends ExactProps<UpdateEventCrawlersRequest> 
   @IsBoolean()
   @IsOptional()
   public readonly isActive?: boolean;
-
-  @MinLength(1)
-  @IsOptional()
-  public readonly provider?: string;
 
   @Min(1)
   @TransformNumber()
