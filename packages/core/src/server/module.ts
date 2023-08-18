@@ -28,6 +28,7 @@ import {
   ApiErrorEventManager,
   ApiSuccessEventManager,
 } from './events/manager.js';
+import { CronJobManager } from './cron.job.js';
 
 export class ServerModule extends BaseModule {
   static apiRoutes: Array<{
@@ -125,6 +126,13 @@ export class ServerModule extends BaseModule {
     return (serviceClass: any) => {
       autoBind()(serviceClass);
       ApiErrorEventManager.items.push({ serviceClass, api });
+    };
+  }
+
+  useCronJob(cronTime: string) {
+    return (serviceClass: any) => {
+      autoBind()(serviceClass);
+      CronJobManager.items.push({ serviceClass, cronTime, module: this });
     };
   }
 
