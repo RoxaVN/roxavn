@@ -4,11 +4,7 @@ import {
   type RemixLoaderContextHelper,
   ServerModule,
   moduleManager,
-  serviceContainer,
-  ApiSuccessJobManager,
-  ApiErrorJobManager,
-  ApiSuccessEventManager,
-  ApiErrorEventManager,
+  registerServices,
 } from '@roxavn/core/server';
 import {
   createRemixRequest,
@@ -20,27 +16,13 @@ import path from 'path';
 
 export async function bootstrap(serverBuild: ServerBuild) {
   await moduleManager.importServerModules();
-
-  await (
-    await serviceContainer.getAsync(ApiSuccessEventManager)
-  ).registerServices();
-  await (
-    await serviceContainer.getAsync(ApiErrorEventManager)
-  ).registerServices();
+  await registerServices();
 
   await Promise.all(
     moduleManager.serverModules.map((m) => {
       return m.onBeforeServerStart && m.onBeforeServerStart();
     })
   );
-  if (process.env.RUN_JOBS_CONSUMER) {
-    await (
-      await serviceContainer.getAsync(ApiSuccessJobManager)
-    ).registerServices();
-    await (
-      await serviceContainer.getAsync(ApiErrorJobManager)
-    ).registerServices();
-  }
 
   const app = fastify();
   app.setErrorHandler(function (error, request, reply) {

@@ -16,7 +16,7 @@ interface ServiceItem {
 export class CronJobManager {
   static items: Array<ServiceItem> = [];
 
-  async startJobs() {
+  async registerServices() {
     for (const item of (this.constructor as any).items as ServiceItem[]) {
       const service = await serviceContainer.getAsync(item.serviceClass);
       item.job = new CronJob(item.cronTime, () => {
