@@ -25,6 +25,9 @@ export class Web3EventCrawler {
   @Column('text')
   provider: string;
 
+  @Column('boolean', { default: true })
+  isActive: boolean;
+
   @Column('bigint')
   lastBlockNumber: string;
 

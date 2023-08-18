@@ -34,16 +34,10 @@ export class updateWeb3EventCrawlersApiService extends InjectDatabaseService {
         provider: request.provider,
         delayBlock: request.delayBlock,
         blockRange: request.blockRange,
+        isActive: request.isActive,
       }
     );
     return {};
-  }
-}
-
-@serverModule.injectable()
-export class GetAllWeb3EventCrawlerApiService extends InjectDatabaseService {
-  handle() {
-    return this.entityManager.getRepository(Web3EventCrawler).find();
   }
 }
 

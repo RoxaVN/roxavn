@@ -1,6 +1,7 @@
 import {
   ApiSource,
   ExactProps,
+  IsBoolean,
   IsOptional,
   Max,
   Min,
@@ -17,6 +18,7 @@ const web3EventCrawlerSource = new ApiSource<{
   contractAddress: string;
   networkId: string;
   provider: string;
+  isActive: boolean;
   lastBlockNumber: string;
   delayBlock: number;
   blockRange: number;
@@ -41,6 +43,10 @@ class GetEventCrawlersRequest extends ExactProps<GetEventCrawlersRequest> {
 class UpdateEventCrawlersRequest extends ExactProps<UpdateEventCrawlersRequest> {
   @MinLength(1)
   public readonly web3EventCrawlerId: string;
+
+  @IsBoolean()
+  @IsOptional()
+  public readonly isActive?: boolean;
 
   @MinLength(1)
   @IsOptional()
