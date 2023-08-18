@@ -14,11 +14,11 @@ import {
   RouterContextState,
   serviceContainer,
 } from './index.js';
-import { compose, LoaderMiddlewareManager } from '../middlewares/manager.js';
+import { compose, LoaderMiddlewareManager } from '../middleware.js';
 
 export interface ServiceLoaderItem<
   Req extends ApiRequest = ApiRequest,
-  Resp extends ApiResponse = ApiResponse
+  Resp extends ApiResponse = ApiResponse,
 > {
   service: {
     new (...args: any[]): BaseService<Req, Resp>;

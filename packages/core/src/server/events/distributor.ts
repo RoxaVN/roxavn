@@ -1,5 +1,7 @@
 import EventEmitter from 'events';
 import { autoBind } from '../services/base.js';
+import { Api } from '../../base/api.js';
+import { RouterContextState } from '../services/context.js';
 
 @autoBind()
 export class EventDistributor {
@@ -18,3 +20,8 @@ export class EventDistributor {
     this.emiter.emit(event, data);
   }
 }
+
+export type InferApiSuccessData<T extends Api> = RouterContextState<T>;
+export type InferApiErrorData<T extends Api> = RouterContextState<T> & {
+  error: any;
+};

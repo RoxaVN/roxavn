@@ -1,16 +1,12 @@
-import {
-  BaseService,
-  InferApiSuccessData,
-  inject,
-  useApiSuccessJob,
-} from '@roxavn/core/server';
+import { BaseService, InferApiSuccessData, inject } from '@roxavn/core/server';
 import { CreateNotificationService } from '@roxavn/module-notification/server';
 import { scopes, taskApi } from '@roxavn/module-project/base';
 import { GetTaskApiService } from '@roxavn/module-project/server';
 
 import { baseModule } from '../../base/index.js';
+import { serverModule } from '../module.js';
 
-@useApiSuccessJob(taskApi.createSubtask)
+@serverModule.useApiSuccessJob(taskApi.createSubtask)
 export class CreateSubTaskNoticeService extends BaseService {
   constructor(
     @inject(GetTaskApiService) private getTaskApiService: GetTaskApiService,
@@ -41,7 +37,7 @@ export class CreateSubTaskNoticeService extends BaseService {
   }
 }
 
-@useApiSuccessJob(taskApi.inprogress)
+@serverModule.useApiSuccessJob(taskApi.inprogress)
 export class InprogressTaskNoticeService extends BaseService {
   constructor(
     @inject(GetTaskApiService) private getTaskApiService: GetTaskApiService,
@@ -68,7 +64,7 @@ export class InprogressTaskNoticeService extends BaseService {
   }
 }
 
-@useApiSuccessJob(taskApi.delete)
+@serverModule.useApiSuccessJob(taskApi.delete)
 export class DeleteTaskNoticeService extends BaseService {
   constructor(
     @inject(GetTaskApiService) private getTaskApiService: GetTaskApiService,
@@ -95,7 +91,7 @@ export class DeleteTaskNoticeService extends BaseService {
   }
 }
 
-@useApiSuccessJob(taskApi.reject)
+@serverModule.useApiSuccessJob(taskApi.reject)
 export class RejectTaskNoticeService extends BaseService {
   constructor(
     @inject(GetTaskApiService) private getTaskApiService: GetTaskApiService,

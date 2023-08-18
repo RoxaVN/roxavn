@@ -23,6 +23,11 @@ import {
   serviceContainer,
 } from './services/index.js';
 import { bindFactory } from './services/utils.js';
+import { ApiErrorJobManager, ApiSuccessJobManager } from './jobs/manager.js';
+import {
+  ApiErrorEventManager,
+  ApiSuccessEventManager,
+} from './events/manager.js';
 
 export class ServerModule extends BaseModule {
   static apiRoutes: Array<{
@@ -84,6 +89,42 @@ export class ServerModule extends BaseModule {
     return (serviceClass: MiddlewareServiceClass) => {
       autoBind()(serviceClass);
       LoaderMiddlewareManager.middlewareServices.push(serviceClass);
+    };
+  }
+
+  useApiSuccessJob<Req extends ApiRequest, Resp extends ApiResponse>(
+    api: Api<Req, Resp>
+  ) {
+    return (serviceClass: any) => {
+      autoBind()(serviceClass);
+      ApiSuccessJobManager.push({ serviceClass, api });
+    };
+  }
+
+  useApiErrorJob<Req extends ApiRequest, Resp extends ApiResponse>(
+    api: Api<Req, Resp>
+  ) {
+    return (serviceClass: any) => {
+      autoBind()(serviceClass);
+      ApiErrorJobManager.push({ serviceClass, api });
+    };
+  }
+
+  onApiSuccess<Req extends ApiRequest, Resp extends ApiResponse>(
+    api: Api<Req, Resp>
+  ) {
+    return (serviceClass: any) => {
+      autoBind()(serviceClass);
+      ApiSuccessEventManager.items.push({ serviceClass, api });
+    };
+  }
+
+  onApiError<Req extends ApiRequest, Resp extends ApiResponse>(
+    api: Api<Req, Resp>
+  ) {
+    return (serviceClass: any) => {
+      autoBind()(serviceClass);
+      ApiErrorEventManager.items.push({ serviceClass, api });
     };
   }
 
