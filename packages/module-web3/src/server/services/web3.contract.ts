@@ -30,3 +30,23 @@ export class UpdateWeb3ContractApiService extends InjectDatabaseService {
     return {};
   }
 }
+
+@serverModule.useApi(web3ContractApi.getMany)
+export class GetWeb3ContractsApiService extends InjectDatabaseService {
+  async handle(request: InferApiRequest<typeof web3ContractApi.getMany>) {
+    const page = request.page || 1;
+    const pageSize = request.pageSize || 10;
+
+    const [items, totalItems] = await this.entityManager
+      .getRepository(Web3Contract)
+      .findAndCount({
+        take: pageSize,
+        skip: (page - 1) * pageSize,
+      });
+
+    return {
+      items: items,
+      pagination: { page, pageSize, totalItems },
+    };
+  }
+}

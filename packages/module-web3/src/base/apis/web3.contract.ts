@@ -3,8 +3,10 @@ import {
   ExactProps,
   IsNotEmptyObject,
   IsOptional,
+  Max,
   Min,
   MinLength,
+  TransformNumber,
 } from '@roxavn/core/base';
 
 import { baseModule } from '../module.js';
@@ -48,7 +50,24 @@ class UpdateWeb3ContractRequest extends ExactProps<UpdateWeb3ContractRequest> {
   public readonly abi?: Record<string, any>;
 }
 
+class GetWeb3ContractsRequest extends ExactProps<GetWeb3ContractsRequest> {
+  @Min(1)
+  @TransformNumber()
+  @IsOptional()
+  public readonly page?: number;
+
+  @Min(1)
+  @Max(100)
+  @TransformNumber()
+  @IsOptional()
+  public readonly pageSize?: number;
+}
+
 export const web3ContractApi = {
+  getMany: web3ContractSource.getMany({
+    validator: GetWeb3ContractsRequest,
+    permission: permissions.ReadWeb3Contracts,
+  }),
   update: web3ContractSource.update({
     validator: UpdateWeb3ContractRequest,
     permission: permissions.UpdateWeb3Contract,

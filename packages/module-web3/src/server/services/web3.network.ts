@@ -9,7 +9,7 @@ import { Web3Network } from '../entities/index.js';
 export class GetWeb3NetworksApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof web3NetworkApi.getMany>) {
     const page = request.page || 1;
-    const pageSize = 10;
+    const pageSize = request.pageSize || 10;
 
     const [items, totalItems] = await this.entityManager
       .getRepository(Web3Network)
