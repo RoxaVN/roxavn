@@ -37,3 +37,14 @@ export class UpdateWeb3NetworkApiService extends InjectDatabaseService {
     return {};
   }
 }
+
+@serverModule.useApi(web3NetworkApi.create)
+export class CreateWeb3NetworkApiService extends InjectDatabaseService {
+  async handle(request: InferApiRequest<typeof web3NetworkApi.create>) {
+    const item = new Web3Network();
+    Object.assign(item, request);
+
+    await this.entityManager.save(item);
+    return { id: item.id };
+  }
+}

@@ -8,6 +8,7 @@ export const scopes = accessManager.makeScopes(baseModule, {
 });
 
 export const permissions = accessManager.makePermissions(scopes, {
+  CreateWeb3Network: {},
   UpdateWeb3Network: {},
   ReadWeb3Networks: {},
 

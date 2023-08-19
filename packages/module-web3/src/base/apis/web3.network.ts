@@ -41,12 +41,23 @@ class UpdateWeb3NetworkRequest extends ExactProps<UpdateWeb3NetworkRequest> {
   public readonly providerUrl: string;
 }
 
+class CreateWeb3NetworkRequest extends ExactProps<CreateWeb3NetworkRequest> {
+  @Min(1)
+  public readonly id: number;
+
+  @IsUrl()
+  public readonly providerUrl: string;
+}
+
 export const web3NetworkApi = {
+  create: web3NetworkSource.create({
+    validator: CreateWeb3NetworkRequest,
+    permission: permissions.CreateWeb3Network,
+  }),
   update: web3NetworkSource.update({
     validator: UpdateWeb3NetworkRequest,
     permission: permissions.UpdateWeb3Network,
   }),
-
   getMany: web3NetworkSource.getMany({
     validator: GetWeb3NetworksRequest,
     permission: permissions.ReadWeb3Networks,
