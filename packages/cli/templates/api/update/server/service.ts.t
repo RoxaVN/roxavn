@@ -2,7 +2,7 @@
 to: src/server/services/<%= h.changeCase.dot(api_source_name) %>.ts
 inject: true
 append: true
-skip_if: update
+skip_if: '\.update\)'
 ---
 <%= '' %>
 @serverModule.useApi(<%= h.changeCase.camel(api_source_name) %>Api.update)
