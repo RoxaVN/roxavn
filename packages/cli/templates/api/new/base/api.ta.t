@@ -1,23 +1,15 @@
 ---
 to: src/base/apis/<%= h.changeCase.dot(api_source_name) %>.ts
 ---
-import { ApiSource, ExactProps, MinLength } from '@roxavn/core/base';
+import { ApiSource, ExactProps } from '@roxavn/core/base';
 
 import { baseModule } from '../module.js';
-import { scopes } from '../access.js';
+import { permissions, scopes } from '../access.js';
 
 const <%= api_source_name %>Source = new ApiSource<{}>(
   [scopes.<%= h.changeCase.pascal(api_source_name) %>],
   baseModule
 );
 
-class Get<%= h.changeCase.pascal(api_source_name) %>Request extends ExactProps<Get<%= h.changeCase.pascal(api_source_name) %>Request> {
-  @MinLength(1)
-  public readonly <%= api_source_name %>Id: string;
-}
-
 export const <%= api_source_name %>Api = {
-  getOne: <%= api_source_name %>Source.getOne({
-    validator: Get<%= h.changeCase.pascal(api_source_name) %>Request,
-  }),
 };

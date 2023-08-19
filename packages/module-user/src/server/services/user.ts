@@ -9,15 +9,14 @@ import { InjectDatabaseService } from '@roxavn/core/server';
 @serverModule.useApi(userApi.getOne)
 export class GetMyUserApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof userApi.getOne>) {
-    const user = await this.entityManager.getRepository(User).findOne({
+    const item = await this.entityManager.getRepository(User).findOne({
       where: { id: request.userId },
     });
 
-    if (!user) {
-      throw new NotFoundException();
+    if (item) {
+      return item;
     }
-
-    return user;
+    throw new NotFoundException();
   }
 }
 
