@@ -2,8 +2,10 @@ import {
   ApiSource,
   ExactProps,
   IsOptional,
+  IsUrl,
   Max,
   Min,
+  MinLength,
   TransformNumber,
 } from '@roxavn/core/base';
 
@@ -12,7 +14,7 @@ import { permissions, scopes } from '../access.js';
 
 const web3NetworkSource = new ApiSource<{
   id: string;
-  provider: string;
+  providerUrl: string;
   metadata?: Record<string, any>;
   createdDate: Date;
   updatedDate: Date;
@@ -31,7 +33,20 @@ class GetWeb3NetworksRequest extends ExactProps<GetWeb3NetworksRequest> {
   public readonly pageSize?: number;
 }
 
+class UpdateWeb3NetworkRequest extends ExactProps<UpdateWeb3NetworkRequest> {
+  @MinLength(1)
+  public readonly web3NetworkId: string;
+
+  @IsUrl()
+  public readonly providerUrl: string;
+}
+
 export const web3NetworkApi = {
+  update: web3NetworkSource.update({
+    validator: UpdateWeb3NetworkRequest,
+    permission: permissions.UpdateWeb3Network,
+  }),
+
   getMany: web3NetworkSource.getMany({
     validator: GetWeb3NetworksRequest,
     permission: permissions.ReadWeb3Networks,

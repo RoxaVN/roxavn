@@ -15,7 +15,7 @@ export class Web3Network {
   id: string;
 
   @Column('text')
-  provider: string;
+  providerUrl: string;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: Record<string, any>;

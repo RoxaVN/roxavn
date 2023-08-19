@@ -24,3 +24,16 @@ export class GetWeb3NetworksApiService extends InjectDatabaseService {
     };
   }
 }
+
+@serverModule.useApi(web3NetworkApi.update)
+export class UpdateWeb3NetworkApiService extends InjectDatabaseService {
+  async handle(request: InferApiRequest<typeof web3NetworkApi.update>) {
+    await this.entityManager
+      .getRepository(Web3Network)
+      .update(
+        { id: request.web3NetworkId },
+        { providerUrl: request.providerUrl }
+      );
+    return {};
+  }
+}

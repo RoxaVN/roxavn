@@ -8,11 +8,11 @@ export const scopes = accessManager.makeScopes(baseModule, {
 });
 
 export const permissions = accessManager.makePermissions(scopes, {
+  UpdateWeb3Network: {},
+  ReadWeb3Networks: {},
+
   UpdateWeb3EventCrawler: {},
   ReadWeb3EventCrawlers: {},
-
-  ReadWeb3Networks: {},
-  UpdateWeb3Networks: {},
 });
 
 export const roles = accessManager.makeRoles(scopes, permissions, {});
