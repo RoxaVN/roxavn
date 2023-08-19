@@ -2,31 +2,30 @@
   "name": "roxavn",
   "scripts": {
     "prepare": "husky install",
-    "build:cli": "npm run build --workspace=packages/core --workspace=packages/cli && npm i --workspace=packages/cli",
-    "build": "npm run build:cli && npm run build --workspaces"
+    "build": "npm run build --workspaces"
   },
   "license": "MIT",
   "author": "roxavn",
   "workspaces": [
     "packages/core",
-    "packages/cli",
     "packages/dev-web",
-    "packages/module-user",
+    "packages/cli",
     "packages/module-utils",
+    "packages/module-user",
     "packages/module-upload",
     "packages/module-user-info",
     "packages/module-installer",
     "packages/module-notification",
     "packages/module-project",
     "packages/module-web3",
+    "packages/module-asset",
+    "packages/module-currency",
     "packages/plugin-email-sender",
     "packages/plugin-project-notification",
     "packages/plugin-firebase",
     "packages/plugin-firebase-auth",
     "packages/plugin-upload-seaweedfs",
-    "packages/plugin-web3-auth",
-    "packages/module-asset",
-    "packages/module-currency"
+    "packages/plugin-web3-auth"
   ],
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",
