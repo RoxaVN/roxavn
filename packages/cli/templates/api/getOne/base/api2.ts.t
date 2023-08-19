@@ -6,5 +6,5 @@ skip_if: '\.getOne\('
 ---
   getOne: <%= api_source_name %>Source.getOne({
     validator: Get<%= h.changeCase.pascal(api_source_name) %>Request,
-    permission: permissions.Get<%= h.changeCase.pascal(api_source_name) %>,
+    permission: permissions.Read<%= h.changeCase.pascal(api_source_name) %>,
   }),
