@@ -8,7 +8,7 @@ import {
 } from '@roxavn/core/base';
 
 import { baseModule } from '../module.js';
-import { scopes } from '../access.js';
+import { permissions, scopes } from '../access.js';
 
 const web3NetworkSource = new ApiSource<{
   id: string;
@@ -34,5 +34,6 @@ class GetWeb3NetworksRequest extends ExactProps<GetWeb3NetworksRequest> {
 export const web3NetworkApi = {
   getMany: web3NetworkSource.getMany({
     validator: GetWeb3NetworksRequest,
+    permission: permissions.ReadWeb3Networks,
   }),
 };

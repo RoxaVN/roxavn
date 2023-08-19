@@ -127,11 +127,12 @@ export class CreateProjectApiService extends BaseService {
 @serverModule.useApi(projectApi.update)
 export class UpdateProjectApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof projectApi.update>) {
-    await this.entityManager.update(
-      Project,
-      { id: request.projectId },
-      { name: request.name, type: request.type }
-    );
+    await this.entityManager
+      .getRepository(Project)
+      .update(
+        { id: request.projectId },
+        { name: request.name, type: request.type }
+      );
     return {};
   }
 }
