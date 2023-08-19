@@ -1,6 +1,10 @@
 {
+  "networks": "Mạng",
+  "providerUrl": "URL nhà cung cấp",
+  "addNetwork": "Thêm mạng",
+  "editNetwork": "Sửa mạng {{ id }}",
   "Meta": {
-    "name": "Web3",
-    "description": "Web3"
+    "name": "Web 3",
+    "description": "Web 3"
   }
 }

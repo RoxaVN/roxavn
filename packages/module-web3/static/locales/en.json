@@ -1,6 +1,10 @@
 {
+  "networks": "Networks",
+  "providerUrl": "Provider url",
+  "addNetwork": "Add network",
+  "editNetwork": "Edit network {{ id }}",
   "Meta": {
-    "name": "Web3",
-    "description": "Web3"
+    "name": "Web 3",
+    "description": "Web 3"
   }
 }
