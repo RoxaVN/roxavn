@@ -3,6 +3,12 @@
   "providerUrl": "Provider url",
   "addNetwork": "Add network",
   "editNetwork": "Edit network {{ id }}",
+  "address": "Address",
+  "networkId": "Network id",
+  "contracts": "Contracts",
+  "addContract": "Add contract",
+  "editContract": "Edit contract",
+  "contractAbi": "Contract ABI",
   "Meta": {
     "name": "Web 3",
     "description": "Web 3"

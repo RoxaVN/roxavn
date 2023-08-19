@@ -1,3 +1,4 @@
+import { NumberInput, TextInput } from '@mantine/core';
 import {
   ApiFormGroup,
   ApiTable,
@@ -11,7 +12,6 @@ import { IconEdit, IconPlus, IconTopologyRing3 } from '@tabler/icons-react';
 
 import { web3NetworkApi } from '../../base/index.js';
 import { webModule } from '../module.js';
-import { NumberInput, TextInput } from '@mantine/core';
 
 const Page = () => {
   const { t } = webModule.useTranslation();

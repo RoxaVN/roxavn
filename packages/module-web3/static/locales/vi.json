@@ -3,6 +3,12 @@
   "providerUrl": "URL nhà cung cấp",
   "addNetwork": "Thêm mạng",
   "editNetwork": "Sửa mạng {{ id }}",
+  "address": "Địa chỉ",
+  "networkId": "Id mạng",
+  "contracts": "Hợp đồng",
+  "addContract": "thêm hợp đồng",
+  "editContract": "Sửa hợp đồng",
+  "contractAbi": "ABI của hợp đồng",
   "Meta": {
     "name": "Web 3",
     "description": "Web 3"
