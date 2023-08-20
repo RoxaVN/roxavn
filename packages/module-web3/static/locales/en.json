@@ -7,9 +7,17 @@
   "address": "Address",
   "networkId": "Network id",
   "contracts": "Contracts",
+  "contract": "Contract",
   "addContract": "Add contract",
   "editContract": "Edit contract",
   "contractAbi": "Contract ABI",
+  "event": "Event",
+  "eventCrawlers": "Event crawlers",
+  "addEventCrawler": "Add event crawlers",
+  "editEventCrawler": "Edit event crawlers {{ event }}",
+  "blockRange": "Block range",
+  "delayBlock": "Delay block",
+  "lastBlockNumber": "Last block number",
   "Meta": {
     "name": "Web 3",
     "description": "Web 3"

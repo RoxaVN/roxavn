@@ -7,9 +7,17 @@
   "address": "Địa chỉ",
   "networkId": "Id mạng",
   "contracts": "Hợp đồng",
+  "contract": "Hợp đồng",
   "addContract": "thêm hợp đồng",
   "editContract": "Sửa hợp đồng",
   "contractAbi": "ABI của hợp đồng",
+  "event": "Sự kiện",
+  "eventCrawlers": "Trình thu thập sự kiện",
+  "addEventCrawler": "thêm trình thu thập sự kiện",
+  "editEventCrawler": "Sửa trình thu thập sự kiện {{ event }}",
+  "blockRange": "Phạm vi khối",
+  "delayBlock": "Số khối trễ",
+  "lastBlockNumber": "Số khối cuối cùng",
   "Meta": {
     "name": "Web 3",
     "description": "Web 3"
