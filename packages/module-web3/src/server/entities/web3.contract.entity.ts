@@ -13,7 +13,7 @@ import { Web3Network } from './web3.network.entity.js';
 
 @Entity()
 export class Web3Contract {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   id: string;
 
   @Column('text')

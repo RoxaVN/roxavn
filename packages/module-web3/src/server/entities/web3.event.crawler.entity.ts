@@ -19,7 +19,7 @@ export class Web3EventCrawler {
   @Column('text')
   event: string;
 
-  @Column('uuid')
+  @Column('bigint')
   contractId: string;
 
   @ManyToOne(() => Web3Contract, (contract) => contract.eventCrawlers)

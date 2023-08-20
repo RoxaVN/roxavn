@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitModuleWeb31692433680517 implements MigrationInterface {
-  name = 'InitModuleWeb31692433680517';
+export class InitModuleWeb31692515607058 implements MigrationInterface {
+  name = 'InitModuleWeb31692515607058';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
@@ -17,7 +17,7 @@ export class InitModuleWeb31692433680517 implements MigrationInterface {
       `);
     await queryRunner.query(`
       CREATE TABLE "web3_contract" (
-        "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
+        "id" BIGSERIAL NOT NULL,
         "address" text NOT NULL,
         "abi" jsonb NOT NULL,
         "networkId" bigint NOT NULL,
@@ -31,7 +31,7 @@ export class InitModuleWeb31692433680517 implements MigrationInterface {
       CREATE TABLE "web3_event_crawler" (
         "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
         "event" text NOT NULL,
-        "contractId" uuid NOT NULL,
+        "contractId" bigint NOT NULL,
         "isActive" boolean NOT NULL DEFAULT true,
         "lastBlockNumber" bigint NOT NULL,
         "delayBlock" integer NOT NULL DEFAULT '10',
