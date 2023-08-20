@@ -23,7 +23,7 @@ const Page = () => {
       columns={{
         contractId: { label: t('contract') },
         event: { label: t('event') },
-        isActive: { label: tCore('status') },
+        isActive: { label: tCore('status'), render: utils.Render.boolean },
         blockRangePerCrawl: { label: t('blockRangePerCrawl') },
         delayBlockCount: { label: t('delayBlockCount') },
         lastCrawlBlockNumber: { label: t('lastCrawlBlockNumber') },
@@ -65,7 +65,7 @@ const Page = () => {
           label: tCore('edit'),
           icon: IconEdit,
           modal: {
-            title: t('editEventCrawler'),
+            title: t('editEventCrawler', { event: item.event }),
             children: (
               <ApiFormGroup
                 api={web3EventCrawlerApi.update}

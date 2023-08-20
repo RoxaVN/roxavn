@@ -1,4 +1,4 @@
-import { Badge, Group } from '@mantine/core';
+import { Badge, Checkbox, Group } from '@mantine/core';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat.js';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
@@ -73,7 +73,7 @@ export const utils = {
         {v}
       </div>
     ),
-    boolean: (v: boolean | number) => v && <i className="pi pi-check" />,
+    boolean: (v: boolean | number) => v && <Checkbox checked readOnly />,
     percent: (v: number) => (Number.isNaN(v) ? '' : `${(v * 100).toFixed(1)}%`),
     number: (v: number) => utils.Number.formatLocale(v),
     abbrNumber: (v: number) => utils.Number.abbreviate(v),

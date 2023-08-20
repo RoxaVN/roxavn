@@ -61,8 +61,9 @@ class CreateWeb3EventCrawlerRequest extends ExactProps<CreateWeb3EventCrawlerReq
   @MinLength(1)
   public readonly event: string;
 
-  @MinLength(1)
-  public readonly contractId: string;
+  @Min(1)
+  @TransformNumber()
+  public readonly contractId: number;
 
   @Min(1)
   public readonly lastCrawlBlockNumber: number;

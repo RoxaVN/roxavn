@@ -22,6 +22,7 @@ const Page = () => {
       api={web3ContractApi.getMany}
       header={t('contracts')}
       columns={{
+        id: { label: tCore('id') },
         address: { label: t('address') },
         networkId: { label: t('networkId') },
         updatedDate: {
