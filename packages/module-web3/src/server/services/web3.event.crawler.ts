@@ -40,19 +40,13 @@ export class updateWeb3EventCrawlersApiService extends InjectDatabaseService {
   }
 }
 
-@serverModule.injectable()
-export class CreateWeb3EventCrawlersApiService extends InjectDatabaseService {
-  async handle(request: {
-    event: string;
-    contractId: string;
-    birthBlockNumber: number;
-  }) {
-    const eventCrawler = new Web3EventCrawler();
-    eventCrawler.event = request.event;
-    eventCrawler.contractId = request.contractId;
-    eventCrawler.lastBlockNumber = request.birthBlockNumber.toString();
+@serverModule.useApi(web3EventCrawlerApi.create)
+export class CreateWeb3EventCrawlerApiService extends InjectDatabaseService {
+  async handle(request: InferApiRequest<typeof web3EventCrawlerApi.create>) {
+    const item = new Web3EventCrawler();
+    Object.assign(item, request);
 
-    await this.entityManager.save(eventCrawler);
-    return { id: eventCrawler.id };
+    await this.entityManager.save(item);
+    return { id: item.id };
   }
 }

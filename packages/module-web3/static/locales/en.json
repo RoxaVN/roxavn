@@ -1,6 +1,7 @@
 {
   "networks": "Networks",
   "providerUrl": "Provider url",
+  "explorerUrl": "Explorer url",
   "addNetwork": "Add network",
   "editNetwork": "Edit network {{ id }}",
   "address": "Address",

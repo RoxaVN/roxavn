@@ -1,6 +1,7 @@
 {
   "networks": "Mạng",
   "providerUrl": "URL nhà cung cấp",
+  "explorerUrl": "Url trình khám phá",
   "addNetwork": "Thêm mạng",
   "editNetwork": "Sửa mạng {{ id }}",
   "address": "Địa chỉ",

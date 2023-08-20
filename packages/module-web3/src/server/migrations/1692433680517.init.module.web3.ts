@@ -8,6 +8,7 @@ export class InitModuleWeb31692433680517 implements MigrationInterface {
       CREATE TABLE "web3_network" (
         "id" bigint NOT NULL,
         "providerUrl" text NOT NULL,
+        "explorerUrl" text NOT NULL,
         "metadata" jsonb,
         "createdDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
         "updatedDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),

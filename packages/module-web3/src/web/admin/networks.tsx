@@ -23,6 +23,7 @@ const Page = () => {
       columns={{
         id: { label: tCore('id') },
         providerUrl: { label: t('providerUrl') },
+        explorerUrl: { label: t('explorerUrl') },
         updatedDate: {
           label: tCore('updatedDate'),
           render: utils.Render.relativeTime,
@@ -43,6 +44,10 @@ const Page = () => {
                     name: 'providerUrl',
                     input: <TextInput label={t('providerUrl')} />,
                   },
+                  {
+                    name: 'explorerUrl',
+                    input: <TextInput label={t('explorerUrl')} />,
+                  },
                 ]}
               />
             ),
@@ -61,11 +66,16 @@ const Page = () => {
                 apiParams={{
                   web3NetworkId: item.id,
                   providerUrl: item.providerUrl,
+                  explorerUrl: item.explorerUrl,
                 }}
                 fields={[
                   {
                     name: 'providerUrl',
                     input: <TextInput label={t('providerUrl')} />,
+                  },
+                  {
+                    name: 'explorerUrl',
+                    input: <TextInput label={t('explorerUrl')} />,
                   },
                 ]}
               />

@@ -15,6 +15,7 @@ import { permissions, scopes } from '../access.js';
 const web3NetworkSource = new ApiSource<{
   id: string;
   providerUrl: string;
+  explorerUrl: string;
   metadata?: Record<string, any>;
   createdDate: Date;
   updatedDate: Date;
@@ -38,7 +39,12 @@ class UpdateWeb3NetworkRequest extends ExactProps<UpdateWeb3NetworkRequest> {
   public readonly web3NetworkId: string;
 
   @IsUrl()
+  @IsOptional()
   public readonly providerUrl: string;
+
+  @IsUrl()
+  @IsOptional()
+  public readonly explorerUrl: string;
 }
 
 class CreateWeb3NetworkRequest extends ExactProps<CreateWeb3NetworkRequest> {
@@ -47,6 +53,9 @@ class CreateWeb3NetworkRequest extends ExactProps<CreateWeb3NetworkRequest> {
 
   @IsUrl()
   public readonly providerUrl: string;
+
+  @IsUrl()
+  public readonly explorerUrl: string;
 }
 
 export const web3NetworkApi = {

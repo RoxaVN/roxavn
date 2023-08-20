@@ -57,7 +57,22 @@ class UpdateEventCrawlersRequest extends ExactProps<UpdateEventCrawlersRequest> 
   public readonly blockRange?: number;
 }
 
+class CreateWeb3EventCrawlerRequest extends ExactProps<CreateWeb3EventCrawlerRequest> {
+  @MinLength(1)
+  public readonly event: string;
+
+  @MinLength(1)
+  public readonly contractId: string;
+
+  @Min(1)
+  public readonly lastBlockNumber: number;
+}
+
 export const web3EventCrawlerApi = {
+  create: web3EventCrawlerSource.create({
+    validator: CreateWeb3EventCrawlerRequest,
+    permission: permissions.CreateWeb3EventCrawler,
+  }),
   getMany: web3EventCrawlerSource.getMany({
     validator: GetEventCrawlersRequest,
     permission: permissions.ReadWeb3EventCrawlers,

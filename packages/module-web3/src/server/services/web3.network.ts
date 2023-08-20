@@ -32,7 +32,7 @@ export class UpdateWeb3NetworkApiService extends InjectDatabaseService {
       .getRepository(Web3Network)
       .update(
         { id: request.web3NetworkId },
-        { providerUrl: request.providerUrl }
+        { providerUrl: request.providerUrl, explorerUrl: request.explorerUrl }
       );
     return {};
   }
