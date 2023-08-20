@@ -31,8 +31,8 @@ export class updateWeb3EventCrawlersApiService extends InjectDatabaseService {
     await this.entityManager.getRepository(Web3EventCrawler).update(
       { id: request.web3EventCrawlerId },
       {
-        delayBlock: request.delayBlock,
-        blockRange: request.blockRange,
+        delayBlockCount: request.delayBlockCount,
+        blockRangePerCrawl: request.blockRangePerCrawl,
         isActive: request.isActive,
       }
     );
