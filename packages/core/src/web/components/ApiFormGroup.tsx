@@ -43,6 +43,15 @@ export function FormGroup<T extends 'horizontal' | 'vertical', V>({
       ].includes((component.type as any).displayName)
     ) {
       props.value = props.value || '';
+    } else if (
+      [
+        '@mantine/core/Switch',
+        '@mantine/core/Radio',
+        '@mantine/core/Checkbox',
+      ].includes((component.type as any).displayName) &&
+      typeof props.value === 'boolean'
+    ) {
+      props.checked = props.value;
     }
     if (component.props.fields) {
       // auto add form for ArrayInput
@@ -106,14 +115,14 @@ export function FormGroup<T extends 'horizontal' | 'vertical', V>({
 export interface ApiFormGroupProps<
   Request extends ApiRequest,
   Response extends ApiResponse,
-  T extends 'horizontal' | 'vertical'
+  T extends 'horizontal' | 'vertical',
 > extends Omit<ApiFormProps<Request, Response>, 'formRender'>,
     Omit<FormGroupProps<T, Request>, 'form'> {}
 
 export function ApiFormGroup<
   Request extends ApiRequest,
   Response extends ApiResponse,
-  T extends 'horizontal' | 'vertical'
+  T extends 'horizontal' | 'vertical',
 >({
   layout,
   header,
@@ -140,7 +149,7 @@ export function ApiFormGroup<
 export interface ApiConfirmFormGroupProps<
   Request extends ApiRequest,
   Response extends ApiResponse,
-  T extends 'horizontal' | 'vertical'
+  T extends 'horizontal' | 'vertical',
 > extends Omit<
     ApiFormGroupProps<Request, Response, T>,
     'header' | 'footer' | 'fields'
@@ -154,7 +163,7 @@ export interface ApiConfirmFormGroupProps<
 export function ApiConfirmFormGroup<
   Request extends ApiRequest,
   Response extends ApiResponse,
-  T extends 'horizontal' | 'vertical'
+  T extends 'horizontal' | 'vertical',
 >({
   onCancel,
   header,

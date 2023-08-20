@@ -23,7 +23,7 @@ const Page = () => {
       columns={{
         contractId: { label: t('contract') },
         event: { label: t('event') },
-        isActive: { label: tCore('status'), render: utils.Render.boolean },
+        isActive: { label: tCore('active'), render: utils.Render.boolean },
         blockRangePerCrawl: { label: t('blockRangePerCrawl') },
         delayBlockCount: { label: t('delayBlockCount') },
         lastCrawlBlockNumber: { label: t('lastCrawlBlockNumber') },
@@ -86,7 +86,7 @@ const Page = () => {
                   },
                   {
                     name: 'isActive',
-                    input: <Checkbox label={tCore('status')} />,
+                    input: <Checkbox label={tCore('active')} />,
                   },
                 ]}
               />

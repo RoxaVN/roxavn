@@ -46,6 +46,7 @@
   "public": "Công khai",
   "private": "Riêng tư",
   "status": "Trạng thái",
+  "active": "Có hiệu lực",
 
   "Roles": {
     "Admin": "Quản trị viên",

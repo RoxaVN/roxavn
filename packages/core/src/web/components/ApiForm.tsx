@@ -14,7 +14,7 @@ import { ApiError } from './ApiError.js';
 
 export interface ApiFormProps<
   Request extends ApiRequest,
-  Response extends ApiResponse
+  Response extends ApiResponse,
 > {
   formRender?: (form: UseFormReturnType<Partial<Request>>) => React.ReactNode;
   dataRender?: (props: {
@@ -34,7 +34,7 @@ export interface ApiFormProps<
 
 export function ApiForm<
   Request extends ApiRequest,
-  Response extends ApiResponse
+  Response extends ApiResponse,
 >({
   api,
   apiParams,

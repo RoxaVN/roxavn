@@ -46,6 +46,7 @@
   "public": "Public",
   "private": "Private",
   "status": "Status",
+  "active": "Active",
 
   "Roles": {
     "Admin": "Admin",
