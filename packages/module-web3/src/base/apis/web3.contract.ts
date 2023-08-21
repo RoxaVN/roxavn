@@ -1,7 +1,6 @@
 import {
   ApiSource,
   ExactProps,
-  IsNotEmptyObject,
   IsOptional,
   Max,
   Min,
@@ -29,8 +28,7 @@ class CreateWeb3ContractRequest extends ExactProps<CreateWeb3ContractRequest> {
   @Min(1)
   public readonly networkId: number;
 
-  @IsNotEmptyObject()
-  public readonly abi: Record<string, any>;
+  public readonly abi: any;
 }
 
 class UpdateWeb3ContractRequest extends ExactProps<UpdateWeb3ContractRequest> {
@@ -45,9 +43,8 @@ class UpdateWeb3ContractRequest extends ExactProps<UpdateWeb3ContractRequest> {
   @IsOptional()
   public readonly networkId?: number;
 
-  @IsNotEmptyObject()
   @IsOptional()
-  public readonly abi?: Record<string, any>;
+  public readonly abi?: any;
 }
 
 class GetWeb3ContractsRequest extends ExactProps<GetWeb3ContractsRequest> {

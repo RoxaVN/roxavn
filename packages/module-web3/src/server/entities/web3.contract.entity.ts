@@ -20,7 +20,7 @@ export class Web3Contract {
   address: string;
 
   @Column('jsonb')
-  abi: Record<string, any>;
+  abi: any;
 
   @Column('bigint')
   networkId: string;
