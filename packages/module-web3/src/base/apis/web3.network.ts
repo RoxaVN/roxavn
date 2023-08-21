@@ -18,6 +18,8 @@ const web3NetworkSource = new ApiSource<{
   explorerUrl: string;
   metadata?: Record<string, any>;
   createdDate: Date;
+  delayBlockCount: number;
+  blockRangePerCrawl: number;
   updatedDate: Date;
 }>([scopes.Web3Network], baseModule);
 
@@ -45,6 +47,16 @@ class UpdateWeb3NetworkRequest extends ExactProps<UpdateWeb3NetworkRequest> {
   @IsUrl()
   @IsOptional()
   public readonly explorerUrl: string;
+
+  @Min(1)
+  @TransformNumber()
+  @IsOptional()
+  public readonly delayBlockCount?: number;
+
+  @Min(1)
+  @TransformNumber()
+  @IsOptional()
+  public readonly blockRangePerCrawl?: number;
 }
 
 class CreateWeb3NetworkRequest extends ExactProps<CreateWeb3NetworkRequest> {

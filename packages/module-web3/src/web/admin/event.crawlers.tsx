@@ -24,8 +24,6 @@ const Page = () => {
         contractId: { label: t('contract') },
         event: { label: t('event') },
         isActive: { label: tCore('active'), render: utils.Render.boolean },
-        blockRangePerCrawl: { label: t('blockRangePerCrawl') },
-        delayBlockCount: { label: t('delayBlockCount') },
         lastCrawlBlockNumber: { label: t('lastCrawlBlockNumber') },
         updatedDate: {
           label: tCore('updatedDate'),
@@ -71,19 +69,9 @@ const Page = () => {
                 api={web3EventCrawlerApi.update}
                 apiParams={{
                   web3EventCrawlerId: item.id,
-                  blockRangePerCrawl: item.blockRangePerCrawl,
-                  delayBlockCount: item.delayBlockCount,
                   isActive: item.isActive,
                 }}
                 fields={[
-                  {
-                    name: 'blockRangePerCrawl',
-                    input: <NumberInput label={t('blockRangePerCrawl')} />,
-                  },
-                  {
-                    name: 'delayBlockCount',
-                    input: <NumberInput label={t('delayBlockCount')} />,
-                  },
                   {
                     name: 'isActive',
                     input: <Checkbox label={tCore('active')} />,

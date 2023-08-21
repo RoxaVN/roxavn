@@ -20,6 +20,12 @@ export class Web3Network {
   @Column('text')
   explorerUrl: string;
 
+  @Column('int', { default: 10 })
+  delayBlockCount: number;
+
+  @Column('int', { default: 5000 })
+  blockRangePerCrawl: number;
+
   @Column({ type: 'jsonb', nullable: true })
   metadata?: Record<string, any>;
 

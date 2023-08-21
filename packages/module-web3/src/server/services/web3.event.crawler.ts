@@ -28,14 +28,12 @@ export class GetWeb3EventCrawlersApiService extends InjectDatabaseService {
 @serverModule.useApi(web3EventCrawlerApi.update)
 export class updateWeb3EventCrawlersApiService extends InjectDatabaseService {
   async handle(request: InferApiRequest<typeof web3EventCrawlerApi.update>) {
-    await this.entityManager.getRepository(Web3EventCrawler).update(
-      { id: request.web3EventCrawlerId },
-      {
-        delayBlockCount: request.delayBlockCount,
-        blockRangePerCrawl: request.blockRangePerCrawl,
-        isActive: request.isActive,
-      }
-    );
+    await this.entityManager
+      .getRepository(Web3EventCrawler)
+      .update(
+        { id: request.web3EventCrawlerId },
+        { isActive: request.isActive }
+      );
     return {};
   }
 }

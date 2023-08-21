@@ -18,8 +18,6 @@ const web3EventCrawlerSource = new ApiSource<{
   contractId: string;
   isActive: boolean;
   lastCrawlBlockNumber: string;
-  delayBlockCount: number;
-  blockRangePerCrawl: number;
   metadata?: any;
   createdDate: Date;
   updatedDate: Date;
@@ -45,16 +43,6 @@ class UpdateEventCrawlersRequest extends ExactProps<UpdateEventCrawlersRequest> 
   @IsBoolean()
   @IsOptional()
   public readonly isActive?: boolean;
-
-  @Min(1)
-  @TransformNumber()
-  @IsOptional()
-  public readonly delayBlockCount?: number;
-
-  @Min(1)
-  @TransformNumber()
-  @IsOptional()
-  public readonly blockRangePerCrawl?: number;
 }
 
 class CreateWeb3EventCrawlerRequest extends ExactProps<CreateWeb3EventCrawlerRequest> {

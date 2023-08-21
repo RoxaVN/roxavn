@@ -24,6 +24,8 @@ const Page = () => {
         id: { label: tCore('id') },
         providerUrl: { label: t('providerUrl') },
         explorerUrl: { label: t('explorerUrl') },
+        blockRangePerCrawl: { label: t('blockRangePerCrawl') },
+        delayBlockCount: { label: t('delayBlockCount') },
         updatedDate: {
           label: tCore('updatedDate'),
           render: utils.Render.relativeTime,
@@ -67,6 +69,8 @@ const Page = () => {
                   web3NetworkId: item.id,
                   providerUrl: item.providerUrl,
                   explorerUrl: item.explorerUrl,
+                  blockRangePerCrawl: item.blockRangePerCrawl,
+                  delayBlockCount: item.delayBlockCount,
                 }}
                 fields={[
                   {
@@ -76,6 +80,14 @@ const Page = () => {
                   {
                     name: 'explorerUrl',
                     input: <TextInput label={t('explorerUrl')} />,
+                  },
+                  {
+                    name: 'blockRangePerCrawl',
+                    input: <NumberInput label={t('blockRangePerCrawl')} />,
+                  },
+                  {
+                    name: 'delayBlockCount',
+                    input: <NumberInput label={t('delayBlockCount')} />,
                   },
                 ]}
               />
