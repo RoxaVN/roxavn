@@ -63,7 +63,7 @@ export class InitModuleWeb31692515607058 implements MigrationInterface {
       )
       `);
     await queryRunner.query(`
-      CREATE UNIQUE INDEX "IDX_9e93de275026e88371ce44d9dc" ON "web3_event" ("transactionHash", "networkId")
+      CREATE UNIQUE INDEX "IDX_559a8c8bf2e86dc996c68a7b9e" ON "web3_event" ("transactionHash")
       `);
     await queryRunner.query(`
       ALTER TABLE "web3_contract"
@@ -83,7 +83,7 @@ export class InitModuleWeb31692515607058 implements MigrationInterface {
       ALTER TABLE "web3_contract" DROP CONSTRAINT "FK_2b48e09982f63488b27cd4c4178"
       `);
     await queryRunner.query(`
-      DROP INDEX "public"."IDX_9e93de275026e88371ce44d9dc"
+      DROP INDEX "public"."IDX_559a8c8bf2e86dc996c68a7b9e"
       `);
     await queryRunner.query(`
       DROP TABLE "web3_event"
