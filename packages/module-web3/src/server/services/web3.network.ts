@@ -1,9 +1,23 @@
-import { InferApiRequest } from '@roxavn/core/base';
+import { InferApiRequest, NotFoundException } from '@roxavn/core/base';
 import { InjectDatabaseService } from '@roxavn/core/server';
 
 import { web3NetworkApi } from '../../base/index.js';
 import { serverModule } from '../module.js';
 import { Web3Network } from '../entities/index.js';
+
+@serverModule.injectable()
+export class GetWeb3NetworkApiService extends InjectDatabaseService {
+  async handle(request: { web3NetworkId: string }) {
+    const item = await this.entityManager.getRepository(Web3Network).findOne({
+      where: { id: request.web3NetworkId },
+    });
+
+    if (item) {
+      return item;
+    }
+    throw new NotFoundException();
+  }
+}
 
 @serverModule.useApi(web3NetworkApi.getMany)
 export class GetWeb3NetworksApiService extends InjectDatabaseService {

@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 
 @Entity()
-@Index(['transactionHash', 'networkId'], { unique: true })
 export class Web3Event {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -27,17 +26,21 @@ export class Web3Event {
   @Column('text')
   blockHash: string;
 
+  @Index({ unique: true })
   @Column('text')
   transactionHash: string;
 
-  @Column('int')
-  transactionIndex: number;
+  @Column('bigint', { nullable: true })
+  transactionIndex?: string;
+
+  @Column('bigint', { nullable: true })
+  logIndex?: string;
 
   @Column('text')
   signature: string;
 
-  @Column({ type: 'jsonb', nullable: true })
-  data?: any;
+  @Column({ type: 'jsonb' })
+  data: Record<string, any>;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdDate: Date;
