@@ -1,6 +1,7 @@
 import {
   ApiTable,
   IfCanAccessApi,
+  JSONTree,
   ModuleT,
   PageItem,
   webModule as coreWebModule,
@@ -24,6 +25,10 @@ const Page = () => {
         networkId: { label: t('networkId') },
         blockNumber: { label: t('block') },
         transactionHash: { label: t('transaction') },
+        data: {
+          label: tCore('data'),
+          render: (value) => <JSONTree data={value} />,
+        },
         createdDate: {
           label: tCore('createdDate'),
           render: utils.Render.relativeTime,

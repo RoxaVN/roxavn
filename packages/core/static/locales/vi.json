@@ -37,6 +37,7 @@
   "type": "Loại",
   "id": "Id",
   "url": "Url",
+  "data": "Dữ liệu",
   "detail": "Chi tiết",
   "creator": "Người tạo",
   "members": "Thành viên",

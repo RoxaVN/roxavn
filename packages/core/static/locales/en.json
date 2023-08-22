@@ -37,6 +37,7 @@
   "type": "Type",
   "id": "Id",
   "url": "Url",
+  "data": "Data",
   "detail": "Detail",
   "creator": "Creator",
   "members": "Members",
