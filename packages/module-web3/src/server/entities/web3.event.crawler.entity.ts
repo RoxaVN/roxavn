@@ -7,13 +7,15 @@ import {
   PrimaryGeneratedColumn,
   type Relation,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { Web3Contract } from './web3.contract.entity.js';
+import { Web3Event } from './web3.event.entity.js';
 
 @Entity()
 @Index(['event', 'contractId'], { unique: true })
 export class Web3EventCrawler {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   id: string;
 
   @Column('text')
@@ -24,6 +26,9 @@ export class Web3EventCrawler {
 
   @ManyToOne(() => Web3Contract, (contract) => contract.eventCrawlers)
   contract: Relation<Web3Contract>;
+
+  @OneToMany(() => Web3Event, (event) => event.crawler)
+  events: Relation<Web3Event>[];
 
   @Column('boolean', { default: true })
   isActive: boolean;

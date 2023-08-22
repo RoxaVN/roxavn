@@ -17,7 +17,6 @@ const web3EventSource = new ApiSource<{
   networkId: string;
   blockNumber: string;
   blockHash: string;
-  transactionHash: string;
   transactionIndex?: string;
   logIndex?: string;
   signature: string;

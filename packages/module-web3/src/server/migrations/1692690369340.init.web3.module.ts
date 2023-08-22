@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitModuleWeb1692666205382 implements MigrationInterface {
-  name = 'InitModuleWeb1692666205382';
+export class InitWeb3Module1692690369340 implements MigrationInterface {
+  name = 'InitWeb3Module1692690369340';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
@@ -17,8 +17,28 @@ export class InitModuleWeb1692666205382 implements MigrationInterface {
       )
       `);
     await queryRunner.query(`
+      CREATE TABLE "web3_event" (
+        "id" text NOT NULL,
+        "event" text NOT NULL,
+        "contractAddress" text NOT NULL,
+        "networkId" bigint NOT NULL,
+        "blockNumber" bigint NOT NULL,
+        "crawlerId" bigint NOT NULL,
+        "blockHash" text NOT NULL,
+        "transactionIndex" bigint,
+        "logIndex" bigint,
+        "signature" text NOT NULL,
+        "data" jsonb NOT NULL,
+        "createdDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+        CONSTRAINT "PK_a39ee42b7ad72c0e83367a8cdb1" PRIMARY KEY ("id")
+      )
+      `);
+    await queryRunner.query(`
+      CREATE INDEX "IDX_01080391475c464da688df6dd9" ON "web3_event" ("blockNumber")
+      `);
+    await queryRunner.query(`
       CREATE TABLE "web3_event_crawler" (
-        "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
+        "id" BIGSERIAL NOT NULL,
         "event" text NOT NULL,
         "contractId" bigint NOT NULL,
         "isActive" boolean NOT NULL DEFAULT true,
@@ -31,26 +51,6 @@ export class InitModuleWeb1692666205382 implements MigrationInterface {
       `);
     await queryRunner.query(`
       CREATE UNIQUE INDEX "IDX_7f043e634f74c11a61b624f389" ON "web3_event_crawler" ("event", "contractId")
-      `);
-    await queryRunner.query(`
-      CREATE TABLE "web3_event" (
-        "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
-        "event" text NOT NULL,
-        "contractAddress" text NOT NULL,
-        "networkId" bigint NOT NULL,
-        "blockNumber" bigint NOT NULL,
-        "blockHash" text NOT NULL,
-        "transactionHash" text NOT NULL,
-        "transactionIndex" bigint,
-        "logIndex" bigint,
-        "signature" text NOT NULL,
-        "data" jsonb NOT NULL,
-        "createdDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-        CONSTRAINT "PK_a39ee42b7ad72c0e83367a8cdb1" PRIMARY KEY ("id")
-      )
-      `);
-    await queryRunner.query(`
-      CREATE UNIQUE INDEX "IDX_559a8c8bf2e86dc996c68a7b9e" ON "web3_event" ("transactionHash")
       `);
     await queryRunner.query(`
       CREATE TABLE "web3_provider" (
@@ -66,6 +66,10 @@ export class InitModuleWeb1692666205382 implements MigrationInterface {
       )
       `);
     await queryRunner.query(`
+      ALTER TABLE "web3_event"
+      ADD CONSTRAINT "FK_3db51baa37ae8baf7652df6ce63" FOREIGN KEY ("crawlerId") REFERENCES "web3_event_crawler"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+      `);
+    await queryRunner.query(`
       ALTER TABLE "web3_event_crawler"
       ADD CONSTRAINT "FK_9d076044fedca39e0c1ec0e0bad" FOREIGN KEY ("contractId") REFERENCES "web3_contract"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
       `);
@@ -76,19 +80,22 @@ export class InitModuleWeb1692666205382 implements MigrationInterface {
       ALTER TABLE "web3_event_crawler" DROP CONSTRAINT "FK_9d076044fedca39e0c1ec0e0bad"
       `);
     await queryRunner.query(`
+      ALTER TABLE "web3_event" DROP CONSTRAINT "FK_3db51baa37ae8baf7652df6ce63"
+      `);
+    await queryRunner.query(`
       DROP TABLE "web3_provider"
-      `);
-    await queryRunner.query(`
-      DROP INDEX "public"."IDX_559a8c8bf2e86dc996c68a7b9e"
-      `);
-    await queryRunner.query(`
-      DROP TABLE "web3_event"
       `);
     await queryRunner.query(`
       DROP INDEX "public"."IDX_7f043e634f74c11a61b624f389"
       `);
     await queryRunner.query(`
       DROP TABLE "web3_event_crawler"
+      `);
+    await queryRunner.query(`
+      DROP INDEX "public"."IDX_01080391475c464da688df6dd9"
+      `);
+    await queryRunner.query(`
+      DROP TABLE "web3_event"
       `);
     await queryRunner.query(`
       DROP TABLE "web3_contract"

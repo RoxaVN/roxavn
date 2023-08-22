@@ -39,7 +39,7 @@ export class Web3EventCrawlersCronService extends BaseService {
       lastBlockNumber: bigint;
     };
     const providers: Record<string, ProviderItem> = {};
-    const eventLogs: { log: EventLog; network: string }[] = [];
+    const eventLogs: { log: EventLog; network: string; crawler: string }[] = [];
 
     for (const crawler of crawlers) {
       let contract = contracts[crawler.contractId];
@@ -92,7 +92,11 @@ export class Web3EventCrawlersCronService extends BaseService {
       })) as EventLog[];
 
       eventLogs.push(
-        ...events.map((e) => ({ log: e, network: contract.entity.networkId }))
+        ...events.map((e) => ({
+          log: e,
+          network: contract.entity.networkId,
+          crawler: crawler.id,
+        }))
       );
 
       // update lastCrawlBlockNumber
@@ -104,7 +108,7 @@ export class Web3EventCrawlersCronService extends BaseService {
       .insert()
       .into(Web3Event)
       .values(
-        eventLogs.map(({ log, network }) => {
+        eventLogs.map(({ log, network, crawler }) => {
           const data: any = {};
           for (const key in log.returnValues) {
             if (key !== '__length__' && Number.isNaN(parseInt(key))) {
@@ -113,16 +117,17 @@ export class Web3EventCrawlersCronService extends BaseService {
             }
           }
           return {
+            id: log.transactionHash,
             blockHash: log.blockHash,
             blockNumber: log.blockNumber?.toString(),
             contractAddress: log.address,
             event: log.event,
             signature: log.signature,
-            transactionHash: log.transactionHash,
             transactionIndex: log.transactionIndex?.toString(),
             logIndex: log.logIndex?.toString(),
             data: data,
             networkId: network,
+            crawlerId: crawler,
           };
         })
       )

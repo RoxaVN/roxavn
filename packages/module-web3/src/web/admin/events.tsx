@@ -20,11 +20,11 @@ const Page = () => {
       api={web3EventApi.getMany}
       header={t('events')}
       columns={{
+        id: { label: tCore('id') },
         contractAddress: { label: t('contract') },
         event: { label: t('event') },
         networkId: { label: t('networkId') },
         blockNumber: { label: t('block') },
-        transactionHash: { label: t('transaction') },
         data: {
           label: tCore('data'),
           render: (value) => <JSONTree data={value} />,

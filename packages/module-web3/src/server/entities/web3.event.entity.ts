@@ -3,12 +3,15 @@ import {
   CreateDateColumn,
   Entity,
   Index,
-  PrimaryGeneratedColumn,
+  ManyToOne,
+  PrimaryColumn,
+  type Relation,
 } from 'typeorm';
+import { Web3EventCrawler } from './web3.event.crawler.entity.js';
 
 @Entity()
 export class Web3Event {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('text')
   id: string;
 
   @Column('text')
@@ -20,15 +23,18 @@ export class Web3Event {
   @Column('bigint')
   networkId: string;
 
+  @Index()
   @Column('bigint')
   blockNumber: string;
 
+  @Column('bigint')
+  crawlerId: string;
+
+  @ManyToOne(() => Web3EventCrawler, (crawler) => crawler.events)
+  crawler: Relation<Web3EventCrawler>;
+
   @Column('text')
   blockHash: string;
-
-  @Index({ unique: true })
-  @Column('text')
-  transactionHash: string;
 
   @Column('bigint', { nullable: true })
   transactionIndex?: string;
