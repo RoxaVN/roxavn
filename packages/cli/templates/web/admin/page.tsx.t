@@ -11,7 +11,7 @@ import {
 } from '@roxavn/core/web';
 import { IconUsers } from '@tabler/icons-react';
 
-import { getUsersApi } from '../../base/index.js';
+import { <%= h.inflection.singularize(h.changeCase.camel(path_name)) %>Api } from '../../base/index.js';
 import { webModule } from '../module.js';
 
 const Page = () => {
@@ -19,10 +19,10 @@ const Page = () => {
   const tCore = coreWebModule.useTranslation().t;
   return (
     <ApiTable
-      api={getUsersApi}
+      api={<%= h.inflection.singularize(h.changeCase.camel(path_name)) %>Api.getMany}
       header={t('<%= h.changeCase.camel(path_name) %>')}
       columns={{
-        username: { label: t('username') },
+        name: { label: t('name') },
         updatedDate: {
           label: tCore('updatedDate'),
           render: utils.Render.relativeTime,
@@ -37,7 +37,7 @@ export const <%= h.changeCase.camel(path_name) %>Page = new PageItem({
   path: '<%= h.changeCase.param(path_name) %>',
   icon: IconUsers,
   element: (
-    <IfCanAccessApi api={getUsersApi}>
+    <IfCanAccessApi api={<%= h.inflection.singularize(h.changeCase.camel(path_name)) %>Api.getMany}>
       <Page />
     </IfCanAccessApi>
   ),
