@@ -4,6 +4,7 @@ import {
   JSONTree,
   ModuleT,
   PageItem,
+  StringCopier,
   webModule as coreWebModule,
   utils,
 } from '@roxavn/core/web';
@@ -20,8 +21,14 @@ const Page = () => {
       api={web3EventApi.getMany}
       header={t('events')}
       columns={{
-        id: { label: tCore('id') },
-        contractAddress: { label: t('contract') },
+        id: {
+          label: tCore('id'),
+          render: (value) => <StringCopier value={value} />,
+        },
+        contractAddress: {
+          label: t('contract'),
+          render: (value) => <StringCopier value={value} />,
+        },
         event: { label: t('event') },
         networkId: { label: t('networkId') },
         blockNumber: { label: t('block') },

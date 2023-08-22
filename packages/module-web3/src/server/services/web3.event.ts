@@ -16,6 +16,7 @@ export class GetWeb3EventsApiService extends InjectDatabaseService {
       .findAndCount({
         take: pageSize,
         skip: (page - 1) * pageSize,
+        order: { blockNumber: 'DESC' },
       });
 
     return {
