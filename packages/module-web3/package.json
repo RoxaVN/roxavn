@@ -28,7 +28,7 @@
     "typeorm": "^0.3.10",
     "viem": "^1.5.4",
     "wagmi": "^1.3.10",
-    "web3": "^4.0.3"
+    "web3": "^4.1.1"
   },
   "exports": {
     "./hook": "./dist/esm/hook/index.js",

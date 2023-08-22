@@ -17,6 +17,9 @@
   "blockRangePerCrawl": "Phạm vi khối",
   "delayBlockCount": "Số khối trễ",
   "lastCrawlBlockNumber": "Số khối cuối cùng",
+  "Error": {
+    "NotFoundProviderException": "Không tìm thấy nhà cung cấp cho mạng {{ networkId }}"
+  },
   "Meta": {
     "name": "Web 3",
     "description": "Web 3"

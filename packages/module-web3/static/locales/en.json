@@ -17,6 +17,9 @@
   "blockRangePerCrawl": "Block range",
   "delayBlockCount": "Delay block",
   "lastCrawlBlockNumber": "Last block number",
+  "Error": {
+    "NotFoundProviderException": "Not found provider of network {{ networkId }}"
+  },
   "Meta": {
     "name": "Web 3",
     "description": "Web 3"

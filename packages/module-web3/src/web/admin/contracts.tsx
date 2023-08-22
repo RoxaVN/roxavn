@@ -71,8 +71,13 @@ const Page = () => {
                   web3ContractId: item.id,
                   abi: item.abi,
                   address: item.address,
+                  networkId: parseInt(item.networkId),
                 }}
                 fields={[
+                  {
+                    name: 'networkId',
+                    input: <NumberInput label={t('networkId')} />,
+                  },
                   {
                     name: 'address',
                     input: <TextInput label={t('address')} />,

@@ -9,16 +9,14 @@ import {
   Web3Provider,
 } from '../entities/index.js';
 import { serverModule } from '../module.js';
-import { GetWeb3ProviderApiService } from './web3.provider.js';
 import { GetWeb3ContractApiService } from './web3.contract.js';
+import { NotFoundProviderException } from '../../base/index.js';
 
 @serverModule.useCronJob('* * * * *')
 export class Web3EventCrawlersCronService extends BaseService {
   constructor(
     @inject(DatabaseService)
     protected databaseService: DatabaseService,
-    @inject(GetWeb3ProviderApiService)
-    protected getWeb3ProviderApiService: GetWeb3ProviderApiService,
     @inject(GetWeb3ContractApiService)
     protected getWeb3ContractApiService: GetWeb3ContractApiService
   ) {
@@ -52,16 +50,23 @@ export class Web3EventCrawlersCronService extends BaseService {
         });
         provider = providers[contractEntity.networkId];
         if (!provider) {
-          const networkEntity = await this.getWeb3ProviderApiService.handle({
-            web3ProviderId: contractEntity.networkId,
-          });
-          const web3 = new Web3(networkEntity.url);
+          const providerEntity = await this.databaseService.manager
+            .getRepository(Web3Provider)
+            .findOne({
+              where: { networkId: contractEntity.networkId },
+            });
+          if (!providerEntity) {
+            throw new NotFoundProviderException(contractEntity.networkId);
+          }
+          const web3 = new Web3(
+            new Web3.providers.HttpProvider(providerEntity.url)
+          );
           const lastBlockNumber = await web3.eth.getBlockNumber();
           provider = {
             service: web3,
-            entity: networkEntity,
+            entity: providerEntity,
             lastBlockNumber:
-              lastBlockNumber - BigInt(networkEntity.delayBlockCount),
+              lastBlockNumber - BigInt(providerEntity.delayBlockCount),
           };
           providers[contractEntity.networkId] = provider;
         }
@@ -99,19 +104,29 @@ export class Web3EventCrawlersCronService extends BaseService {
       .insert()
       .into(Web3Event)
       .values(
-        eventLogs.map(({ log, network }) => ({
-          blockHash: log.blockHash,
-          blockNumber: log.blockNumber?.toString(),
-          contractAddress: log.address,
-          event: log.event,
-          signature: log.signature,
-          transactionHash: log.transactionHash,
-          transactionIndex: log.transactionIndex?.toString(),
-          logIndex: log.logIndex?.toString(),
-          data: log.returnValues as any,
-          networkId: network,
-        }))
+        eventLogs.map(({ log, network }) => {
+          const data: any = {};
+          for (const key in log.returnValues) {
+            if (key !== '__length__' && Number.isNaN(parseInt(key))) {
+              const value = log.returnValues[key];
+              data[key] = typeof value === 'bigint' ? value.toString() : value;
+            }
+          }
+          return {
+            blockHash: log.blockHash,
+            blockNumber: log.blockNumber?.toString(),
+            contractAddress: log.address,
+            event: log.event,
+            signature: log.signature,
+            transactionHash: log.transactionHash,
+            transactionIndex: log.transactionIndex?.toString(),
+            logIndex: log.logIndex?.toString(),
+            data: data,
+            networkId: network,
+          };
+        })
       )
+      .orIgnore()
       .execute();
 
     // save crawlers
