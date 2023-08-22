@@ -44,7 +44,7 @@ export class CreateWeb3EventCrawlerApiService extends InjectDatabaseService {
     const item = new Web3EventCrawler();
     Object.assign(item, request);
 
-    await this.entityManager.save(item);
+    await this.entityManager.getRepository(Web3EventCrawler).insert(item);
     return { id: item.id };
   }
 }

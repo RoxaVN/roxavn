@@ -11,7 +11,7 @@ export class Create<%= h.changeCase.pascal(api_source_name) %>ApiService extends
     const item = new <%= h.changeCase.pascal(api_source_name) %>();
     Object.assign(item, request);
 
-    await this.entityManager.save(item);
+    await this.entityManager.getRepository(<%= h.changeCase.pascal(api_source_name) %>).insert(item);
     return { id: item.id };
   }
 }

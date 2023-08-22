@@ -25,7 +25,7 @@ export class CreateWeb3ContractApiService extends InjectDatabaseService {
     const item = new Web3Contract();
     Object.assign(item, request);
 
-    await this.entityManager.save(item);
+    await this.entityManager.getRepository(Web3Contract).insert(item);
     return { id: item.id };
   }
 }
