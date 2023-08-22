@@ -6,10 +6,10 @@ import {
   Web3Contract,
   Web3Event,
   Web3EventCrawler,
-  Web3Network,
+  Web3Provider,
 } from '../entities/index.js';
 import { serverModule } from '../module.js';
-import { GetWeb3NetworkApiService } from './web3.network.js';
+import { GetWeb3ProviderApiService } from './web3.provider.js';
 import { GetWeb3ContractApiService } from './web3.contract.js';
 
 @serverModule.useCronJob('* * * * *')
@@ -17,8 +17,8 @@ export class Web3EventCrawlersCronService extends BaseService {
   constructor(
     @inject(DatabaseService)
     protected databaseService: DatabaseService,
-    @inject(GetWeb3NetworkApiService)
-    protected getWeb3NetworkApiService: GetWeb3NetworkApiService,
+    @inject(GetWeb3ProviderApiService)
+    protected getWeb3ProviderApiService: GetWeb3ProviderApiService,
     @inject(GetWeb3ContractApiService)
     protected getWeb3ContractApiService: GetWeb3ContractApiService
   ) {
@@ -37,7 +37,7 @@ export class Web3EventCrawlersCronService extends BaseService {
     > = {};
     type ProviderItem = {
       service: Web3;
-      entity: Web3Network;
+      entity: Web3Provider;
       lastBlockNumber: bigint;
     };
     const providers: Record<string, ProviderItem> = {};
@@ -52,10 +52,10 @@ export class Web3EventCrawlersCronService extends BaseService {
         });
         provider = providers[contractEntity.networkId];
         if (!provider) {
-          const networkEntity = await this.getWeb3NetworkApiService.handle({
-            web3NetworkId: contractEntity.networkId,
+          const networkEntity = await this.getWeb3ProviderApiService.handle({
+            web3ProviderId: contractEntity.networkId,
           });
-          const web3 = new Web3(networkEntity.providerUrl);
+          const web3 = new Web3(networkEntity.url);
           const lastBlockNumber = await web3.eth.getBlockNumber();
           provider = {
             service: web3,

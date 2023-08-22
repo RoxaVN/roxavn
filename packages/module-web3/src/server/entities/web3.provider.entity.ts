@@ -2,23 +2,20 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
-  PrimaryColumn,
-  Relation,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Web3Contract } from './web3.contract.entity.js';
 
 @Entity()
-export class Web3Network {
-  @PrimaryColumn('bigint')
+export class Web3Provider {
+  @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   id: string;
 
-  @Column('text')
-  providerUrl: string;
+  @Column('bigint')
+  networkId: string;
 
   @Column('text')
-  explorerUrl: string;
+  url: string;
 
   @Column('int', { default: 10 })
   delayBlockCount: number;
@@ -34,7 +31,4 @@ export class Web3Network {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedDate: Date;
-
-  @OneToMany(() => Web3Contract, (contract) => contract.network)
-  contracts: Relation<Web3Contract>[];
 }

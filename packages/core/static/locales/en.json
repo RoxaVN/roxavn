@@ -36,6 +36,7 @@
   "content": "Content",
   "type": "Type",
   "id": "Id",
+  "url": "Url",
   "detail": "Detail",
   "creator": "Creator",
   "members": "Members",

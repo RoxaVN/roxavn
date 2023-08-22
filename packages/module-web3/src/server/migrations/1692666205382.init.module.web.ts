@@ -1,22 +1,9 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitModuleWeb31692515607058 implements MigrationInterface {
-  name = 'InitModuleWeb31692515607058';
+export class InitModuleWeb1692666205382 implements MigrationInterface {
+  name = 'InitModuleWeb1692666205382';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
-      CREATE TABLE "web3_network" (
-        "id" bigint NOT NULL,
-        "providerUrl" text NOT NULL,
-        "explorerUrl" text NOT NULL,
-        "delayBlockCount" integer NOT NULL DEFAULT '10',
-        "blockRangePerCrawl" integer NOT NULL DEFAULT '5000',
-        "metadata" jsonb,
-        "createdDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-        "updatedDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-        CONSTRAINT "PK_ebb3fd44e67abb8444fef0f1359" PRIMARY KEY ("id")
-      )
-      `);
     await queryRunner.query(`
       CREATE TABLE "web3_contract" (
         "id" BIGSERIAL NOT NULL,
@@ -66,8 +53,17 @@ export class InitModuleWeb31692515607058 implements MigrationInterface {
       CREATE UNIQUE INDEX "IDX_559a8c8bf2e86dc996c68a7b9e" ON "web3_event" ("transactionHash")
       `);
     await queryRunner.query(`
-      ALTER TABLE "web3_contract"
-      ADD CONSTRAINT "FK_2b48e09982f63488b27cd4c4178" FOREIGN KEY ("networkId") REFERENCES "web3_network"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+      CREATE TABLE "web3_provider" (
+        "id" BIGSERIAL NOT NULL,
+        "networkId" bigint NOT NULL,
+        "url" text NOT NULL,
+        "delayBlockCount" integer NOT NULL DEFAULT '10',
+        "blockRangePerCrawl" integer NOT NULL DEFAULT '5000',
+        "metadata" jsonb,
+        "createdDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+        "updatedDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+        CONSTRAINT "PK_303653d9f293b37b233938f71b1" PRIMARY KEY ("id")
+      )
       `);
     await queryRunner.query(`
       ALTER TABLE "web3_event_crawler"
@@ -80,7 +76,7 @@ export class InitModuleWeb31692515607058 implements MigrationInterface {
       ALTER TABLE "web3_event_crawler" DROP CONSTRAINT "FK_9d076044fedca39e0c1ec0e0bad"
       `);
     await queryRunner.query(`
-      ALTER TABLE "web3_contract" DROP CONSTRAINT "FK_2b48e09982f63488b27cd4c4178"
+      DROP TABLE "web3_provider"
       `);
     await queryRunner.query(`
       DROP INDEX "public"."IDX_559a8c8bf2e86dc996c68a7b9e"
@@ -96,9 +92,6 @@ export class InitModuleWeb31692515607058 implements MigrationInterface {
       `);
     await queryRunner.query(`
       DROP TABLE "web3_contract"
-      `);
-    await queryRunner.query(`
-      DROP TABLE "web3_network"
       `);
   }
 }

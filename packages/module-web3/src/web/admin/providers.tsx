@@ -10,7 +10,7 @@ import {
 } from '@roxavn/core/web';
 import { IconEdit, IconPlus, IconTopologyRing3 } from '@tabler/icons-react';
 
-import { web3NetworkApi } from '../../base/index.js';
+import { web3ProviderApi } from '../../base/index.js';
 import { webModule } from '../module.js';
 
 const Page = () => {
@@ -18,12 +18,12 @@ const Page = () => {
   const tCore = coreWebModule.useTranslation().t;
   return (
     <ApiTable
-      api={web3NetworkApi.getMany}
-      header={t('networks')}
+      api={web3ProviderApi.getMany}
+      header={t('providers')}
       columns={{
         id: { label: tCore('id') },
-        providerUrl: { label: t('providerUrl') },
-        explorerUrl: { label: t('explorerUrl') },
+        networkId: { label: t('networkId') },
+        url: { label: tCore('url') },
         blockRangePerCrawl: { label: t('blockRangePerCrawl') },
         delayBlockCount: { label: t('delayBlockCount') },
         updatedDate: {
@@ -39,16 +39,15 @@ const Page = () => {
             title: t('addNetwork'),
             children: (
               <ApiFormGroup
-                api={web3NetworkApi.create}
+                api={web3ProviderApi.create}
                 fields={[
-                  { name: 'id', input: <NumberInput label={tCore('id')} /> },
                   {
-                    name: 'providerUrl',
-                    input: <TextInput label={t('providerUrl')} />,
+                    name: 'networkId',
+                    input: <NumberInput label={t('networkId')} />,
                   },
                   {
-                    name: 'explorerUrl',
-                    input: <TextInput label={t('explorerUrl')} />,
+                    name: 'url',
+                    input: <TextInput label={tCore('url')} />,
                   },
                 ]}
               />
@@ -64,22 +63,22 @@ const Page = () => {
             title: t('editNetwork', { id: item.id }),
             children: (
               <ApiFormGroup
-                api={web3NetworkApi.update}
+                api={web3ProviderApi.update}
                 apiParams={{
-                  web3NetworkId: item.id,
-                  providerUrl: item.providerUrl,
-                  explorerUrl: item.explorerUrl,
+                  web3ProviderId: item.id,
+                  url: item.url,
+                  networkId: parseInt(item.networkId),
                   blockRangePerCrawl: item.blockRangePerCrawl,
                   delayBlockCount: item.delayBlockCount,
                 }}
                 fields={[
                   {
-                    name: 'providerUrl',
-                    input: <TextInput label={t('providerUrl')} />,
+                    name: 'networkId',
+                    input: <NumberInput label={t('networkId')} />,
                   },
                   {
-                    name: 'explorerUrl',
-                    input: <TextInput label={t('explorerUrl')} />,
+                    name: 'url',
+                    input: <TextInput label={tCore('url')} />,
                   },
                   {
                     name: 'blockRangePerCrawl',
@@ -99,12 +98,12 @@ const Page = () => {
   );
 };
 
-export const networksPage = new PageItem({
-  label: <ModuleT module={webModule} k="networks" />,
-  path: 'networks',
+export const providersPage = new PageItem({
+  label: <ModuleT module={webModule} k="providers" />,
+  path: 'providers',
   icon: IconTopologyRing3,
   element: (
-    <IfCanAccessApi api={web3NetworkApi.getMany}>
+    <IfCanAccessApi api={web3ProviderApi.getMany}>
       <Page />
     </IfCanAccessApi>
   ),

@@ -6,10 +6,8 @@ import {
   PrimaryGeneratedColumn,
   type Relation,
   UpdateDateColumn,
-  ManyToOne,
 } from 'typeorm';
 import { Web3EventCrawler } from './web3.event.crawler.entity.js';
-import { Web3Network } from './web3.network.entity.js';
 
 @Entity()
 export class Web3Contract {
@@ -24,9 +22,6 @@ export class Web3Contract {
 
   @Column('bigint')
   networkId: string;
-
-  @ManyToOne(() => Web3Network, (network) => network.contracts)
-  network: Relation<Web3Network>;
 
   @Column({ type: 'jsonb', nullable: true })
   metadata?: Record<string, any>;

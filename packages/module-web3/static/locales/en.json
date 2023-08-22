@@ -1,6 +1,5 @@
 {
-  "networks": "Networks",
-  "providerUrl": "Provider url",
+  "providers": "Providers",
   "explorerUrl": "Explorer url",
   "addNetwork": "Add network",
   "editNetwork": "Edit network {{ id }}",

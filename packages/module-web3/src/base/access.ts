@@ -4,7 +4,7 @@ import { baseModule } from './module.js';
 
 export const scopes = accessManager.makeScopes(baseModule, {
   Web3EventCrawler: { name: 'web3EventCrawler' },
-  Web3Network: { name: 'web3Network' },
+  Web3Provider: { name: 'web3Provider' },
   Web3Contract: { name: 'web3Contract' },
 });
 
@@ -13,9 +13,9 @@ export const permissions = accessManager.makePermissions(scopes, {
   UpdateWeb3Contract: {},
   CreateWeb3Contract: {},
 
-  CreateWeb3Network: {},
-  UpdateWeb3Network: {},
-  ReadWeb3Networks: {},
+  CreateWeb3Provider: {},
+  UpdateWeb3Provider: {},
+  ReadWeb3Providers: {},
 
   CreateWeb3EventCrawler: {},
   UpdateWeb3EventCrawler: {},
