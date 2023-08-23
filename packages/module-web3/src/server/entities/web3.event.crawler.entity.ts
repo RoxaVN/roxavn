@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { Web3Contract } from './web3.contract.entity.js';
 import { Web3Event } from './web3.event.entity.js';
+import { Web3EventConsumer } from './web3.event.consumer.entity.js';
 
 @Entity()
 @Index(['event', 'contractId'], { unique: true })
@@ -29,6 +30,9 @@ export class Web3EventCrawler {
 
   @OneToMany(() => Web3Event, (event) => event.crawler)
   events: Relation<Web3Event>[];
+
+  @OneToMany(() => Web3EventConsumer, (consumer) => consumer.crawler)
+  consumers: Relation<Web3EventConsumer>[];
 
   @Column('boolean', { default: true })
   isActive: boolean;
