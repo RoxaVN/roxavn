@@ -78,8 +78,11 @@ export class InitWeb3Module1692690369340 implements MigrationInterface {
       )
       `);
     await queryRunner.query(`
+      CREATE UNIQUE INDEX "IDX_57169e1260ee06495a2c15e1d5" ON "web3_event_consumer" ("name", "crawlerId")
+      `);
+    await queryRunner.query(`
       ALTER TABLE "web3_event"
-      ADD CONSTRAINT "FK_3db51baa37ae8baf7652df6ce63" FOREIGN KEY ("crawlerId") REFERENCES "web3_event_crawler"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+      ADD CONSTRAINT "FK_3db51baa37ae8baf7652df6cuniquee63" FOREIGN KEY ("crawlerId") REFERENCES "web3_event_crawler"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
       `);
     await queryRunner.query(`
       ALTER TABLE "web3_event_crawler"
@@ -100,6 +103,9 @@ export class InitWeb3Module1692690369340 implements MigrationInterface {
       `);
     await queryRunner.query(`
       ALTER TABLE "web3_event" DROP CONSTRAINT "FK_3db51baa37ae8baf7652df6ce63"
+      `);
+    await queryRunner.query(`
+      DROP INDEX "public"."IDX_57169e1260ee06495a2c15e1d5"
       `);
     await queryRunner.query(`
       DROP TABLE "web3_event_consumer"
