@@ -24,7 +24,7 @@ const Page = () => {
         contractId: { label: t('contract') },
         event: { label: t('event') },
         isActive: { label: tCore('active'), render: utils.Render.boolean },
-        lastCrawlBlockNumber: { label: t('lastCrawlBlockNumber') },
+        lastCrawlBlockNumber: { label: t('lastBlockNumber') },
         updatedDate: {
           label: tCore('updatedDate'),
           render: utils.Render.relativeTime,
@@ -50,7 +50,7 @@ const Page = () => {
                   },
                   {
                     name: 'lastCrawlBlockNumber',
-                    input: <NumberInput label={t('lastCrawlBlockNumber')} />,
+                    input: <NumberInput label={t('lastBlockNumber')} />,
                   },
                 ]}
               />

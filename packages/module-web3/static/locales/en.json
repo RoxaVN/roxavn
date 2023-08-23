@@ -14,12 +14,14 @@
   "events": "Events",
   "block": "Block",
   "transaction": "Transaction",
+  "eventConsumers": "Event consumers",
+  "crawler": "Crawler",
   "eventCrawlers": "Event crawlers",
   "addEventCrawler": "Add event crawlers",
   "editEventCrawler": "Edit event crawlers {{ event }}",
   "blockRangePerCrawl": "Block range",
   "delayBlockCount": "Delay block",
-  "lastCrawlBlockNumber": "Last block number",
+  "lastBlockNumber": "Last block number",
   "Error": {
     "NotFoundProviderException": "Not found provider of network {{ networkId }}"
   },
