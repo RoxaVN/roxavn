@@ -66,6 +66,18 @@ export class InitWeb3Module1692690369340 implements MigrationInterface {
       )
       `);
     await queryRunner.query(`
+      CREATE TABLE "web3_event_consumer" (
+        "id" BIGSERIAL NOT NULL,
+        "name" text NOT NULL,
+        "lastConsumeBlockNumber" bigint NOT NULL,
+        "crawlerId" bigint NOT NULL,
+        "metadata" jsonb,
+        "createdDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+        "updatedDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+        CONSTRAINT "PK_27991885576683e9b7864cc63ed" PRIMARY KEY ("id")
+      )
+      `);
+    await queryRunner.query(`
       ALTER TABLE "web3_event"
       ADD CONSTRAINT "FK_3db51baa37ae8baf7652df6ce63" FOREIGN KEY ("crawlerId") REFERENCES "web3_event_crawler"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
       `);
@@ -73,14 +85,24 @@ export class InitWeb3Module1692690369340 implements MigrationInterface {
       ALTER TABLE "web3_event_crawler"
       ADD CONSTRAINT "FK_9d076044fedca39e0c1ec0e0bad" FOREIGN KEY ("contractId") REFERENCES "web3_contract"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
       `);
+    await queryRunner.query(`
+      ALTER TABLE "web3_event_consumer"
+      ADD CONSTRAINT "FK_dbbf89380f38958830fbf03a2fd" FOREIGN KEY ("crawlerId") REFERENCES "web3_event_crawler"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+      `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
+      ALTER TABLE "web3_event_consumer" DROP CONSTRAINT "FK_dbbf89380f38958830fbf03a2fd"
+      `);
     await queryRunner.query(`
       ALTER TABLE "web3_event_crawler" DROP CONSTRAINT "FK_9d076044fedca39e0c1ec0e0bad"
       `);
     await queryRunner.query(`
       ALTER TABLE "web3_event" DROP CONSTRAINT "FK_3db51baa37ae8baf7652df6ce63"
+      `);
+    await queryRunner.query(`
+      DROP TABLE "web3_event_consumer"
       `);
     await queryRunner.query(`
       DROP TABLE "web3_provider"
