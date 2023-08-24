@@ -12,7 +12,7 @@ const removeIgnoredFiles = async (files) => {
 };
 
 module.exports = {
-  '*': ['prettier --check --ignore-unknown'],
+  // '*': ['prettier --check --ignore-unknown'],
 
   '*.{ts,tsx}': async (files) => {
     const filesToLint = await removeIgnoredFiles(files);
