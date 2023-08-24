@@ -1,9 +1,0 @@
----
-inject: true
-to: package.json
-before: '"web": \['
-skip_if: '"hook"'
----
-      "hook": [
-        "dist/esm/hook/index.d.ts"
-      ],

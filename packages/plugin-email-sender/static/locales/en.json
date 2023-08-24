@@ -1,9 +1,0 @@
-{
-  "emailsenderSetting": "Email sender setting",
-  "sender": "Sender",
-  "transportOptions": "Transport options",
-  "Meta": {
-    "name": "email sender",
-    "description": "email sender"
-  }
-}

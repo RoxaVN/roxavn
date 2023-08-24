@@ -1,9 +1,0 @@
----
-inject: true
-to: package.json
-before: '"base": \['
-skip_if: 'web/init.d.ts'
----
-      "web/init": [
-        "dist/esm/web/init.d.ts"
-      ],
