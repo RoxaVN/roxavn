@@ -1,3 +1,54 @@
 [submodule "packages/cli"]
 	path = packages/cli
 	url = git@github.com:RoxaVN/cli.git
+[submodule "packages/core"]
+	path = packages/core
+	url = git@github.com:RoxaVN/core.git
+[submodule "packages/dev-web"]
+	path = packages/dev-web
+	url = git@github.com:RoxaVN/dev-web.git
+[submodule "packages/module-asset"]
+	path = packages/module-asset
+	url = git@github.com:RoxaVN/module-asset.git
+[submodule "packages/module-currency"]
+	path = packages/module-currency
+	url = git@github.com:RoxaVN/module-currency.git
+[submodule "packages/module-installer"]
+	path = packages/module-installer
+	url = git@github.com:RoxaVN/module-installer.git
+[submodule "packages/module-project"]
+	path = packages/module-project
+	url = git@github.com:RoxaVN/module-project.git
+[submodule "packages/module-notification"]
+	path = packages/module-notification
+	url = git@github.com:RoxaVN/module-notification.git
+[submodule "packages/module-upload"]
+	path = packages/module-upload
+	url = git@github.com:RoxaVN/module-upload.git
+[submodule "packages/module-user"]
+	path = packages/module-user
+	url = git@github.com:RoxaVN/module-user.git
+[submodule "packages/module-utils"]
+	path = packages/module-utils
+	url = git@github.com:RoxaVN/module-utils.git
+[submodule "packages/module-web3"]
+	path = packages/module-web3
+	url = git@github.com:RoxaVN/module-web3.git
+[submodule "packages/plugin-email-sender"]
+	path = packages/plugin-email-sender
+	url = git@github.com:RoxaVN/plugin-email-sender.git
+[submodule "packages/plugin-firebase"]
+	path = packages/plugin-firebase
+	url = git@github.com:RoxaVN/plugin-firebase.git
+[submodule "packages/plugin-firebase-auth"]
+	path = packages/plugin-firebase-auth
+	url = git@github.com:RoxaVN/plugin-firebase-auth.git
+[submodule "packages/plugin-project-notification"]
+	path = packages/plugin-project-notification
+	url = git@github.com:RoxaVN/plugin-project-notification.git
+[submodule "packages/plugin-upload-seaweedfs"]
+	path = packages/plugin-upload-seaweedfs
+	url = git@github.com:RoxaVN/plugin-upload-seaweedfs.git
+[submodule "packages/plugin-web3-auth"]
+	path = packages/plugin-web3-auth
+	url = git@github.com:RoxaVN/plugin-web3-auth.git
