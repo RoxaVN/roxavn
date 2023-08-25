@@ -25,7 +25,8 @@
     "packages/plugin-firebase",
     "packages/plugin-firebase-auth",
     "packages/plugin-upload-seaweedfs",
-    "packages/plugin-web3-auth"
+    "packages/plugin-web3-auth",
+    "packages/new_metastrike"
   ],
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",
