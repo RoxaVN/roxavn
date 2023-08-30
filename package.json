@@ -3,8 +3,7 @@
   "scripts": {
     "prepare": "husky install",
     "build": "npm run build --workspaces",
-    "git:init": "git submodule update --init --recursive && git submodule foreach --recursive git checkout main",
-    "git:pull": "git pull --recurse-submodules --jobs=10"
+    "git:init": "git submodule update --init --recursive && git submodule foreach --recursive git checkout main"
   },
   "license": "MIT",
   "author": "roxavn",
