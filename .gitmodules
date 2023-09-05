@@ -55,3 +55,6 @@
 [submodule "packages/new_metastrike"]
 	path = packages/new_metastrike
 	url = git@gitlab.com:metastrike/new_metastrike.git
+[submodule "packages/plugin-email-auth"]
+	path = packages/plugin-email-auth
+	url = https://github.com/RoxaVN/plugin-email-auth.git
