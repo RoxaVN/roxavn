@@ -20,6 +20,7 @@
     "packages/module-web3",
     "packages/module-asset",
     "packages/module-currency",
+    "packages/plugin-otp",
     "packages/plugin-email-sender",
     "packages/plugin-email-auth",
     "packages/plugin-project-notification",
