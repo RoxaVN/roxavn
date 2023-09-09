@@ -28,6 +28,7 @@
     "packages/plugin-firebase-auth",
     "packages/plugin-upload-seaweedfs",
     "packages/plugin-web3-auth",
+    "packages/plugin-user-info",
     "packages/new_metastrike"
   ],
   "devDependencies": {
