@@ -3,7 +3,8 @@
   "scripts": {
     "prepare": "husky install",
     "build": "npm run build --workspaces",
-    "git:init": "git submodule update --init --recursive && git submodule foreach --recursive git checkout main"
+    "git:init": "git submodule update --init --recursive && git submodule foreach --recursive git checkout main",
+    "git:pull": "git submodule foreach --recursive git pull"
   },
   "license": "MIT",
   "author": "roxavn",
@@ -20,6 +21,7 @@
     "packages/module-web3",
     "packages/module-asset",
     "packages/module-currency",
+    "packages/module-socket",
     "packages/plugin-otp",
     "packages/plugin-email-sender",
     "packages/plugin-email-auth",
