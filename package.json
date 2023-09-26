@@ -22,6 +22,7 @@
     "packages/module-asset",
     "packages/module-currency",
     "packages/module-socket",
+    "packages/module-game",
     "packages/plugin-otp",
     "packages/plugin-email-sender",
     "packages/plugin-email-auth",

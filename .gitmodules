@@ -70,3 +70,6 @@
 [submodule "packages/module-socket"]
 	path = packages/module-socket
 	url = https://github.com/RoxaVN/module-socket.git
+[submodule "packages/module-game"]
+	path = packages/module-game
+	url = https://github.com/RoxaVN/module-game.git
