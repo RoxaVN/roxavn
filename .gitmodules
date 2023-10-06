@@ -73,3 +73,6 @@
 [submodule "packages/module-game"]
 	path = packages/module-game
 	url = https://github.com/RoxaVN/module-game.git
+[submodule "packages/plugin-casino-game"]
+	path = packages/plugin-casino-game
+	url = https://github.com/RoxaVN/plugin-casino-game.git
