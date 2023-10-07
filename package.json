@@ -34,7 +34,8 @@
     "packages/plugin-asset-web3",
     "packages/plugin-user-info",
     "packages/plugin-casino-game",
-    "packages/new_metastrike"
+    "packages/new_metastrike",
+    "packages/baccarat"
   ],
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",

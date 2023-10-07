@@ -76,3 +76,6 @@
 [submodule "packages/plugin-casino-game"]
 	path = packages/plugin-casino-game
 	url = https://github.com/RoxaVN/plugin-casino-game.git
+[submodule "packages/baccarat"]
+	path = packages/baccarat
+	url = git@gitlab.com:metastrike/baccarat.git
