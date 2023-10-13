@@ -4,7 +4,7 @@ version: '3.9'
 services:
   cache:
     image: redis:7
-    restart: always
+    restart: on-failure
     ports:
       - '6379:6379'
     command: redis-server --save 60 1 --loglevel warning
