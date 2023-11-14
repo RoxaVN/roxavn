@@ -79,3 +79,6 @@
 [submodule "packages/baccarat"]
 	path = packages/baccarat
 	url = git@gitlab.com:metastrike/baccarat.git
+[submodule "packages/plugin-payment"]
+	path = packages/plugin-payment
+	url = https://github.com/RoxaVN/plugin-payment.git
