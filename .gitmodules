@@ -85,3 +85,6 @@
 [submodule "packages/plugin-payment-web3"]
 	path = packages/plugin-payment-web3
 	url = https://github.com/RoxaVN/plugin-payment-web3.git
+[submodule "packages/plugin-currency-socket"]
+	path = packages/plugin-currency-socket
+	url = https://github.com/RoxaVN/plugin-currency-socket.git

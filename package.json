@@ -36,6 +36,7 @@
     "packages/plugin-asset-web3",
     "packages/plugin-user-info",
     "packages/plugin-casino-game",
+    "packages/plugin-currency-socket",
     "packages/new_metastrike",
     "packages/baccarat"
   ],
