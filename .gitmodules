@@ -52,9 +52,6 @@
 [submodule "packages/plugin-web3-auth"]
 	path = packages/plugin-web3-auth
 	url = https://github.com/RoxaVN/plugin-web3-auth.git
-[submodule "packages/new_metastrike"]
-	path = packages/new_metastrike
-	url = git@gitlab.com:metastrike/new_metastrike.git
 [submodule "packages/plugin-email-auth"]
 	path = packages/plugin-email-auth
 	url = https://github.com/RoxaVN/plugin-email-auth.git
@@ -76,9 +73,6 @@
 [submodule "packages/plugin-casino-game"]
 	path = packages/plugin-casino-game
 	url = https://github.com/RoxaVN/plugin-casino-game.git
-[submodule "packages/baccarat"]
-	path = packages/baccarat
-	url = git@gitlab.com:metastrike/baccarat.git
 [submodule "packages/plugin-payment"]
 	path = packages/plugin-payment
 	url = https://github.com/RoxaVN/plugin-payment.git
