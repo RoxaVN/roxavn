@@ -26,19 +26,16 @@
     "packages/plugin-otp",
     "packages/plugin-email-sender",
     "packages/plugin-email-auth",
+    "packages/plugin-web3-auth",
     "packages/plugin-payment",
     "packages/plugin-payment-web3",
     "packages/plugin-project-notification",
     "packages/plugin-firebase",
     "packages/plugin-firebase-auth",
     "packages/plugin-upload-seaweedfs",
-    "packages/plugin-web3-auth",
     "packages/plugin-asset-web3",
     "packages/plugin-user-info",
-    "packages/plugin-casino-game",
-    "packages/plugin-currency-socket",
-    "packages/new_metastrike",
-    "packages/baccarat"
+    "packages/plugin-casino-game"
   ],
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",
