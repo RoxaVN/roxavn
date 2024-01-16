@@ -79,3 +79,6 @@
 [submodule "packages/plugin-payment-web3"]
 	path = packages/plugin-payment-web3
 	url = https://github.com/RoxaVN/plugin-payment-web3.git
+[submodule "packages/module-message"]
+	path = packages/module-message
+	url = https://github.com/RoxaVN/module-message.git

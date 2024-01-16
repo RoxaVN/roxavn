@@ -16,6 +16,7 @@
     "packages/module-user",
     "packages/module-upload",
     "packages/module-installer",
+    "packages/module-message",
     "packages/module-notification",
     "packages/module-project",
     "packages/module-web3",
