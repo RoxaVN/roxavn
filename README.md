@@ -38,9 +38,10 @@ npm run dev
 
 For documentation about RoxaVN, please visit [our wiki](https://github.com/RoxaVN/roxavn/wiki)
 
-## Libraries used by RoxaVN
+## Tech stack
 
 - [Remix](https://remix.run/) a full stack web framework
+- [Vite](https://vitejs.dev/) next generation frontend tooling
 - [Typeorm](https://typeorm.io/) an object relational mapping library
 - [I18next](https://www.i18next.com/) an internationalization-framework
 - [Mantine](https://mantine.dev/) a fully featủed React components library
