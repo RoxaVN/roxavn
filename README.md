@@ -13,7 +13,7 @@ RoxaVN is a full stack web framework, designed in a modularized architecture. Ea
 Create a simple module
 
 ```
-npx roxavn gen module
+npx @roxavn/cli gen module
 ```
 
 Add available modules
