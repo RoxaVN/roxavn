@@ -79,3 +79,6 @@
 [submodule "packages/plugin-payment-web3"]
 	path = packages/plugin-payment-web3
 	url = https://github.com/RoxaVN/plugin-payment-web3.git
+[submodule "packages/plugin-web3-airdrop"]
+	path = packages/plugin-web3-airdrop
+	url = git@github.com:RoxaVN/plugin-web3-airdrop.git

@@ -33,6 +33,7 @@
     "packages/plugin-firebase-auth",
     "packages/plugin-upload-seaweedfs",
     "packages/plugin-web3-auth",
+    "packages/plugin-web3-airdrop",
     "packages/plugin-asset-web3",
     "packages/plugin-user-info",
     "packages/plugin-casino-game",
