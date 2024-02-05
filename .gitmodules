@@ -82,3 +82,6 @@
 [submodule "packages/module-message"]
 	path = packages/module-message
 	url = https://github.com/RoxaVN/module-message.git
+[submodule "packages/plugin-web3-airdrop"]
+	path = packages/plugin-web3-airdrop
+	url = git@github.com:RoxaVN/plugin-web3-airdrop.git
