@@ -37,7 +37,8 @@
     "packages/plugin-asset-web3",
     "packages/plugin-user-info",
     "packages/plugin-web3-airdrop",
-    "packages/plugin-casino-game"
+    "packages/plugin-casino-game",
+    "packages/plugin-news"
   ],
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",

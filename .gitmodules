@@ -85,3 +85,6 @@
 [submodule "packages/plugin-web3-airdrop"]
 	path = packages/plugin-web3-airdrop
 	url = git@github.com:RoxaVN/plugin-web3-airdrop.git
+[submodule "packages/plugin-news"]
+	path = packages/plugin-news
+	url = https://github.com/RoxaVN/plugin-news.git
