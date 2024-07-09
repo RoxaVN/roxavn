@@ -88,3 +88,6 @@
 [submodule "packages/plugin-news"]
 	path = packages/plugin-news
 	url = https://github.com/RoxaVN/plugin-news.git
+[submodule "packages/openapi"]
+	path = packages/openapi
+	url = https://github.com/RoxaVN/openapi.git

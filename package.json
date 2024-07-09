@@ -12,6 +12,7 @@
     "packages/core",
     "packages/dev-web",
     "packages/cli",
+    "packages/openapi",
     "packages/module-utils",
     "packages/module-user",
     "packages/module-upload",
