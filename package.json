@@ -25,7 +25,7 @@
     "packages/module-currency",
     "packages/module-socket",
     "packages/module-game",
-    "packages/module-affiliate",
+    "packages/module-referral",
     "packages/plugin-otp",
     "packages/plugin-email-sender",
     "packages/plugin-email-auth",

@@ -91,6 +91,6 @@
 [submodule "packages/openapi"]
 	path = packages/openapi
 	url = https://github.com/RoxaVN/openapi.git
-[submodule "packages/module-affiliate"]
-	path = packages/module-affiliate
-	url = https://github.com/RoxaVN/module-affiliate.git
+[submodule "packages/module-referral"]
+	path = packages/module-referral
+	url = https://github.com/RoxaVN/module-referral.git
