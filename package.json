@@ -26,6 +26,7 @@
     "packages/module-socket",
     "packages/module-game",
     "packages/module-referral",
+    "packages/module-procedure",
     "packages/plugin-otp",
     "packages/plugin-email-sender",
     "packages/plugin-email-auth",

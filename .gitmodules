@@ -94,3 +94,6 @@
 [submodule "packages/module-referral"]
 	path = packages/module-referral
 	url = https://github.com/RoxaVN/module-referral.git
+[submodule "packages/module-procedure"]
+	path = packages/module-procedure
+	url = https://github.com/RoxaVN/module-procedure.git
