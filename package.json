@@ -27,6 +27,7 @@
     "packages/module-game",
     "packages/module-referral",
     "packages/module-workflow",
+    "packages/module-login-reward",
     "packages/plugin-otp",
     "packages/plugin-email-sender",
     "packages/plugin-email-auth",
