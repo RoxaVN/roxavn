@@ -97,6 +97,6 @@
 [submodule "packages/module-workflow"]
 	path = packages/module-workflow
 	url = https://github.com/RoxaVN/module-workflow.git
-[submodule "packages/module-login-reward"]
-	path = packages/module-login-reward
-	url = https://github.com/RoxaVN/module-login-reward.git
+[submodule "packages/module-reward"]
+	path = packages/module-reward
+	url = https://github.com/RoxaVN/module-reward.git
