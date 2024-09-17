@@ -28,6 +28,7 @@
     "packages/module-referral",
     "packages/module-workflow",
     "packages/module-reward",
+    "packages/module-wager",
     "packages/plugin-otp",
     "packages/plugin-email-sender",
     "packages/plugin-email-auth",
