@@ -4,14 +4,12 @@ version: '3.9'
 services:
   cache:
     image: redis/redis-stack:latest
-    restart: on-failure
     ports:
       - 6379:6379
       - 8001:8001
 
   db:
     image: postgres:14-alpine
-    restart: on-failure
     ports:
       - 5434:5432
     volumes:
@@ -21,16 +19,39 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: roxavn
 
-  seaweed_master:
+  seaweedfs-s3:
     image: chrislusf/seaweedfs
-    network_mode: 'host'
-    command: 'master -ip=localhost -ip.bind=0.0.0.0 -metricsPort=9324'
-
-  seaweed_volume:
-    image: chrislusf/seaweedfs
-    network_mode: 'host'
+    container_name: seaweedfs-s3
+    ports:
+      - "8333:8333"
     volumes:
       - ./docker-data/seaweed:/data
-    command: 'volume -mserver="localhost:9333" -ip.bind=0.0.0.0 -port=28080 -publicUrl="http://localhost:28080" -metricsPort=9325'
-    depends_on:
-      - seaweed_master
+    entrypoint: /bin/sh -c
+    command: |
+      "echo '{
+        \"identities\": [
+          {
+            \"name\": \"anonymous\",
+            \"actions\": [
+              \"Read:bucket/public/*\"
+            ]
+          },
+          {
+            \"name\": \"admin_user\",
+            \"credentials\": [
+              {
+                \"accessKey\": \"some_access_key1\",
+                \"secretKey\": \"some_secret_key1\"
+              }
+            ],
+            \"actions\": [
+              \"Admin\",
+              \"Read\",
+              \"List\",
+              \"Tagging\",
+              \"Write\"
+            ]
+          }
+        ]
+      }' > /etc/seaweedfs/config.json && \
+      weed server -s3 -s3.config /etc/seaweedfs/config.json"
