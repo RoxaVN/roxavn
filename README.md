@@ -42,7 +42,8 @@ For documentation about RoxaVN, please visit [our wiki](https://github.com/RoxaV
 
 - [Remix](https://remix.run/) a full stack web framework
 - [Vite](https://vitejs.dev/) next generation frontend tooling
-- [Kysely](https://kysely.dev/) TypeScript SQL query builder and [Typeorm](https://typeorm.io/) for entities definition and migration management
+- [Kysely](https://kysely.dev/) TypeScript SQL query builder
+- [Typeorm](https://typeorm.io/) for entities definition and migration management
 - [I18next](https://www.i18next.com/) an internationalization-framework
 - [Mantine](https://mantine.dev/) a fully featured React components library
 - [Tabler Icons](https://tabler-icons.io/) free and open source icons
