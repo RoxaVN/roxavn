@@ -47,7 +47,7 @@ For documentation about RoxaVN, please visit [our wiki](https://github.com/RoxaV
 - [I18next](https://www.i18next.com/) an internationalization-framework
 - [Mantine](https://mantine.dev/) a fully featured React components library
 - [Tabler Icons](https://tabler-icons.io/) free and open source icons
-- [Lodash](https://lodash.com/) a modern JavaScript utility library
+- [ES-toolkit](https://es-toolkit.slash.page/) a modern JavaScript utility library
 
 ## License
 
