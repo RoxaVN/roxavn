@@ -1,6 +1,3 @@
-# cna't work with rootless mode because must use network_mode host
-version: '3.9'
-
 services:
   cache:
     image: redis/redis-stack:latest
