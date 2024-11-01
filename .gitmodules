@@ -100,3 +100,6 @@
 [submodule "packages/module-wager"]
 	path = packages/module-wager
 	url = https://github.com/RoxaVN/module-wager.git
+[submodule "packages/module-organization"]
+	path = packages/module-organization
+	url = https://github.com/RoxaVN/module-organization.git

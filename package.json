@@ -29,6 +29,7 @@
     "packages/module-workflow",
     "packages/module-reward",
     "packages/module-wager",
+    "packages/module-organization",
     "packages/plugin-otp",
     "packages/plugin-email-sender",
     "packages/plugin-email-auth",
