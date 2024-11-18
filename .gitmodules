@@ -106,3 +106,6 @@
 [submodule "packages/plugin-telegram-bot"]
 	path = packages/plugin-telegram-bot
 	url = https://github.com/RoxaVN/plugin-telegram-bot.git
+[submodule "packages/plugin-asset-template"]
+	path = packages/plugin-asset-template
+	url = https://github.com/RoxaVN/plugin-asset-template.git

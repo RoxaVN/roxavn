@@ -40,6 +40,7 @@
     "packages/plugin-firebase",
     "packages/plugin-firebase-auth",
     "packages/plugin-asset-web3",
+    "packages/plugin-asset-template",
     "packages/plugin-user-info",
     "packages/plugin-web3-airdrop",
     "packages/plugin-casino-game",
