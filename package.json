@@ -43,6 +43,7 @@
     "packages/plugin-asset-template",
     "packages/plugin-user-info",
     "packages/plugin-web3-airdrop",
+    "packages/plugin-store-record",
     "packages/plugin-casino-game",
     "packages/plugin-telegram-bot",
     "packages/plugin-news"

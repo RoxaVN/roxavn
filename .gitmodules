@@ -109,3 +109,6 @@
 [submodule "packages/plugin-asset-template"]
 	path = packages/plugin-asset-template
 	url = https://github.com/RoxaVN/plugin-asset-template.git
+[submodule "packages/plugin-store-record"]
+	path = packages/plugin-store-record
+	url = https://github.com/RoxaVN/plugin-store-record.git
