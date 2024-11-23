@@ -112,3 +112,6 @@
 [submodule "packages/plugin-store-record"]
 	path = packages/plugin-store-record
 	url = https://github.com/RoxaVN/plugin-store-record.git
+[submodule "packages/module-order"]
+	path = packages/module-order
+	url = https://github.com/RoxaVN/module-order.git
