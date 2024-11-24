@@ -115,3 +115,6 @@
 [submodule "packages/module-order"]
 	path = packages/module-order
 	url = https://github.com/RoxaVN/module-order.git
+[submodule "packages/plugin-asset-category"]
+	path = packages/plugin-asset-category
+	url = https://github.com/RoxaVN/plugin-asset-category.git

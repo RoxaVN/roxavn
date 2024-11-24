@@ -42,6 +42,7 @@
     "packages/plugin-firebase-auth",
     "packages/plugin-asset-web3",
     "packages/plugin-asset-template",
+    "packages/plugin-asset-category",
     "packages/plugin-user-info",
     "packages/plugin-web3-airdrop",
     "packages/plugin-store-record",
