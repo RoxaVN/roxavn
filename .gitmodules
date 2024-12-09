@@ -118,3 +118,6 @@
 [submodule "packages/plugin-asset-category"]
 	path = packages/plugin-asset-category
 	url = https://github.com/RoxaVN/plugin-asset-category.git
+[submodule "packages/module-skill"]
+	path = packages/module-skill
+	url = https://github.com/RoxaVN/module-skill.git

@@ -30,6 +30,7 @@
     "packages/module-reward",
     "packages/module-wager",
     "packages/module-order",
+    "packages/module-skill",
     "packages/module-organization",
     "packages/plugin-otp",
     "packages/plugin-email-sender",
