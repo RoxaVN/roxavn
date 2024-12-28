@@ -121,3 +121,6 @@
 [submodule "packages/module-skill"]
 	path = packages/module-skill
 	url = https://github.com/RoxaVN/module-skill.git
+[submodule "packages/module-timesheet"]
+	path = packages/module-timesheet
+	url = https://github.com/RoxaVN/module-timesheet.git
