@@ -1,7 +1,6 @@
 {
   "name": "roxavn",
   "scripts": {
-    "prepare": "husky install",
     "build": "npm run build --workspaces",
     "git:init": "git submodule update --init --recursive && git submodule foreach --recursive git checkout main",
     "git:pull": "git submodule foreach --recursive git pull"
@@ -11,6 +10,7 @@
   "workspaces": [
     "packages/core",
     "packages/dev-web",
+    "packages/code-convention",
     "packages/cli",
     "packages/openapi",
     "packages/module-utils",
@@ -53,10 +53,7 @@
     "packages/plugin-news"
   ],
   "devDependencies": {
-    "@commitlint/cli": "^17.2.0",
-    "@commitlint/config-conventional": "^17.2.0",
-    "husky": "^8.0.2",
-    "lint-staged": "^14.0.1",
+    "@biomejs/biome": "^1.9.4",
     "standard-version": "^9.5.0"
   }
 }
