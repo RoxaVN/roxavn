@@ -40,7 +40,7 @@ For documentation about RoxaVN, please visit [our wiki](https://github.com/RoxaV
 
 ## Tech stack
 
-- [Remix](https://remix.run/) a full stack web framework
+- [React Router](https://reactrouter.com/) a full stack web framework
 - [Vite](https://vitejs.dev/) next generation frontend tooling
 - [Kysely](https://kysely.dev/) TypeScript SQL query builder
 - [I18next](https://www.i18next.com/) an internationalization-framework
