@@ -1,0 +1,9 @@
+{
+	"@inject decorator": {
+		"prefix": "@inject",
+		"body": [
+			"@inject(${1}) protected ${2:${1/(.)(.*)/${1:/downcase}${2}/}}: ${1},"
+		],
+		"description": "@inject with auto-generated property name"
+	}
+}
