@@ -28,9 +28,9 @@
 [submodule "packages/module-user"]
 	path = packages/module-user
 	url = https://github.com/RoxaVN/module-user.git
-[submodule "packages/module-utils"]
-	path = packages/module-utils
-	url = https://github.com/RoxaVN/module-utils.git
+[submodule "packages/module-system"]
+	path = packages/module-system
+	url = https://github.com/RoxaVN/module-system.git
 [submodule "packages/module-web3"]
 	path = packages/module-web3
 	url = https://github.com/RoxaVN/module-web3.git
