@@ -13,7 +13,6 @@
     "packages/code-convention",
     "packages/cli",
     "packages/openapi",
-    "packages/module-utils",
     "packages/module-user",
     "packages/module-system",
     "packages/module-upload",
