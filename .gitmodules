@@ -130,3 +130,6 @@
 [submodule "packages/plugin-api-logger"]
 	path = packages/plugin-api-logger
 	url = https://github.com/RoxaVN/plugin-api-logger.git
+[submodule "packages/module-accounting"]
+	path = packages/module-accounting
+	url = https://github.com/RoxaVN/module-accounting.git
