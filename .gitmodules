@@ -133,3 +133,6 @@
 [submodule "packages/module-accounting"]
 	path = packages/module-accounting
 	url = https://github.com/RoxaVN/module-accounting.git
+[submodule "packages/plugin-sequence"]
+	path = packages/plugin-sequence
+	url = https://github.com/RoxaVN/plugin-sequence.git

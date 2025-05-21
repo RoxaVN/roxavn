@@ -23,6 +23,7 @@
     "packages/module-web3",
     "packages/module-asset",
     "packages/module-currency",
+    "packages/plugin-sequence",
     "packages/module-accounting",
     "packages/module-socket",
     "packages/module-game",
