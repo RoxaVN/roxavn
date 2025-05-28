@@ -36,6 +36,7 @@
     "packages/module-skill",
     "packages/module-timesheet",
     "packages/module-organization",
+    "packages/module-finance-contract",
     "packages/plugin-api-logger",
     "packages/plugin-otp",
     "packages/plugin-email-sender",

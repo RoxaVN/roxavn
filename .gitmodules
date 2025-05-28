@@ -136,3 +136,6 @@
 [submodule "packages/plugin-sequence"]
 	path = packages/plugin-sequence
 	url = https://github.com/RoxaVN/plugin-sequence.git
+[submodule "packages/module-finance-contract"]
+	path = packages/module-finance-contract
+	url = https://github.com/RoxaVN/module-finance-contract.git
