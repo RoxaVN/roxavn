@@ -139,3 +139,6 @@
 [submodule "packages/module-finance-contract"]
 	path = packages/module-finance-contract
 	url = https://github.com/RoxaVN/module-finance-contract.git
+[submodule "packages/plugin-user-ban"]
+	path = packages/plugin-user-ban
+	url = https://github.com/RoxaVN/plugin-user-ban.git
