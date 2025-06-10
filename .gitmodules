@@ -142,3 +142,6 @@
 [submodule "packages/plugin-user-ban"]
 	path = packages/plugin-user-ban
 	url = https://github.com/RoxaVN/plugin-user-ban.git
+[submodule "packages/plugin-message-report"]
+	path = packages/plugin-message-report
+	url = https://github.com/RoxaVN/plugin-message-report.git
