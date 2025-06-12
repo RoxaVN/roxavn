@@ -56,6 +56,7 @@
     "packages/plugin-casino-game",
     "packages/plugin-telegram-bot",
     "packages/plugin-message-report",
+    "packages/plugin-message-reaction",
     "packages/plugin-news"
   ],
   "devDependencies": {
