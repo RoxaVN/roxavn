@@ -57,6 +57,7 @@
     "packages/plugin-telegram-bot",
     "packages/plugin-message-report",
     "packages/plugin-message-reaction",
+    "packages/plugin-message-pin",
     "packages/plugin-news"
   ],
   "devDependencies": {
