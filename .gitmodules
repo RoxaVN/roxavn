@@ -151,3 +151,6 @@
 [submodule "packages/plugin-message-pin"]
 	path = packages/plugin-message-pin
 	url = https://github.com/RoxaVN/plugin-message-pin.git
+[submodule "packages/plugin-message-media"]
+	path = packages/plugin-message-media
+	url = https://github.com/RoxaVN/plugin-message-media.git

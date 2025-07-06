@@ -58,6 +58,7 @@
     "packages/plugin-message-report",
     "packages/plugin-message-reaction",
     "packages/plugin-message-pin",
+    "packages/plugin-message-media",
     "packages/plugin-news"
   ],
   "devDependencies": {
