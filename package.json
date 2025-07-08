@@ -38,6 +38,7 @@
     "packages/module-organization",
     "packages/module-finance-contract",
     "packages/plugin-api-logger",
+    "packages/plugin-api-rate-limiter",
     "packages/plugin-otp",
     "packages/plugin-email-sender",
     "packages/plugin-email-auth",

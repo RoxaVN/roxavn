@@ -154,3 +154,6 @@
 [submodule "packages/plugin-message-media"]
 	path = packages/plugin-message-media
 	url = https://github.com/RoxaVN/plugin-message-media.git
+[submodule "packages/plugin-api-rate-limiter"]
+	path = packages/plugin-api-rate-limiter
+	url = https://github.com/RoxaVN/plugin-api-rate-limiter.git
