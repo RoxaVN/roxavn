@@ -157,3 +157,6 @@
 [submodule "packages/plugin-api-rate-limiter"]
 	path = packages/plugin-api-rate-limiter
 	url = https://github.com/RoxaVN/plugin-api-rate-limiter.git
+[submodule "packages/plugin-message-poll"]
+	path = packages/plugin-message-poll
+	url = https://github.com/RoxaVN/plugin-message-poll.git
