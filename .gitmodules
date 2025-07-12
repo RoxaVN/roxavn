@@ -160,3 +160,6 @@
 [submodule "packages/plugin-message-poll"]
 	path = packages/plugin-message-poll
 	url = https://github.com/RoxaVN/plugin-message-poll.git
+[submodule "packages/plugin-project-message"]
+	path = packages/plugin-project-message
+	url = https://github.com/RoxaVN/plugin-project-message.git

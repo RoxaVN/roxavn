@@ -46,6 +46,7 @@
     "packages/plugin-payment",
     "packages/plugin-payment-web3",
     "packages/plugin-project-notification",
+    "packages/plugin-project-message",
     "packages/plugin-firebase",
     "packages/plugin-firebase-auth",
     "packages/plugin-asset-web3",
