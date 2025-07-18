@@ -42,7 +42,7 @@
     "packages/plugin-otp",
     "packages/plugin-email-sender",
     "packages/plugin-auth-email",
-    "packages/plugin-web3-auth",
+    "packages/plugin-auth-web3",
     "packages/plugin-payment",
     "packages/plugin-payment-web3",
     "packages/plugin-project-notification",
