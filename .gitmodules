@@ -37,9 +37,6 @@
 [submodule "packages/plugin-firebase"]
 	path = packages/plugin-firebase
 	url = https://github.com/RoxaVN/plugin-firebase.git
-[submodule "packages/plugin-firebase-auth"]
-	path = packages/plugin-firebase-auth
-	url = https://github.com/RoxaVN/plugin-firebase-auth.git
 [submodule "packages/plugin-project-notification"]
 	path = packages/plugin-project-notification
 	url = https://github.com/RoxaVN/plugin-project-notification.git
@@ -166,3 +163,6 @@
 [submodule "packages/plugin-auth-web3"]
 	path = packages/plugin-auth-web3
 	url = https://github.com/RoxaVN/plugin-auth-web3.git
+[submodule "packages/plugin-auth-firebase"]
+	path = packages/plugin-auth-firebase
+	url = https://github.com/RoxaVN/plugin-auth-firebase.git

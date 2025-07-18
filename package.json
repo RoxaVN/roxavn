@@ -48,7 +48,7 @@
     "packages/plugin-project-notification",
     "packages/plugin-project-message",
     "packages/plugin-firebase",
-    "packages/plugin-firebase-auth",
+    "packages/plugin-auth-firebase",
     "packages/plugin-asset-web3",
     "packages/plugin-asset-category",
     "packages/plugin-user-ban",
