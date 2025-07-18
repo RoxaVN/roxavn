@@ -154,9 +154,6 @@
 [submodule "packages/plugin-project-message"]
 	path = packages/plugin-project-message
 	url = https://github.com/RoxaVN/plugin-project-message.git
-[submodule "packages/plugin-web-push"]
-	path = packages/plugin-web-push
-	url = https://github.com/RoxaVN/plugin-web-push.git
 [submodule "packages/plugin-auth-email"]
 	path = packages/plugin-auth-email
 	url = https://github.com/RoxaVN/plugin-auth-email.git
@@ -166,3 +163,6 @@
 [submodule "packages/plugin-auth-firebase"]
 	path = packages/plugin-auth-firebase
 	url = https://github.com/RoxaVN/plugin-auth-firebase.git
+[submodule "packages/plugin-push-web"]
+	path = packages/plugin-push-web
+	url = https://github.com/RoxaVN/plugin-push-web.git
