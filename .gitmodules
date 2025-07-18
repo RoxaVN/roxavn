@@ -46,9 +46,6 @@
 [submodule "packages/plugin-web3-auth"]
 	path = packages/plugin-web3-auth
 	url = https://github.com/RoxaVN/plugin-web3-auth.git
-[submodule "packages/plugin-email-auth"]
-	path = packages/plugin-email-auth
-	url = https://github.com/RoxaVN/plugin-email-auth.git
 [submodule "packages/plugin-otp"]
 	path = packages/plugin-otp
 	url = https://github.com/RoxaVN/plugin-otp.git
@@ -166,3 +163,6 @@
 [submodule "packages/plugin-web-push"]
 	path = packages/plugin-web-push
 	url = https://github.com/RoxaVN/plugin-web-push.git
+[submodule "packages/plugin-auth-email"]
+	path = packages/plugin-auth-email
+	url = https://github.com/RoxaVN/plugin-auth-email.git

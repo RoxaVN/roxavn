@@ -41,7 +41,7 @@
     "packages/plugin-api-rate-limiter",
     "packages/plugin-otp",
     "packages/plugin-email-sender",
-    "packages/plugin-email-auth",
+    "packages/plugin-auth-email",
     "packages/plugin-web3-auth",
     "packages/plugin-payment",
     "packages/plugin-payment-web3",
