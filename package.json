@@ -63,7 +63,7 @@
     "packages/plugin-message-media",
     "packages/plugin-message-poll",
     "packages/plugin-notification-push",
-    "packages/plugin-push-web",
+    "packages/plugin-notification-web",
     "packages/plugin-news"
   ],
   "devDependencies": {
