@@ -62,6 +62,7 @@
     "packages/plugin-message-pin",
     "packages/plugin-message-media",
     "packages/plugin-message-poll",
+    "packages/plugin-notification-push",
     "packages/plugin-push-web",
     "packages/plugin-news"
   ],
