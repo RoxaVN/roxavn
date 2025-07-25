@@ -166,6 +166,6 @@
 [submodule "packages/plugin-notification-push"]
 	path = packages/plugin-notification-push
 	url = https://github.com/RoxaVN/plugin-notification-push.git
-[submodule "packages/plugin-notification-web"]
-	path = packages/plugin-notification-web
-	url = https://github.com/RoxaVN/plugin-notification-web.git
+[submodule "packages/plugin-notification-push-web"]
+	path = packages/plugin-notification-push-web
+	url = https://github.com/RoxaVN/plugin-notification-push-web.git
