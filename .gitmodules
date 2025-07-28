@@ -172,3 +172,6 @@
 [submodule "packages/plugin-notification-in-app"]
 	path = packages/plugin-notification-in-app
 	url = https://github.com/RoxaVN/plugin-notification-in-app.git
+[submodule "packages/plugin-message-notification"]
+	path = packages/plugin-message-notification
+	url = https://github.com/RoxaVN/plugin-message-notification.git
