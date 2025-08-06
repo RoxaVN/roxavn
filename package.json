@@ -67,6 +67,7 @@
     "packages/plugin-notification-in-app",
     "packages/plugin-notification-push",
     "packages/plugin-notification-push-web",
+    "packages/plugin-location-countries",
     "packages/plugin-news"
   ],
   "devDependencies": {

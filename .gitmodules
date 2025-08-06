@@ -178,3 +178,6 @@
 [submodule "packages/module-location"]
 	path = packages/module-location
 	url = https://github.com/RoxaVN/module-location.git
+[submodule "packages/plugin-location-countries"]
+	path = packages/plugin-location-countries
+	url = https://github.com/RoxaVN/plugin-location-countries.git
