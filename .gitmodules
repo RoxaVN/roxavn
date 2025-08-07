@@ -181,3 +181,6 @@
 [submodule "packages/plugin-location-countries"]
 	path = packages/plugin-location-countries
 	url = https://github.com/RoxaVN/plugin-location-countries.git
+[submodule "packages/plugin-location-vietnam"]
+	path = packages/plugin-location-vietnam
+	url = https://github.com/RoxaVN/plugin-location-vietnam.git
