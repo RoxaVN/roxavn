@@ -69,6 +69,7 @@
     "packages/plugin-notification-push-web",
     "packages/plugin-location-countries",
     "packages/plugin-location-vietnam",
+    "packages/plugin-location-address",
     "packages/plugin-news"
   ],
   "devDependencies": {

@@ -184,3 +184,6 @@
 [submodule "packages/plugin-location-vietnam"]
 	path = packages/plugin-location-vietnam
 	url = https://github.com/RoxaVN/plugin-location-vietnam.git
+[submodule "packages/plugin-location-address"]
+	path = packages/plugin-location-address
+	url = https://github.com/RoxaVN/plugin-location-address.git
