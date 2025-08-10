@@ -1,4 +1,6 @@
 node_modules
-docker-data
 *.env
 **/.DS_Store
+
+docker/postgres
+docker/seaweed

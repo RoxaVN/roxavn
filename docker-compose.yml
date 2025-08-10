@@ -6,11 +6,11 @@ services:
       - 8001:8001
 
   db:
-    image: postgres:16-alpine
+    image: postgis/postgis:17-3.5
     ports:
       - 5432:5432
     volumes:
-      - ./docker-data/postgres:/var/lib/postgresql/data
+      - ./docker/postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
@@ -22,7 +22,7 @@ services:
     ports:
       - "8333:8333"
     volumes:
-      - ./docker-data/seaweed:/data
+      - ./docker/seaweed:/data
     entrypoint: /bin/sh -c
     command: |
       "echo '{
