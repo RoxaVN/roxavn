@@ -44,6 +44,7 @@
     "packages/plugin-email-sender",
     "packages/plugin-auth-email",
     "packages/plugin-auth-web3",
+    "packages/plugin-auth-two-factor",
     "packages/plugin-payment",
     "packages/plugin-payment-web3",
     "packages/plugin-project-notification",
