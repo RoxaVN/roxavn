@@ -40,13 +40,23 @@ For documentation about RoxaVN, please visit [our wiki](https://github.com/RoxaV
 
 ## Tech stack
 
+RoxaVN uses RESTful APIs and [Socket.IO](https://socket.io/) to enable communication between backend and frontend.
+
+##### Backend
+
 - [PostgreSQL](https://www.postgresql.org/) a powerful, open source object-relational database system
 - [React Router](https://reactrouter.com/) a full stack web framework
 - [Vite](https://vitejs.dev/) next generation frontend tooling
 - [Kysely](https://kysely.dev/) TypeScript SQL query builder
-- [I18next](https://www.i18next.com/) an internationalization-framework
+
+##### Frontend
+
 - [Mantine](https://mantine.dev/) a fully featured React components library
 - [Tabler Icons](https://tabler-icons.io/) free and open source icons
+
+##### Utils
+
+- [I18next](https://www.i18next.com/) an internationalization-framework
 - [ES-toolkit](https://es-toolkit.slash.page/) a modern JavaScript utility library
 
 ## License
