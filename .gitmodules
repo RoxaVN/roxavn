@@ -43,9 +43,6 @@
 [submodule "packages/plugin-otp"]
 	path = packages/plugin-otp
 	url = https://github.com/RoxaVN/plugin-otp.git
-[submodule "packages/plugin-user-info"]
-	path = packages/plugin-user-info
-	url = https://github.com/RoxaVN/plugin-user-info.git
 [submodule "packages/plugin-asset-web3"]
 	path = packages/plugin-asset-web3
 	url = https://github.com/RoxaVN/plugin-asset-web3.git
