@@ -187,3 +187,6 @@
 [submodule "packages/plugin-auth-two-factor"]
 	path = packages/plugin-auth-two-factor
 	url = https://github.com/RoxaVN/plugin-auth-two-factor.git
+[submodule "packages/plugin-reauth-password"]
+	path = packages/plugin-reauth-password
+	url = https://github.com/RoxaVN/plugin-reauth-password.git
