@@ -44,6 +44,7 @@
     "packages/plugin-email-sender",
     "packages/plugin-auth-email",
     "packages/plugin-auth-web3",
+    "packages/plugin-auth-webauthn",
     "packages/plugin-auth-two-factor",
     "packages/plugin-reauth-password",
     "packages/plugin-payment",

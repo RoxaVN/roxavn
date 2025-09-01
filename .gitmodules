@@ -190,3 +190,6 @@
 [submodule "packages/plugin-reauth-password"]
 	path = packages/plugin-reauth-password
 	url = https://github.com/RoxaVN/plugin-reauth-password.git
+[submodule "packages/plugin-auth-webauthn"]
+	path = packages/plugin-auth-webauthn
+	url = https://github.com/RoxaVN/plugin-auth-webauthn.git
