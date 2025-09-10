@@ -46,6 +46,7 @@
     "packages/plugin-auth-web3",
     "packages/plugin-auth-webauthn",
     "packages/plugin-auth-two-factor",
+    "packages/plugin-identity-pin",
     "packages/plugin-reauth-password",
     "packages/plugin-payment",
     "packages/plugin-payment-web3",
