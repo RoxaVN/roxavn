@@ -196,3 +196,6 @@
 [submodule "packages/plugin-identity-pin"]
 	path = packages/plugin-identity-pin
 	url = https://github.com/RoxaVN/plugin-identity-pin.git
+[submodule "packages/plugin-identity-totp"]
+	path = packages/plugin-identity-totp
+	url = https://github.com/RoxaVN/plugin-identity-totp.git
