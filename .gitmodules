@@ -199,3 +199,6 @@
 [submodule "packages/plugin-identity-totp"]
 	path = packages/plugin-identity-totp
 	url = https://github.com/RoxaVN/plugin-identity-totp.git
+[submodule "packages/plugin-auth-two-factor-totp"]
+	path = packages/plugin-auth-two-factor-totp
+	url = https://github.com/RoxaVN/plugin-auth-two-factor-totp.git
