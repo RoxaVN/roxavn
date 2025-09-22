@@ -76,7 +76,8 @@
     "packages/plugin-location-countries",
     "packages/plugin-location-vietnam",
     "packages/plugin-location-address",
-    "packages/plugin-news"
+    "packages/plugin-news",
+    "packages/demo-company-it"
   ],
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
