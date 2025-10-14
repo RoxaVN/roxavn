@@ -77,7 +77,7 @@ Mỗi module RoxaVN sẽ là 1 Javascript package với git repo độc lập, c
 
 Ngoài ra những module dòi hỏi tính năng đặc thù hoặc hiệu suất cao nên tách ra như 1 hệ thống độc lập, không nên nằm trong RoxaVN (ví dụ như upload file với MinIO, hay stream video với Mediasoup, ...)
 
-### ⚔️ 2. JavaScript song kiếm hợp bích cùng TypeScript  
+### ⚔️ 2. JavaScript + TypeScript  
 
 JavaScript không phải “ngôn ngữ mạnh nhất vũ trụ”, nhưng lại là **ngôn ngữ được lòng cả backend lẫn frontend**. Và đó chính là lý do RoxaVN chọn nó làm bảo kiếm của mình 🥷
 
@@ -108,7 +108,7 @@ RoxaVN dùng với Node 20+ và npm. Trong tương lai sẽ cân nhắc chuyển
 
 > RoxaVN dùng JavaScript để **linh hoạt như nước** và TypeScript để **chắc chắn như thép**.
 
-### 🔄 3. RESTful vs GraphQL – Cuộc chiến không hồi kết ⚔️
+### 🔄 3. RESTful vs GraphQL
 
 Thế giới backend chia làm hai phe:  
 - Một bên là **RESTful API** – lão làng, ổn định, dễ hiểu.  
@@ -163,7 +163,7 @@ Tuy client có thể join bất cứ thứ gì mình muốn, nhưng cũng nên n
 
 Như vậy vừa tiết kiệm tài nguyên, vừa giúp trải nghiệm người dùng “mượt mà như gió” 🌬️
 
-### 🧙‍♂️ 4. Postgres – Thần giữ của 💰  
+### 🧙‍♂️ 4. Postgres
 
 Trong thế giới lập trình, **data là vàng**, mà đã là vàng thì phải có thần giữ của canh chừng cẩn thận. RoxaVN chọn **PostgreSQL** – vị thần vừa “ngầu”, vừa “có học”, vừa “không đòi tiền bản quyền” 😎  
 
@@ -188,7 +188,7 @@ Vì RoxaVN cần **transaction**, mà NoSQL thì… thôi, nói nhẹ nhàng là
 
 Nếu bạn muốn Postgres của mình có **siêu năng lực phân tán**, chạy đa node, chịu lỗi như “gián đến từ hậu tận thế”, thì chỉ cần chuyển sang **CockroachDB** — cùng cú pháp SQL, không cần sửa code, và hệ thống của bạn sẽ “bất tử” như boss cuối trong game 💀
 
-### ⚛️ 5. React – Cánh tay phải của RoxaVN 💙  
+### ⚛️ 5. React
 
 RoxaVN chọn **React** không phải vì hype, mà vì nó có hệ sinh thái to như chợ Bến Thành. Cần vẽ flow? Có **ReactFlow**. Cần editor xịn? Có **Puck Editor**. Cần biểu đồ lung linh? **Recharts** lo hết 🎨 và 1 loạt các framework UI khác nữa. Một hệ sinh thái có đủ “đồ chơi” như vậy, dev chỉ cần biết cách import đúng là có thể “sống vui – code khỏe” 🤓.
 
@@ -215,7 +215,7 @@ Chỉ có **React Router** – người bạn “cũ” (tiền thân là Remix)
 
 Và thế là RoxaVN đã tìm thấy tri kỷ của mình ❤️. Một người bạn linh hoạt, đáng tin, và không bắt dev phải theo khuôn mẫu.
 
-### 🧩 6. Kysely - Cuộc gặp gỡ định mệnh
+### 🧩 6. Kysely
 
 Những phiên bản đầu tiên của RoxaVN từng “yêu say đắm” **TypeORM** – một công cụ ORM giúp đồng bộ entity với database và tạo migration tự động. Ban đầu, mọi thứ đều đẹp: chỉ cần định nghĩa entity là database tự sinh ra, dev không cần động tay vào SQL — cảm giác sung sướng như có AI viết hộ code 🧠✨. Nhưng càng gắn bó lâu, TypeORM càng lộ nhiều “tật xấu”:
 
@@ -229,7 +229,7 @@ Và rồi **Kysely** xuất hiện – nhẹ nhàng, tinh gọn, và chuẩn tri
 
 Từ đó, RoxaVN chính thức chia tay TypeORM trong êm đẹp, và nắm tay Kysely bước tiếp trên con đường **đơn giản, mạnh mẽ, và rõ ràng**.
 
-### 🎨 7. Mantine UI – Bộ áo đẹp mà nhẹ 💅  
+### 🎨 7. Mantine UI
 
 Trước khi kể về Mantine, phải nói thật một điều: RoxaVN nói “không” với Tailwind”. Không phải Tailwind tệ, nhưng mà… mỗi lần nhìn thấy dòng code kiểu:
 
