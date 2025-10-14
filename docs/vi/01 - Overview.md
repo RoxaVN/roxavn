@@ -33,7 +33,7 @@ flowchart LR
 ```
 
 ### 1. Lớp người dùng
-- **Nhà cung cấp:** tổ chức hoặc cá nhân “dựng cửa hàng, mở dịch vụ”, cung cấp đủ thứ cho khách hàng.
+- **Nhà cung cấp:** tổ chức hoặc cá nhân sử dụng RoxaVN để “dựng cửa hàng, mở dịch vụ”, cung cấp đủ thứ cho khách hàng.
 - **Khách hàng:** người dùng cuối, là thượng đế của bạn 👑.
 
 ### 2. Giao diện người dùng
@@ -57,7 +57,6 @@ Phía sau ánh đèn sân khấu, **Worker Service** là người cày cuốc th
 - Chạy **cronjob** định kỳ (kiểu như nhắc “Ê, hôm nay quét dữ liệu chưa?”).  
 - Lắng nghe **event từ API hoặc database** rồi xử lý trong im lặng.
 - Làm hết mấy việc “nặng nhọc” để Web Server không bị stress 🤯
-
 
 #### 💻 Trong môi trường dev  
 
