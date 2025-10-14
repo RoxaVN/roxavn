@@ -1,0 +1,419 @@
+## 1. Tạo module
+
+1. Bắt đầu tạo 1 module cho RoxaVN
+
+```bash
+mkdir test-module
+cd test-module
+npx -p @roxavn/cli roxavn gen module
+```
+
+2. Lúc này script đã tạo sẵn code base và cài đặt các thư viện cần thiết. Bạn muốn chuẩn hóa code base với biome, commitlint, ... thì chạy thêm câu lệnh sau
+
+```bash
+npx roxavn gen module convention
+```
+
+3. Tiếp theo, tạo file `.env` với nội dung sau để cấu hình môi trường. Bạn phải tạo database với cấu hình như trong file `.env`
+
+```bash
+# thông tin kết nối đến postgresql
+DATABASE_URL = 'postgresql://admin:admin@localhost:5432/roxavn'
+# log các câu truy vấn sql
+DATABASE_LOGGING = 1
+```
+
+4. Tạo các bảng cho database
+
+```bash
+npx roxavn-ts migration:up
+```
+
+5. Tạo user admin và cập nhật các quyền cần thiết
+
+```bash
+npx roxavn hook
+```
+
+6. Chạy server ở môi trường dev
+
+```bash
+npm run dev
+```
+
+7. Mở đường dẫn `http://[DEV_SERVER]/login?ref=%2Fadmin%2Fapps` trên trình duyệt, đăng nhập với user `admin` mật khẩu `admin`
+
+8. Bạn có thể thêm các module có sẵn từ RoxaVN hay từ các nhà phát triển khác. Ở đây ví dụ sẽ thêm module `@roxavn/module-project`
+
+```bash
+npm i @roxavn/module-project
+
+# đồng bộ module mới với môi trường dev hiện tại
+npx roxavn sync
+
+```
+
+9. Bạn cần chạy lại migration để tạo bảng cho module `@roxavn/module-project`
+
+```bash
+npx roxavn-ts migration:up
+```
+
+10. Khởi động lại server dev
+
+```bash
+npm run dev
+```
+
+11. Lúc này bạn vào trang `http://[DEV_SERVER]/admin/apps` thì sẽ chưa thấy module mới. Vì module `@roxavn/module-project` có thêm những permissions mới, nên cần cập nhật những permissions này cho user admin. Module `@roxavn/module-project` đã export sẵn script để cập nhật quyền cho admin qua install hook, nên chỉ cần chạy lại `hook`
+
+```bash
+npx roxavn hook
+```
+
+12. Refresh lại trang `http://[DEV_SERVER]/admin/apps` thì sẽ thấy module mới `@roxavn/module-project`. Có thể xem các permissions mới tại `http://[DEV_SERVER]/admin/apps/@roxavn@module-user/roles`
+
+## 2. Tạo API
+
+1. Trước khi tạo api, cần tạo permissions, roles để xác định những ai có quyền gọi api
+
+```bash
+npx roxavn gen access
+```
+
+2. Tạo template api cho đối tượng `task`
+
+```bash
+npx roxavn gen api
+
+✔ What's your api source name (in camelCase)? · task
+```
+
+3. Tạo api create cho đối tượng `task` (dùng api này để tạo mới các đối tượng `task`)
+
+```bash
+npx roxavn gen api create
+
+✔ What's your api source name (in camelCase)? · task
+```
+
+Script sẽ tự tạo thêm permission `CreateTask` và gán vào api create. Ngoài ra script cũng tự tạo thêm `CreateTaskService` ở `src/server/services/task.ts`
+
+4. Cập nhật schema cho Task ở `src/base/access.ts` tương ứng với Task entity như sau
+
+```ts
+import { accessManager, Type } from "@roxavn/core/base";
+import { baseModule } from "./module.js";
+
+export const scopes = accessManager.makeScopes(baseModule, {
+  Task: {
+    schema: Type.Resource({
+      name: Type.String(),
+      description: Type.String(),
+    }),
+  },
+});
+
+export const permissions = accessManager.makePermissions(scopes, {
+  CreateTask: {},
+});
+
+export const roles = accessManager.makeRoles(scopes, permissions, {});
+```
+
+Đồng thời cập nhật `request` cho api `create` để user có thể tạo mới với thuộc tính `name`, `description` của `task`
+
+```ts
+create: taskSource.create({
+    request: Type.Object({
+      name: Type.String({ minLength: 1 }),
+      description: Type.String(),
+    }),
+    authorization: {
+      policies: [
+        policies.Module(baseModule, permissions.CreateTask),
+      ],
+    },
+  }),
+```
+
+5. Tạo api getMany cho đối tượng `task` (dùng api này để lấy các đối tượng `task` trong database theo từng trang)
+
+```bash
+npx roxavn gen api getMany
+
+✔ What's your api source name (in camelCase)? · task
+```
+
+6. Cập nhật request của `getMany` api để tìm kiếm với `name` của `task`
+
+```ts
+getMany: taskSource.getMany({
+    request: Type.PaginationRequest({
+      name: Type.Optional(Type.String()),
+    }),
+    authorization: {
+      policies: [
+        policies.Module(baseModule, permissions.ReadTasks),
+      ],
+    },
+  }),
+```
+
+7. Cập nhật file `src/server/services/task.ts` như sau 
+
+```ts
+import { InferApiRequest } from '@roxavn/core/base';
+import { CreateResourceService, GetManyResourcesService } from '@roxavn/core/server';
+import { taskApi, scopes } from '../../base/index.js';
+import { serverModule } from '../module.js';
+
+@serverModule.useApi(taskApi.create)
+export class CreateTaskService extends CreateResourceService<
+  InferApiRequest<typeof taskApi.create>
+> {
+  scope = scopes.Task;
+}
+
+@serverModule.useApi(taskApi.getMany)
+export class GetTasksService extends GetManyResourcesService<
+  InferApiRequest<typeof taskApi.getMany>,
+  typeof scopes.Task
+> {
+  scope = scopes.Task;
+}
+```
+
+Bạn có thể tự khám phá thêm chế độ tạo các loại api khác `delete`, `update`, `getOne`, ...
+
+```
+npx roxavn gen api all
+```
+
+## 3. Tạo migration
+
+1. Tự động tạo migration từ scope `task`
+
+```bash
+npx roxavn-ts migration
+```
+
+Migration được tạo ở thư mục `src/server/migrations`
+
+2. Chạy migration để tạo bảng cho entity ở database
+
+```bash
+npx roxavn-ts migration:up
+```
+
+Sau khi chạy xong, script sẽ tự động đồng bộ kiểu với các bảng trong database. Bạn có thể kiểm tra ở thư mục `.web/schemas`
+
+3. Nếu database có thay đổi, bạn có thể tự chạy lại đồng bộ kiểu
+
+```bash
+npx roxavn sync -d
+```
+
+4. Có thể xóa migration gần nhất nếu lỗi
+
+```bash
+npx roxavn-ts migration:revert
+```
+
+## 4. Admin Dashboard
+
+Từ những api create và getMany cho đối tượng `task`, ta sẽ tạo trang quản lý cho admin user với những tính năng là tạo mới và xem danh sách các `task`
+
+1. Tạo trang quản lý `task`
+
+```bash
+npx roxavn gen web admin
+
+✔ What's your name of page? · tasks
+```
+
+2. Sửa file `src/web/admin/tasks.tsx` như sau
+
+```ts
+import { Textarea, TextInput } from "@mantine/core";
+import { formatDateTime, formatRelativeTime } from "@roxavn/core";
+import { ResourceAction ResourceList } from "@roxavn/core/web";
+import { IconBriefcase } from "@tabler/icons-react";
+import { taskApi } from "../../base/index.js";
+import { webModule } from '../export/index.js';
+
+export const taskPage = webModule.addAdminPage({
+  icon: IconBriefcase,
+  element: (
+    <ResourceList
+      api={taskApi.getMany}
+      columns={{
+        name: {},
+        description: {},
+        createdDate: { render: formatDateTime },
+        updatedDate: { render: formatRelativeTime },
+      }}
+      filters={{
+        renderForm: ({ field }) => [
+          field(TextInput, { name: "name" })
+        ],
+      }}
+      renderHeaderActions={() => [
+        ResourceAction.createForm({
+          api: userApi.create,
+          renderForm: ({ field }) => [
+            field(TextInput, { name: 'name' }),
+            field(Textarea, { name: 'description' }),
+          ],
+        })
+      ]}
+    />
+  ),
+});
+```
+
+3. Chạy lệnh `npx roxavn i18n` để cập nhật file ngôn ngữ tiếng anh `static/locales/en.json` cho các key mới. Xem thêm [react-i18next](https://react.i18next.com/)
+
+```json
+{
+  "description": "Description",
+  "tasks": "Tasks",
+  "Meta": {
+    "name": "Test module",
+    "description": "Module for test"
+  }
+}
+```
+
+4. Cập nhật icon cho module để hiện thị trong admin dashboard bằng cách cập nhật file `static/icon.png`
+
+## 5. Install hook
+
+1. Sau khi thêm admin page, chạy lại server dev
+
+```
+npm run dev
+```
+
+Khi vào trang `http://[DEV_SERVER]/admin/apps` với tài khoản `admin` vẫn chưa thấy `module test` vì chưa cập nhật permission mới cho `admin`
+
+2. Tạo script để thêm permission mới cho `admin` bằng cách tạo install hook
+
+```bash
+npx roxavn gen hook
+```
+
+Xem nội dung file `src/hook/install.ts`
+
+```ts
+import { BaseInstallHook } from '@roxavn/core/server';
+
+import { roles } from '../base/index.js';
+import { serverModule } from '../server/index.js';
+
+@serverModule.injectable()
+export class InstallHook extends BaseInstallHook {
+  async handle() {
+    await this.upsertRolesService.handle(roles);
+    await this.setAdminRoleService.handle(roles.Admin);
+  }
+}
+```
+
+3. Chạy install hook để cập nhật role mới
+
+```bash
+npx roxavn hook
+```
+
+4. Vào lại trang `http://[DEV_SERVER]/admin/apps` sẽ thấy module mới. Click vào module có thể thêm mới và xem các `task` được tạo
+
+## 6. Web page
+
+1. Để tạo 1 web page hỗ trợ SEO (cần server side render) chạy lệnh `npx roxavn gen web route`. Nhập thông tin như sau
+
+```
+✔ What's page name? · tasks
+✔ What's page path (starts with / or empty)? · /tasks
+```
+
+2. Cập nhật `src/base/apis/route.ts`
+
+```ts
+import { accessManager, ApiSource, Type } from "@roxavn/core/base";
+import { baseModule } from "../export/index.js";
+import { scopes } from "../access.js";
+
+const routeSource = new ApiSource(accessManager.scopes.Route, baseModule);
+
+export const routeApi = {
+  tasks: routeSource.api({
+    method: "GET",
+    path: routeSource.apiPath() + "/tasks",
+    request: Type.Object({}),
+    response: Type.PaginationResponse(scopes.Task.schema),
+  }),
+};
+```
+
+3. Cập nhật `src/server/services/route.ts`
+
+```ts
+import { InferApiRequest } from "@roxavn/core/base";
+import { BaseService, inject } from "@roxavn/core/server";
+
+import { routeApi } from "../../base/index.js";
+import { serverModule } from "../module.js";
+import { GetTasksService } from "./task.js";
+
+@serverModule.useApi(routeApi.tasks)
+export class TasksService extends BaseService {
+  constructor(
+    @inject(GetTasksService)
+    private getTasksService: GetTasksService
+  ) {
+    super();
+  }
+
+  async handle(request: InferApiRequest<typeof routeApi.tasks>) {
+    return this.getTasksService.handle(request);
+  }
+}
+```
+
+4. Hoàn thiện web page
+
+```ts
+import { useApiQuery } from "@roxavn/core/web";
+import { apiLoader } from "@roxavn/core/server";
+
+import { routeApi } from "../../base/index.js";
+
+export default function Tasks() {
+  const { data } = useApiQuery(routeApi.tasks);
+
+  return (
+    <ul>{data?.items.map((item) => <li key={item.id}>{item.name}</li>)}</ul>
+  );
+}
+
+export const loader = apiLoader(routeApi.tasks);
+```
+
+5. RoxaVN được xây dựng trên [Remix](https://remix.run/). Với Remix tạo 1 web page ở trong thư mục `app/routes`, còn với RoxaVN thêm ở trong thư mục `src/web/pages`. RoxaVN sử dụng chuẩn đặt tên web page từ Remix version 1, nên tìm hiểu thêm về web page tham khảo [tại đây](https://remix.run/docs/en/1.19.3/file-conventions/routes-files)
+
+## 7. Xuất bản module
+
+1. Bạn có thể xuất bản module này lên [npm](https://www.npmjs.com/) để mọi người cùng sử dụng module của bạn trong các dự án dùng RoxaVN
+
+```bash
+npm run build
+npm publish
+```
+
+2. Hoặc bạn có thể chạy module này như 1 service độc lập trong môi trường production
+
+```bash
+npx roxavn serve:build
+npx roxavn serve
+```

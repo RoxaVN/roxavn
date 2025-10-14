@@ -76,3 +76,47 @@ Nhờ tách riêng như vậy, hệ thống ổn định, dễ scale, và nếu 
 ### 4. Database
 
 Đây là tầng dưới cùng, đảm nhận lưu trữ dữ liệu với Postgres. Ngoài ra bạn có thể cache dữ liệu với Redis giúp tăng cường hiệu suất cho hệ thống.
+
+
+## Module Structure
+
+<pre>
+test-module/
+├── src/
+│   ├── base/             # contains shared code for both server/ and web/
+│   │   ├── module.ts     # declares the module
+│   │   ├── access.ts     # declares scopes, permissions, and roles
+│   │   ├── errors.ts     # declares errors
+│   │   └── apis          # API declarations
+│   │       ├── task.ts   # API for `task` entity
+│   │       └── group.ts  # API for `group` entity
+│   │
+|   ├── server/           # backend code
+│   │   ├── module.ts     # backend module declaration
+│   │   ├── migrations/   # database migration files
+│   │   └── services/     # service files that implement APIs or jobs
+│   │
+|   ├── hook/             # hook services, executed via `npx roxavn hook`
+│   │
+|   └── web/                  # frontend code
+│       ├── admin/            # pages for admin app
+│       ├── me/               # pages for me app
+│       ├── pages/            # route declarations, <a href="https://remix.run/docs/en/1.19.3/file-conventions/routes-files">details</a>
+│       │   └── abc.tsx       # page route: http://[DEV_SERVER]/abc
+│       └── export/           # shared components for me app
+│           ├── module.ts     # web module declaration
+│           └── components/   # shared React components
+|
+├── static/            # static files
+│   ├── locales/       # localization files
+│   │   ├── en.json    # English language file
+│   │   └── vi.json    # Vietnamese language file
+|   ├── icon.svg       # module icon
+|   ├── abc.txt        # arbitrary files
+|   └── test/
+|       └── a.png      # file path: http://[DEV_SERVER]/static/test-module/test/a.png
+|
+├── dist/              # for publishing the module, created via `npx roxavn build`
+├── .web/              # dev build artifacts, created via `npx roxavn sync`
+└── package.json
+</pre>
