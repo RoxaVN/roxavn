@@ -273,11 +273,11 @@ Giải thích từng trường
 
 | Thuộc tính    | Kiểu                  | Mô tả                                                                        |
 | ------------- | --------------------- | ---------------------------------------------------------------------------- |
-| **type**      | `string`              | Loại lỗi, ví dụ: `"Error.ValidationException"`, `"Error.NotFoundException"`. |
+| **type**      | `string`              | Loại lỗi, ví dụ: `"Error.ValidationError"`, `"Error.NotFoundError"`. |
 | **code**      | `number`              | Mã lỗi nội bộ, dùng để định danh từng loại lỗi trong hệ thống.               |
-| **metadata**  | `any`                 | Dữ liệu bổ sung (vd: trường bị sai trong ValidationException).               |
+| **metadata**  | `any`                 | Dữ liệu bổ sung (vd: trường bị sai trong ValidationErrorFactory).               |
 | **i18n**      | `object`              | Thông tin phục vụ cho việc đa ngôn ngữ hóa thông báo lỗi.                    |
-| `i18n.key`    | `string`              | Key của bản dịch lỗi (ví dụ: `"Error.ValidationException"`).                 |
+| `i18n.key`    | `string`              | Key của bản dịch lỗi (ví dụ: `"Error.ValidationError"`).                 |
 | `i18n.ns`     | `string`              | Namespace của bản dịch (vd: `"@roxavn@core"`).                               |
 | `i18n.params` | `Record<string, any>` | Danh sách tham số để render thông báo lỗi.                                   |
 
@@ -329,7 +329,7 @@ Nếu API trả về danh sách đối tượng, dữ liệu trong trường `da
 {
   "code": 422,
   "error": {
-    "type": "Error.ValidationException",
+    "type": "Error.ValidationError",
     "code": 422,
     "metadata": {
       "fields": [
@@ -344,7 +344,7 @@ Nếu API trả về danh sách đối tượng, dữ liệu trong trường `da
       ]
     },
     "i18n": {
-      "key": "Error.ValidationException",
+      "key": "Error.ValidationError",
       "ns": "@roxavn@core"
     }
   }
@@ -355,17 +355,17 @@ Trên là ví dụ lỗi khi validate request API, trong metadata chứa thông 
 
 ## API Error
 
-RoxaVN cung cấp sẵn một tập hợp **exception chuẩn** để thống nhất cách xử lý và phản hồi lỗi trong toàn hệ thống. Các exception này giúp API tự động trả về mã lỗi (`code`) và thông tin chi tiết trong trường `error` theo định dạng JSON.
+RoxaVN cung cấp sẵn một tập hợp **error factory chuẩn** để thống nhất cách xử lý và phản hồi lỗi trong toàn hệ thống. Các error factory này giúp API tự động trả về mã lỗi (`code`) và thông tin chi tiết trong trường `error` theo định dạng JSON.
 
 
 | Tên lỗi                    | Code  | Mô tả                                                       | Khi nào sử dụng                                                                                             |
 | -------------------------- | ----- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| **badRequestException**    | `400` | Yêu cầu không hợp lệ về mặt **nghiệp vụ (business logic)**. | Khi dữ liệu hợp lệ về cú pháp, nhưng không hợp lệ về logic (vd: user cố gắng xoá chính tài khoản của mình). |
-| **alreadyExistsException** | `409` | Tài nguyên đã tồn tại.                                      | Khi gọi API `POST` để tạo dữ liệu trùng khoá hoặc trùng id.                                                 |
-| **forbiddenException**     | `403` | Không có quyền truy cập tài nguyên.                         | Khi người dùng không đủ quyền (`permission`) để thực hiện hành động.                                        |
-| **validationException**    | `422` | Request không hợp lệ về mặt **schema**.                     | Khi dữ liệu gửi lên không khớp với schema `request` được khai báo trong API.                                |
-| **notFoundException**      | `404` | Không tìm thấy tài nguyên.                                  | Khi truy vấn id hoặc record không tồn tại trong database.                                                   |
-| **serverException**        | `500` | Lỗi nội bộ server.                                          | Khi hệ thống gặp lỗi không xác định (lỗi ngoài dự kiến).                                                    |
+| **badRequestErrorFactory**    | `400` | Yêu cầu không hợp lệ về mặt **nghiệp vụ (business logic)**. | Khi dữ liệu hợp lệ về cú pháp, nhưng không hợp lệ về logic (vd: user cố gắng xoá chính tài khoản của mình). |
+| **alreadyExistsErrorFactory** | `409` | Tài nguyên đã tồn tại.                                      | Khi gọi API `POST` để tạo dữ liệu trùng khoá hoặc trùng id.                                                 |
+| **forbiddenErrorFactory**     | `403` | Không có quyền truy cập tài nguyên.                         | Khi người dùng không đủ quyền (`permission`) để thực hiện hành động.                                        |
+| **validationErrorFactory**    | `422` | Request không hợp lệ về mặt **schema**.                     | Khi dữ liệu gửi lên không khớp với schema `request` được khai báo trong API.                                |
+| **notFoundErrorFactory**      | `404` | Không tìm thấy tài nguyên.                                  | Khi truy vấn id hoặc record không tồn tại trong database.                                                   |
+| **serverErrorFactory**        | `500` | Lỗi nội bộ server.                                          | Khi hệ thống gặp lỗi không xác định (lỗi ngoài dự kiến).                                                    |
 
 Ngoài ra bạn có thể tự tạo lỗi với câu lệnh `npx roxavn gen error`
 
@@ -382,11 +382,11 @@ Loaded templates: /.../roxavn/packages/cli/templates
 
 Sau khi hoàn tất, RoxaVN sẽ tự động:
 
-- Thêm lỗi userNotFoundException vào file src/base/errors.ts.
+- Thêm userNotFoundErrorFactory vào file src/base/errors.ts.
 ```ts
-export const userNotFoundException = new BaseException({
+export const userNotFoundErrorFactory = new BaseErrorFactory({
   baseModule,
-  type: 'Error.UserNotFoundException',
+  type: 'Error.UserNotFoundError',
   code: 404 // thêm dòng này trả về mã lỗi 404, mặc định là 400
 });
 ```
@@ -396,7 +396,7 @@ export const userNotFoundException = new BaseException({
 Bạn có thể throw lỗi này ở bất kỳ đâu trong logic xử lý của API:
 
 ```ts
-throw userNotFoundException.make({ name: 'Woody' })
+throw userNotFoundErrorFactory.make({ name: 'Woody' })
 ```
 
 Server sẽ trả về phản hồi JSON tương ứng như sau
@@ -405,10 +405,10 @@ Server sẽ trả về phản hồi JSON tương ứng như sau
 {
   "code": 404,
   "error": {
-    "type": "Error.UserNotFoundException",
+    "type": "Error.UserNotFoundError",
     "code": 404,
     "i18n": {
-      "key": "Error.UserNotFoundException",
+      "key": "Error.UserNotFoundError",
       "ns": "{{ YOUR_MODULE_NAME }}",
       "params": { "name": "Woody" }
     }

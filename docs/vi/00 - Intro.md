@@ -236,7 +236,7 @@ Trước khi kể về Mantine, phải nói thật một điều: RoxaVN nói �
 ```html
 <div class="flex flex-col justify-between items-center text-sm text-gray-700 bg-gradient-to-r from-blue-500 to-purple-600 hover:scale-105 transition-all duration-300 shadow-md rounded-lg p-4">
 ```
-là tôi cảm giác như đang đọc thần chú để triệu hồi CSS thần thánh 🧙‍♂️. Không ai có thể bảo trì nổi những chuỗi class dài hơn cả đường Trường Sơn như vậy. Tailwind có thể hợp với các dự án nhỏ, nhưng với hệ thống lớn như RoxaVN, đọc code cũng phải thở oxy 😵‍💫
+là tôi cảm giác như đang đọc thần chú để triệu hồi CSS thần thánh 🧙‍♂️. Không ai có thể bảo trì nổi những chuỗi class dài hơn cả đường Trường Sơn như vậy. Tailwind có thể hợp với các dự án kiểu ăn xổi, nhưng với hệ thống ưu tiên sự rõ ràng như RoxaVN, thì Tailwind không phù hợp 😵‍💫.
 
 Giờ thì nói đến các UI framework “đối tác tiềm năng” của RoxaVN nhé 👇
 

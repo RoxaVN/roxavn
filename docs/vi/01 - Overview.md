@@ -196,3 +196,17 @@ Ngoài việc khởi tạo convention ban đầu, bạn có thể chạy lệnh 
 - Tạo code snippets giúp viết nhanh các đoạn mã RoxaVN phổ biến.
 - Thiết lập cấu hình launch cho phép debug các RoxaVN module.
 - Cấu hình thuộc tính "importModuleSpecifierEnding" trong VSCode để đảm bảo tự động thêm đuôi `.js` khi import module ES.
+
+### 6. Phiên bản và quy ước đặt version
+
+Từ **phiên bản 4 trở đi**, RoxaVN tuân thủ chuẩn [Semantic Versioning (SemVer)](https://semver.org/) với format `MAJOR.MINOR.PATCH`
+
+
+| Thành phần | Ý nghĩa                                                         | Ví dụ thay đổi |
+| ---------- | --------------------------------------------------------------- | -------------- |
+| **MAJOR**  | Thay đổi lớn, có thể phá vỡ tương thích (breaking changes).     | 4.x.x → 5.0.0  |
+| **MINOR**  | Thêm tính năng mới, **tương thích ngược**.                      | 4.1.0 → 4.2.0  |
+| **PATCH**  | Sửa lỗi, tối ưu hoặc thay đổi nhỏ, **không ảnh hưởng** đến API. | 4.2.0 → 4.2.1  |
+
+- Mọi module trong hệ sinh thái RoxaVN đều đồng bộ theo cùng version gốc của framework.
+- Khi cập nhật phiên bản **MAJOR**, bạn nên kiểm tra lại các API để đảm bảo tương thích.
