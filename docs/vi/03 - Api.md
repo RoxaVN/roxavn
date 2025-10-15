@@ -244,7 +244,7 @@ Mọi API trong RoxaVN đều trả về dữ liệu theo định dạng JSON th
 
 ### Cấu trúc phản hồi chung
 
-```json
+```ts
 {
   "code": number,
   "data": { ... },
@@ -285,7 +285,7 @@ Giải thích từng trường
 
 Nếu API trả về danh sách đối tượng, dữ liệu trong trường `data` sẽ có cấu trúc sau:
 
-```json
+```ts
 {
   "items": [ ... ],
   "pagination": {
