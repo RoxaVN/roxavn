@@ -163,19 +163,19 @@ import { program } from './program.js';
 
 ### 3. Quy tắc đặt tên
 
-| Thành phần                   | Quy tắc đặt tên| Ví dụ                        |
-|------------------------------|----------------|------------------------------|
-| **Class**                    | PascalCase     | `UserService`, `AuthManager` |
-| **Biến / Hàm thông thường**  | camelCase      | `userList`, `fetchData()`    |
-| **React Component Function** | PascalCase     | `ApiTable`, `ApiFetcher`     |
-| **Hằng số (constant)**       | UPPER_CASE     | `MAX_RETRY_COUNT`, `API_URL` |
+| Thành phần                   | Quy tắc đặt tên | Ví dụ                        |
+| ---------------------------- | --------------- | ---------------------------- |
+| **Class**                    | PascalCase      | `UserService`, `AuthManager` |
+| **Biến / Hàm thông thường**  | camelCase       | `userList`, `fetchData()`    |
+| **React Component Function** | PascalCase      | `ApiTable`, `ApiFetcher`     |
+| **Hằng số (constant)**       | UPPER_CASE      | `MAX_RETRY_COUNT`, `API_URL` |
 
 ### 4. Độ dài mã nguồn
 
 Để giữ cho mã nguồn dễ đọc, dễ bảo trì và dễ review, cần tuân thủ các giới hạn sau:
 
-| Loại mã nguồn        | Giới hạn khuyến nghị | Giới hạn tối đa |
-|-----------------------|----------------------|-----------------|
+| Loại mã nguồn         | Giới hạn khuyến nghị | Giới hạn tối đa |
+| --------------------- | -------------------- | --------------- |
 | **File**              | 100 – 200 dòng       | < 500 dòng      |
 | **Function / Method** | 10 – 50 dòng         | < 100 dòng      |
 

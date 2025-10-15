@@ -49,12 +49,12 @@ Nghe sang lắm, nhưng chạy rồi mới biết: “Một hệ thống, ngàn 
 
 RoxaVN chọn **Modular Monolith**, vì nó giữ đúng tinh thần **KISS**:  
 
-| Microservices | Modular Monolith (RoxaVN) |
-|----------------|-----------------------------|
-| Mỗi service chạy riêng → 10 app, 10 port, 10 container 😫 | Một lệnh `npm start` là lên hết 😌 |
-| Transaction xuyên service → saga pattern, event bus, headache 💥 | Mọi thứ chung DB → rollback 1 phát ăn ngay 🧘 |
-| API call → network delay, timeout, retry | Import module → chạy nhanh như ánh sáng ⚡ |
-| Đồng bộ dữ liệu giữa các service là 1 thách thức | Truy vấn đơn giản vì tất cả dữ liệu trong 1 DB |
+| Microservices                                                   | Modular Monolith (RoxaVN)                                      |
+| --------------------------------------------------------------- | -------------------------------------------------------------- |
+| Mỗi service chạy riêng → 10 app, 10 port, 10 container 😫        | Một lệnh `npm start` là lên hết 😌                              |
+| Transaction xuyên service → saga pattern, event bus, headache 💥 | Request được bọc trong transaction → rollback 1 phát ăn ngay 🧘 |
+| API call → network delay, timeout, retry                        | Import module → chạy nhanh như ánh sáng ⚡                      |
+| Đồng bộ dữ liệu giữa các service là 1 thách thức                | Truy vấn đơn giản vì tất cả dữ liệu trong 1 DB                 |
 
 Thực tế thì Modular Monolith vẫn đang bị underrated một cách đau lòng 💔. Mọi người hay bị cuốn vào hype “micro-đủ-thứ”, trong khi tư tưởng **Modular** thực ra có thể áp dụng cho cả backend lẫn frontend luôn. Bạn đâu cần phải dựng nguyên một **microfrontend** phức tạp và nặng như con voi chỉ để hiển thị vài component nhỏ 😅. Với RoxaVN, chỉ cần:
 
@@ -77,7 +77,7 @@ Mỗi module RoxaVN sẽ là 1 Javascript package với git repo độc lập, c
 
 Ngoài ra những module dòi hỏi tính năng đặc thù hoặc hiệu suất cao nên tách ra như 1 hệ thống độc lập, không nên nằm trong RoxaVN (ví dụ như upload file với MinIO, hay stream video với Mediasoup, ...)
 
-### ⚔️ 2. JavaScript + TypeScript  
+### ⚔️ 2. JavaScript + TypeScript
 
 JavaScript không phải “ngôn ngữ mạnh nhất vũ trụ”, nhưng lại là **ngôn ngữ được lòng cả backend lẫn frontend**. Và đó chính là lý do RoxaVN chọn nó làm bảo kiếm của mình 🥷
 
@@ -92,11 +92,11 @@ Khi **frontend và backend cùng nói chung một thứ tiếng**, bạn sẽ nh
 - 👩‍💻 **Tuyển dev dễ như ăn bánh**  
   Không còn drama “ông này biết backend nhưng không biết React”, hay “chị kia chỉ làm frontend”. Giờ chỉ cần **một ngôn ngữ – full stack liền mạch**. Dev frontend có thể làm backend, dev backend có thể… build giao diện (nếu dám 😏).  
 
-Nhưng đừng xem thường JavaScript! Dù không nhanh như Rust, không gọn như Go, không “cứng” như C++, nó lại có một siêu năng lực mà mấy ngôn ngữ kia mơ cũng không có:
+Dù không nhanh như Rust, không gọn như Go, không “cứng” như C++, nhưng JavaScript lại có một siêu năng lực mà mấy ngôn ngữ kia mơ cũng không có:
 
 > 💥 Bạn có thể lưu **mã JavaScript trong database**, backend chỉ việc lấy ra, **chạy thẳng luôn!**  
 
-Không cần build, không cần compile, không cần cầu nguyện. Tính năng này giúp RoxaVN **tùy biến linh hoạt như ninja biến hình**, và được dùng triệt để trong `@roxavn/module-workflow` để xử lý mọi logic theo yêu cầu.  
+Không cần build, không cần compile, không cần cầu nguyện. Tính năng này giúp RoxaVN **tùy biến linh hoạt như ninja biến hình**, và được dùng triệt để trong `@roxavn/module-workflow` để xử lý mọi logic theo yêu cầu.
 
 Còn **TypeScript** thì sao? Đó chính là **thanh kiếm thứ hai** của RoxaVN ⚔️  
 
@@ -110,24 +110,24 @@ RoxaVN dùng với Node 20+ và npm. Trong tương lai sẽ cân nhắc chuyển
 
 ### 🔄 3. RESTful vs GraphQL
 
-Thế giới backend chia làm hai phe:  
-- Một bên là **RESTful API** – lão làng, ổn định, dễ hiểu.  
+Thế giới backend chia làm hai phe:
+- Một bên là **RESTful API** – lão làng, ổn định, dễ hiểu.
 - Bên kia là **GraphQL** – trẻ trung, thông minh, và... hơi “đòi hỏi” 😏
 
-| Tiêu chí               | RESTful                        | GraphQL                        |
-| ---------------------- | ------------------------------ | ------------------------------ |
-| Cách tiếp cận          | Mỗi endpoint cho 1 tài nguyên  | Một endpoint cho tất cả        |
-| Dễ học                 | 🟢 Dễ như ăn bánh              | 🔴 Hơi khó, cần hiểu schema    |
-| Linh hoạt dữ liệu      | 🔴 Trả cả phần không cần       | 🟢 Lấy đúng thứ mình muốn      |
-| Debug & Cache          | 🟢 Dễ kiểm soát                | 🔴 Khó vì query động           |
+| Tiêu chí          | RESTful                       | GraphQL                    |
+| ----------------- | ----------------------------- | -------------------------- |
+| Cách tiếp cận     | Mỗi endpoint cho 1 tài nguyên | Một endpoint cho tất cả    |
+| Dễ học            | 🟢 Dễ như ăn bánh              | 🔴 Hơi khó, cần hiểu schema |
+| Linh hoạt dữ liệu | 🔴 Trả cả phần không cần       | 🟢 Lấy đúng thứ mình muốn   |
+| Debug & Cache     | 🟢 Dễ kiểm soát                | 🔴 Khó vì query động        |
 
-RESTful là “người bạn cũ hiểu bạn, không phức tạp nhưng đáng tin”, còn GraphQL là “người mới quyến rũ, thông minh, nhưng đòi hỏi kiên nhẫn và hiểu sâu”. Với triết lý KISS, RoxaVN chọn RESTful – vì đôi khi đơn giản chính là tối ưu 😎.
+RESTful là “người bạn cũ hiểu bạn, không phức tạp nhưng đáng tin”, còn GraphQL là “người mới quyến rũ, thông minh, nhưng đòi hỏi kiên nhẫn và hiểu sâu”. Với triết lý KISS, RoxaVN chọn RESTful với JSON – vì đôi khi đơn giản chính là tối ưu 😎.
 
 #### 🧩 RESTful “kiểu RoxaVN” – Đơn giản nhưng linh hoạt
 
 Trong RoxaVN, mỗi RESTful API chỉ có một nhiệm vụ duy nhất trong đời – thêm thì chỉ thêm, lấy thì chỉ lấy, xóa thì… nói lời tạm biệt 👋. Không đa nhiệm, không lằng nhằng, không “vừa insert vừa update vừa join” như một mớ spaghetti 🍝.
 
-#### 🧠 Nguyên tắc vàng của API RoxaVN  
+#### 🧠 Nguyên tắc vàng của API RoxaVN
 > “Server chỉ nên làm một việc, và làm việc đó thật tốt.”  
 
 Vì vậy, mỗi API được thiết kế tối giản:  
@@ -144,7 +144,7 @@ RoxaVN tin tưởng client như một người bạn thông minh:
 
 Server được giữ đơn giản và dễ tái sử dụng, còn client thì có đủ công cụ để tự ráp dữ liệu theo nhu cầu riêng – như chơi Lego nhưng không cần xin phép backend 🧱
 
-Cụ thể, RoxaVN trang bị cho frontend 2 “vũ khí lợi hại”:  
+Cụ thể, RoxaVN trang bị cho frontend 2 “vũ khí lợi hại”:
 
 - 🧭 component `ApiReference` – giúp client liên kết dữ liệu từ nhiều API một cách tự nhiên, dễ đọc.  
 - ⚡ hook `useApiBatchQuery()` – cho phép gọi nhiều API cùng lúc rồi ráp kết quả về như pro.  
