@@ -55,12 +55,12 @@ abstract class BasePolicy<S> {
 
 #### Giải thích chi tiết
 
-| Thành phần                         | Kiểu                            | Mô tả                                                                                                                                                                                                                                |
-| ---------------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **priority**                       | `number`                        | Độ ưu tiên của policy. Khi có nhiều policy cùng kiểm tra, RoxaVN sẽ sắp xếp theo thứ tự `priority` (thấp hơn chạy trước).                                                                                                            |
-| **check**(context, arg)            | `(PolicyContext, S) => boolean` | Hàm kiểm tra điều kiện với đầu vào là PolicyContext và arg S được lấy từ hàm static `getter()`, nếu policy không định nghĩa `getter()` thì arg sẽ là undefined. Trả về `true` nếu user được phép truy cập, ngược lại trả về `false`. |
-| **constructor**(data)              | `T`                             | Truyền dữ liệu khởi tạo cho policy module.                                                                                                                                                                                           |
-| `static` **getter**(context, data) | `(context, data) => S`          | Hàm tiện ích dùng để trích xuất dữ liệu cần thiết `S` (nếu trả về S là undefined thì coi như kiểm tra quyền thất bại) từ `context` và `data` trước khi gọi `check()`. Không bắt buộc phải khai báo                                   |
+| Thành phần       | Mô tả                                                      |
+| -----------------|------------------------------------------------------------|
+| **priority**:`number`                        | Độ ưu tiên của policy. Khi có nhiều policy cùng kiểm tra, RoxaVN sẽ sắp xếp theo thứ tự `priority` (thấp hơn chạy trước).                                                                                                            |
+| **check**(context: `PolicyContext`, arg: `S`) => `boolean` | Hàm kiểm tra điều kiện với đầu vào là PolicyContext và arg S được lấy từ hàm static `getter()`, nếu policy không định nghĩa `getter()` thì arg sẽ là undefined. Trả về `true` nếu user được phép truy cập, ngược lại trả về `false`. |
+| **constructor**(data: `any`)    | Truyền dữ liệu khởi tạo cho policy module.                                                                                                                                                                                           |
+| *static* **getter**(context: `PolicyContext`, data: any) => `S`          | Hàm tiện ích dùng để trích xuất dữ liệu cần thiết `S` (nếu trả về S là undefined thì coi như kiểm tra quyền thất bại) từ `context` và `data` trước khi gọi `check()`. Không bắt buộc phải khai báo                                   |
 
 #### Flow kiểm tra policy 
 
@@ -81,7 +81,7 @@ stateDiagram-v2
 Giả sử bạn muốn định nghĩa một policy cho phép người dùng truy cập API khi có quyền
 
 ```ts
-export class RolePermissionPolicy extends BasePolicy {
+export class SimpleRolePolicy extends BasePolicy {
   priority = 10;
 
   check = (
@@ -97,7 +97,7 @@ export class RolePermissionPolicy extends BasePolicy {
 
   static async getter(
     ctx: PolicyContext,
-    data: RolePermissionPolicy['data']
+    data: SimpleRolePolicy['data']
   ): Promise<{ permissions: string[] }> {
     throw new Error('[RolePolicy] Must define ' + ctx + data);
   }
@@ -138,7 +138,7 @@ const messageApi = {
     authorization: {
       policies: [
         (context) =>
-          new RolePermissionPolicy({
+          new SimpleRolePolicy({
             permission: permissions.CreateMessage.name,
           }),
       ],
@@ -149,7 +149,7 @@ const messageApi = {
 
 ## Role-based access control
 
-Ví dụ `RolePermissionPolicy` ở trên chỉ minh họa cách kiểm tra quyền đơn giản. Trong thực tế, RoxaVN hỗ trợ **mô hình phân quyền đa tầng (multi-scope)** để xử lý các trường hợp phức tạp hơn, nơi mà một người dùng có thể có nhiều vai trò khác nhau ở các phạm vi khác nhau.
+Ví dụ `SimpleRolePolicy` ở trên chỉ minh họa cách kiểm tra quyền đơn giản. Trong thực tế, RoxaVN hỗ trợ **mô hình phân quyền đa tầng (multi-scope)** để xử lý các trường hợp phức tạp hơn, nơi mà một người dùng có thể có nhiều vai trò khác nhau ở các phạm vi khác nhau.
 
 ### Vấn đề thực tế
 
@@ -172,5 +172,54 @@ Hệ thống phân quyền của RoxaVN được thiết kế để giải quy�
 | **scopeId**     | `string`     | ID của phạm vi. <br> - Với role module, `scopeId = '*'` (áp dụng cho toàn bộ module). <br> - Với role cấp channel, `scopeId` chính là ID của channel (ví dụ: `1`). |
 | **permissions** | `string[]`   | Danh sách quyền mà role được cấp (ví dụ: `CreateMessage`, `DeleteMessage`, `EditChannel`, ...).                                                                    |
 
+
 ### Ứng dụng Web
 
+Như đã giới thiệu ở phần đầu, ứng dụng web của RoxaVN được chia thành ba phần chính Admin Dashboard, Personal Profile, Custom Application. Mỗi phần có cơ chế quản lý quyền (role & permission) khác nhau, nhưng đều sử dụng chung kiến trúc `ApiRolesGetter` và `RolesContext` để quản lý quyền người dùng trên frontend.
+
+#### 1. Admin Dashboard
+
+Trong khu vực Admin Dashboard, khi người dùng truy cập, client sẽ tự động lấy toàn bộ danh sách `role` mà user đang có trong các module bằng component `ApiRolesGetter`.
+
+```tsx
+// Component ApiRolesGetter có nhiệm vụ lấy danh sách `role` của người dùng,
+// sau đó lưu vào RolesContext để các component con có thể sử dụng lại.
+<ApiRolesGetter api={authService.getUserModulesApi}>
+  <AdminComponent />
+</ApiRolesGetter>
+````
+
+Sau khi `RolesContext` được khởi tạo, tất cả các trang hoặc component con có thể sử dụng các cơ chế kiểm tra quyền như:
+
+```tsx
+<IfCanAccessApi api={messageApi.create}>
+  <CreateMessageButton />
+</IfCanAccessApi>
+```
+
+> ✅ **Lưu ý:**
+> Trong Admin Dashboard, bạn không cần gọi lại API để lấy role của người dùng — vì `ApiRolesGetter` đã tự động xử lý điều này ngay từ đầu.
+
+#### 2. Personal Profile và Custom Application
+
+Đối với các khu vực mang tính cá nhân hoặc ứng dụng tuỳ chỉnh, quyền truy cập thường phụ thuộc vào **phạm vi (scope)** cụ thể — ví dụ như từng đối tượng như `Channel`, `Project`, ...
+
+Trong các trường hợp này, bạn cần đặt component `ApiRolesGetter` ở cấp phạm vi của đối tượng, để chỉ lấy các role có liên quan đến scope đó.
+
+```tsx
+<ApiRolesGetter apiRequest={{ scope: scopes.Channel.name, scopeId: channel.id }}>
+  <ChannelDetail />
+</ApiRolesGetter>
+```
+
+* `scope`: tên của phạm vi cần lấy quyền (ví dụ: `"channel"`).
+* `scopeId`: định danh cụ thể của phạm vi (ví dụ: `channel.id = "1"`).
+
+Sau đó `RolesContext` sẽ lưu role cho phạm vi này, toàn bộ các component con bên trong (như danh sách tin nhắn, hành động xoá, ghim, chỉnh sửa, v.v.) có thể sử dụng trực tiếp `IfCanAccessApi` để kiểm tra quyền.
+
+#### 3. Cách hoạt động tổng quát
+
+1. `ApiRolesGetter` gọi API lấy danh sách role tương ứng với **scope** và **scopeId**.
+2. Các role được lưu vào `RolesContext`.
+3. `IfCanAccessApi` và `useAuthorization()` tự động đọc dữ liệu trong `RolesContext` để kiểm tra quyền truy cập.
+4. Nếu người dùng không có quyền phù hợp, component sẽ không hiển thị hoặc thao tác sẽ bị vô hiệu hóa.
