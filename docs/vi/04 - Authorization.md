@@ -62,6 +62,20 @@ abstract class BasePolicy<S> {
 | **constructor**(data)              | `T`                             | Truyền dữ liệu khởi tạo cho policy module.                                                                                                                                                                                           |
 | `static` **getter**(context, data) | `(context, data) => S`          | Hàm tiện ích dùng để trích xuất dữ liệu cần thiết `S` (nếu trả về S là undefined thì coi như kiểm tra quyền thất bại) từ `context` và `data` trước khi gọi `check()`. Không bắt buộc phải khai báo                                   |
 
+#### Flow kiểm tra policy 
+
+```mermaid
+stateDiagram-v2
+    state "policy.constructor.getter() to get resource S" as getter
+    state "policy.check(context, resource S)" as check
+
+    [*] --> getter: call
+    getter --> False: can't get resource
+    getter --> check: call
+    check --> True
+    check --> False
+```
+
 #### Ví dụ minh họa
 
 Giả sử bạn muốn định nghĩa một policy cho phép người dùng truy cập API khi có quyền
