@@ -66,12 +66,15 @@ abstract class BasePolicy<S> {
 
 ```mermaid
 stateDiagram-v2
+    state "check policy.constructor has `getter()` method" as checkGetter    
     state "policy.constructor.getter() to get resource S" as getter
     state "policy.check(context, resource S)" as check
 
-    [*] --> getter: call
+    [*] --> checkGetter 
+    checkGetter --> getter: true
     getter --> False: can't get resource
     getter --> check: call
+    checkGetter --> check: else call with resource S is undefined
     check --> True
     check --> False
 ```
