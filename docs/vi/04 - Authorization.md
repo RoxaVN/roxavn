@@ -270,3 +270,138 @@ Sau đó `RolesContext` sẽ lưu role cho phạm vi này, toàn bộ các compo
 2. Các role được lưu vào `RolesContext`.
 3. `IfCanAccessApi` và `useAuthorization()` tự động đọc dữ liệu trong `RolesContext` để kiểm tra quyền truy cập.
 4. Nếu người dùng không có quyền phù hợp, component sẽ không hiển thị hoặc thao tác sẽ bị vô hiệu hóa.
+
+## Attribute-based access control
+
+Ngoài việc kiểm tra quyền theo role và permission, RoxaVN còn hỗ trợ kiểm soát truy cập dựa trên thuộc tính của tài nguyên (resource attributes) thông qua `ResourceConditionPolicy`.
+
+Điều này cho phép bạn xác định các điều kiện linh hoạt — ví dụ:  
+> Chỉ cho phép truy cập nếu tài nguyên là **public** hoặc Người dùng chỉ được xem **project mà họ sở hữu**.
+
+```ts
+export const projectApi = {
+  getOne: projectSource.getOne({
+    request: Type.Object({
+      id: Type.String({ minLength: 1 }),
+    }),
+    authorization: {
+        (ctx) =>
+          new ResourceConditionPolicy(
+            // Điều kiện để truy vấn tài nguyên Project cần kiểm tra
+            { scope: scopes.Project, condition: { id: ctx.request.id } },
+
+            // Hàm kiểm tra thuộc tính `isPublic` của tài nguyên
+            (_ctx, resource) => resource.isPublic
+          ),
+      ],
+    },
+  })
+};
+```
+
+Hoặc kiểm tra phức tạp hơn: chỉ cho phép user xem project nếu project là public hoặc thuộc về chính họ.
+
+```ts
+(ctx) =>
+  new ResourceConditionPolicy(
+    { scope: scopes.Project, condition: { id: ctx.request.id } },
+    (ctx, resource) => resource.isPublic || resource.ownerId === ctx.user.id
+  );
+```
+
+### Cơ chế hoạt động
+
+`ResourceConditionPolicy` là một implement cụ thể của `BasePolicy`, với phương thức `getter()` hoạt động tương tự như ví dụ `SimpleRolePolicy`. Tùy theo môi trường Backend hoặc Frontend, RoxaVN sẽ có cách lấy dữ liệu (resource) khác nhau để thực hiện việc kiểm tra.
+
+#### Backend
+
+Ở backend, `getter()` sẽ tự động truy vấn database theo điều kiện đã truyền trong `condition`. Ví dụ với đoạn khai báo:
+
+```ts
+new ResourceConditionPolicy(
+  { scope: scopes.Project, condition: { id: ctx.request.id } },
+  (_ctx, resource) => resource.isPublic
+);
+````
+
+thì câu truy vấn tương ứng sẽ được thực hiện như sau:
+
+```sql
+SELECT * FROM project WHERE id = $1;
+```
+
+Dữ liệu nhận được sẽ được truyền vào callback `(ctx, resource)` để kiểm tra điều kiện (`resource.isPublic` trong ví dụ trên).
+
+#### Frontend
+
+Ở frontend, `getter()` sẽ không truy vấn database, mà thay vào đó lấy dữ liệu từ `ScopesContext`. Khi bạn sử dụng component `<ApiFetcher />`, sau khi client gọi API và nhận được dữ liệu, RoxaVN sẽ:
+
+1. Lưu dữ liệu này vào `ScopesContext` với scope tương ứng trong API. 
+2. Nếu dữ liệu là 1 danh sách các đối tượng thì lưu từng đối tượng với id của nó.
+3. Khi `ResourceConditionPolicy` được gọi, nó sẽ tự động lấy resource từ `ScopesContext` để kiểm tra.
+
+Điều này giúp việc kiểm tra quyền ở frontend diễn ra tức thì, không cần gọi API phụ để xác minh lại.
+
+#### Ví dụ dùng với ApiFetcher
+
+Ví dụ cho phép bất cứ ai có thể cập nhật project nếu project đó công khai.
+
+```tsx
+export const projectApi = {
+  // API lấy thông tin Project
+  getMany: projectSource.getMany({
+    request: Type.Object({
+      userId: Type.String({ minLength: 1 }),
+    }),
+    authorization: {
+      // chỉ cho phép nếu `userId` trong request trùng với user id được xác thực
+      policies: [policies.Owner]
+    }
+  }),
+  // API cập nhật Project 
+  update: projectSource.update({
+    request: Type.Object({
+      id: Type.String({ minLength: 1 }),
+      name: Type.String({ minLength: 1 }),
+    }),
+    authorization: {
+      policies: [
+        (ctx) =>
+          // cập nhật nếu project là công khai
+          new ResourceConditionPolicy(
+            { scope: scopes.Project, condition: { id: ctx.request.id } },
+            (_ctx, resource) => resource.isPublic
+          ),
+      ]
+    },
+  }),
+};
+```
+
+Ở phía frontend, bạn có thể dùng ApiFetcher để lấy dữ liệu Project, và kết hợp IfCanAccessApi để hiển thị form cập nhật chỉ khi user có quyền cập nhật (tức Project công khai).
+
+```tsx
+// lấy thông tin user đăng nhập hiện tại
+const user = useAuthUser();
+<ApiFetcher 
+  api={projectApi.getMany} 
+  initialApiRequest={{ userId: user.id }}
+  renderData={({data}) => data && data.items.map(item => (
+    <div key={item.id}>
+      <ProjectInfo project={item} />
+      <IfCanAccessApi api={projectApi.update}>
+        <UpdateProjectForm project={item} />
+      </IfCanAccessApi>
+    </div>
+  ))}
+/>
+```
+
+Giải thích:
+
+- ApiFetcher gọi `projectApi.getMany` để tải tất cả Project của user.
+- Kết quả được lưu vào `ScopesContext` theo scope Project.
+- `<IfCanAccessApi />` tự động chạy policy của `projectApi.update` để kiểm tra quyền.
+- Nếu Project có isPublic = true, form `<UpdateProfileForm />` sẽ hiển thị; ngược lại, component này sẽ không render gì cả.
+
+=> Nhờ cơ chế này, `ResourceConditionPolicy` hoạt động nhất quán trên cả backend và frontend, giúp định nghĩa quyền truy cập một lần nhưng sử dụng ở cả hai phía mà không cần viết lại logic kiểm tra.
