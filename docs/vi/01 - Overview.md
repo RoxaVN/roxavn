@@ -47,22 +47,22 @@ flowchart LR
 
 Hệ thống của RoxaVN chia làm hai “nhân vật chính”: một anh “giao tiếp xã hội” và một anh “ở hậu trường làm việc quần quật” 😆  
 
-#### 🛰️ 3.1. Web Server – Anh chàng nói nhiều  
+#### 3.1. Web Server – Anh chàng nói nhiều  
 
 Đây là mặt tiền của RoxaVN, nơi xử lý **RESTful API** và **WebSocket**. Nói cách khác, đây là “người phát ngôn chính thức” –  client hỏi gì, anh này trả lời; có socket kết nối, anh này chat lại liền. Không có web server thì cả hệ thống im như chùa mùa mưa. 🧘‍♂️
 
-#### 🧱 3.2. Worker Service – Công nhân ẩn danh
+#### 3.2. Worker Service – Công nhân ẩn danh
 
 Phía sau ánh đèn sân khấu, **Worker Service** là người cày cuốc thầm lặng:  
 - Chạy **cronjob** định kỳ (kiểu như nhắc “Ê, hôm nay quét dữ liệu chưa?”).  
 - Lắng nghe **event từ API hoặc database** rồi xử lý trong im lặng.
 - Làm hết mấy việc “nặng nhọc” để Web Server không bị stress 🤯
 
-#### 💻 Trong môi trường dev  
+##### Trong môi trường dev  
 
 Khi bạn chạy `npm run dev` RoxaVN sẽ load cả Web Server lẫn Worker Service trong cùng một tiến trình. Tất cả cùng sống hòa bình, giúp dev test dễ dàng hơn – không cần mở 100 terminal. Chạy 1 lệnh, 2 anh lên sàn cùng lúc 🎭.
 
-#### 🚀 Trong môi trường production
+##### Trong môi trường production
 
 Khi deploy thật, mọi thứ nghiêm túc hơn:
 
