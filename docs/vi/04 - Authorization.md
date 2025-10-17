@@ -42,7 +42,7 @@ Trong đó:
 `BasePolicy` là một abstract class trong RoxaVN, được dùng làm nền tảng để xây dựng các chính sách kiểm tra quyền truy cập (authorization policy). Mỗi policy kế thừa từ `BasePolicy` sẽ định nghĩa điều kiện kiểm tra quyền riêng biệt, giúp hệ thống linh hoạt và dễ mở rộng.
 
 ```ts
-abstract class BasePolicy<S> {
+abstract class BasePolicy<T, S> {
   abstract priority: number;
 
   abstract check: (context: PolicyContext, arg: S) => boolean;
@@ -59,8 +59,8 @@ abstract class BasePolicy<S> {
 | -----------------|------------------------------------------------------------|
 | **priority**:`number`                        | Độ ưu tiên của policy. Khi có nhiều policy cùng kiểm tra, RoxaVN sẽ sắp xếp theo thứ tự `priority` (thấp hơn chạy trước).                                                                                                            |
 | **check**(context: `PolicyContext`, arg: `S`) => `boolean` | Hàm kiểm tra điều kiện với đầu vào là PolicyContext và arg S được lấy từ hàm static `getter()`, nếu policy không định nghĩa `getter()` thì arg sẽ là undefined. Trả về `true` nếu user được phép truy cập, ngược lại trả về `false`. |
-| **constructor**(data: `any`)    | Truyền dữ liệu khởi tạo cho policy module.                                                                                                                                                                                           |
-| *static* **getter**(context: `PolicyContext`, data: any) => `S`          | Hàm tiện ích dùng để trích xuất dữ liệu cần thiết `S` (nếu trả về S là undefined thì coi như kiểm tra quyền thất bại) từ `context` và `data` trước khi gọi `check()`. Không bắt buộc phải khai báo                                   |
+| **constructor**(data: `T`)    | Truyền dữ liệu khởi tạo cho policy module.                                                                                                                                                                                           |
+| *static* **getter**(context: `PolicyContext`, data: `T`) => `S`          | Hàm tiện ích dùng để trích xuất dữ liệu cần thiết `S` (nếu trả về S là undefined thì coi như kiểm tra quyền thất bại) từ `context` và `data` trước khi gọi `check()`. Không bắt buộc phải khai báo                                   |
 
 #### Flow kiểm tra policy 
 
@@ -119,19 +119,6 @@ export class SimpleRolePolicy extends BasePolicy {
 
 > ⚠️ Nếu bạn không override `getter()` ở môi trường tương ứng, policy sẽ ném lỗi như trong ví dụ trên (`throw new Error(...)`).
 
-Ở phía client, để policy hoạt động đúng, bạn cần bọc toàn bộ ứng dụng hoặc khu vực cần kiểm tra quyền bằng component:
-
-```tsx
-<ApiRolesGetter api={roleApi.getMany} apiRequest={{userId: user.id}}>
-  <IfCanAccessApi api={messageApi.create}>
-    <CreateMessageForm />
-  </IfCanAccessApi>
-</ApiRolesGetter>
-```
-
-* **`<ApiRolesGetter />`**:
-  Component này có nhiệm vụ lấy danh sách `role` của người dùng, sau đó lưu vào `RolesContext`.
-
 Cách dùng
 
 ```ts
@@ -159,30 +146,84 @@ Ví dụ `SimpleRolePolicy` ở trên chỉ minh họa cách kiểm tra quyền 
 Hệ thống phân quyền của RoxaVN được thiết kế để giải quyết các bài toán như sau:
 
 - Mỗi **module** trong RoxaVN có thể có **các chức vụ (role)** riêng biệt với **quyền (permission)** cụ thể để quản lý dữ liệu trong module đó.  
-  → Ví dụ: module `@roxavn/module-message` có role `Admin` với quyền *xem*, *sửa*, *xoá* tất cả `Channel` và `Message`.
+  - Module `@roxavn/module-message` có role `Admin` với quyền *xem*, *sửa*, *xoá* tất cả `Channel` và `Message`.
+  - Module `@roxavn/module-project` có role `Admin` (chỉ cùng tên, khác id với role `Admin` của @roxavn/module-message) với quyền *xem*, *sửa*, *xoá* tất cả `Project` và `Task`.
 
 - Bên cạnh đó, trong từng **phạm vi nhỏ hơn** (như Channel, Project, ...), người dùng có thể có **role riêng biệt**.  
   → Ví dụ: trong channel “Tin tức về RoxaVN” (id = 1), người dùng có thể mang vai trò `ChannelAdmin` hoặc `ChannelModerator`, cho phép họ *xem*, *sửa*, *xoá* tất cả `Message` thuộc riêng channel này.
 
-### Cấu trúc Role
+### Role
 
-Để hỗ trợ mô hình trên, RoxaVN định nghĩa cấu trúc `Role` với các thuộc tính sau:
+Để hỗ trợ mô hình trên, RoxaVN định nghĩa đối tượng `Role` với các thuộc tính sau:
 
 | Thuộc tính      | Kiểu dữ liệu | Mô tả                                                                                                                                                              |
 | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **id**        | `string`     | Id của chức vụ                                                                                                       |
 | **name**        | `string`     | Tên của chức vụ (ví dụ: `Admin`, `Viewer`, `Moderator`, ...)                                                                                                       |
 | **scope**       | `string`     | Tên của phạm vi áp dụng quyền. Ví dụ: <br> - `@roxavn/module-message` cho role cấp module <br> - `channel` cho role cấp channel                                    |
 | **scopeId**     | `string`     | ID của phạm vi. <br> - Với role module, `scopeId = '*'` (áp dụng cho toàn bộ module). <br> - Với role cấp channel, `scopeId` chính là ID của channel (ví dụ: `1`). |
 | **permissions** | `string[]`   | Danh sách quyền mà role được cấp (ví dụ: `CreateMessage`, `DeleteMessage`, `EditChannel`, ...).                                                                    |
 
+### RolePermissionPolicy
 
-### Ứng dụng Web
+RoxaVN có sẵn `RolePermissionPolicy` để thực hiện kiểm tra quyền với role theo từng scope như trên
+
+```ts
+import { Scope } from '@roxavn/core';
+import { baseModule } from './module.js';
+import { scopes } from './access.js';
+
+const channelApi = {
+  get: channelSource.create({
+    request: Type.Object({ id: Type.String() }),
+    authorization: {
+      policies: [
+        (context) =>
+          new RolePermissionPolicy({
+            permission: permissions.ReadChannel.name,
+            scope: baseModule.name,
+            scopeId: Scope.ANY_ID, // '*'
+          }), // kiểm tra user có quyền ReadChannel trong @roxavn/module-message không
+        ({ request }) =>
+          new RolePermissionPolicy({
+            permission: permissions.ReadChannel.name,
+            scope: scopes.Channel.name,
+            scopeId: request.id,
+          }), // kiểm tra user có quyền ReadChannel trong scope Channel với scopeId là id của channel 
+      ],
+    },
+  }),
+}
+```
+
+RoxaVN cung cấp sẵn helper `policies` (đọc thêm doc trong '@roxavn/core' để tìm hiểu chi tiết), giúp định nghĩa policy dễ đọc và súc tích hơn.
+
+```ts
+import { policies } from '@roxavn/core';
+
+const channelApi = {
+  getOne: channelSource.create({
+    request: Type.Object({ id: Type.String() }),
+    authorization: {
+      policies: [
+        policies.Module(baseModule, permissions.ReadChannel),
+        policies.ScopeRole({
+          scope: scopes.Channel,
+          permission: permissions.ReadChannel,
+        }),
+      ],
+    },
+  }),
+}
+```
+
+### ApiRolesGetter
 
 Như đã giới thiệu ở phần đầu, ứng dụng web của RoxaVN được chia thành ba phần chính Admin Dashboard, Personal Profile, Custom Application. Mỗi phần có cơ chế quản lý quyền (role & permission) khác nhau, nhưng đều sử dụng chung kiến trúc `ApiRolesGetter` và `RolesContext` để quản lý quyền người dùng trên frontend.
 
 #### 1. Admin Dashboard
 
-Trong khu vực Admin Dashboard, khi người dùng truy cập, client sẽ tự động lấy toàn bộ danh sách `role` mà user đang có trong các module bằng component `ApiRolesGetter`.
+Trong Admin Dashboard, khi người dùng truy cập, client sẽ tự động lấy toàn bộ danh sách `role` mà user đang có trong các module bằng component `ApiRolesGetter`.
 
 ```tsx
 // Component ApiRolesGetter có nhiệm vụ lấy danh sách `role` của người dùng,
@@ -205,12 +246,15 @@ Sau khi `RolesContext` được khởi tạo, tất cả các trang hoặc compo
 
 #### 2. Personal Profile và Custom Application
 
-Đối với các khu vực mang tính cá nhân hoặc ứng dụng tuỳ chỉnh, quyền truy cập thường phụ thuộc vào **phạm vi (scope)** cụ thể — ví dụ như từng đối tượng như `Channel`, `Project`, ...
+Đối với Personal Profile hoặc ứng dụng tuỳ chỉnh, quyền truy cập thường phụ thuộc vào **phạm vi (scope)** cụ thể — ví dụ như từng đối tượng như `Channel`, `Project`, ...
 
 Trong các trường hợp này, bạn cần đặt component `ApiRolesGetter` ở cấp phạm vi của đối tượng, để chỉ lấy các role có liên quan đến scope đó.
 
 ```tsx
-<ApiRolesGetter apiRequest={{ scope: scopes.Channel.name, scopeId: channel.id }}>
+<ApiRolesGetter 
+  api={authService.getUserRolesApi} // không yêu cầu set vì mặc định là authService.getUserRolesApi 
+  apiRequest={{ scope: scopes.Channel.name, scopeId: channel.id }}
+>
   <ChannelDetail />
 </ApiRolesGetter>
 ```

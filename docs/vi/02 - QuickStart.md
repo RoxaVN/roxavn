@@ -8,6 +8,22 @@ cd test-module
 npx -p @roxavn/cli roxavn gen module
 ```
 
+> ⚠️ **Lưu ý:**  
+> Tên của base module được khai báo trong file `src/base/module.ts` phải trùng khớp với giá trị của trường `"name"` trong file `package.json`.  
+>
+> Ví dụ: nếu trong `package.json` có cấu hình:
+> ```json
+> {
+>   "name": "module-a"
+> }
+> ```
+> thì trong file `src/base/module.ts` cần khai báo:
+> ```ts
+> export const baseModule = new BaseModule('module-a');
+> ```
+>
+> Nếu hai giá trị này không trùng nhau, hệ thống sẽ gặp lỗi khi khởi tạo trong quá trình chạy.
+
 2. Lúc này script đã tạo sẵn code base và cài đặt các thư viện cần thiết. Bạn muốn chuẩn hóa code base với biome, commitlint, ... thì chạy thêm câu lệnh sau
 
 ```bash
