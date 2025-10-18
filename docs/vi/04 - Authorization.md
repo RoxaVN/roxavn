@@ -45,35 +45,35 @@ Trong đó:
 abstract class BasePolicy<T, S> {
   abstract priority: number;
 
-  abstract check: (context: PolicyContext, arg: S) => boolean;
+  abstract check: (context: PolicyContext, resource: S) => boolean;
 
   constructor(public data: T) {}
 
-  static getter(context, data: T): S;
+  static getResource(context, data: T): S;
 }
 ```
 
 #### Giải thích chi tiết
 
-| Thành phần       | Mô tả                                                      |
-| -----------------|------------------------------------------------------------|
-| **priority**:`number`                        | Độ ưu tiên của policy. Khi có nhiều policy cùng kiểm tra, RoxaVN sẽ sắp xếp theo thứ tự `priority` (thấp hơn chạy trước).                                                                                                            |
-| **check**(context: `PolicyContext`, arg: `S`) => `boolean` | Hàm kiểm tra điều kiện với đầu vào là PolicyContext và arg S được lấy từ hàm static `getter()`, nếu policy không định nghĩa `getter()` thì arg sẽ là undefined. Trả về `true` nếu user được phép truy cập, ngược lại trả về `false`. |
-| **constructor**(data: `T`)    | Truyền dữ liệu khởi tạo cho policy module.                                                                                                                                                                                           |
-| *static* **getter**(context: `PolicyContext`, data: `T`) => `S`          | Hàm tiện ích dùng để trích xuất dữ liệu cần thiết `S` (nếu trả về S là undefined thì coi như kiểm tra quyền thất bại) từ `context` và `data` trước khi gọi `check()`. Không bắt buộc phải khai báo                                   |
+| Thành phần                                                           | Mô tả                                                                                                                                                                                                                                                    |
+| -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **priority**:`number`                                                | Độ ưu tiên của policy. Khi có nhiều policy cùng kiểm tra, RoxaVN sẽ sắp xếp theo thứ tự `priority` (thấp hơn chạy trước).                                                                                                                                |
+| **check**(context: `PolicyContext`, resource: `S`) => `boolean`      | Hàm kiểm tra điều kiện với đầu vào là PolicyContext và resource S được lấy từ hàm static `getResource()`, nếu policy không định nghĩa `getResource()` thì resource sẽ là undefined. Trả về `true` nếu user được phép truy cập, ngược lại trả về `false`. |
+| **constructor**(data: `T`)                                           | Truyền dữ liệu khởi tạo cho policy module.                                                                                                                                                                                                               |
+| *static* **getResource**(context: `PolicyContext`, data: `T`) => `S` | Hàm tiện ích dùng để trích xuất dữ liệu cần thiết `S` (nếu trả về S là undefined thì coi như kiểm tra quyền thất bại) từ `context` và `data` trước khi gọi `check()`. Không bắt buộc phải khai báo                                                       |
 
 #### Flow kiểm tra policy 
 
 ```mermaid
 stateDiagram-v2
-    state "check policy.constructor has `getter()` method" as checkGetter    
-    state "policy.constructor.getter() to get resource S" as getter
+    state "check policy.constructor has `getResource()` method" as checkGetter    
+    state "policy.constructor.getResource() to get resource S" as getResource
     state "policy.check(context, resource S)" as check
 
     [*] --> checkGetter 
-    checkGetter --> getter: true
-    getter --> False: can't get resource
-    getter --> check: call
+    checkGetter --> getResource: true
+    getResource --> False: can't get resource
+    getResource --> check: call
     checkGetter --> check: else call with resource S is undefined
     check --> True
     check --> False
@@ -98,7 +98,7 @@ export class SimpleRolePolicy extends BasePolicy {
     this.data = data;
   }
 
-  static async getter(
+  static async getResource(
     ctx: PolicyContext,
     data: SimpleRolePolicy['data']
   ): Promise<{ permissions: string[] }> {
@@ -108,16 +108,16 @@ export class SimpleRolePolicy extends BasePolicy {
 ```
 
 * **`check()`**
-  Hàm kiểm tra quyền thực tế. RoxaVN sẽ truyền vào `context` và dữ liệu được lấy từ `getter()`.
+  Hàm kiểm tra quyền thực tế. RoxaVN sẽ truyền vào `context` và dữ liệu được lấy từ `getResource()`.
   Trong ví dụ trên, hàm chỉ đơn giản kiểm tra xem `permission` của policy có nằm trong danh sách `role.permissions` hay không.
 
-* **`getter()`**
+* **`getResource()`**
   Đây là hàm **bắt buộc override** trên từng môi trường (Backend hoặc Frontend) để xác định cách lấy `role` của người dùng:
 
   * **Backend:** sẽ truy vấn cơ sở dữ liệu để lấy danh sách quyền (`permissions`) của user.
   * **Frontend:** sẽ lấy thông tin `role` từ `RolesContext`.
 
-> ⚠️ Nếu bạn không override `getter()` ở môi trường tương ứng, policy sẽ ném lỗi như trong ví dụ trên (`throw new Error(...)`).
+> ⚠️ Nếu bạn không override `getResource()` ở môi trường tương ứng, policy sẽ ném lỗi như trong ví dụ trên (`throw new Error(...)`).
 
 Cách dùng
 
@@ -158,7 +158,7 @@ Hệ thống phân quyền của RoxaVN được thiết kế để giải quy�
 
 | Thuộc tính      | Kiểu dữ liệu | Mô tả                                                                                                                                                              |
 | --------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **id**        | `string`     | Id của chức vụ                                                                                                       |
+| **id**          | `string`     | Id của chức vụ                                                                                                                                                     |
 | **name**        | `string`     | Tên của chức vụ (ví dụ: `Admin`, `Viewer`, `Moderator`, ...)                                                                                                       |
 | **scope**       | `string`     | Tên của phạm vi áp dụng quyền. Ví dụ: <br> - `@roxavn/module-message` cho role cấp module <br> - `channel` cho role cấp channel                                    |
 | **scopeId**     | `string`     | ID của phạm vi. <br> - Với role module, `scopeId = '*'` (áp dụng cho toàn bộ module). <br> - Với role cấp channel, `scopeId` chính là ID của channel (ví dụ: `1`). |
@@ -311,11 +311,11 @@ Hoặc kiểm tra phức tạp hơn: chỉ cho phép user xem project nếu proj
 
 ### Cơ chế hoạt động
 
-`ResourceConditionPolicy` là một implement cụ thể của `BasePolicy`, với phương thức `getter()` hoạt động tương tự như ví dụ `SimpleRolePolicy`. Tùy theo môi trường Backend hoặc Frontend, RoxaVN sẽ có cách lấy dữ liệu (resource) khác nhau để thực hiện việc kiểm tra.
+`ResourceConditionPolicy` là một implement cụ thể của `BasePolicy`, với phương thức `getResource()` hoạt động tương tự như ví dụ `SimpleRolePolicy`. Tùy theo môi trường Backend hoặc Frontend, RoxaVN sẽ có cách lấy dữ liệu (resource) khác nhau để thực hiện việc kiểm tra.
 
 #### Backend
 
-Ở backend, `getter()` sẽ tự động truy vấn database theo điều kiện đã truyền trong `condition`. Ví dụ với đoạn khai báo:
+Ở backend, `getResource()` sẽ tự động truy vấn database theo điều kiện đã truyền trong `condition`. Ví dụ với đoạn khai báo:
 
 ```ts
 new ResourceConditionPolicy(
@@ -334,7 +334,7 @@ Dữ liệu nhận được sẽ được truyền vào callback `(ctx, resource
 
 #### Frontend
 
-Ở frontend, `getter()` sẽ không truy vấn database, mà thay vào đó lấy dữ liệu từ `ScopesContext`. Khi bạn sử dụng component `<ApiFetcher />`, sau khi client gọi API và nhận được dữ liệu, RoxaVN sẽ:
+Ở frontend, `getResource()` sẽ không truy vấn database, mà thay vào đó lấy dữ liệu từ `ScopesContext`. Khi bạn sử dụng component `<ApiFetcher />`, sau khi client gọi API và nhận được dữ liệu, RoxaVN sẽ:
 
 1. Lưu dữ liệu này vào `ScopesContext` với scope tương ứng trong API. 
 2. Nếu dữ liệu là 1 danh sách các đối tượng thì lưu từng đối tượng với id của nó.
