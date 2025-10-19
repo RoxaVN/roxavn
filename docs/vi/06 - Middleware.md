@@ -3,7 +3,7 @@
 Trong RoxaVN, mọi API được gọi thông qua một **Router pipeline**, nơi mỗi middleware có thể can thiệp, xác thực, hoặc biến đổi request/response.  
 Hai khái niệm quan trọng trong pipeline là **RouterContext** và **MiddlewareService**.
 
-### `RouterContextState`
+### RouterContextState
 
 `RouterContextState` chứa toàn bộ trạng thái của request đang được xử lý. Đây là phần dữ liệu "mềm" mà middleware hoặc API handler có thể đọc, ghi hoặc sửa đổi trong suốt vòng đời của request.
 
@@ -24,12 +24,12 @@ export interface RouterContextState<T extends Api = Api> {
 }
 ```
 
-#### Ví dụ
+Ví dụ:
 
 * Middleware xác thực (`AuthMiddleware`) có thể gán `context.state.user` khi user đã login.
 * Middleware ghi log (`LoggerMiddleware`) có thể thêm `traceId` vào `context.state`.
 
-### `RouterContext`
+### RouterContext
 
 `RouterContext` là đối tượng truyền qua toàn bộ pipeline xử lý API.
 Mỗi middleware nhận `RouterContext` và có thể đọc, ghi, hoặc chặn luồng xử lý.
@@ -42,7 +42,7 @@ export interface RouterContext {
 }
 ```
 
-#### Ví dụ
+Ví dụ:
 
 ```ts
 context.request.url       // URL của request
@@ -74,7 +74,7 @@ export class ValidatorMiddleware extends MiddlewareService {
 }
 ```
 
-#### Giải thích:
+Giải thích:
 
 * `priority`: Xác định thứ tự thực thi middleware (số càng nhỏ chạy càng sớm)
 * `handle(context, next)`: Hàm chính của middleware
@@ -115,8 +115,6 @@ export class LoggerMiddleware extends MiddlewareService {
   }
 }
 ```
-
-Rất hay — phần này có thể được trình bày trong tài liệu chính thức như sau để người đọc hiểu rõ vai trò và thứ tự hoạt động của các middleware trong RoxaVN 👇
 
 ### Các Middleware có sẵn trong RoxaVN
 
@@ -170,3 +168,51 @@ Thực hiện kiểm tra quyền truy cập (Authorization) của người dùng
 |   3️⃣    | `AuthenticatorMiddleware` | Xác thực user từ token                      |
 |   4️⃣    | `AuthorizationMiddleware` | Kiểm tra quyền truy cập qua policy          |
 |   5️⃣    | API Handler               | Xử lý nghiệp vụ chính nếu hợp lệ            |
+
+## Frontend
+
+Trong RoxaVN, mỗi lần gọi API từ phía frontend đều đi qua một **chuỗi middleware** tương tự như bên backend. Điều này giúp developer dễ dàng:
+- can thiệp, ghi log, hoặc sửa đổi request trước khi gửi;
+- xử lý response hoặc lỗi tập trung;
+- thêm chức năng toàn cục (như gắn token, đo thời gian, ...).
+
+### Cấu trúc Middleware
+
+Mỗi middleware là một hàm async nhận 2 tham số:
+
+```ts
+export type ApiFetcherMiddleware = (
+  context: {
+    api: Api;                // Định nghĩa API (method, path, schema...)
+    request?: Record<string, any>; // Dữ liệu request gửi lên
+    response?: Record<string, any>; // Dữ liệu response nhận về
+  },
+  next: () => Promise<void>  // Gọi middleware kế tiếp
+) => Promise<void>;
+```
+
+Cấu trúc này tương tự như backend middleware pipeline. Bạn có thể chèn, sửa, hoặc dừng luồng request tại bất kỳ middleware nào.
+
+### Service apiFetcher
+
+`apiFetcher` là lớp trung tâm chịu trách nhiệm gửi request và quản lý middleware frontend.
+
+```ts
+export const apiFetcher = {
+  middlewares: [] as Array<ApiFetcherMiddleware>, // Danh sách middleware đăng ký
+  ...
+};
+```
+
+### Ví dụ
+
+Ghi log request và response cho mục đích debug.
+
+```ts
+apiFetcher.middlewares.push(async (ctx, next) => {
+  console.log('[API]', ctx.api.method, ctx.api.path, ctx.request);
+  const start = performance.now();
+  await next();
+  console.log(`[API] ${ctx.api.path} completed in ${performance.now() - start}ms`, ctx.response);
+});
+```
