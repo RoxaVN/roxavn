@@ -275,8 +275,7 @@ Sau đó `RolesContext` sẽ lưu role cho phạm vi này, toàn bộ các compo
 
 Ngoài việc kiểm tra quyền theo role và permission, RoxaVN còn hỗ trợ kiểm soát truy cập dựa trên thuộc tính của tài nguyên (resource attributes) thông qua `ResourceConditionPolicy`.
 
-Điều này cho phép bạn xác định các điều kiện linh hoạt — ví dụ:  
-> Chỉ cho phép truy cập nếu tài nguyên là **public** hoặc Người dùng chỉ được xem **project mà họ sở hữu**.
+Điều này cho phép bạn xác định các điều kiện linh hoạt — ví dụ chỉ cho phép truy cập nếu tài nguyên là **public**
 
 ```ts
 export const projectApi = {
