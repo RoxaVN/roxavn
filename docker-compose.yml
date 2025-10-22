@@ -1,9 +1,8 @@
 services:
   cache:
-    image: redis/redis-stack:latest
+    image: redis/redis-stack-server:7.4.0-v7
     ports:
       - 6379:6379
-      - 8001:8001
 
   db:
     image: imresamu/postgis:17-3.5.2-alpine3.21
