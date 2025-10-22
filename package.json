@@ -76,6 +76,7 @@
     "packages/plugin-location-countries",
     "packages/plugin-location-vietnam",
     "packages/plugin-location-address",
+    "packages/plugin-presence-redis",
     "packages/plugin-news",
     "packages/demo-company-it"
   ],

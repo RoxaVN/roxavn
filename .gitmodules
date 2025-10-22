@@ -205,3 +205,6 @@
 [submodule "packages/demo-company-it"]
 	path = packages/demo-company-it
 	url = https://github.com/RoxaVN/demo-company-it.git
+[submodule "packages/plugin-presence-redis"]
+	path = packages/plugin-presence-redis
+	url = https://github.com/RoxaVN/plugin-presence-redis.git
