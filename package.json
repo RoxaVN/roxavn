@@ -12,7 +12,6 @@
     "packages/dev-web",
     "packages/code-convention",
     "packages/cli",
-    "packages/openapi",
     "packages/module-system",
     "packages/module-user",
     "packages/module-upload",
@@ -78,6 +77,7 @@
     "packages/plugin-location-address",
     "packages/plugin-presence-redis",
     "packages/plugin-news",
+    "packages/plugin-openapi",
     "packages/demo-company-it"
   ],
   "devDependencies": {
