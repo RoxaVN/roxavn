@@ -74,7 +74,7 @@ for dir in "${folders[@]}"; do
         echo "📂 Processing folder: $dir"
         cd "$dir"
         npx roxavn sync
-        npx roxavn-ts migration:up
+        npx roxavn migration:up
         npm run build
         npx standard-version --release-as 3.6.0
         git push --follow-tags origin main && npm publish
