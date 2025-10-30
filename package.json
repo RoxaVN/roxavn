@@ -3,7 +3,7 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "git:init": "git submodule update --init --recursive && git submodule foreach --recursive git checkout main",
-    "git:pull": "git submodule foreach --recursive 'git pull || :'"
+    "git:pull": "git submodule foreach --recursive \"git pull || :\""
   },
   "license": "MIT",
   "author": "roxavn",
