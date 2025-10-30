@@ -78,6 +78,7 @@
     "packages/plugin-presence-redis",
     "packages/plugin-news",
     "packages/plugin-openapi",
+    "packages/plugin-job-custom",
     "packages/demo-company-it"
   ],
   "devDependencies": {
