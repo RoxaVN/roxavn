@@ -211,3 +211,6 @@
 [submodule "packages/plugin-job-custom"]
 	path = packages/plugin-job-custom
 	url = https://github.com/RoxaVN/plugin-job-custom.git
+[submodule "packages/plugin-job-logger"]
+	path = packages/plugin-job-logger
+	url = https://github.com/RoxaVN/plugin-job-logger.git

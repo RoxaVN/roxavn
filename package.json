@@ -79,6 +79,7 @@
     "packages/plugin-news",
     "packages/plugin-openapi",
     "packages/plugin-job-custom",
+    "packages/plugin-job-logger",
     "packages/demo-company-it"
   ],
   "devDependencies": {
