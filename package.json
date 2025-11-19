@@ -25,6 +25,7 @@
     "packages/module-currency",
     "packages/module-location",
     "packages/plugin-sequence",
+    "packages/plugin-classification",
     "packages/module-accounting",
     "packages/module-socket",
     "packages/module-game",
