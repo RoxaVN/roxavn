@@ -220,3 +220,6 @@
 [submodule "packages/plugin-classification"]
 	path = packages/plugin-classification
 	url = https://github.com/RoxaVN/plugin-classification.git
+[submodule "packages/plugin-message-realtime"]
+	path = packages/plugin-message-realtime
+	url = https://github.com/RoxaVN/plugin-message-realtime.git
