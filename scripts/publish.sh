@@ -1,9 +1,9 @@
 #!/bin/bash
 
 folders=(
-    "packages/openapi"
-    "packages/module-user"
     "packages/module-system"
+    "packages/module-user"
+    "packages/module-statistic"
     "packages/module-upload"
     "packages/module-installer"
     "packages/module-message"
@@ -14,9 +14,10 @@ folders=(
     "packages/module-currency"
     "packages/module-location"
     "packages/plugin-sequence"
+    "packages/plugin-classification"
     "packages/module-accounting"
     "packages/module-socket"
-    "packages/module-game"
+    # "packages/module-game"
     "packages/module-referral"
     "packages/module-workflow"
     "packages/module-reward"
@@ -59,13 +60,18 @@ folders=(
     "packages/plugin-message-media"
     "packages/plugin-message-poll"
     "packages/plugin-message-notification"
+    "packages/plugin-message-realtime"
     "packages/plugin-notification-in-app"
     "packages/plugin-notification-push"
     "packages/plugin-notification-push-web"
     "packages/plugin-location-countries"
     "packages/plugin-location-vietnam"
     "packages/plugin-location-address"
+    "packages/plugin-presence-redis"
     "packages/plugin-news"
+    "packages/plugin-openapi"
+    "packages/plugin-job-custom"
+    "packages/plugin-job-logger"
 )
 
 # Lặp qua từng thư mục
@@ -76,7 +82,7 @@ for dir in "${folders[@]}"; do
         npx roxavn sync
         npx roxavn migration:up
         npm run build
-        npx standard-version --release-as 3.6.0
+        npx standard-version --release-as 3.7.0
         git push --follow-tags origin main && npm publish
         cd - > /dev/null
     else
