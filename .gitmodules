@@ -223,3 +223,6 @@
 [submodule "packages/plugin-message-realtime"]
 	path = packages/plugin-message-realtime
 	url = https://github.com/RoxaVN/plugin-message-realtime.git
+[submodule "packages/plugin-qr-code"]
+	path = packages/plugin-qr-code
+	url = https://github.com/RoxaVN/plugin-qr-code.git

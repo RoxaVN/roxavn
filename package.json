@@ -81,6 +81,7 @@
     "packages/plugin-presence-redis",
     "packages/plugin-news",
     "packages/plugin-openapi",
+    "packages/plugin-qr-code",
     "packages/plugin-job-custom",
     "packages/plugin-job-logger",
     "packages/demo-company-it"
