@@ -80,6 +80,7 @@
     "packages/plugin-location-vietnam",
     "packages/plugin-location-address",
     "packages/plugin-presence-redis",
+    "packages/plugin-statistic-report-export",
     "packages/plugin-news",
     "packages/plugin-openapi",
     "packages/plugin-job-custom",
