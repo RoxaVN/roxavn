@@ -229,3 +229,6 @@
 [submodule "packages/plugin-statistic-report-export"]
 	path = packages/plugin-statistic-report-export
 	url = https://github.com/RoxaVN/plugin-statistic-report-export.git
+[submodule "packages/plugin-barcode"]
+	path = packages/plugin-barcode
+	url = https://github.com/RoxaVN/plugin-barcode.git
