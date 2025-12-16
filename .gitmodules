@@ -232,3 +232,6 @@
 [submodule "packages/plugin-barcode"]
 	path = packages/plugin-barcode
 	url = https://github.com/RoxaVN/plugin-barcode.git
+[submodule "packages/plugin-order-barcode"]
+	path = packages/plugin-order-barcode
+	url = https://github.com/RoxaVN/plugin-order-barcode.git

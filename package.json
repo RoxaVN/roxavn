@@ -84,6 +84,7 @@
     "packages/plugin-statistic-report-export",
     "packages/plugin-news",
     "packages/plugin-openapi",
+    "packages/plugin-order-barcode",
     "packages/plugin-job-custom",
     "packages/plugin-job-logger",
     "packages/demo-company-it"
