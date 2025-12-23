@@ -25,6 +25,7 @@
     "packages/module-currency",
     "packages/module-location",
     "packages/plugin-barcode",
+    "packages/plugin-excel",
     "packages/plugin-qr-code",
     "packages/plugin-sequence",
     "packages/plugin-classification",
