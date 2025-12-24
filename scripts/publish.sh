@@ -13,6 +13,9 @@ folders=(
     "packages/module-asset"
     "packages/module-currency"
     "packages/module-location"
+    "packages/plugin-barcode"
+    "packages/plugin-excel"
+    "packages/plugin-qr-code"
     "packages/plugin-sequence"
     "packages/plugin-classification"
     "packages/module-accounting"
@@ -68,21 +71,23 @@ folders=(
     "packages/plugin-location-vietnam"
     "packages/plugin-location-address"
     "packages/plugin-presence-redis"
+    "packages/plugin-statistic-report-export"
     "packages/plugin-news"
     "packages/plugin-openapi"
+    "packages/plugin-order-barcode"
     "packages/plugin-job-custom"
     "packages/plugin-job-logger"
 )
 
-# Lặp qua từng thư mục
 for dir in "${folders[@]}"; do
     if [ -d "$dir" ]; then
         echo "📂 Processing folder: $dir"
         cd "$dir"
-        npx roxavn sync
-        npx roxavn migration:up
-        npm run build
-        npx standard-version --release-as 3.7.0
+        # rm -rf dist
+        # npx roxavn migration:up
+        # npx roxavn sync
+        # npm run build
+        npx standard-version --release-as 3.8.0
         git push --follow-tags origin main && npm publish
         cd - > /dev/null
     else
