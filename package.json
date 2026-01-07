@@ -42,6 +42,7 @@
     "packages/module-timesheet",
     "packages/module-organization",
     "packages/module-finance-contract",
+    "packages/module-follow",
     "packages/plugin-api-logger",
     "packages/plugin-api-rate-limiter",
     "packages/plugin-otp",

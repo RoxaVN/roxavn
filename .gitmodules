@@ -238,3 +238,6 @@
 [submodule "packages/plugin-excel"]
 	path = packages/plugin-excel
 	url = https://github.com/RoxaVN/plugin-excel.git
+[submodule "packages/module-follow"]
+	path = packages/module-follow
+	url = https://github.com/RoxaVN/module-follow.git
