@@ -241,3 +241,6 @@
 [submodule "packages/module-follow"]
 	path = packages/module-follow
 	url = https://github.com/RoxaVN/module-follow.git
+[submodule "packages/plugin-user-identity-limit"]
+	path = packages/plugin-user-identity-limit
+	url = https://github.com/RoxaVN/plugin-user-identity-limit.git
