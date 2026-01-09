@@ -244,3 +244,6 @@
 [submodule "packages/plugin-user-identity-limit"]
 	path = packages/plugin-user-identity-limit
 	url = https://github.com/RoxaVN/plugin-user-identity-limit.git
+[submodule "packages/plugin-message-conversation"]
+	path = packages/plugin-message-conversation
+	url = https://github.com/RoxaVN/plugin-message-conversation.git
