@@ -15,6 +15,7 @@
     "packages/module-system",
     "packages/module-user",
     "packages/module-statistic",
+    "packages/module-insight",
     "packages/module-upload",
     "packages/module-installer",
     "packages/module-message",

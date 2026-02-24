@@ -247,3 +247,6 @@
 [submodule "packages/plugin-message-conversation"]
 	path = packages/plugin-message-conversation
 	url = https://github.com/RoxaVN/plugin-message-conversation.git
+[submodule "packages/module-insight"]
+	path = packages/module-insight
+	url = https://github.com/RoxaVN/module-insight.git
