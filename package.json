@@ -91,6 +91,7 @@
     "packages/plugin-order-barcode",
     "packages/plugin-job-custom",
     "packages/plugin-job-logger",
+    "packages/plugin-ui-editor-export",
     "packages/demo-company-it"
   ],
   "devDependencies": {

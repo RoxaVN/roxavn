@@ -250,3 +250,6 @@
 [submodule "packages/module-insight"]
 	path = packages/module-insight
 	url = https://github.com/RoxaVN/module-insight.git
+[submodule "packages/plugin-ui-editor-export"]
+	path = packages/plugin-ui-editor-export
+	url = https://github.com/RoxaVN/plugin-ui-editor-export.git
