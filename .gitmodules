@@ -214,9 +214,6 @@
 [submodule "packages/plugin-job-logger"]
 	path = packages/plugin-job-logger
 	url = https://github.com/RoxaVN/plugin-job-logger.git
-[submodule "packages/module-statistic"]
-	path = packages/module-statistic
-	url = https://github.com/RoxaVN/module-statistic.git
 [submodule "packages/plugin-classification"]
 	path = packages/plugin-classification
 	url = https://github.com/RoxaVN/plugin-classification.git
@@ -226,9 +223,6 @@
 [submodule "packages/plugin-qr-code"]
 	path = packages/plugin-qr-code
 	url = https://github.com/RoxaVN/plugin-qr-code.git
-[submodule "packages/plugin-statistic-report-export"]
-	path = packages/plugin-statistic-report-export
-	url = https://github.com/RoxaVN/plugin-statistic-report-export.git
 [submodule "packages/plugin-barcode"]
 	path = packages/plugin-barcode
 	url = https://github.com/RoxaVN/plugin-barcode.git
