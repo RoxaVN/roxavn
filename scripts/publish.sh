@@ -1,9 +1,12 @@
 #!/bin/bash
 
 folders=(
+    "packages/core"
+    "packages/dev-web"
+    "packages/cli"
     "packages/module-system"
     "packages/module-user"
-    "packages/module-statistic"
+    "packages/module-insight"
     "packages/module-upload"
     "packages/module-installer"
     "packages/module-message"
@@ -31,6 +34,7 @@ folders=(
     "packages/module-timesheet"
     "packages/module-organization"
     "packages/module-finance-contract"
+    # "packages/module-follow"
     "packages/plugin-api-logger"
     "packages/plugin-api-rate-limiter"
     "packages/plugin-otp"
@@ -44,18 +48,18 @@ folders=(
     "packages/plugin-auth-two-factor-totp"
     "packages/plugin-reauth-password"
     "packages/plugin-payment"
-    "packages/plugin-payment-web3"
+    # "packages/plugin-payment-web3"
     "packages/plugin-project-notification"
     "packages/plugin-project-message"
     "packages/plugin-firebase"
     "packages/plugin-auth-firebase"
-    "packages/plugin-asset-web3"
+    # "packages/plugin-asset-web3"
     "packages/plugin-asset-category"
     "packages/plugin-user-ban"
-    "packages/plugin-user-info"
+    "packages/plugin-user-identity-limit"
     "packages/plugin-web3-airdrop"
     "packages/plugin-store-record"
-    "packages/plugin-casino-game"
+    # "packages/plugin-casino-game"
     "packages/plugin-telegram-bot"
     "packages/plugin-message-report"
     "packages/plugin-message-reaction"
@@ -64,6 +68,7 @@ folders=(
     "packages/plugin-message-poll"
     "packages/plugin-message-notification"
     "packages/plugin-message-realtime"
+    "packages/plugin-message-conversation"
     "packages/plugin-notification-in-app"
     "packages/plugin-notification-push"
     "packages/plugin-notification-push-web"
@@ -71,12 +76,12 @@ folders=(
     "packages/plugin-location-vietnam"
     "packages/plugin-location-address"
     "packages/plugin-presence-redis"
-    "packages/plugin-statistic-report-export"
     "packages/plugin-news"
     "packages/plugin-openapi"
     "packages/plugin-order-barcode"
     "packages/plugin-job-custom"
     "packages/plugin-job-logger"
+    "packages/plugin-ui-editor-export"
 )
 
 for dir in "${folders[@]}"; do
@@ -87,7 +92,7 @@ for dir in "${folders[@]}"; do
         # npx roxavn migration:up
         # npx roxavn sync
         # npm run build
-        npx standard-version --release-as 3.8.0
+        npx standard-version --release-as 3.9.0
         git push --follow-tags origin main && npm publish
         cd - > /dev/null
     else
