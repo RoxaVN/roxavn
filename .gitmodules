@@ -247,3 +247,6 @@
 [submodule "packages/plugin-ui-editor-export"]
 	path = packages/plugin-ui-editor-export
 	url = https://github.com/RoxaVN/plugin-ui-editor-export.git
+[submodule "packages/plugin-message-mention"]
+	path = packages/plugin-message-mention
+	url = https://github.com/RoxaVN/plugin-message-mention.git
