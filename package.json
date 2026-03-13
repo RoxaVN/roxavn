@@ -12,6 +12,7 @@
     "packages/dev-web",
     "packages/code-convention",
     "packages/cli",
+    "packages/testing",
     "packages/module-system",
     "packages/module-user",
     "packages/module-insight",
