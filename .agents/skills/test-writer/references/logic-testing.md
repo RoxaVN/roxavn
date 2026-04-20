@@ -1,29 +1,31 @@
-# Logic and Service Testing
+# Pure Logic and Utility Testing
 
 ## Pattern
 
-Import logic utilities and rely on global `describe`, `expect`, `it`, and `vi`.
+For shared code, base logic, and pure utilities, rely on standard Vitest features. These tests usually don't require database setup or DOM rendering.
 
 ```typescript
 import { myUtility } from './utils.js';
 
 describe('myUtility', () => {
-  it('handles transformations and async calls', async () => {
-    const callback = vi.fn();
-    const result = await myUtility('input', callback);
-    
+  it('handles transformations correctly', () => {
+    const result = myUtility('input');
     expect(result).toBe('output');
-    expect(callback).toHaveBeenCalledWith('processed');
+  });
+
+  it('handles async logic', async () => {
+    const result = await myUtility('async-input');
+    expect(result).toBe('async-output');
   });
 });
 ```
 
-## Module Mocking
+## Mocking
 
-Use `vi.mock` to mock internal dependencies.
+Use `vi.mock` for external dependencies and `vi.fn()` for callbacks.
 
 ```typescript
-vi.mock('./db.js', () => ({
-  query: vi.fn().mockResolvedValue([]),
+vi.mock('node:fs', () => ({
+  readFileSync: vi.fn().mockReturnValue('content'),
 }));
 ```

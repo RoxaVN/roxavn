@@ -17,10 +17,17 @@ This skill provides guidance for writing tests in `roxavn`. The project uses Vit
 
 ## Workflow Selection
 
-- **Web Components**: See [references/web-testing.md](references/web-testing.md) for UI/React testing patterns.
-- **Logic & Services**: See [references/logic-testing.md](references/logic-testing.md) for pure logic and mocking.
+- **Server Services**: See [references/server-testing.md](references/server-testing.md) for testing server-side services with database setup.
+- **Web Pages**: See [references/web-testing.md](references/web-testing.md) for UI/React testing using `PageTester`.
+- **Pure Logic**: See [references/logic-testing.md](references/logic-testing.md) for shared/base logic and utility testing.
 
 ## Common Patterns
+
+### Server Testing (Services)
+Use `setUpDatabase` from `@roxavn/core/server/testing` to initialize a temporary database for the test suite.
+
+### Web Testing (Pages)
+Use `PageTester` from `@roxavn/core/web/testing` to test standard page flows like filtering and adding items.
 
 ### Running Tests
 ```bash

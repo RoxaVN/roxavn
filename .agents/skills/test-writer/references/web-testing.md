@@ -1,36 +1,53 @@
-# Web Component Testing
+# Web Component and Page Testing
 
-## Pattern
+## Page Testing (Standard CRUD)
 
-Rely on global `describe`, `expect`, `it`, and `vi`. Use local `render` from `../../testing/index.js`.
+For standard admin pages, use `PageTester` from `@roxavn/core/web/testing`. It provides automated tests for standard flows.
 
 ```typescript
-import { render } from '../../testing/index.js';
-import { MyComponent } from './MyComponent.js';
+import { PageTester } from '@roxavn/core/web/testing';
+import { myPage } from './myPage.js';
 
-describe('MyComponent', () => {
-  it('handles interaction and async state', async () => {
-    const onClick = vi.fn().mockResolvedValue('ok');
-    const screen = await render(<MyComponent onClick={onClick} />);
-    
-    const button = screen.getByRole('button');
-    await button.click();
-    
-    // Check loading state (data-loading attribute)
-    expect(button).toHaveAttribute('data-loading', 'true');
-    
-    await vi.waitFor(() => {
-      expect(button).not.toHaveAttribute('data-loading');
-    });
-    expect(onClick).toHaveBeenCalled();
+describe('myPage', () => {
+  it('should support standard flows', async () => {
+    const pageTester = new PageTester(myPage);
+    await pageTester.testFilter();
+    await pageTester.testAdd();
+    await pageTester.testItemActions([0, 1]); // test actions for first two items
   });
 });
 ```
 
-## Service Mocking
+## Component Testing (Custom UI)
+
+Use `render` from `@roxavn/core/web/testing`. It wraps components with Mantine and API providers.
 
 ```typescript
-vi.mock('../../services/modal.js', () => ({
-  openModal: vi.fn(),
+import { render } from '@roxavn/core/web/testing';
+import { MyComponent } from './MyComponent.js';
+
+describe('MyComponent', () => {
+  it('handles interaction', async () => {
+    const screen = await render(<MyComponent />);
+    
+    const button = screen.getByRole('button');
+    await button.click();
+    
+    expect(button).toBeDisabled();
+  });
+});
+```
+
+## Service/API Mocking
+
+Use `ApiMocker` for fine-grained control or `vi.mock` for global service mocks.
+
+```typescript
+import { ApiMocker } from '@roxavn/core/web/testing';
+
+const apiMocker = new ApiMocker();
+apiMocker.mock(api, ({ response }) => ({
+  ...response,
+  items: [{ id: '1', name: 'Test' }],
 }));
 ```
