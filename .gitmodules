@@ -253,3 +253,6 @@
 [submodule "packages/testing"]
 	path = packages/testing
 	url = https://github.com/RoxaVN/testing.git
+[submodule "packages/stories"]
+	path = packages/stories
+	url = https://github.com/RoxaVN/stories.git

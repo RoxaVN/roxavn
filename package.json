@@ -8,9 +8,10 @@
   "license": "MIT",
   "author": "roxavn",
   "workspaces": [
+    "packages/code-convention",
     "packages/core",
     "packages/dev-web",
-    "packages/code-convention",
+    "packages/stories",
     "packages/cli",
     "packages/testing",
     "packages/module-system",
