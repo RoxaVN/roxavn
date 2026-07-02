@@ -9,11 +9,11 @@
   "author": "roxavn",
   "workspaces": [
     "packages/code-convention",
+    "packages/stories",
+    "packages/testing",
     "packages/core",
     "packages/dev-web",
-    "packages/stories",
     "packages/cli",
-    "packages/testing",
     "packages/module-system",
     "packages/module-user",
     "packages/module-insight",
