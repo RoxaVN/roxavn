@@ -1,6 +1,8 @@
 #!/bin/bash
 
 folders=(
+    # "packages/stories"
+    # "packages/testing"
     "packages/core"
     "packages/dev-web"
     "packages/cli"
@@ -12,7 +14,7 @@ folders=(
     "packages/module-message"
     "packages/module-notification"
     "packages/module-project"
-    "packages/module-web3"
+    # "packages/module-web3"
     "packages/module-asset"
     "packages/module-currency"
     "packages/module-location"
@@ -40,7 +42,7 @@ folders=(
     "packages/plugin-otp"
     "packages/plugin-email-sender"
     "packages/plugin-auth-email"
-    "packages/plugin-auth-web3"
+    # "packages/plugin-auth-web3"
     "packages/plugin-auth-webauthn"
     "packages/plugin-auth-two-factor"
     "packages/plugin-identity-pin"
@@ -57,7 +59,7 @@ folders=(
     "packages/plugin-asset-category"
     "packages/plugin-user-ban"
     "packages/plugin-user-identity-limit"
-    "packages/plugin-web3-airdrop"
+    # "packages/plugin-web3-airdrop"
     "packages/plugin-store-record"
     # "packages/plugin-casino-game"
     "packages/plugin-telegram-bot"
@@ -92,8 +94,7 @@ for dir in "${folders[@]}"; do
         # npx roxavn migration:up
         # npx roxavn sync
         # npm run build
-        npx standard-version --release-as 3.9.0
-        git push --follow-tags origin main && npm publish
+        npx release-it minor --ci -c ../../.release-it.json
         cd - > /dev/null
     else
         echo "⚠️ Folder not found: $dir"
