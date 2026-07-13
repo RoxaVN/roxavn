@@ -8,32 +8,6 @@ RoxaVN is a full stack web framework, designed in a modularized architecture. Ea
 - It uses a type-safe coding style to find and manipulate data on both the backend and frontend code.
 - It has many modules available that are easy to reuse for all areas such as games, social networks, erp, e-commerce, blockchain...
 
-## Quickstart
-
-Create a simple module
-
-```
-npx @roxavn/cli gen module
-```
-
-Add available modules
-
-```
-npm i @roxavn/module-user @roxavn/module-project
-```
-
-Synchronize modules
-
-```
-npx roxavn sync
-```
-
-Run dev server
-
-```
-npm run dev
-```
-
 ## Documentation
 
 For documentation about RoxaVN, please visit [our wiki](https://github.com/RoxaVN/roxavn/wiki)
