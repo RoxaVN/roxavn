@@ -76,13 +76,13 @@ export const UserInput = (props) => (...);
 
 **Pattern:**
 ```typescript
-import { createAction } from '@roxavn/stories/server';
 import { ServerStory } from '@roxavn/stories/web';
-import * as services from './service.js';
+import { ServiceA, ServiceB } from './service.js';
+import { serverModule } from '../module.js';
 
 export default ServerStory({});
 
-export const action = createAction(services);
+export const loader = serverModule.storyLoader({ServiceA, ServiceB});
 ```
 
 **Source JSDoc requirements:**
@@ -188,7 +188,7 @@ For each source file, generate the appropriate story type following the patterns
 
 **Key rules:**
 - Export default the Story object
-- For ServerStory, also export `action = createAction(services)`
+- For ServerStory, also export `loader = serverModule.storyLoader(services)`
 - Use relative imports with `.js` extension (ESM)
 - Import from `../index.js` for components (follows module-user pattern)
 
@@ -220,11 +220,13 @@ import { useMyHook } from './useMyHook.js';
 export default HookStory({ hook: useMyHook });
 
 // ServerStory
-import { createAction } from '@roxavn/stories/server';
 import { ServerStory } from '@roxavn/stories/web';
-import * as services from './service.js';
+import { ServiceA, ServiceB } from './service.js';
+import { serverModule } from '../module.js';
+
 export default ServerStory({});
-export const action = createAction(services);
+
+export const loader = serverModule.storyLoader({ServiceA, ServiceB});
 ```
 
 ## Common Pitfalls
@@ -232,5 +234,5 @@ export const action = createAction(services);
 1. **Missing `return` in ModuleStory examples**: Playground won't display anything
 2. **Wrong import path**: Use `../index.js` for components, `./source.js` for base/services
 3. **Missing `.js` extension**: ESM requires `.js` extension in imports
-4. **ServerStory without `createAction`**: Won't have interactive playground
+4. **ServerStory without `serverModule.storyLoader()`**: Won't have interactive playground
 5. **Skipping barrel files**: Don't create stories for `index.ts` files
