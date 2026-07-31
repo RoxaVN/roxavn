@@ -1,6 +1,7 @@
 #!/bin/bash
 
 folders=(
+    # "packages/code-convention"
     # "packages/stories"
     # "packages/testing"
     "packages/core"
@@ -68,6 +69,7 @@ folders=(
     "packages/plugin-message-pin"
     "packages/plugin-message-media"
     "packages/plugin-message-poll"
+    "packages/plugin-message-mention"
     "packages/plugin-message-notification"
     "packages/plugin-message-realtime"
     "packages/plugin-message-conversation"
