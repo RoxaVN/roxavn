@@ -256,3 +256,6 @@
 [submodule "packages/stories"]
 	path = packages/stories
 	url = https://github.com/RoxaVN/stories.git
+[submodule "packages/tauri"]
+	path = packages/tauri
+	url = https://github.com/RoxaVN/tauri.git

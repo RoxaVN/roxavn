@@ -14,6 +14,7 @@
     "packages/core",
     "packages/dev-web",
     "packages/cli",
+    "packages/tauri",
     "packages/module-system",
     "packages/module-user",
     "packages/module-insight",
