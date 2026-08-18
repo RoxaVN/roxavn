@@ -99,5 +99,8 @@
     "@biomejs/biome": "^2.3.5",
     "@release-it/conventional-changelog": "^11.0.1",
     "release-it": "^20.2.1"
+  },
+  "allowScripts": {
+    "sharp@0.32.6": true
   }
 }
