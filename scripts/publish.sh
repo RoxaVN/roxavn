@@ -7,6 +7,7 @@ folders=(
     "packages/core"
     "packages/dev-web"
     "packages/cli"
+    # "packages/tauri"
     "packages/module-system"
     "packages/module-user"
     "packages/module-insight"
@@ -96,7 +97,7 @@ for dir in "${folders[@]}"; do
         # npx roxavn migration:up
         # npx roxavn sync
         # npm run build
-        npx release-it minor --ci -c ../../.release-it.json
+        npx release-it -c ../../.release-it.json --ci minor
         cd - > /dev/null
     else
         echo "⚠️ Folder not found: $dir"
