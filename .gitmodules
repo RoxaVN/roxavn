@@ -259,3 +259,6 @@
 [submodule "packages/tauri"]
 	path = packages/tauri
 	url = https://github.com/RoxaVN/tauri.git
+[submodule "packages/module-oauth2-provider"]
+	path = packages/module-oauth2-provider
+	url = https://github.com/RoxaVN/module-oauth2-provider.git

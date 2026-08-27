@@ -46,6 +46,7 @@
     "packages/module-organization",
     "packages/module-finance-contract",
     "packages/module-follow",
+    "packages/module-oauth2-provider",
     "packages/plugin-api-logger",
     "packages/plugin-api-rate-limiter",
     "packages/plugin-otp",
