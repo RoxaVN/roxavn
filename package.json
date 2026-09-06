@@ -68,6 +68,7 @@
     "packages/plugin-asset-web3",
     "packages/plugin-asset-category",
     "packages/plugin-user-ban",
+    "packages/plugin-user-setting",
     "packages/plugin-user-identity-limit",
     "packages/plugin-web3-airdrop",
     "packages/plugin-store-record",

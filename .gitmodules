@@ -262,3 +262,6 @@
 [submodule "packages/module-oauth2-provider"]
 	path = packages/module-oauth2-provider
 	url = https://github.com/RoxaVN/module-oauth2-provider.git
+[submodule "packages/plugin-user-setting"]
+	path = packages/plugin-user-setting
+	url = https://github.com/RoxaVN/plugin-user-setting.git
