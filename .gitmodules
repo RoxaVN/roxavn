@@ -265,3 +265,6 @@
 [submodule "packages/plugin-user-setting"]
 	path = packages/plugin-user-setting
 	url = https://github.com/RoxaVN/plugin-user-setting.git
+[submodule "packages/plugin-auth-oidc"]
+	path = packages/plugin-auth-oidc
+	url = https://github.com/RoxaVN/plugin-auth-oidc.git
