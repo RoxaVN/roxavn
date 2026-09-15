@@ -55,7 +55,7 @@
     "packages/plugin-auth-web3",
     "packages/plugin-auth-webauthn",
     "packages/plugin-auth-two-factor",
-    "packages/plugin-auth-oidc",
+    "packages/plugin-auth-oauth",
     "packages/plugin-identity-pin",
     "packages/plugin-identity-totp",
     "packages/plugin-auth-two-factor-totp",

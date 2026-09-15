@@ -265,3 +265,6 @@
 [submodule "packages/plugin-user-setting"]
 	path = packages/plugin-user-setting
 	url = https://github.com/RoxaVN/plugin-user-setting.git
+[submodule "packages/plugin-auth-oauth"]
+	path = packages/plugin-auth-oauth
+	url = https://github.com/RoxaVN/plugin-auth-oauth.git
