@@ -268,3 +268,6 @@
 [submodule "packages/plugin-auth-oauth"]
 	path = packages/plugin-auth-oauth
 	url = https://github.com/RoxaVN/plugin-auth-oauth.git
+[submodule "packages/plugin-auth-facebook"]
+	path = packages/plugin-auth-facebook
+	url = https://github.com/RoxaVN/plugin-auth-facebook.git
