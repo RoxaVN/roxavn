@@ -271,3 +271,6 @@
 [submodule "packages/plugin-auth-facebook"]
 	path = packages/plugin-auth-facebook
 	url = https://github.com/RoxaVN/plugin-auth-facebook.git
+[submodule "packages/plugin-message-conversation-follow"]
+	path = packages/plugin-message-conversation-follow
+	url = https://github.com/RoxaVN/plugin-message-conversation-follow.git

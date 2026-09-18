@@ -85,6 +85,7 @@
     "packages/plugin-message-notification",
     "packages/plugin-message-realtime",
     "packages/plugin-message-conversation",
+    "packages/plugin-message-conversation-follow",
     "packages/plugin-notification-in-app",
     "packages/plugin-notification-push",
     "packages/plugin-notification-push-web",
