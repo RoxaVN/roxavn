@@ -93,6 +93,7 @@
     "packages/plugin-location-vietnam",
     "packages/plugin-location-address",
     "packages/plugin-presence-redis",
+    "packages/module-omnichannel",
     "packages/plugin-news",
     "packages/plugin-openapi",
     "packages/plugin-order-barcode",

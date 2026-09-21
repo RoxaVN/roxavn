@@ -274,3 +274,6 @@
 [submodule "packages/plugin-message-conversation-follow"]
 	path = packages/plugin-message-conversation-follow
 	url = https://github.com/RoxaVN/plugin-message-conversation-follow.git
+[submodule "packages/module-omnichannel"]
+	path = packages/module-omnichannel
+	url = https://github.com/RoxaVN/module-omnichannel.git
