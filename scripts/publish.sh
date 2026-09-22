@@ -73,7 +73,7 @@ folders=(
     "packages/plugin-message-mention"
     "packages/plugin-message-notification"
     "packages/plugin-message-realtime"
-    "packages/plugin-message-conversation"
+    "packages/module-conversation"
     "packages/plugin-notification-in-app"
     "packages/plugin-notification-push"
     "packages/plugin-notification-push-web"
