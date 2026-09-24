@@ -280,3 +280,6 @@
 [submodule "packages/plugin-conversation-reaction"]
 	path = packages/plugin-conversation-reaction
 	url = https://github.com/RoxaVN/plugin-conversation-reaction.git
+[submodule "packages/plugin-conversation-report"]
+	path = packages/plugin-conversation-report
+	url = https://github.com/RoxaVN/plugin-conversation-report.git
