@@ -283,3 +283,6 @@
 [submodule "packages/plugin-conversation-report"]
 	path = packages/plugin-conversation-report
 	url = https://github.com/RoxaVN/plugin-conversation-report.git
+[submodule "packages/plugin-conversation-pin"]
+	path = packages/plugin-conversation-pin
+	url = https://github.com/RoxaVN/plugin-conversation-pin.git

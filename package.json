@@ -88,6 +88,7 @@
     "packages/plugin-conversation-follow",
     "packages/plugin-conversation-reaction",
     "packages/plugin-conversation-report",
+    "packages/plugin-conversation-pin",
     "packages/plugin-notification-in-app",
     "packages/plugin-notification-push",
     "packages/plugin-notification-push-web",
