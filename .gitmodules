@@ -289,3 +289,6 @@
 [submodule "packages/plugin-conversation-mention"]
 	path = packages/plugin-conversation-mention
 	url = https://github.com/RoxaVN/plugin-conversation-mention.git
+[submodule "packages/plugin-conversation-poll"]
+	path = packages/plugin-conversation-poll
+	url = https://github.com/RoxaVN/plugin-conversation-poll.git
