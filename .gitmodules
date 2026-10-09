@@ -292,3 +292,6 @@
 [submodule "packages/plugin-conversation-poll"]
 	path = packages/plugin-conversation-poll
 	url = https://github.com/RoxaVN/plugin-conversation-poll.git
+[submodule "packages/plugin-conversation-media"]
+	path = packages/plugin-conversation-media
+	url = https://github.com/RoxaVN/plugin-conversation-media.git

@@ -92,6 +92,7 @@
     "packages/plugin-conversation-pin",
     "packages/plugin-conversation-mention",
     "packages/plugin-conversation-poll",
+    "packages/plugin-conversation-media",
     "packages/plugin-notification-in-app",
     "packages/plugin-notification-push",
     "packages/plugin-notification-push-web",
