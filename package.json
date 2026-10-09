@@ -1,5 +1,6 @@
 {
   "name": "roxavn",
+  "version": "0.1.0",
   "scripts": {
     "build": "npm run build --workspaces",
     "git:init": "git submodule update --init --recursive && git submodule foreach --recursive git checkout main",
@@ -111,6 +112,10 @@
     "@release-it/conventional-changelog": "^11.0.1",
     "release-it": "^20.2.1"
   },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE.txt"
+  ],
   "allowScripts": {
     "sharp@0.32.6": true
   }
