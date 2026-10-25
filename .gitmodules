@@ -295,3 +295,6 @@
 [submodule "packages/plugin-conversation-media"]
 	path = packages/plugin-conversation-media
 	url = https://github.com/RoxaVN/plugin-conversation-media.git
+[submodule "packages/plugin-conversation-notification"]
+	path = packages/plugin-conversation-notification
+	url = https://github.com/RoxaVN/plugin-conversation-notification.git
