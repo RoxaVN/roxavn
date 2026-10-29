@@ -85,6 +85,7 @@
     "packages/plugin-message-mention",
     "packages/plugin-message-notification",
     "packages/plugin-message-realtime",
+    "packages/plugin-message-hyperlink",
     "packages/module-conversation",
     "packages/plugin-conversation-follow",
     "packages/plugin-conversation-reaction",

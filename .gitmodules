@@ -298,3 +298,6 @@
 [submodule "packages/plugin-conversation-notification"]
 	path = packages/plugin-conversation-notification
 	url = https://github.com/RoxaVN/plugin-conversation-notification.git
+[submodule "packages/plugin-message-hyperlink"]
+	path = packages/plugin-message-hyperlink
+	url = https://github.com/RoxaVN/plugin-message-hyperlink.git
