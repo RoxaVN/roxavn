@@ -304,3 +304,6 @@
 [submodule "packages/plugin-omnichannel-facebook"]
 	path = packages/plugin-omnichannel-facebook
 	url = https://github.com/RoxaVN/plugin-omnichannel-facebook.git
+[submodule "packages/plugin-tag"]
+	path = packages/plugin-tag
+	url = https://github.com/RoxaVN/plugin-tag.git
