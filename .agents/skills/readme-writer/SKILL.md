@@ -39,7 +39,7 @@ Read only what you need, but cover:
   - `src/server/index.ts` (if present)
   - `package.json` (name, exports)
 - **Access / auth**
-  - `src/base/access.ts` (scopes, permissions, roles, policies)
+  - `src/base/access.ts` (resources, permissions, roles, policies)
 - **APIs**
   - `src/base/apis/*.ts` (endpoints and the policies they enforce)
 - **Server behavior**

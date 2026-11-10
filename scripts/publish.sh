@@ -10,6 +10,12 @@ folders=(
     # "packages/tauri"
     "packages/module-system"
     "packages/module-user"
+    "packages/plugin-barcode"
+    "packages/plugin-excel"
+    "packages/plugin-qr-code"
+    "packages/plugin-sequence"
+    "packages/plugin-tag"
+    "packages/plugin-classification"
     "packages/module-insight"
     "packages/module-upload"
     "packages/module-installer"
@@ -20,11 +26,6 @@ folders=(
     "packages/module-asset"
     "packages/module-currency"
     "packages/module-location"
-    "packages/plugin-barcode"
-    "packages/plugin-excel"
-    "packages/plugin-qr-code"
-    "packages/plugin-sequence"
-    "packages/plugin-classification"
     "packages/module-accounting"
     "packages/module-socket"
     # "packages/module-game"
@@ -44,6 +45,7 @@ folders=(
     "packages/plugin-api-rate-limiter"
     "packages/plugin-otp"
     "packages/plugin-email-sender"
+    "packages/plugin-user-setting"
     "packages/plugin-auth-email"
     # "packages/plugin-auth-web3"
     "packages/plugin-auth-webauthn"
@@ -63,7 +65,6 @@ folders=(
     # "packages/plugin-asset-web3"
     "packages/plugin-asset-category"
     "packages/plugin-user-ban"
-    "packages/plugin-user-setting"
     "packages/plugin-user-identity-limit"
     # "packages/plugin-web3-airdrop"
     "packages/plugin-store-record"
@@ -77,7 +78,9 @@ folders=(
     "packages/plugin-message-mention"
     "packages/plugin-message-notification"
     "packages/plugin-message-realtime"
+    "packages/plugin-message-hyperlink"
     "packages/module-conversation"
+    "packages/plugin-conversation-notification"
     "packages/plugin-conversation-follow"
     "packages/plugin-conversation-reaction"
     "packages/plugin-conversation-report"
@@ -85,7 +88,8 @@ folders=(
     "packages/plugin-conversation-mention"
     "packages/plugin-conversation-poll"
     "packages/plugin-conversation-media"
-    "packages/plugin-conversation-notification"
+    "packages/module-omnichannel"
+    "packages/plugin-omnichannel-facebook"
     "packages/plugin-notification-in-app"
     "packages/plugin-notification-push"
     "packages/plugin-notification-push-web"
@@ -93,7 +97,6 @@ folders=(
     "packages/plugin-location-vietnam"
     "packages/plugin-location-address"
     "packages/plugin-presence-redis"
-    # "packages/module-omnichannel"
     "packages/plugin-news"
     "packages/plugin-openapi"
     "packages/plugin-order-barcode"
@@ -109,8 +112,8 @@ for dir in "${folders[@]}"; do
         # rm -rf dist
         # npx roxavn migration:up
         # npx roxavn sync
-        # npm run build
-        npx release-it -c ../../.release-it.json --ci minor
+        npm run build
+        # npx release-it -c ../../.release-it.json --ci minor
         cd - > /dev/null
     else
         echo "⚠️ Folder not found: $dir"
