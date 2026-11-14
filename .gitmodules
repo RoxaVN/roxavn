@@ -307,3 +307,6 @@
 [submodule "packages/plugin-tag"]
 	path = packages/plugin-tag
 	url = https://github.com/RoxaVN/plugin-tag.git
+[submodule "packages/module-calendar"]
+	path = packages/module-calendar
+	url = https://github.com/RoxaVN/module-calendar.git

@@ -98,6 +98,7 @@
     "packages/plugin-conversation-media",
     "packages/module-omnichannel",
     "packages/plugin-omnichannel-facebook",
+    "packages/module-calendar",
     "packages/plugin-notification-in-app",
     "packages/plugin-notification-push",
     "packages/plugin-notification-push-web",
